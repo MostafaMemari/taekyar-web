@@ -9,18 +9,26 @@ export function Wordmark({ onNavigate }: WordmarkProps) {
     <Link
       href="/"
       onClick={onNavigate}
-      className="flex items-center gap-2 rounded-md text-xl font-black text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+      aria-label="تک‌یار — صفحه اصلی"
+      className="group/mark flex shrink-0 items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
     >
-      <span className="flex items-center gap-1.5">
-        تک‌یار
-        <span aria-hidden="true" className="size-1.5 rounded-[2px] bg-primary" />
-      </span>
       <span
-        lang="ko"
         aria-hidden="true"
-        className="hidden rounded border border-border px-1.5 py-0.5 text-[10px] font-bold leading-none tracking-[0.2em] text-muted-foreground sm:inline-block"
+        className="flex size-9 items-center justify-center rounded-lg bg-primary text-base font-black leading-none text-white shadow-sm shadow-primary/30 transition-transform duration-300 group-hover/mark:-rotate-3"
       >
-        태권도
+        ت
+      </span>
+      <span className="flex flex-col leading-none">
+        <span className="text-[17px] font-black tracking-tight text-foreground">
+          تک‌یار
+        </span>
+        <span
+          lang="ko"
+          aria-hidden="true"
+          className="mt-[3px] text-[9px] font-bold tracking-[0.22em] text-muted-foreground"
+        >
+          태권도
+        </span>
       </span>
     </Link>
   );

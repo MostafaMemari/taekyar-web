@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Download, Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ChevronLeft, Download, Menu } from "lucide-react";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { navLinks } from "@/lib/data";
+import { cn } from "@/lib/utils";
 import { Wordmark } from "./wordmark";
 
 interface MobileMenuProps {
@@ -21,39 +23,71 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
+  const pathname = usePathname();
   const close = () => onOpenChange(false);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild className="md:hidden">
-        <Button variant="ghost" size="icon" aria-label="باز کردن منو">
-          <Menu className="!size-6" />
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="باز کردن منو"
+          className="size-10 rounded-lg text-foreground"
+        >
+          <Menu className="!size-[22px]" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="theme-light w-72 gap-0 border-border p-0">
-        <SheetHeader className="border-b border-border py-5">
-          <SheetTitle className="text-start text-lg font-black">
+      <SheetContent side="right" className="theme-light w-[19rem] gap-0 border-none p-0">
+        <SheetHeader className="border-b border-black/[0.07] px-5 py-4">
+          <SheetTitle className="text-start">
             <Wordmark onNavigate={close} />
           </SheetTitle>
         </SheetHeader>
-        <nav aria-label="منوی موبایل" className="flex flex-col p-3">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={close}
-              className="rounded-lg px-3 py-3 text-[15px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              {link.label}
-            </Link>
-          ))}
+
+        <nav aria-label="منوی موبایل" className="flex flex-col gap-0.5 p-3">
+          {navLinks.map(({ href, label }) => {
+            const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={close}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "flex items-center justify-between rounded-lg px-3 py-3 text-[15px] transition-colors",
+                  active
+                    ? "bg-primary/[0.07] font-bold text-primary"
+                    : "font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}
+              >
+                {label}
+                <ChevronLeft
+                  className={cn("size-4", active ? "text-primary" : "text-muted-foreground/50")}
+                />
+              </Link>
+            );
+          })}
         </nav>
-        <div className="mt-auto space-y-4 p-4 pb-6">
-          <Button className="h-11 w-full gap-2 rounded-xl font-semibold" onClick={close}>
-            <Download className="!size-4" />
+
+        <div className="mt-auto space-y-3 p-4 pb-6">
+          <Button
+            className="h-12 w-full gap-2 rounded-lg text-[15px] font-bold shadow-sm shadow-primary/25"
+            onClick={close}
+          >
+            <Download className="!size-[18px]" />
             دانلود اپلیکیشن
           </Button>
-          <BeltDivider fullWidth />
+          <Button
+            variant="outline"
+            asChild
+            className="h-11 w-full rounded-lg bg-card font-semibold"
+            onClick={close}
+          >
+            <Link href="/contact">تماس با ما</Link>
+          </Button>
+          <BeltDivider fullWidth className="mt-4" />
         </div>
       </SheetContent>
     </Sheet>

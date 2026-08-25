@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -14,34 +15,60 @@ import { Wordmark } from "./wordmark";
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrolled = useScrolled();
+  const pathname = usePathname();
 
   return (
     <header
       className={cn(
-        "theme-light sticky top-0 z-40 bg-background/80 backdrop-blur-xl transition-shadow duration-300",
-        scrolled && "shadow-[0_1px_0_rgba(23,23,23,0.06),0_8px_24px_-16px_rgba(23,23,23,0.18)]"
+        "theme-light sticky top-0 z-40 bg-background transition-colors duration-300",
+        scrolled && "border-b border-black/[0.07] bg-background/95 supports-backdrop-filter:backdrop-blur-md"
       )}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-4 sm:h-[68px] sm:px-6 lg:px-8">
         <Wordmark />
 
         <nav
           aria-label="ناوبری اصلی"
-          className="hidden flex-1 items-center justify-center gap-1 md:flex"
+          className="hidden flex-1 items-center gap-7 md:flex"
         >
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map(({ href, label }) => {
+            const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "relative -my-1 rounded-sm py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                  active
+                    ? "font-bold text-foreground"
+                    : "font-medium text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {label}
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "absolute -bottom-[7px] end-0 h-[2px] rounded-full bg-primary transition-all duration-300",
+                    active ? "w-full opacity-100" : "w-0 opacity-0"
+                  )}
+                />
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="ms-auto flex items-center gap-2 md:ms-0">
-          <Button className="hidden h-10 gap-2 rounded-xl px-4 font-semibold shadow-sm shadow-primary/20 md:inline-flex">
+        <div className="ms-auto flex items-center gap-1.5 md:ms-0 md:gap-3">
+          <Button
+            variant="ghost"
+            asChild
+            className="hidden h-10 px-3 text-sm font-semibold text-muted-foreground hover:text-foreground lg:inline-flex"
+          >
+            <Link href="/contact">تماس با ما</Link>
+          </Button>
+
+          <Button className="hidden h-10 gap-2 rounded-lg px-4 text-sm font-bold shadow-sm shadow-primary/25 md:inline-flex">
             <Download className="!size-4" />
             دانلود اپلیکیشن
           </Button>
