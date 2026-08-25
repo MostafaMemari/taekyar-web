@@ -36,7 +36,7 @@ export function BlogCard({ post }: BlogCardProps) {
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="min-h-14 text-base font-bold leading-7 [&_a]:line-clamp-2">
+        <h3 className="text-base font-bold leading-7 [&_a]:line-clamp-1">
           <Link href={href} className="transition-colors hover:text-primary">
             {post.title}
           </Link>
@@ -44,7 +44,7 @@ export function BlogCard({ post }: BlogCardProps) {
         <p className="mt-1 text-xs font-medium text-muted-foreground">
           {post.date} · {post.readTimeMinutes} دقیقه مطالعه
         </p>
-        <p className="mt-3 text-sm leading-7 text-muted-foreground">{post.excerpt}</p>
+        <p className="mt-3 text-sm leading-7 text-muted-foreground line-clamp-3">{post.excerpt}</p>
 
         <Link
           href={href}
