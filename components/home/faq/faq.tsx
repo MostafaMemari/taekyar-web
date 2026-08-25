@@ -1,4 +1,8 @@
+import Link from "next/link";
+import { ArrowLeft, MessagesSquare } from "lucide-react";
+
 import { Reveal } from "@/components/shared/reveal";
+import { Section } from "@/components/shared/section";
 import { SectionHeader } from "@/components/shared/section-header";
 import {
   Accordion,
@@ -6,49 +10,60 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ContactBanner } from "./contact-banner";
+import { Button } from "@/components/ui/button";
+import { SURFACE_CARD } from "@/lib/styles";
+import { cn } from "@/lib/utils";
 import { FAQS } from "./data";
-
-function FaqList() {
-  return (
-    <div className="mt-10 max-w-3xl rounded-3xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05] sm:p-7 lg:mt-12">
-      <Accordion type="single" collapsible>
-        {FAQS.map(({ question, answer }, index) => (
-          <AccordionItem key={question} value={`faq-${index + 1}`}>
-            <AccordionTrigger>{question}</AccordionTrigger>
-            <AccordionContent>{answer}</AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
-    </div>
-  );
-}
 
 export function Faq() {
   return (
-    <section
-      id="faq"
-      className="theme-light relative isolate scroll-mt-24 bg-background text-foreground"
-    >
-      <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0" />
+    <Section id="faq" className="bg-[#f5f5f4]">
+      <Reveal>
+        <SectionHeader
+          eyebrow="سوالات متداول"
+          title="سوالی دارید؟ پاسخ اینجاست"
+          description="چیزهایی که کاربران پیش از نصب تک‌یار از ما می‌پرسند؛ اگر پاسخت را پیدا نکردی، تیم ما یک پیام فاصله دارد."
+        />
+      </Reveal>
 
-      <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8 lg:pb-24 lg:pt-20">
-        <Reveal>
-          <SectionHeader
-            eyebrow="سوالات متداول"
-            title="سوالی دارید؟ پاسخ اینجاست"
-            description="چیزهایی که کاربران پیش از نصب تک‌یار از ما می‌پرسند؛ اگر پاسخت را پیدا نکردی، تیم ما یک پیام فاصله دارد."
-          />
-        </Reveal>
-
-        <Reveal delay={100}>
-          <FaqList />
+      <div className="mt-10 grid gap-5 lg:mt-12 lg:grid-cols-[1.35fr_0.65fr] lg:items-start">
+        <Reveal delay={80}>
+          <div className={cn(SURFACE_CARD, "p-5 sm:p-7")}>
+            <Accordion type="single" collapsible>
+              {FAQS.map(({ question, answer }, index) => (
+                <AccordionItem key={question} value={`faq-${index + 1}`}>
+                  <AccordionTrigger>{question}</AccordionTrigger>
+                  <AccordionContent>{answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
         </Reveal>
 
         <Reveal delay={140}>
-          <ContactBanner />
+          <div className={cn(SURFACE_CARD, "p-6 text-center sm:p-7 lg:sticky lg:top-24")}>
+            <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/15">
+              <MessagesSquare className="!size-6" />
+            </span>
+            <h3 className="mt-4 text-lg font-extrabold leading-8">
+              سوال دیگری دارید؟ با ما تماس بگیرید
+            </h3>
+            <p className="mt-2 text-sm leading-7 text-muted-foreground">
+              تیم پشتیبانی تک‌یار در سریع‌ترین زمان ممکن پاسخگوی شماست.
+            </p>
+            <Button
+              asChild
+              size="lg"
+              className="mt-5 h-11 w-full gap-2 rounded-xl bg-primary text-[15px] font-bold text-white shadow-lg shadow-primary/25 hover:bg-primary/90"
+            >
+              <Link href="/contact">
+                تماس با ما
+                <ArrowLeft className="!size-4" />
+              </Link>
+            </Button>
+          </div>
         </Reveal>
       </div>
-    </section>
+    </Section>
   );
 }

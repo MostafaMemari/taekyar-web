@@ -154,27 +154,6 @@
   }
   html {
     @apply font-sans scroll-smooth;
-
-    scrollbar-width: thin;
-    scrollbar-color: rgba(224, 40, 46, 0.5) #ece9e2;
-  }
-  ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-  }
-  ::-webkit-scrollbar-track {
-    background-color: #ece9e2;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: rgba(224, 40, 46, 0.5);
-    border-radius: 999px;
-    border: 3px solid #ece9e2;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(224, 40, 46, 0.78);
-  }
-  ::-webkit-scrollbar-corner {
-    background-color: #ece9e2;
   }
   ::selection {
     background-color: #e0282e;
@@ -215,20 +194,6 @@
   animation: hero-float 6s ease-in-out infinite;
 }
 
-@keyframes scroll-cue {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(4px);
-  }
-}
-
-.animate-scroll-cue {
-  animation: scroll-cue 1.8s ease-in-out infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -238,8 +203,7 @@
     transform: none;
     transition: none;
   }
-  .animate-hero-float,
-  .animate-scroll-cue {
+  .animate-hero-float {
     animation: none;
     opacity: 1;
     transform: none;
