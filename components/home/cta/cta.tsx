@@ -1,7 +1,7 @@
 import { Download } from "lucide-react";
 
-import { BeltDivider } from "@/components/belt-divider";
-import { Reveal } from "@/components/reveal";
+import { BeltDivider } from "@/components/shared/belt-divider";
+import { Reveal } from "@/components/shared/reveal";
 import { Button } from "@/components/ui/button";
 
 export function CtaSection() {

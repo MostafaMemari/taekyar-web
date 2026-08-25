@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Geist_Mono, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
+import { Header } from "@/components/layout/header/header";
+import { Footer } from "@/components/layout/footer/footer";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],

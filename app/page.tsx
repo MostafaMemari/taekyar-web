@@ -1,9 +1,9 @@
-import { BeltDivider } from "@/components/belt-divider";
-import { Hero } from "@/components/home/hero";
-import { Features } from "@/components/home/features";
-import { BlogPreview } from "@/components/home/blog-preview";
-import { Faq } from "@/components/home/faq";
-import { CtaSection } from "@/components/home/cta";
+import { BeltDivider } from "@/components/shared/belt-divider";
+import { Hero } from "@/components/home/hero/hero";
+import { Features } from "@/components/home/features/features";
+import { BlogPreview } from "@/components/home/blog-preview/blog-preview";
+import { Faq } from "@/components/home/faq/faq";
+import { CtaSection } from "@/components/home/cta/cta";
 
 export default function Home() {
   return (

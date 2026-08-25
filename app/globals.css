@@ -47,8 +47,6 @@
   --color-belt-red: #c21807;
   --color-belt-black: #0d0d0d;
 
-  --color-surface-light: #fafaf8;
-
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -199,54 +197,11 @@
   transform: none;
 }
 
-.strike-draw {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  animation: strike-draw 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
-}
-
-.speed-line {
-  transform-origin: right center;
-  animation: speed-in 0.7s ease-out both;
-}
-.speed-line:nth-child(odd) {
-  animation-delay: 0.25s;
-}
-.speed-line:nth-child(even) {
-  animation-delay: 0.45s;
-}
-
-@keyframes strike-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes speed-in {
-  from {
-    opacity: 0;
-    transform: translateX(-14px);
-  }
-}
-
-/* Dobok fabric weave texture — faint crosshatch for hero backgrounds */
-.bg-weave {
-  background-image:
-    repeating-linear-gradient(0deg, rgba(245, 243, 239, 0.022) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(90deg, rgba(245, 243, 239, 0.016) 0 1px, transparent 1px 4px);
-}
-
 /* Tatami-mat lattice — faint diagonal weave shared by the light sections */
 .bg-tatami {
   background-image:
     repeating-linear-gradient(45deg, rgba(23, 23, 23, 0.015) 0 1px, transparent 1px 12px),
     repeating-linear-gradient(-45deg, rgba(23, 23, 23, 0.015) 0 1px, transparent 1px 12px);
-}
-
-.text-glow-red {
-  text-shadow:
-    0 0 28px rgba(224, 40, 46, 0.45),
-    0 0 72px rgba(224, 40, 46, 0.25);
 }
 
 @keyframes hero-float {
@@ -286,11 +241,8 @@
     transform: none;
     transition: none;
   }
-  .strike-draw,
-  .speed-line,
   .animate-hero-float,
   .animate-scroll-cue {
-    stroke-dashoffset: 0;
     animation: none;
     opacity: 1;
     transform: none;
