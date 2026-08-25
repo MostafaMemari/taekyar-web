@@ -42,9 +42,9 @@ export function Footer() {
   return (
     <footer className="bg-belt-black">
       <BeltDivider />
-      <div className="mx-auto max-w-6xl px-4 pb-8 pt-14 sm:px-6 lg:px-8">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="space-y-3">
+      <div className="mx-auto max-w-7xl px-4 pb-8 pt-14 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
+          <div className="col-span-2 space-y-3 lg:col-span-1">
             <p className="text-lg font-black text-foreground">
               تک‌یار
               <span
@@ -65,9 +65,9 @@ export function Footer() {
             ariaLabel="دسته‌بندی‌های وبلاگ"
           />
 
-          <div className="space-y-3">
+          <div className="col-span-2 space-y-3 text-center lg:col-span-1 lg:text-start">
             <p className="text-sm font-bold text-foreground">تک‌یار را دنبال کنید</p>
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-center gap-2.5 lg:justify-start">
               {SOCIALS.map(({ label, href, Icon }) => (
                 <a
                   key={label}

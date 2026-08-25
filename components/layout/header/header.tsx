@@ -24,7 +24,7 @@ export function Header() {
         scrolled && "border-black/[0.07] shadow-[0_4px_16px_-12px_rgba(23,23,23,0.25)]"
       )}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-4 sm:h-[68px] sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-8 px-4 sm:h-[68px] sm:px-6 lg:px-8">
         <Wordmark />
 
         <nav

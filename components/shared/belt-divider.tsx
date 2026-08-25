@@ -41,7 +41,7 @@ export function BeltDivider({
         aria-hidden="true"
         className={cn(
           "h-3 w-full overflow-hidden",
-          !fullWidth && "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8",
+          !fullWidth && "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",
           className
         )}
       >
@@ -57,7 +57,7 @@ export function BeltDivider({
       aria-hidden="true"
       className={cn(
         "h-[5px] w-full overflow-hidden border-y border-foreground/10",
-        !fullWidth && "mx-auto max-w-6xl px-4 sm:px-6 lg:px-8",
+        !fullWidth && "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",
         className
       )}
     >
