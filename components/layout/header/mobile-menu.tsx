@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { ChevronLeft, Download, Menu } from "lucide-react";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { navLinks } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
+import { NavLinkItem, useIsActive } from "./nav-link-item";
 import { Wordmark } from "./wordmark";
 
 interface MobileMenuProps {
@@ -22,8 +22,34 @@ interface MobileMenuProps {
   onOpenChange: (open: boolean) => void;
 }
 
+function MobileNavLink({
+  href,
+  label,
+  onNavigate,
+}: {
+  href: string;
+  label: string;
+  onNavigate: () => void;
+}) {
+  const active = useIsActive(href);
+
+  return (
+    <NavLinkItem
+      href={href}
+      label={label}
+      onNavigate={onNavigate}
+      className="flex items-center justify-between rounded-lg px-3 py-3 text-[15px] transition-colors"
+      activeClassName="bg-primary/[0.07] font-bold text-primary"
+      inactiveClassName="font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+    >
+      <ChevronLeft
+        className={cn("size-4", active ? "text-primary" : "text-muted-foreground/50")}
+      />
+    </NavLinkItem>
+  );
+}
+
 export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
-  const pathname = usePathname();
   const close = () => onOpenChange(false);
 
   return (
@@ -46,29 +72,9 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
         </SheetHeader>
 
         <nav aria-label="منوی موبایل" className="flex flex-col gap-0.5 p-3">
-          {navLinks.map(({ href, label }) => {
-            const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-
-            return (
-              <Link
-                key={href}
-                href={href}
-                onClick={close}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "flex items-center justify-between rounded-lg px-3 py-3 text-[15px] transition-colors",
-                  active
-                    ? "bg-primary/[0.07] font-bold text-primary"
-                    : "font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
-                )}
-              >
-                {label}
-                <ChevronLeft
-                  className={cn("size-4", active ? "text-primary" : "text-muted-foreground/50")}
-                />
-              </Link>
-            );
-          })}
+          {navLinks.map(({ href, label }) => (
+            <MobileNavLink key={href} href={href} label={label} onNavigate={close} />
+          ))}
         </nav>
 
         <div className="mt-auto space-y-3 p-4 pb-6">

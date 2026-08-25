@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,12 +9,34 @@ import { navLinks } from "@/lib/navigation";
 import { useScrolled } from "@/lib/use-scrolled";
 import { cn } from "@/lib/utils";
 import { MobileMenu } from "./mobile-menu";
+import { NavLinkItem, useIsActive } from "./nav-link-item";
 import { Wordmark } from "./wordmark";
+
+function DesktopNavLink({ href, label }: { href: string; label: string }) {
+  const active = useIsActive(href);
+
+  return (
+    <NavLinkItem
+      href={href}
+      label={label}
+      className="relative -my-1 rounded-sm py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+      activeClassName="font-bold text-foreground"
+      inactiveClassName="font-medium text-muted-foreground hover:text-foreground"
+    >
+      <span
+        aria-hidden="true"
+        className={cn(
+          "absolute -bottom-[7px] end-0 h-[2px] rounded-full bg-primary transition-all duration-300",
+          active ? "w-full opacity-100" : "w-0 opacity-0"
+        )}
+      />
+    </NavLinkItem>
+  );
+}
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrolled = useScrolled();
-  const pathname = usePathname();
 
   return (
     <header
@@ -31,32 +52,9 @@ export function Header() {
           aria-label="ناوبری اصلی"
           className="hidden flex-1 items-center gap-7 md:flex"
         >
-          {navLinks.map(({ href, label }) => {
-            const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-
-            return (
-              <Link
-                key={href}
-                href={href}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "relative -my-1 rounded-sm py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                  active
-                    ? "font-bold text-foreground"
-                    : "font-medium text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {label}
-                <span
-                  aria-hidden="true"
-                  className={cn(
-                    "absolute -bottom-[7px] end-0 h-[2px] rounded-full bg-primary transition-all duration-300",
-                    active ? "w-full opacity-100" : "w-0 opacity-0"
-                  )}
-                />
-              </Link>
-            );
-          })}
+          {navLinks.map(({ href, label }) => (
+            <DesktopNavLink key={href} href={href} label={label} />
+          ))}
         </nav>
 
         <div className="ms-auto flex items-center gap-1.5 md:ms-0 md:gap-3">
