@@ -17,3 +17,13 @@ export const BLOG_INDEX_INTRO = {
   description:
     "تحلیل فن‌ها، اخبار دنیای تکواندو و نکته‌های تغذیه و تناسب؛ هر هفته مطالبی که مستقیم از تشک تمرین به کارت می‌آید.",
 };
+
+export const BLOG_INDEX_LABELS = {
+  filterNav: "فیلتر دسته‌بندی مقالات",
+  allCategories: "همه",
+  readMore: "ادامه مطلب",
+  readTimeSuffix: "دقیقه مطالعه",
+  emptyState:
+    "هنوز مقاله‌ای در این دسته‌بندی منتشر نشده؛ به‌زودی مطالب جدید اضافه می‌شود.",
+  resultsSuffix: "مقاله",
+};
