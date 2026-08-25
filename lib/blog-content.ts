@@ -192,3 +192,16 @@ const CONTENT: Record<string, PostBlock[]> = {
 export function getPostBlocks(slug: string): PostBlock[] | undefined {
   return CONTENT[slug];
 }
+
+export interface TocItem {
+  id: string;
+  text: string;
+}
+
+export function getHeadings(blocks: PostBlock[]): TocItem[] {
+  return blocks.flatMap((block, index) =>
+    block.type === "heading"
+      ? [{ id: `heading-${index}`, text: block.text }]
+      : []
+  );
+}

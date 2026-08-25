@@ -8,7 +8,8 @@ function renderBlock(block: PostBlock, index: number) {
       return (
         <h2
           key={index}
-          className="pt-2 text-xl font-extrabold leading-[1.6] sm:text-2xl sm:leading-[1.5]"
+          id={`heading-${index}`}
+          className="scroll-mt-28 pt-2 text-xl font-extrabold leading-[1.6] sm:text-2xl sm:leading-[1.5]"
         >
           {block.text}
         </h2>
