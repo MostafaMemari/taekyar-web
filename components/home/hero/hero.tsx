@@ -58,7 +58,6 @@ function TrustBadges() {
 export function Hero() {
   return (
     <section className="theme-light relative isolate min-h-fit overflow-hidden bg-background text-foreground">
-      {/* Light backdrop layers */}
       <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0" />
       <div
         aria-hidden="true"
@@ -74,7 +73,6 @@ export function Hero() {
           <div>
             <HeroBadge />
 
-            {/* Headline */}
             <h1 className="mt-5 max-w-2xl text-[2.4rem] font-black leading-[1.25] sm:text-6xl sm:leading-[1.15] lg:text-[4.35rem] lg:leading-[1.12]">
               <span className="block">از اولین ضربه،</span>
               <span className="block">
@@ -85,7 +83,6 @@ export function Hero() {
               </span>
             </h1>
 
-            {/* Description */}
             <p className="mt-4 max-w-lg text-[15px] leading-8 text-muted-foreground sm:text-base sm:leading-9">
               تک‌یار همراه هوشمند تو در دنیای تکواندوست؛ برنامه تمرین شخصی، آموزش گام‌به‌گام فن‌ها
               و پیگیری دقیق مسیر ارتقای کمربند — همه در یک اپلیکیشن.
@@ -101,7 +98,6 @@ export function Hero() {
         </Reveal>
       </div>
 
-      {/* Scroll cue */}
       <a
         href="#features"
         aria-label="رفتن به بخش امکانات"

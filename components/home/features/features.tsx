@@ -39,7 +39,6 @@ export function Features() {
       id="features"
       className="theme-light relative isolate scroll-mt-24 bg-[#f5f5f4] text-foreground"
     >
-      {/* Tatami lattice texture + faint red wash echoing the hero */}
       <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0" />
       <div
         aria-hidden="true"

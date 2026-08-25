@@ -115,15 +115,12 @@ function TabBar() {
 export function PhoneMockup() {
   return (
     <div aria-hidden="true" className="relative mx-auto w-fit">
-      {/* Soft glow behind the device */}
       <div className="absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(circle_at_50%_38%,rgba(224,40,46,0.14),rgba(224,40,46,0)_65%)] sm:-inset-16" />
 
-      {/* Korean watermark */}
       <span className="absolute -end-14 top-1/2 hidden -translate-y-1/2 select-none font-black text-3xl tracking-[0.4em] text-foreground/[0.05] [writing-mode:vertical-rl] xl:block">
         태권도
       </span>
 
-      {/* Device frame */}
       <div className="relative w-[264px] rounded-[2.6rem] bg-[#16161a] p-[10px] shadow-2xl shadow-black/25 ring-1 ring-black/30 sm:w-[290px]">
         <div className="overflow-hidden rounded-[2.1rem] bg-white">
           <StatusBar />
@@ -139,7 +136,6 @@ export function PhoneMockup() {
         </div>
       </div>
 
-      {/* Floating stat cards */}
       <StatCard
         icon={Dumbbell}
         value="۵۰+"

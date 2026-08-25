@@ -30,7 +30,6 @@ export function Faq() {
       id="faq"
       className="theme-light relative isolate scroll-mt-24 bg-background text-foreground"
     >
-      {/* Tatami lattice texture — same motif as hero and features */}
       <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0" />
 
       <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8 lg:pb-24 lg:pt-20">

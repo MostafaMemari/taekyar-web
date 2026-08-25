@@ -155,11 +155,9 @@
   html {
     @apply font-sans scroll-smooth;
 
-    /* Branded scrollbar (Firefox) */
     scrollbar-width: thin;
     scrollbar-color: rgba(224, 40, 46, 0.5) #ece9e2;
   }
-  /* Branded scrollbar (Chrome / Edge / Safari) */
   ::-webkit-scrollbar {
     width: 12px;
     height: 12px;
@@ -197,7 +195,6 @@
   transform: none;
 }
 
-/* Tatami-mat lattice — faint diagonal weave shared by the light sections */
 .bg-tatami {
   background-image:
     repeating-linear-gradient(45deg, rgba(23, 23, 23, 0.015) 0 1px, transparent 1px 12px),
