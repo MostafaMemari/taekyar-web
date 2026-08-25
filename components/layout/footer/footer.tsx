@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
-import { blogCategories, navLinks, type NavLink } from "@/lib/data";
+import { blogCategories } from "@/lib/blog";
+import { navLinks, type NavLink } from "@/lib/navigation";
 import { FOOTER_BLURB, FOOTER_COPYRIGHT, SOCIALS } from "./data";
 
 function LinkColumn({

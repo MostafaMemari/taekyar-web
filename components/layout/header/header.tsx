@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { navLinks } from "@/lib/data";
+import { navLinks } from "@/lib/navigation";
 import { useScrolled } from "@/lib/use-scrolled";
 import { cn } from "@/lib/utils";
 import { MobileMenu } from "./mobile-menu";

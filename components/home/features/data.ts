@@ -10,9 +10,17 @@ import {
   Zap,
 } from "lucide-react";
 
+import { BELT_LEVELS } from "@/lib/belts";
+
 export interface SupportingFeature {
   Icon: typeof Zap;
   tint: string;
+  title: string;
+  description: string;
+}
+
+export interface FeaturedFeature {
+  Icon: typeof Zap;
   title: string;
   description: string;
 }
@@ -24,7 +32,7 @@ export const FEATURES_INTRO = {
     "تک‌یار فقط یک اپلیکیشن ورزشی نیست؛ باشگاه همراه همیشگی توست. هرچه برای رشد در تکواندو لازم داری، اینجا کنار هم است.",
 };
 
-export const FEATURED_FEATURE = {
+export const FEATURED_FEATURE: FeaturedFeature = {
   Icon: Zap,
   title: "برنامه تمرین شخصی",
   description:
@@ -77,13 +85,6 @@ export const SUPPORTING_FEATURES: SupportingFeature[] = [
   },
 ];
 
-export const BELT_PATH = [
-  { name: "سفید", color: "#ffffff" },
-  { name: "زرد", color: "#f4c430" },
-  { name: "سبز", color: "#2e8b57" },
-  { name: "آبی", color: "#1f5fa8" },
-  { name: "قرمز", color: "#c21807" },
-  { name: "سیاه", color: "#0d0d0d" },
-];
+export const BELT_PATH = BELT_LEVELS;
 
 export const CURRENT_BELT_INDEX = 2;

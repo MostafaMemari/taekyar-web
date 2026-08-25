@@ -1,6 +1,6 @@
 import { Newspaper, Salad, Target } from "lucide-react";
 
-import type { BlogCategoryName } from "@/lib/data";
+import type { BlogCategoryName } from "@/lib/blog";
 
 export const BLOG_PREVIEW_COUNT = 3;
 

@@ -1,7 +1,13 @@
-export interface NavLink {
-  href: string;
-  label: string;
-}
+export type BlogCategoryName =
+  | "تکنیک‌ها"
+  | "اخبار و مسابقات"
+  | "تغذیه و تناسب اندام";
+
+export const blogCategories: BlogCategoryName[] = [
+  "تکنیک‌ها",
+  "اخبار و مسابقات",
+  "تغذیه و تناسب اندام",
+];
 
 export interface BlogPost {
   id: number;
@@ -13,25 +19,6 @@ export interface BlogPost {
   date: string;
   readTimeMinutes: number;
 }
-
-export type BlogCategoryName =
-  | "تکنیک‌ها"
-  | "اخبار و مسابقات"
-  | "تغذیه و تناسب اندام";
-
-export const navLinks: NavLink[] = [
-  { href: "/", label: "خانه" },
-  { href: "/#features", label: "امکانات اپلیکیشن" },
-  { href: "/blog", label: "وبلاگ" },
-  { href: "/about", label: "درباره ما" },
-  { href: "/contact", label: "تماس با ما" },
-];
-
-export const blogCategories: BlogCategoryName[] = [
-  "تکنیک‌ها",
-  "اخبار و مسابقات",
-  "تغذیه و تناسب اندام",
-];
 
 export const blogPosts: BlogPost[] = [
   {
@@ -96,7 +83,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "تکنیک‌های تنفسی و تمرین‌های ذهنی که ورزشکاران حرفه‌ای برای آرام ماندن روی باسکول استفاده می‌کنند و شما هم می‌توانید.",
     category: "اخبار و مسابقات",
-    tags: ["روانشناسی ورزشی", "مسابقه", "تمرکز"],
+    tags: ["روانشناسی ورزش", "مسابقه", "تمرکز"],
     date: "۲۰ تیر ۱۴۰۵",
     readTimeMinutes: 6,
   },

@@ -1,6 +1,6 @@
 import { Dumbbell, Users } from "lucide-react";
 
-import { BELT_LADDER, TODAY_TRAININGS } from "./data";
+import { BELT_COLORS, TODAY_TRAININGS } from "./data";
 import { StatCard } from "./stat-card";
 import { AppScreen } from "./app-screen";
 
@@ -14,7 +14,7 @@ export function PhoneMockup() {
       </span>
 
       <div className="relative w-[264px] rounded-[2.6rem] bg-[#16161a] p-[10px] shadow-2xl shadow-black/25 ring-1 ring-black/30 sm:w-[290px]">
-        <AppScreen belts={BELT_LADDER} trainings={TODAY_TRAININGS} />
+        <AppScreen belts={BELT_COLORS} trainings={TODAY_TRAININGS} />
       </div>
 
       <StatCard

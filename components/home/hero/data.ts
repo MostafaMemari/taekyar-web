@@ -1,5 +1,7 @@
 import { Flame, Footprints, Zap, type LucideIcon } from "lucide-react";
 
+import { BELT_LEVELS } from "@/lib/belts";
+
 export interface Training {
   Icon: LucideIcon;
   title: string;
@@ -8,14 +10,7 @@ export interface Training {
   tint: string;
 }
 
-export const BELT_LADDER = [
-  "#ffffff",
-  "#f4c430",
-  "#2e8b57",
-  "#1f5fa8",
-  "#c21807",
-  "#0d0d0d",
-];
+export const BELT_COLORS = BELT_LEVELS.map(({ color }) => color);
 
 export const TODAY_TRAININGS: Training[] = [
   {

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import type { BlogPost } from "@/lib/data";
+import type { BlogPost } from "@/lib/blog";
 import { SURFACE_CARD, SURFACE_CARD_INTERACTIVE } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 import { CATEGORY_STYLES } from "./data";

@@ -5,7 +5,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import { SectionHeader } from "@/components/shared/section-header";
 import { Button } from "@/components/ui/button";
-import { blogPosts } from "@/lib/data";
+import { blogPosts } from "@/lib/blog";
 import { BlogCard } from "./blog-card";
 import { BLOG_PREVIEW_COUNT, BLOG_PREVIEW_INTRO } from "./data";
 
