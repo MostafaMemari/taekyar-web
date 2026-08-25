@@ -11,8 +11,7 @@ import { toFaDigits } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "وبلاگ",
-  description:
-    "مقالات و آموزش‌های تکواندو؛ تحلیل فن‌ها، اخبار مسابقات و نکته‌های تغذیه و تناسب از وبلاگ تک‌یار.",
+  description: "مقالات و آموزش‌های تکواندو؛ تحلیل فن‌ها، اخبار مسابقات و نکته‌های تغذیه و تناسب از وبلاگ تک‌یار.",
 };
 
 interface BlogPageProps {
@@ -21,18 +20,14 @@ interface BlogPageProps {
 
 function resolveCategory(value?: string): BlogCategoryName | null {
   if (!value) return null;
-  return (blogCategories as string[]).includes(value)
-    ? (value as BlogCategoryName)
-    : null;
+  return (blogCategories as string[]).includes(value) ? (value as BlogCategoryName) : null;
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const { category } = await searchParams;
   const activeCategory = resolveCategory(category);
 
-  const posts = activeCategory
-    ? blogPosts.filter((post) => post.category === activeCategory)
-    : blogPosts;
+  const posts = activeCategory ? blogPosts.filter((post) => post.category === activeCategory) : blogPosts;
 
   return (
     <>
@@ -45,10 +40,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           <div className="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-black/[0.06] pb-5">
             <CategoryFilter activeCategory={activeCategory} />
             <p className="text-xs font-medium text-muted-foreground">
-              <span className="font-bold text-foreground">
-                {toFaDigits(posts.length)}
-              </span>{" "}
-              {BLOG_INDEX_LABELS.resultsSuffix}
+              <span className="font-bold text-foreground">{toFaDigits(posts.length)}</span> {BLOG_INDEX_LABELS.resultsSuffix}
             </p>
           </div>
         </Reveal>

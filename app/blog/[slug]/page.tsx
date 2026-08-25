@@ -3,11 +3,7 @@ import { notFound } from "next/navigation";
 
 import { ArticleContent } from "@/components/blog/article-content";
 import { PostHeader } from "@/components/blog/post-header";
-import {
-  POST_CONTACT_CTA,
-  POST_LAYOUT,
-  RELATED_POSTS_COUNT,
-} from "@/components/blog/post-config";
+import { POST_CONTACT_CTA, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/components/blog/post-config";
 import { RelatedPosts } from "@/components/blog/related-posts";
 import { TableOfContents } from "@/components/blog/table-of-contents";
 import { ContactBanner } from "@/components/shared/contact-banner";
@@ -26,9 +22,7 @@ export function generateStaticParams() {
   return blogPosts.map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: PostPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = blogPosts.find((item) => item.slug === slug);
 
@@ -37,18 +31,8 @@ export async function generateMetadata({
   return { title: post.title, description: post.excerpt };
 }
 
-function TocGrid({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <div className={cn("grid gap-8", POST_LAYOUT.tocColumns, className)}>
-      {children}
-    </div>
-  );
+function TocGrid({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={cn("grid gap-8", POST_LAYOUT.tocColumns, className)}>{children}</div>;
 }
 
 export default async function PostPage({ params }: PostPageProps) {
@@ -59,16 +43,10 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const blocks = getPostBlocks(post.slug) ?? [];
   const headings = getHeadings(blocks);
-  const relatedPosts = getRelatedPosts(
-    blogPosts,
-    post.slug,
-    post.category,
-    RELATED_POSTS_COUNT
-  );
+  const relatedPosts = getRelatedPosts(blogPosts, post.slug, post.category, RELATED_POSTS_COUNT);
 
   return (
     <>
-      {/* Article header — its title aligns with the article card below */}
       <Section className="pb-0 sm:pb-0 lg:pb-0">
         <TocGrid>
           <div aria-hidden="true" className="hidden lg:block" />
@@ -80,27 +58,27 @@ export default async function PostPage({ params }: PostPageProps) {
         </TocGrid>
       </Section>
 
-      {/* Body: sticky TOC + article card + related posts */}
       <Section containerClassName="pt-0 sm:pt-0 lg:pt-0">
         <TocGrid className="items-start">
           <aside className="hidden self-stretch lg:block">
             <TableOfContents items={headings} />
           </aside>
 
-          <div className="min-w-0 space-y-10 sm:space-y-12">
+          <div className="min-w-0">
             <Reveal delay={80}>
               <article>
                 <ArticleContent post={post} blocks={blocks} />
               </article>
             </Reveal>
-
-            <Reveal delay={100}>
-              <RelatedPosts posts={relatedPosts} />
-            </Reveal>
           </div>
         </TocGrid>
 
-        {/* Contact CTA — full global container width */}
+        <div className="mt-10 sm:mt-12">
+          <Reveal delay={100}>
+            <RelatedPosts posts={relatedPosts} />
+          </Reveal>
+        </div>
+
         <div className="mt-10 sm:mt-12">
           <Reveal delay={120}>
             <ContactBanner

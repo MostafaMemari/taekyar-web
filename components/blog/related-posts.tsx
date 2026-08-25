@@ -2,7 +2,11 @@ import { BlogCard } from "@/components/blog/blog-card";
 import { POST_LABELS } from "@/components/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
 
-export function RelatedPosts({ posts }: { posts: BlogPost[] }) {
+interface RelatedPostsProps {
+  posts: BlogPost[];
+}
+
+export function RelatedPosts({ posts }: RelatedPostsProps) {
   if (posts.length === 0) return null;
 
   return (
