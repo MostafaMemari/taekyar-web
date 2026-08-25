@@ -31,8 +31,10 @@ interface ArticleContentProps {
 
 export function ArticleContent({ post, blocks }: ArticleContentProps) {
   return (
-    <div className={cn(SURFACE_CARD, "p-5 sm:p-7 lg:p-9")}>
-      <PostBody blocks={blocks} />
+    <div className={cn(SURFACE_CARD, "p-5 sm:p-7 lg:p-10")}>
+      <div className="max-w-2xl">
+        <PostBody blocks={blocks} />
+      </div>
       <PostTags tags={post.tags} />
     </div>
   );

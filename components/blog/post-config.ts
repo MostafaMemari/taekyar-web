@@ -1,6 +1,4 @@
 export const POST_LAYOUT = {
-  headerWidth: "max-w-3xl",
-  bodyWidth: "max-w-5xl",
   tocColumns: "lg:grid-cols-[15rem_minmax(0,1fr)]",
 } as const;
 

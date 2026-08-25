@@ -37,6 +37,20 @@ export async function generateMetadata({
   return { title: post.title, description: post.excerpt };
 }
 
+function TocGrid({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("grid gap-8", POST_LAYOUT.tocColumns, className)}>
+      {children}
+    </div>
+  );
+}
+
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
   const post = blogPosts.find((item) => item.slug === slug);
@@ -54,22 +68,21 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <>
+      {/* Article header — its title aligns with the article card below */}
       <Section className="pb-0 sm:pb-0 lg:pb-0">
-        <div className={cn("mx-auto", POST_LAYOUT.headerWidth)}>
-          <Reveal>
-            <PostHeader post={post} />
-          </Reveal>
-        </div>
+        <TocGrid>
+          <div aria-hidden="true" className="hidden lg:block" />
+          <div className="min-w-0">
+            <Reveal>
+              <PostHeader post={post} />
+            </Reveal>
+          </div>
+        </TocGrid>
       </Section>
 
+      {/* Body: sticky TOC + article card + related posts */}
       <Section containerClassName="pt-0 sm:pt-0 lg:pt-0">
-        <div
-          className={cn(
-            "mx-auto grid gap-8",
-            POST_LAYOUT.bodyWidth,
-            POST_LAYOUT.tocColumns
-          )}
-        >
+        <TocGrid className="items-start">
           <aside className="hidden self-stretch lg:block">
             <TableOfContents items={headings} />
           </aside>
@@ -85,9 +98,10 @@ export default async function PostPage({ params }: PostPageProps) {
               <RelatedPosts posts={relatedPosts} />
             </Reveal>
           </div>
-        </div>
+        </TocGrid>
 
-        <div className={cn("mx-auto mt-10 sm:mt-12", POST_LAYOUT.bodyWidth)}>
+        {/* Contact CTA — full global container width */}
+        <div className="mt-10 sm:mt-12">
           <Reveal delay={120}>
             <ContactBanner
               title={POST_CONTACT_CTA.title}

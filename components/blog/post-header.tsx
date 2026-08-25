@@ -59,7 +59,7 @@ export function PostHeader({ post }: { post: BlogPost }) {
 
       <PostMeta post={post} />
 
-      <h1 className="mt-4 text-[1.75rem] font-black leading-[1.4] sm:text-4xl sm:leading-[1.3]">
+      <h1 className="mt-4 max-w-2xl text-[1.75rem] font-black leading-[1.4] sm:text-4xl sm:leading-[1.3]">
         {post.title}
       </h1>
 
