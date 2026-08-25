@@ -46,11 +46,13 @@ export function FeatureCard({ Icon, tint, title, description }: SupportingFeatur
     <article
       className={cn(SURFACE_CARD, SURFACE_CARD_INTERACTIVE, "h-full p-5 sm:p-6")}
     >
-      <span className={cn("flex size-11 items-center justify-center rounded-full", tint)}>
-        <Icon className="!size-5" />
-      </span>
-      <h3 className="mt-4 text-base font-bold">{title}</h3>
-      <p className="mt-2 text-sm leading-7 text-muted-foreground">{description}</p>
+      <div className="flex items-center gap-3">
+        <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-full", tint)}>
+          <Icon className="!size-[18px]" />
+        </span>
+        <h3 className="text-base font-bold leading-6">{title}</h3>
+      </div>
+      <p className="mt-3 text-sm leading-7 text-muted-foreground">{description}</p>
     </article>
   );
 }
