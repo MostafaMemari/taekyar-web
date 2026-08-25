@@ -4,6 +4,7 @@ import { BeltDivider } from "@/components/shared/belt-divider";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import { Button } from "@/components/ui/button";
+import { CTA_CONTENT } from "./data";
 
 export function CtaSection() {
   return (
@@ -20,11 +21,10 @@ export function CtaSection() {
           />
           <div className="relative mx-auto max-w-2xl">
             <h2 className="text-3xl font-black leading-snug text-white sm:text-4xl">
-              آماده‌ای اولین ضربه بزنی؟
+              {CTA_CONTENT.title}
             </h2>
             <p className="mt-4 text-[15px] leading-8 text-white/85 sm:text-base">
-              همین حالا تک‌یار را نصب کن؛ اولین قدم تا کمربند سیاه را امروز بردار،
-              نه از شنبه آینده.
+              {CTA_CONTENT.description}
             </p>
             <Button
               type="button"
@@ -32,7 +32,7 @@ export function CtaSection() {
               className="mt-8 h-12 gap-2.5 rounded-xl bg-white px-7 text-base font-bold text-primary shadow-xl shadow-black/20 hover:bg-white/90"
             >
               <Download />
-              دانلود رایگان تک‌یار
+              {CTA_CONTENT.cta}
             </Button>
           </div>
         </div>

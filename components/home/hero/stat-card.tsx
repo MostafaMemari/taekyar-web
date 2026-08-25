@@ -1,7 +1,7 @@
-import { Dumbbell } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface StatCardProps {
-  icon: typeof Dumbbell;
+  icon: LucideIcon;
   value: string;
   label: string;
   className?: string;

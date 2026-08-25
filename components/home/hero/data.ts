@@ -1,4 +1,12 @@
-import { Flame, Footprints, Zap } from "lucide-react";
+import { Flame, Footprints, Zap, type LucideIcon } from "lucide-react";
+
+export interface Training {
+  Icon: LucideIcon;
+  title: string;
+  meta: string;
+  duration: string;
+  tint: string;
+}
 
 export const BELT_LADDER = [
   "#ffffff",
@@ -9,7 +17,7 @@ export const BELT_LADDER = [
   "#0d0d0d",
 ];
 
-export const TODAY_TRAININGS = [
+export const TODAY_TRAININGS: Training[] = [
   {
     Icon: Flame,
     title: "گرم کردن و کشش",

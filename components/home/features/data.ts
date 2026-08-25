@@ -10,6 +10,20 @@ import {
   Zap,
 } from "lucide-react";
 
+export interface SupportingFeature {
+  Icon: typeof Zap;
+  tint: string;
+  title: string;
+  description: string;
+}
+
+export const FEATURES_INTRO = {
+  eyebrow: "چرا تک‌یار؟",
+  title: "تمرین هوشمند، پیشرفت واقعی",
+  description:
+    "تک‌یار فقط یک اپلیکیشن ورزشی نیست؛ باشگاه همراه همیشگی توست. هرچه برای رشد در تکواندو لازم داری، اینجا کنار هم است.",
+};
+
 export const FEATURED_FEATURE = {
   Icon: Zap,
   title: "برنامه تمرین شخصی",
@@ -39,7 +53,7 @@ export const WEEKLY_STATS = [
   { label: "تکمیل‌شده", value: "۳ از ۶" },
 ];
 
-export const SUPPORTING_FEATURES = [
+export const SUPPORTING_FEATURES: SupportingFeature[] = [
   {
     Icon: TrendingUp,
     tint: "bg-[#1f5fa8]/10 text-[#1f5fa8]",
@@ -71,3 +85,5 @@ export const BELT_PATH = [
   { name: "قرمز", color: "#c21807" },
   { name: "سیاه", color: "#0d0d0d" },
 ];
+
+export const CURRENT_BELT_INDEX = 2;

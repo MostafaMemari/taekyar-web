@@ -1,55 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { Download, Menu } from "lucide-react";
+import { Download } from "lucide-react";
 
-import { BeltDivider } from "@/components/shared/belt-divider";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { navLinks } from "@/lib/data";
+import { useScrolled } from "@/lib/use-scrolled";
 import { cn } from "@/lib/utils";
-
-function Wordmark({ onNavigate }: { onNavigate?: () => void }) {
-  return (
-    <Link
-      href="/"
-      onClick={onNavigate}
-      className="flex items-center gap-2 rounded-md text-xl font-black text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-    >
-      <span className="flex items-center gap-1.5">
-        تک‌یار
-        <span aria-hidden="true" className="size-1.5 rounded-[2px] bg-primary" />
-      </span>
-      <span
-        lang="ko"
-        aria-hidden="true"
-        className="hidden rounded border border-border px-1.5 py-0.5 text-[10px] font-bold leading-none tracking-[0.2em] text-muted-foreground sm:inline-block"
-      >
-        태권도
-      </span>
-    </Link>
-  );
-}
+import { MobileMenu } from "./mobile-menu";
+import { Wordmark } from "./wordmark";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const closeMenu = () => setMenuOpen(false);
+  const scrolled = useScrolled();
 
   return (
     <header
@@ -82,42 +46,7 @@ export function Header() {
             دانلود اپلیکیشن
           </Button>
 
-          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" aria-label="باز کردن منو">
-                <Menu className="!size-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="theme-light w-72 gap-0 border-border p-0">
-              <SheetHeader className="border-b border-border py-5">
-                <SheetTitle className="text-start text-lg font-black">
-                  <Wordmark onNavigate={closeMenu} />
-                </SheetTitle>
-              </SheetHeader>
-              <nav aria-label="منوی موبایل" className="flex flex-col p-3">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={closeMenu}
-                    className="rounded-lg px-3 py-3 text-[15px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
-              <div className="mt-auto space-y-4 p-4 pb-6">
-                <Button
-                  className="h-11 w-full gap-2 rounded-xl font-semibold"
-                  onClick={closeMenu}
-                >
-                  <Download className="!size-4" />
-                  دانلود اپلیکیشن
-                </Button>
-                <BeltDivider fullWidth />
-              </div>
-            </SheetContent>
-          </Sheet>
+          <MobileMenu open={menuOpen} onOpenChange={setMenuOpen} />
         </div>
       </div>
     </header>
