@@ -156,6 +156,29 @@
   }
   html {
     @apply font-sans scroll-smooth;
+
+    /* Branded scrollbar (Firefox) */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(224, 40, 46, 0.5) #ece9e2;
+  }
+  /* Branded scrollbar (Chrome / Edge / Safari) */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #ece9e2;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(224, 40, 46, 0.5);
+    border-radius: 999px;
+    border: 3px solid #ece9e2;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(224, 40, 46, 0.78);
+  }
+  ::-webkit-scrollbar-corner {
+    background-color: #ece9e2;
   }
   ::selection {
     background-color: #e0282e;
@@ -213,6 +236,20 @@
     repeating-linear-gradient(90deg, rgba(245, 243, 239, 0.016) 0 1px, transparent 1px 4px);
 }
 
+/* Light-theme variant of the dobok weave for light hero backgrounds */
+.bg-weave-light {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(23, 23, 23, 0.022) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(23, 23, 23, 0.016) 0 1px, transparent 1px 4px);
+}
+
+/* Tatami-mat lattice — faint diagonal weave for large light section backgrounds */
+.bg-tatami {
+  background-image:
+    repeating-linear-gradient(45deg, rgba(23, 23, 23, 0.015) 0 1px, transparent 1px 12px),
+    repeating-linear-gradient(-45deg, rgba(23, 23, 23, 0.015) 0 1px, transparent 1px 12px);
+}
+
 .text-glow-red {
   text-shadow:
     0 0 28px rgba(224, 40, 46, 0.45),
@@ -233,6 +270,20 @@
   animation: hero-float 6s ease-in-out infinite;
 }
 
+@keyframes scroll-cue {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.animate-scroll-cue {
+  animation: scroll-cue 1.8s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -244,7 +295,8 @@
   }
   .strike-draw,
   .speed-line,
-  .animate-hero-float {
+  .animate-hero-float,
+  .animate-scroll-cue {
     stroke-dashoffset: 0;
     animation: none;
     opacity: 1;
