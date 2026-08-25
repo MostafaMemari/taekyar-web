@@ -35,8 +35,12 @@ const PLAN_CHIPS = ["سطح‌بندی خودکار", "برنامهٔ هفتگی
 export function Features() {
   return (
     <section id="features" className="theme-light relative isolate scroll-mt-24 bg-[#f5f5f4] text-foreground">
-      {/* Tatami lattice texture */}
+      {/* Tatami lattice texture + faint red wash echoing the hero */}
       <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_45%_at_88%_-5%,rgba(224,40,46,0.05),transparent_60%)]"
+      />
 
       <div className="relative mx-auto max-w-6xl px-4 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20">
         <Reveal>

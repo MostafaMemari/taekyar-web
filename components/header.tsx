@@ -41,7 +41,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-background/85 backdrop-blur-md">
+    <header className="theme-light sticky top-0 z-40 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Wordmark />
 
@@ -71,7 +71,7 @@ export function Header() {
                 <Menu className="!size-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72 gap-0 border-border p-0">
+            <SheetContent side="right" className="theme-light w-72 gap-0 border-border p-0">
               <SheetHeader className="border-b border-border py-5">
                 <SheetTitle className="text-lg font-black">تک‌یار</SheetTitle>
               </SheetHeader>

@@ -178,7 +178,7 @@ export function Hero() {
   return (
     <section className="theme-light relative isolate min-h-fit overflow-hidden bg-background text-foreground">
       {/* Light backdrop layers */}
-      <div aria-hidden="true" className="bg-weave-light pointer-events-none absolute inset-0" />
+      <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0" />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_85%_-10%,rgba(224,40,46,0.07),transparent_60%)]"

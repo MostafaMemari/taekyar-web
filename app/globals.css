@@ -236,14 +236,7 @@
     repeating-linear-gradient(90deg, rgba(245, 243, 239, 0.016) 0 1px, transparent 1px 4px);
 }
 
-/* Light-theme variant of the dobok weave for light hero backgrounds */
-.bg-weave-light {
-  background-image:
-    repeating-linear-gradient(0deg, rgba(23, 23, 23, 0.022) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(90deg, rgba(23, 23, 23, 0.016) 0 1px, transparent 1px 4px);
-}
-
-/* Tatami-mat lattice — faint diagonal weave for large light section backgrounds */
+/* Tatami-mat lattice — faint diagonal weave shared by the light sections */
 .bg-tatami {
   background-image:
     repeating-linear-gradient(45deg, rgba(23, 23, 23, 0.015) 0 1px, transparent 1px 12px),
