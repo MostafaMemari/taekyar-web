@@ -1,47 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { BookOpen } from "lucide-react";
-
+import { useActiveHeading } from "@/components/blog/use-active-heading";
+import { POST_LABELS } from "@/components/blog/post-config";
 import type { TocItem } from "@/lib/blog-content";
 import { cn, toFaDigits } from "@/lib/utils";
+import { BookOpen } from "lucide-react";
 
 interface TableOfContentsProps {
   items: TocItem[];
 }
 
 export function TableOfContents({ items }: TableOfContentsProps) {
-  const [activeId, setActiveId] = useState<string | null>(null);
-
-  useEffect(() => {
-    let ticking = false;
-
-    const update = () => {
-      ticking = false;
-      const marker = window.scrollY + 160;
-      let current: string | null = null;
-
-      for (const item of items) {
-        const element = document.getElementById(item.id);
-        if (!element) continue;
-        const top = element.getBoundingClientRect().top + window.scrollY;
-        if (top <= marker) current = item.id;
-      }
-
-      setActiveId(current);
-    };
-
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [items]);
+  const activeId = useActiveHeading(items.map((item) => item.id));
 
   if (items.length === 0) return null;
 
@@ -50,13 +20,13 @@ export function TableOfContents({ items }: TableOfContentsProps) {
       aria-label="سرفصل‌های مقاله"
       className="hidden lg:sticky lg:top-[84px] lg:block"
     >
-      <div className="max-h-[calc(100vh-116px)] overflow-y-auto rounded-2xl bg-card shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05]">
+      <div className="overflow-hidden rounded-2xl bg-card shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05]">
         <div className="flex items-center gap-2 border-b border-black/[0.06] px-4 py-3">
           <BookOpen className="size-4 text-primary" />
-          <p className="text-xs font-bold text-foreground">سرفصل‌ها</p>
+          <p className="text-xs font-bold text-foreground">{POST_LABELS.tocTitle}</p>
         </div>
 
-        <ul className="space-y-0.5 p-2.5">
+        <ul className="max-h-[calc(100vh-13rem)] space-y-0.5 overflow-y-auto p-2.5">
           {items.map((item, index) => {
             const active = activeId === item.id;
 
@@ -66,16 +36,16 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   href={`#${item.id}`}
                   aria-current={active ? "true" : undefined}
                   className={cn(
-                    "group flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors",
+                    "group flex items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors",
                     active
-                      ? "bg-primary/[0.06] text-primary"
+                      ? "bg-primary/[0.07] text-primary"
                       : "text-muted-foreground hover:bg-black/[0.03] hover:text-foreground"
                   )}
                 >
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "text-[10px] font-bold tabular-nums",
+                      "mt-[3px] text-[10px] font-bold tabular-nums",
                       active
                         ? "text-primary"
                         : "text-muted-foreground/50 group-hover:text-muted-foreground"
