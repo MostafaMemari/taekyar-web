@@ -11,7 +11,7 @@ import { BLOG_PREVIEW_COUNT, BLOG_PREVIEW_INTRO } from "./data";
 
 export function BlogPreview() {
   return (
-    <Section id="blog-preview">
+    <Section id="blog-preview" divider>
       <Reveal>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeader {...BLOG_PREVIEW_INTRO} className="max-w-xl" />

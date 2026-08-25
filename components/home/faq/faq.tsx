@@ -41,7 +41,7 @@ function ContactCard() {
 
 export function Faq() {
   return (
-    <Section id="faq" divider className="bg-[#f4f3f1]">
+    <Section id="faq" divider>
       <Reveal>
         <SectionHeader {...FAQ_INTRO} />
       </Reveal>

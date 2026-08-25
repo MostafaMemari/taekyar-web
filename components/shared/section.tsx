@@ -35,7 +35,7 @@ export function Section({
       ) : null}
       <div
         className={cn(
-          "relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16",
+          "relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-11 lg:px-8 lg:py-12",
           containerClassName
         )}
       >

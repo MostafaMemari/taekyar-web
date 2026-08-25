@@ -15,10 +15,6 @@ export function CtaSection() {
             fullWidth
             className="absolute inset-x-0 top-0 h-[3px] border-0 opacity-90"
           />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-[repeating-linear-gradient(115deg,rgba(255,255,255,0.05)_0_3px,transparent_3px_56px)]"
-          />
           <div className="relative mx-auto max-w-2xl">
             <h2 className="text-3xl font-black leading-snug text-white sm:text-4xl">
               {CTA_CONTENT.title}

@@ -7,7 +7,7 @@ import { FeatureCard, FeaturedFeatureCard } from "./feature-cards";
 
 export function Features() {
   return (
-    <Section id="features" divider className="bg-[#f4f3f1]">
+    <Section id="features" divider>
       <Reveal>
         <SectionHeader {...FEATURES_INTRO} />
       </Reveal>
