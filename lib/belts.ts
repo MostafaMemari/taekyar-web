@@ -9,5 +9,5 @@ export const BELT_LEVELS: BeltLevel[] = [
   { name: "سبز", color: "#2e8b57" },
   { name: "آبی", color: "#1f5fa8" },
   { name: "قرمز", color: "#c21807" },
-  { name: "سیاه", color: "#0d0d0d" },
+  { name: "مشکی", color: "#0d0d0d" },
 ];

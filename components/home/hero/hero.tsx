@@ -21,21 +21,17 @@ export function Hero() {
             <h1 className="mt-4 max-w-xl text-[2rem] font-black leading-[1.3] tracking-[-0.01em] sm:text-[2.75rem] sm:leading-[1.25] lg:mt-5 lg:text-[3.25rem] lg:leading-[1.22]">
               <span className="block">از اولین ضربه،</span>
               <span className="block">
-                تا <span className="text-primary">کمربند سیاه.</span>
+                تا <span className="text-primary">کمربند مشکی.</span>
               </span>
             </h1>
 
             <p className="mt-4 max-w-md text-[15px] leading-8 text-muted-foreground lg:mt-5 lg:max-w-lg">
-              تک‌یار همراه هوشمند تو در دنیای تکواندوست؛ برنامه تمرین شخصی، آموزش گام‌به‌گام
-              فن‌ها و پیگیری دقیق مسیر ارتقای کمربند — همه در یک اپلیکیشن.
+              تک‌یار همراه هوشمند تو در دنیای تکواندوست؛ برنامه تمرین شخصی، آموزش گام‌به‌گام فن‌ها و پیگیری دقیق مسیر ارتقای کمربند — همه در
+              یک اپلیکیشن.
             </p>
 
             <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5 lg:mt-9 lg:justify-start">
-              <Button
-                type="button"
-                size="lg"
-                className="h-11 gap-2 rounded-lg px-5 text-[15px] font-bold shadow-sm shadow-primary/25"
-              >
+              <Button type="button" size="lg" className="h-11 gap-2 rounded-lg px-5 text-[15px] font-bold shadow-sm shadow-primary/25">
                 <Download className="!size-[17px]" />
                 دانلود اپلیکیشن
               </Button>
@@ -51,10 +47,7 @@ export function Hero() {
 
             <ul className="mt-8 flex w-full flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-black/[0.06] pt-5 lg:mt-10 lg:justify-start lg:pt-6">
               {TRUST_BADGES.map((badge) => (
-                <li
-                  key={badge}
-                  className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"
-                >
+                <li key={badge} className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                   <Check className="size-3.5 shrink-0 text-belt-green" strokeWidth={2.5} />
                   {badge}
                 </li>

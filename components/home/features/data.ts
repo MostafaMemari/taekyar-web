@@ -1,14 +1,4 @@
-import {
-  Dumbbell,
-  Flame,
-  Footprints,
-  MessageCircle,
-  Moon,
-  Swords,
-  TrendingUp,
-  Video,
-  Zap,
-} from "lucide-react";
+import { Dumbbell, Flame, Footprints, MessageCircle, Moon, Swords, TrendingUp, Video, Zap } from "lucide-react";
 
 import { BELT_LEVELS } from "@/lib/belts";
 
@@ -28,22 +18,16 @@ export interface FeaturedFeature {
 export const FEATURES_INTRO = {
   eyebrow: "چرا تک‌یار؟",
   title: "تمرین هوشمند، پیشرفت واقعی",
-  description:
-    "تک‌یار فقط یک اپلیکیشن ورزشی نیست؛ باشگاه همراه همیشگی توست. هرچه برای رشد در تکواندو لازم داری، اینجا کنار هم است.",
+  description: "تک‌یار فقط یک اپلیکیشن ورزشی نیست؛ باشگاه همراه همیشگی توست. هرچه برای رشد در تکواندو لازم داری، اینجا کنار هم است.",
 };
 
 export const FEATURED_FEATURE: FeaturedFeature = {
   Icon: Zap,
   title: "برنامه تمرین شخصی",
-  description:
-    "برنامه‌ای که با سطح، هدف و سرعت تو تنظیم می‌شود؛ هر هفته دقیقاً می‌دانی کدام تمرین، چند بار و برای کدام کمربند.",
+  description: "برنامه‌ای که با سطح، هدف و سرعت تو تنظیم می‌شود؛ هر هفته دقیقاً می‌دانی کدام تمرین، چند بار و برای کدام کمربند.",
 };
 
-export const PLAN_CHIPS = [
-  "سطح‌بندی خودکار",
-  "برنامهٔ هفتگی",
-  "تمرین در خانه یا باشگاه",
-];
+export const PLAN_CHIPS = ["سطح‌بندی خودکار", "برنامهٔ هفتگی", "تمرین در خانه یا باشگاه"];
 
 export const WEEKLY_PLAN = [
   { day: "ش", label: "پایه", Icon: Footprints, load: 55, minutes: 30, done: true },
@@ -66,22 +50,19 @@ export const SUPPORTING_FEATURES: SupportingFeature[] = [
     Icon: TrendingUp,
     tint: "bg-[#1f5fa8]/10 text-[#1f5fa8]",
     title: "پیگیری ارتقای کمربند",
-    description:
-      "مسیر پیشرفتت را از سفید تا سیاه ثبت کن؛ آمار تمرین‌ها و آمادگی‌ات برای آزمون بعدی همیشه جلوی چشمت باشد.",
+    description: "مسیر پیشرفتت را از سفید تا مشکی ثبت کن؛ آمار تمرین‌ها و آمادگی‌ات برای آزمون بعدی همیشه جلوی چشمت باشد.",
   },
   {
     Icon: Video,
     tint: "bg-[#2e8b57]/10 text-[#2e8b57]",
     title: "آموزش ویدیویی فن‌ها",
-    description:
-      "از ضربات پایه تا پومسه‌ها را فریم‌به‌فریم ببین؛ با اجرای استاندارد و توضیح ساده که در تمرین به کارت می‌آید.",
+    description: "از ضربات پایه تا پومسه‌ها را فریم‌به‌فریم ببین؛ با اجرای استاندارد و توضیح ساده که در تمرین به کارت می‌آید.",
   },
   {
     Icon: MessageCircle,
     tint: "bg-[#f4c430]/20 text-[#9a7b0a]",
     title: "ارتباط با مربی",
-    description:
-      "سؤالت را از مربی بپرس، روی فن‌هایت بازخورد بگیری و تمرین‌هایت را زیر نظر مستقیم او انجام بده.",
+    description: "سؤالت را از مربی بپرس، روی فن‌هایت بازخورد بگیری و تمرین‌هایت را زیر نظر مستقیم او انجام بده.",
   },
 ];
 

@@ -21,20 +21,12 @@ export const metadata: Metadata = {
     template: "%s | تک‌یار",
   },
   description:
-    "تک‌یار اپلیکیشن همراه تمرین تکواندوست؛ برنامه تمرین شخصی، آموزش گام‌به‌گام فن‌ها و پیگیری ارتقای کمربند، از کمربند سفید تا سیاه.",
+    "تک‌یار اپلیکیشن همراه تمرین تکواندوست؛ برنامه تمرین شخصی، آموزش گام‌به‌گام فن‌ها و پیگیری ارتقای کمربند، از کمربند سفید تا مشکی.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="fa"
-      dir="rtl"
-      className={cn(
-        "h-full antialiased dark font-sans",
-        vazirmatn.variable,
-        geistMono.variable
-      )}
-    >
+    <html lang="fa" dir="rtl" className={cn("h-full antialiased dark font-sans", vazirmatn.variable, geistMono.variable)}>
       <body className="flex min-h-full flex-col">
         <Header />
         <main className="theme-light flex-1 bg-background">{children}</main>
