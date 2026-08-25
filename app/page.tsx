@@ -8,9 +8,8 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <BeltDivider />
       <Features />
-      <BeltDivider />
+      <BeltDivider variant="slant" className="h-3 opacity-90" />
       <BlogPreview />
       <CtaSection />
     </>

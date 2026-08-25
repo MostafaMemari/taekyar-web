@@ -206,6 +206,33 @@
   }
 }
 
+/* Dobok fabric weave texture — faint crosshatch for hero backgrounds */
+.bg-weave {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(245, 243, 239, 0.022) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(245, 243, 239, 0.016) 0 1px, transparent 1px 4px);
+}
+
+.text-glow-red {
+  text-shadow:
+    0 0 28px rgba(224, 40, 46, 0.45),
+    0 0 72px rgba(224, 40, 46, 0.25);
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-hero-float {
+  animation: hero-float 6s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -216,7 +243,8 @@
     transition: none;
   }
   .strike-draw,
-  .speed-line {
+  .speed-line,
+  .animate-hero-float {
     stroke-dashoffset: 0;
     animation: none;
     opacity: 1;
