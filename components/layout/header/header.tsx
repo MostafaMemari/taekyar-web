@@ -20,8 +20,8 @@ export function Header() {
   return (
     <header
       className={cn(
-        "theme-light sticky top-0 z-40 bg-background transition-colors duration-300",
-        scrolled && "border-b border-black/[0.07] bg-background/95 supports-backdrop-filter:backdrop-blur-md"
+        "theme-light sticky top-0 z-40 border-b border-transparent bg-background transition-[border-color,box-shadow] duration-300",
+        scrolled && "border-black/[0.07] shadow-[0_4px_16px_-12px_rgba(23,23,23,0.25)]"
       )}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-4 sm:h-[68px] sm:px-6 lg:px-8">
