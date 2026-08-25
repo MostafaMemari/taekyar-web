@@ -13,7 +13,7 @@ export function CtaSection() {
         <div className="relative overflow-hidden rounded-3xl bg-[linear-gradient(135deg,#e0282e_0%,#b01d22_55%,#701014_100%)] px-6 pb-12 pt-14 text-center shadow-xl shadow-primary/25 sm:px-12">
           <BeltDivider
             fullWidth
-            className="absolute inset-x-0 top-0 border-0 opacity-90"
+            className="absolute inset-x-0 top-0 h-[3px] border-0 opacity-90"
           />
           <div
             aria-hidden="true"

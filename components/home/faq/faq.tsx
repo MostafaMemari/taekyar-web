@@ -41,12 +41,12 @@ function ContactCard() {
 
 export function Faq() {
   return (
-    <Section id="faq" className="bg-[#f5f5f4]">
+    <Section id="faq" divider className="bg-[#f4f3f1]">
       <Reveal>
         <SectionHeader {...FAQ_INTRO} />
       </Reveal>
 
-      <div className="mt-10 grid gap-5 lg:mt-12 lg:grid-cols-[1.35fr_0.65fr] lg:items-start">
+      <div className="mt-8 grid gap-4 lg:mt-10 lg:grid-cols-[1.35fr_0.65fr] lg:items-start lg:gap-5">
         <Reveal delay={80}>
           <div className={cn(SURFACE_CARD, "p-5 sm:p-7")}>
             <Accordion type="single" collapsible>

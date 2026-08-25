@@ -7,12 +7,12 @@ import { FeatureCard, FeaturedFeatureCard } from "./feature-cards";
 
 export function Features() {
   return (
-    <Section id="features" className="bg-[#f5f5f4]">
+    <Section id="features" divider className="bg-[#f4f3f1]">
       <Reveal>
         <SectionHeader {...FEATURES_INTRO} />
       </Reveal>
 
-      <div className="mt-10 space-y-5 lg:mt-12">
+      <div className="mt-8 space-y-4 lg:mt-10 lg:space-y-5">
         <Reveal>
           <FeaturedFeatureCard />
         </Reveal>
@@ -21,7 +21,7 @@ export function Features() {
           <BeltPath />
         </Reveal>
 
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3 lg:gap-5">
           {SUPPORTING_FEATURES.map((feature, index) => (
             <Reveal key={feature.title} delay={(index + 1) * 80}>
               <FeatureCard {...feature} />
