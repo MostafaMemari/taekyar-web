@@ -1,21 +1,45 @@
-import { MessageCircle, TrendingUp, Video, Zap } from "lucide-react";
-
-export interface Feature {
-  Icon: typeof Zap;
-  tint: string;
-  title: string;
-  description: string;
-}
+import {
+  Dumbbell,
+  Flame,
+  Footprints,
+  MessageCircle,
+  Moon,
+  Swords,
+  TrendingUp,
+  Video,
+  Zap,
+} from "lucide-react";
 
 export const FEATURED_FEATURE = {
   Icon: Zap,
-  tint: "bg-primary/10 text-primary",
   title: "برنامه تمرین شخصی",
   description:
     "برنامه‌ای که با سطح، هدف و سرعت تو تنظیم می‌شود؛ هر هفته دقیقاً می‌دانی کدام تمرین، چند بار و برای کدام کمربند.",
 };
 
-export const FEATURES: Feature[] = [
+export const PLAN_CHIPS = [
+  "سطح‌بندی خودکار",
+  "برنامهٔ هفتگی",
+  "تمرین در خانه یا باشگاه",
+];
+
+export const WEEKLY_PLAN = [
+  { day: "ش", label: "پایه", Icon: Footprints, load: 55, minutes: 30, done: true },
+  { day: "ی", label: "ضربات", Icon: Zap, load: 80, minutes: 45, done: true },
+  { day: "د", label: "کشش", Icon: Flame, load: 35, minutes: 20, done: true },
+  { day: "س", label: "کیوروگی", Icon: Swords, load: 95, minutes: 50, active: true },
+  { day: "چ", label: "پومسه", Icon: Footprints, load: 45, minutes: 25 },
+  { day: "پ", label: "قدرت", Icon: Dumbbell, load: 70, minutes: 40 },
+  { day: "ج", label: "استراحت", Icon: Moon, load: 0, minutes: 0, rest: true },
+];
+
+export const WEEKLY_STATS = [
+  { label: "جلسه فعال", value: "۶" },
+  { label: "دقیقه تمرین", value: "۲۱۰" },
+  { label: "تکمیل‌شده", value: "۳ از ۶" },
+];
+
+export const SUPPORTING_FEATURES = [
   {
     Icon: TrendingUp,
     tint: "bg-[#1f5fa8]/10 text-[#1f5fa8]",
@@ -39,8 +63,11 @@ export const FEATURES: Feature[] = [
   },
 ];
 
-export const PLAN_CHIPS = [
-  "سطح‌بندی خودکار",
-  "برنامهٔ هفتگی",
-  "تمرین در خانه یا باشگاه",
+export const BELT_PATH = [
+  { name: "سفید", color: "#ffffff" },
+  { name: "زرد", color: "#f4c430" },
+  { name: "سبز", color: "#2e8b57" },
+  { name: "آبی", color: "#1f5fa8" },
+  { name: "قرمز", color: "#c21807" },
+  { name: "سیاه", color: "#0d0d0d" },
 ];
