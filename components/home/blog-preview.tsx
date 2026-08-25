@@ -27,20 +27,20 @@ const CATEGORY_STYLES: Record<
 export function BlogPreview() {
   return (
     <section id="blog-preview" className="theme-light bg-background text-foreground">
-      <div className="mx-auto max-w-6xl px-4 pb-14 pt-12 sm:px-6 sm:pb-16 sm:pt-14 lg:px-8 lg:pb-20">
+      <div className="mx-auto max-w-6xl px-4 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-16 lg:px-8 lg:pb-24 lg:pt-20">
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-xl">
               <span className="text-sm font-bold text-primary">وبلاگ تک‌یار</span>
-              <h2 className="mt-2 text-3xl font-black leading-snug sm:text-4xl">
+              <h2 className="mt-3 text-3xl font-extrabold leading-[1.4] sm:text-4xl">
                 از وبلاگ تک‌یار بخوانید
               </h2>
               <BeltDivider
                 fullWidth={false}
                 variant="pill"
-                className="mt-3 h-1 w-20"
+                className="mt-4 h-1 w-20"
               />
-              <p className="mt-3 text-[15px] leading-7 text-muted-foreground sm:text-base sm:leading-8">
+              <p className="mt-4 text-[15px] leading-8 text-muted-foreground sm:text-base sm:leading-9">
                 آموزش فن‌ها، تحلیل مسابقات و نکات تغذیه؛ نوشته‌هایی که هر هفته
                 مستقیم از تشک به خواندن می‌ارزند.
               </p>
@@ -59,7 +59,7 @@ export function BlogPreview() {
             const { color, Icon } = CATEGORY_STYLES[post.category];
             return (
               <Reveal key={post.id} delay={index * 100}>
-                <Card className="h-full gap-0 pt-0 shadow-md shadow-black/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10">
+                <Card className="h-full gap-0 pt-0 shadow-sm shadow-black/[0.04] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/[0.07]">
                   <div className="relative h-32 w-full overflow-hidden sm:h-36">
                     <div className="absolute inset-0" style={{ backgroundColor: color }} />
                     <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.09)_0_2px,transparent_2px_16px)]" />

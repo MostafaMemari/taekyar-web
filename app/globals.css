@@ -295,4 +295,7 @@
     opacity: 1;
     transform: none;
   }
+  [data-slot="accordion-content"] {
+    animation: none !important;
+  }
 }

@@ -2,6 +2,7 @@ import { BeltDivider } from "@/components/belt-divider";
 import { Hero } from "@/components/home/hero";
 import { Features } from "@/components/home/features";
 import { BlogPreview } from "@/components/home/blog-preview";
+import { Faq } from "@/components/home/faq";
 import { CtaSection } from "@/components/home/cta";
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
       <Features />
       <BeltDivider variant="slant" className="h-3 opacity-90" />
       <BlogPreview />
+      <Faq />
       <CtaSection />
     </>
   );

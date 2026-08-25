@@ -41,7 +41,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="theme-light sticky top-0 z-40 bg-background/85 backdrop-blur-md">
+    <header className="theme-light sticky top-0 z-40 border-b border-black/[0.06] bg-card/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Wordmark />
 
@@ -103,7 +103,6 @@ export function Header() {
           </Sheet>
         </div>
       </div>
-      <div className="border-b border-border" />
     </header>
   );
 }

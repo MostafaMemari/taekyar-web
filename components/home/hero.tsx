@@ -26,7 +26,7 @@ const BELT_LADDER = [
 ];
 
 const TODAY_TRAININGS = [
-  { Icon: Flame, title: "گرم کردن و کشش", meta: "کشش پویا", duration: "۱۰ دقیقه", tint: "bg-orange-500/10 text-orange-600" },
+  { Icon: Flame, title: "گرم کردن و کشش", meta: "کشش پویا", duration: "۱۰ دقیقه", tint: "bg-[#f4c430]/20 text-[#9a7b0a]" },
   { Icon: Zap, title: "دولیو چاگی", meta: "ضربه پا", duration: "۱۵ دقیقه", tint: "bg-primary/10 text-primary" },
   { Icon: Footprints, title: "پومسه ایل جانگ", meta: "اجرای فرم", duration: "۱۲ دقیقه", tint: "bg-[#1f5fa8]/10 text-[#1f5fa8]" },
 ];
@@ -181,7 +181,7 @@ export function Hero() {
       <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0" />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_55%_at_85%_-10%,rgba(224,40,46,0.07),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_85%_10%,rgba(224,40,46,0.05),transparent_62%)]"
       />
       <div
         aria-hidden="true"
