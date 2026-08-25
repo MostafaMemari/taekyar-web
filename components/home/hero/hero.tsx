@@ -12,7 +12,7 @@ export function Hero() {
 
       <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 pb-10 pt-10 sm:px-6 sm:pb-11 sm:pt-12 lg:grid-cols-[1fr_0.9fr] lg:gap-10 lg:px-8 lg:pb-12 lg:pt-14">
         <Reveal>
-          <div>
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-start">
             <span className="inline-flex items-center gap-2 text-[13px] font-semibold text-muted-foreground">
               <span className="h-px w-6 bg-primary/40" />
               همراه هوشمند تمرین تکواندو
@@ -25,12 +25,12 @@ export function Hero() {
               </span>
             </h1>
 
-            <p className="mt-4 max-w-md text-[15px] leading-8 text-muted-foreground">
+            <p className="mt-4 max-w-md text-[15px] leading-8 text-muted-foreground lg:max-w-lg">
               تک‌یار همراه هوشمند تو در دنیای تکواندوست؛ برنامه تمرین شخصی، آموزش گام‌به‌گام
               فن‌ها و پیگیری دقیق مسیر ارتقای کمربند — همه در یک اپلیکیشن.
             </p>
 
-            <div className="mt-7 flex flex-wrap items-center gap-2.5">
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5 lg:justify-start">
               <Button
                 type="button"
                 size="lg"
@@ -49,7 +49,7 @@ export function Hero() {
               </Button>
             </div>
 
-            <ul className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2">
+            <ul className="mt-8 flex w-full flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-black/[0.06] pt-5 lg:justify-start">
               {TRUST_BADGES.map((badge) => (
                 <li
                   key={badge}
