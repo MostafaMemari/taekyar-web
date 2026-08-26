@@ -19,20 +19,25 @@ export function ContactBanner({
   actionHref,
 }: ContactBannerProps) {
   return (
-    <div className="flex flex-col items-start gap-5 rounded-2xl bg-belt-black p-6 sm:flex-row sm:items-center sm:gap-6 sm:p-7">
+    <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-4 rounded-2xl bg-belt-black p-6 lg:flex lg:items-center lg:gap-6 lg:p-7">
       <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary ring-1 ring-primary/25">
         <MessagesSquare className="!size-6" />
       </span>
 
-      <div className="flex-1">
+      <div className="contents lg:block lg:min-w-0 lg:flex-1">
         <h3 className="text-lg font-extrabold text-white">{title}</h3>
-        <p className="mt-1.5 text-sm leading-7 text-white/60">{description}</p>
+        <p className="col-span-full mt-1.5 text-sm leading-7 text-white/60">{description}</p>
       </div>
+
+      <span
+        aria-hidden="true"
+        className="hidden h-10 w-px shrink-0 bg-white/15 lg:block"
+      />
 
       <Button
         asChild
         size="lg"
-        className="h-11 w-full shrink-0 gap-2 rounded-xl bg-primary px-6 text-[15px] font-bold text-white shadow-lg shadow-primary/25 hover:bg-primary/90 sm:w-auto"
+        className="col-span-full h-11 w-full shrink-0 gap-2 rounded-xl bg-primary px-6 text-[15px] font-bold text-white shadow-lg shadow-primary/25 hover:bg-primary/90 lg:w-auto"
       >
         <Link href={actionHref}>
           {actionLabel}
