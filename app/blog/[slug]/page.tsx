@@ -43,8 +43,6 @@ interface PostRailProps {
   tocItems: TocItem[];
 }
 
-/** Widget order: TOC → guides → categories → app CTA.
- *  Sticks to the viewport on desktop while the page scrolls; sized to fit without inner scrolling. */
 function PostRail({ slug, category, tocItems }: PostRailProps) {
   return (
     <div className="space-y-4 lg:sticky lg:top-[88px]">
