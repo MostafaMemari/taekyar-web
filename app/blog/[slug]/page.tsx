@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ArticleContent } from "@/components/blog/article-content";
+import { CommentsSection } from "@/components/blog/comments/comments-section";
+import { getPostComments } from "@/components/blog/comments/data";
 import { PostCover } from "@/components/blog/post-cover";
 import { PostHeader, PostTopbar } from "@/components/blog/post-header";
 import { POST_CONTACT_CTA, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/components/blog/post-config";
@@ -65,6 +67,7 @@ export default async function PostPage({ params }: PostPageProps) {
   const blocks = getPostBlocks(post.slug) ?? [];
   const headings = getHeadings(blocks);
   const relatedPosts = getRelatedPosts(blogPosts, post.slug, post.category, RELATED_POSTS_COUNT);
+  const comments = getPostComments();
 
   return (
     <>
@@ -94,6 +97,10 @@ export default async function PostPage({ params }: PostPageProps) {
                 <article className="mt-5 sm:mt-6 lg:mt-0">
                   <ArticleContent post={post} blocks={blocks} />
                 </article>
+              </Reveal>
+
+              <Reveal delay={120}>
+                <CommentsSection comments={comments} />
               </Reveal>
             </div>
 
