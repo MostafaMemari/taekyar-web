@@ -30,7 +30,7 @@ export function SidebarCategories({ activeCategory }: SidebarCategoriesProps) {
                 href={`/blog?category=${encodeURIComponent(category)}`}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "group flex min-h-11 items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors",
+                  "group flex min-h-10 items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors",
                   active
                     ? "bg-primary/[0.07]"
                     : "hover:bg-black/[0.03] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"

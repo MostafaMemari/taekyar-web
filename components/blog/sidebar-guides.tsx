@@ -28,11 +28,11 @@ export function SidebarGuides({ currentSlug }: SidebarGuidesProps) {
             <li key={post.id}>
               <Link
                 href={`/blog/${post.slug}`}
-                className="group flex items-start gap-3 rounded-xl p-2 transition-colors hover:bg-black/[0.03] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                className="group flex items-start gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-black/[0.03] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
               >
                 <span
                   aria-hidden="true"
-                  className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg"
+                  className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg"
                   style={{ backgroundColor: `${color}14`, color }}
                 >
                   <Icon className="size-4" />

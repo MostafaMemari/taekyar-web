@@ -29,7 +29,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   href={`#${item.id}`}
                   aria-current={active ? "true" : undefined}
                   className={cn(
-                    "group relative flex items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors",
+                    "group relative flex items-start gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors",
                     active
                       ? "bg-primary/[0.07] text-primary"
                       : "text-muted-foreground hover:bg-black/[0.03] hover:text-foreground"
