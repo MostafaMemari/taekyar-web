@@ -78,12 +78,12 @@ export default async function PostPage({ params }: PostPageProps) {
               POST_LAYOUT.postColumns,
             )}
           >
-            <div className="min-w-0 lg:col-start-2 lg:row-start-1">
-              <PostCover category={post.category} />
-            </div>
-
             <div className="min-w-0 lg:col-start-1 lg:row-start-1">
               <PostHeader post={post} />
+            </div>
+
+            <div className="min-w-0 lg:col-start-2 lg:row-start-1">
+              <PostCover category={post.category} />
             </div>
 
             <div className="min-w-0 lg:col-start-1 lg:row-start-2">
@@ -102,14 +102,14 @@ export default async function PostPage({ params }: PostPageProps) {
         </Reveal>
       </Section>
 
-      <Section>
-        <div className="mt-10 sm:mt-12">
+      <Section containerClassName="pt-8 sm:pt-10 lg:pt-10">
+        <div>
           <Reveal delay={100}>
             <RelatedPosts posts={relatedPosts} />
           </Reveal>
         </div>
 
-        <div className="mt-10 sm:mt-12">
+        <div className="mt-8 sm:mt-10">
           <Reveal delay={120}>
             <ContactBanner
               title={POST_CONTACT_CTA.title}

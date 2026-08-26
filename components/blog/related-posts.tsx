@@ -12,14 +12,12 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
 
   return (
     <section aria-labelledby="related-posts-title">
-      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-b border-black/[0.06] pb-5">
-        <div>
-          <span className="text-sm font-bold text-primary">{POST_LABELS.relatedEyebrow}</span>
-          <h2 id="related-posts-title" className="mt-1.5 text-xl font-black sm:text-2xl">
-            {POST_LABELS.relatedTitle}
-          </h2>
-        </div>
-        <BeltDivider fullWidth={false} variant="pill" className="mb-1 hidden h-1 w-16 sm:block" />
+      <div className="border-b border-black/[0.06] pb-4 sm:pb-5">
+        <p className="text-xs font-bold tracking-wide text-primary sm:text-sm">{POST_LABELS.relatedEyebrow}</p>
+        <h2 id="related-posts-title" className="mt-1.5 text-xl font-black leading-tight sm:text-2xl">
+          {POST_LABELS.relatedTitle}
+        </h2>
+        <BeltDivider variant="pill" className="mt-3 h-1 w-14 sm:w-16" />
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5 xl:grid-cols-3">
