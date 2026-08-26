@@ -13,7 +13,7 @@ interface SidebarGuidesProps {
 
 export function SidebarGuides({ currentSlug }: SidebarGuidesProps) {
   const guides = blogPosts.filter(
-    (post) => TRAINING_GUIDE_SLUGS.includes(post.slug as (typeof TRAINING_GUIDE_SLUGS)[number]) && post.slug !== currentSlug
+    (post) => TRAINING_GUIDE_SLUGS.includes(post.slug as (typeof TRAINING_GUIDE_SLUGS)[number]) && post.slug !== currentSlug,
   );
 
   if (guides.length === 0) return null;
@@ -38,7 +38,7 @@ export function SidebarGuides({ currentSlug }: SidebarGuidesProps) {
                   <Icon className="size-4" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="line-clamp-2 block text-[13px] font-bold leading-6 text-foreground transition-colors group-hover:text-primary">
+                  <span className="block truncate text-[13px] font-bold leading-6 text-foreground transition-colors group-hover:text-primary">
                     {post.title}
                   </span>
                   <span className="mt-0.5 block text-[11px] font-medium text-muted-foreground">

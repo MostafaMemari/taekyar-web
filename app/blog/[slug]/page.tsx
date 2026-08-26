@@ -43,7 +43,6 @@ interface PostRailProps {
   tocItems: TocItem[];
 }
 
-/** Widget order: TOC (navigation for this article) → guides → categories → app CTA. */
 function PostRail({ slug, category, tocItems }: PostRailProps) {
   return (
     <div className="space-y-5 lg:sticky lg:top-[88px] lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pe-1">
@@ -73,21 +72,18 @@ export default async function PostPage({ params }: PostPageProps) {
         <Reveal>
           <PostTopbar />
 
-          {/* RTL desktop composition: main reading column on the right (col 1),
-              cover image + sticky support rail on the left (col 2).
-              Rail order: TOC → guides → categories → app CTA. */}
           <div
             className={cn(
               "mt-6 grid gap-8 sm:mt-8 lg:mt-10 lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-12 lg:gap-y-8 xl:gap-x-14",
-              POST_LAYOUT.postColumns
+              POST_LAYOUT.postColumns,
             )}
           >
-            <div className="min-w-0 lg:col-start-1 lg:row-start-1">
-              <PostHeader post={post} />
-            </div>
-
             <div className="min-w-0 lg:col-start-2 lg:row-start-1">
               <PostCover category={post.category} />
+            </div>
+
+            <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+              <PostHeader post={post} />
             </div>
 
             <div className="min-w-0 lg:col-start-1 lg:row-start-2">
