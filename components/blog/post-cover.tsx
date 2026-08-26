@@ -14,7 +14,7 @@ export function PostCover({ category }: { category: BlogPost["category"] }) {
       />
 
       <div
-        className="relative mx-auto aspect-square w-full max-w-[520px] overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06] sm:max-w-[560px] lg:mx-0 lg:aspect-auto lg:h-full lg:min-h-[16rem] lg:max-w-none"
+        className="relative mx-auto aspect-square w-full max-w-[520px] overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06] sm:max-w-[600px] lg:mx-0 lg:aspect-auto lg:h-full lg:min-h-[16rem] lg:max-w-none"
         style={{ backgroundColor: color }}
       >
         <div

@@ -45,8 +45,10 @@ interface PostRailProps {
 
 function PostRail({ slug, category, tocItems }: PostRailProps) {
   return (
-    <div className="space-y-4 lg:sticky lg:top-[88px]">
-      <TableOfContents items={tocItems} />
+    <div className="space-y-3.5 sm:space-y-4 lg:sticky lg:top-[88px]">
+      <div className="hidden lg:block">
+        <TableOfContents items={tocItems} />
+      </div>
       <SidebarGuides currentSlug={slug} />
       <SidebarCategories activeCategory={category} />
       <SidebarAppCta />
@@ -74,7 +76,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
           <div
             className={cn(
-              "mt-6 grid gap-8 sm:mt-8 lg:mt-10 lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-12 lg:gap-y-8 xl:gap-x-14",
+              "mt-6 grid gap-6 sm:mt-7 sm:gap-7 lg:mt-10 lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-12 lg:gap-y-8 xl:gap-x-14",
               POST_LAYOUT.postColumns,
             )}
           >
@@ -89,7 +91,7 @@ export default async function PostPage({ params }: PostPageProps) {
             <div className="min-w-0 lg:col-start-1 lg:row-start-2">
               <TocCollapse items={headings} />
               <Reveal delay={80}>
-                <article className="mt-6 lg:mt-0">
+                <article className="mt-5 sm:mt-6 lg:mt-0">
                   <ArticleContent post={post} blocks={blocks} />
                 </article>
               </Reveal>
@@ -102,7 +104,7 @@ export default async function PostPage({ params }: PostPageProps) {
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-6">
+      <Section containerClassName="pt-8 sm:pt-10">
         <div>
           <Reveal delay={100}>
             <RelatedPosts posts={relatedPosts} />

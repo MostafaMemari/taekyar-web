@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 function PostTags({ tags }: { tags: string[] }) {
   return (
-    <div className="mt-12 flex flex-wrap items-center gap-2 border-t border-black/[0.06] pt-6">
+    <div className="mt-8 flex flex-wrap items-center gap-2 border-t border-black/[0.06] pt-5 sm:mt-10 sm:pt-6">
       <span className="text-xs font-bold text-foreground">{POST_LABELS.tagsLabel}</span>
       {tags.map((tag) => (
         <span
@@ -28,7 +28,7 @@ interface ArticleContentProps {
 
 export function ArticleContent({ post, blocks }: ArticleContentProps) {
   return (
-    <div className={cn(SURFACE_CARD, "p-5 sm:p-8 lg:p-12")}>
+    <div className={cn(SURFACE_CARD, "p-4 sm:p-6 lg:p-10 xl:p-12")}>
       <div className="max-w-3xl">
         <PostBody blocks={blocks} />
       </div>

@@ -9,14 +9,14 @@ export function SidebarAppCta() {
   return (
     <section
       aria-label={POST_LABELS.appCtaTitle}
-      className="relative overflow-hidden rounded-2xl bg-belt-black p-4 shadow-sm shadow-black/[0.08]"
+      className="relative overflow-hidden rounded-2xl bg-belt-black p-3.5 shadow-sm shadow-black/[0.08] sm:p-4"
     >
       <BeltDivider fullWidth className="absolute inset-x-0 top-0 h-[3px] border-0 opacity-80" />
 
-      <h2 className="mt-1.5 text-[15px] font-black leading-7 text-white">
+      <h2 className="mt-1.5 text-[14px] font-black leading-7 text-white sm:text-[15px]">
         {POST_LABELS.appCtaTitle}
       </h2>
-      <p className="mt-1.5 text-xs leading-6 text-white/60">
+      <p className="mt-1.5 text-[11px] leading-6 text-white/60 sm:text-xs">
         {POST_LABELS.appCtaDescription}
       </p>
 

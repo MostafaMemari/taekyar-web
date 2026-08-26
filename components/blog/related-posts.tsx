@@ -13,14 +13,14 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
   return (
     <section aria-labelledby="related-posts-title">
       <div className="border-b border-black/[0.06] pb-4 sm:pb-5">
-        <p className="text-xs font-bold tracking-wide text-primary sm:text-sm">{POST_LABELS.relatedEyebrow}</p>
-        <h2 id="related-posts-title" className="mt-1.5 text-xl font-black leading-tight sm:text-2xl">
+        <p className="text-[11px] font-bold tracking-wide text-primary sm:text-xs">{POST_LABELS.relatedEyebrow}</p>
+        <h2 id="related-posts-title" className="mt-1.5 text-[1.25rem] font-black leading-tight sm:text-2xl">
           {POST_LABELS.relatedTitle}
         </h2>
-        <BeltDivider variant="pill" className="mt-3 h-1 w-14 sm:w-16" />
+        <BeltDivider variant="pill" className="mt-3 h-1 w-12 sm:w-16" />
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5 xl:grid-cols-3">
+      <div className="mt-5 grid grid-cols-1 gap-4 sm:mt-6 sm:grid-cols-2 lg:gap-5 xl:grid-cols-3">
         {posts.map((post) => (
           <BlogCard key={post.id} post={post} />
         ))}
