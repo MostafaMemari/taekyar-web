@@ -4,21 +4,23 @@ import { ArrowLeft, Clock } from "lucide-react";
 import { BLOG_INDEX_LABELS, CATEGORY_STYLES } from "@/components/blog/data";
 import { Badge } from "@/components/ui/badge";
 import type { BlogPost } from "@/lib/blog";
-import { SURFACE_CARD, SURFACE_CARD_INTERACTIVE } from "@/lib/styles";
+import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
 function CardCover({ post }: { post: BlogPost }) {
   const { color, Icon } = CATEGORY_STYLES[post.category];
 
   return (
-    <div className="relative h-36 w-full overflow-hidden sm:h-40">
+    <div className="relative aspect-[16/10] w-full overflow-hidden">
       <div className="absolute inset-0" style={{ backgroundColor: color }} />
-      <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.09)_0_2px,transparent_2px_16px)]" />
+      <div aria-hidden="true" className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.08)_0_2px,transparent_2px_18px)]" />
+      <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.14),transparent_62%)]" />
       <Icon
-        className="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 text-white/30 transition-transform duration-300 group-hover/card:scale-[1.08]"
-        strokeWidth={1.5}
+        className="absolute left-1/2 top-1/2 size-[52px] -translate-x-1/2 -translate-y-1/2 text-white/30 transition-transform duration-500 group-hover/card:scale-[1.06] sm:size-14"
+        strokeWidth={1.4}
       />
-      <Badge className="absolute start-3 top-3 border-none bg-white/95 text-xs font-semibold text-[#171717] shadow-sm">
+      <span aria-hidden="true" className="pointer-events-none absolute inset-3 rounded-xl ring-1 ring-white/15" />
+      <Badge className="absolute start-3 top-3 border-none bg-white/90 text-[11px] font-bold tracking-tight text-[#171717] shadow-sm backdrop-blur-sm sm:text-xs">
         {post.category}
       </Badge>
     </div>
@@ -32,34 +34,33 @@ export function BlogCard({ post }: { post: BlogPost }) {
     <article
       className={cn(
         SURFACE_CARD,
-        SURFACE_CARD_INTERACTIVE,
-        "group/card flex h-full flex-col overflow-hidden"
+        "group/card flex h-full flex-col overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/[0.06]"
       )}
     >
-      <CardCover post={post} />
+      <Link href={href} className="block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50" aria-label={post.title}>
+        <CardCover post={post} />
+      </Link>
 
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-base font-bold leading-7">
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <h3 className="text-balance text-[15px] font-bold leading-6 sm:text-[16px] sm:leading-7">
           <Link
             href={href}
-            className="line-clamp-1 rounded-sm transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="line-clamp-2 rounded-sm transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             {post.title}
           </Link>
         </h3>
 
-        <p className="mt-1.5 flex flex-wrap items-center gap-x-2 text-xs font-medium text-muted-foreground">
+        <p className="mt-1.5 flex flex-wrap items-center gap-x-2 text-[11px] font-medium text-muted-foreground sm:text-xs">
           <span>{post.date}</span>
-          <span aria-hidden="true" className="text-muted-foreground/40">
-            ·
-          </span>
+          <span aria-hidden="true" className="size-1 rounded-full bg-muted-foreground/30" />
           <span className="inline-flex items-center gap-1">
             <Clock className="size-3" />
             {post.readTimeMinutes} {BLOG_INDEX_LABELS.readTimeSuffix}
           </span>
         </p>
 
-        <p className="mt-3 line-clamp-3 text-sm leading-7 text-muted-foreground">
+        <p className="mt-2.5 line-clamp-2 text-pretty text-[13px] leading-6 text-muted-foreground sm:text-sm sm:leading-7">
           {post.excerpt}
         </p>
 
@@ -67,10 +68,10 @@ export function BlogCard({ post }: { post: BlogPost }) {
           href={href}
           tabIndex={-1}
           aria-hidden="true"
-          className="mt-auto inline-flex items-center gap-1.5 self-start pt-5 text-sm font-semibold text-primary transition-all group-hover/card:gap-2.5"
+          className="mt-auto inline-flex items-center gap-1.5 self-start pt-4 text-[13px] font-bold text-primary transition-all group-hover/card:gap-2 sm:pt-5 sm:text-sm"
         >
           {BLOG_INDEX_LABELS.readMore}
-          <ArrowLeft className="size-4" />
+          <ArrowLeft className="size-3.5 sm:size-4" />
         </Link>
       </div>
     </article>

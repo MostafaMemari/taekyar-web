@@ -31,22 +31,22 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <>
-      <Section className="pb-0 sm:pb-0 lg:pb-0">
+      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10">
         <Reveal>
           <BlogHeader />
         </Reveal>
 
         <Reveal delay={80}>
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-black/[0.06] pb-5">
+          <div className="mt-6 flex flex-col gap-3 border-b border-black/[0.06] pb-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pb-5">
             <CategoryFilter activeCategory={activeCategory} />
-            <p className="text-xs font-medium text-muted-foreground">
-              <span className="font-bold text-foreground">{toFaDigits(posts.length)}</span> {BLOG_INDEX_LABELS.resultsSuffix}
+            <p className="shrink-0 text-xs font-medium text-muted-foreground sm:text-[13px]">
+              <span className="font-bold tabular-nums text-foreground">{toFaDigits(posts.length)}</span> {BLOG_INDEX_LABELS.resultsSuffix}
             </p>
           </div>
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-0 sm:pt-0 lg:pt-0">
+      <Section containerClassName="pt-6 sm:pt-7 lg:pt-8">
         <PostGrid posts={posts} />
       </Section>
     </>
