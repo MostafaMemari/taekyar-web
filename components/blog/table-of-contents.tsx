@@ -2,6 +2,7 @@
 
 import { useActiveHeading } from "@/components/blog/use-active-heading";
 import { POST_LABELS } from "@/components/blog/post-config";
+import { SidebarSection } from "@/components/blog/sidebar-section";
 import type { TocItem } from "@/lib/blog-content";
 import { cn, toFaDigits } from "@/lib/utils";
 import { BookOpen } from "lucide-react";
@@ -16,17 +17,9 @@ export function TableOfContents({ items }: TableOfContentsProps) {
   if (items.length === 0) return null;
 
   return (
-    <nav
-      aria-label="سرفصل‌های مقاله"
-      className="hidden lg:sticky lg:top-[84px] lg:block"
-    >
-      <div className="overflow-hidden rounded-2xl bg-card shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05]">
-        <div className="flex items-center gap-2 border-b border-black/[0.06] px-4 py-3">
-          <BookOpen className="size-4 text-primary" />
-          <p className="text-xs font-bold text-foreground">{POST_LABELS.tocTitle}</p>
-        </div>
-
-        <ul className="max-h-[calc(100vh-13rem)] space-y-0.5 overflow-y-auto p-2.5">
+    <SidebarSection title={POST_LABELS.tocTitle} icon={BookOpen}>
+      <nav aria-label="سرفصل‌های مقاله">
+        <ul className="space-y-0.5">
           {items.map((item, index) => {
             const active = activeId === item.id;
 
@@ -36,7 +29,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   href={`#${item.id}`}
                   aria-current={active ? "true" : undefined}
                   className={cn(
-                    "group flex items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors",
+                    "group relative flex items-start gap-2.5 rounded-lg px-2.5 py-2 transition-colors",
                     active
                       ? "bg-primary/[0.07] text-primary"
                       : "text-muted-foreground hover:bg-black/[0.03] hover:text-foreground"
@@ -66,7 +59,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
             );
           })}
         </ul>
-      </div>
-    </nav>
+      </nav>
+    </SidebarSection>
   );
 }

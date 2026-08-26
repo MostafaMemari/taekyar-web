@@ -4,13 +4,18 @@ import { notFound } from "next/navigation";
 import { ArticleContent } from "@/components/blog/article-content";
 import { PostHeader } from "@/components/blog/post-header";
 import { POST_CONTACT_CTA, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/components/blog/post-config";
+import { ReadingProgress } from "@/components/blog/reading-progress";
 import { RelatedPosts } from "@/components/blog/related-posts";
+import { SidebarAppCta } from "@/components/blog/sidebar-app-cta";
+import { SidebarCategories } from "@/components/blog/sidebar-categories";
+import { SidebarGuides } from "@/components/blog/sidebar-guides";
 import { TableOfContents } from "@/components/blog/table-of-contents";
+import { TocCollapse } from "@/components/blog/toc-collapse";
 import { ContactBanner } from "@/components/shared/contact-banner";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { blogPosts } from "@/lib/blog";
-import { getHeadings, getPostBlocks } from "@/lib/blog-content";
+import { blogPosts, type BlogCategoryName } from "@/lib/blog";
+import { getHeadings, getPostBlocks, type TocItem } from "@/lib/blog-content";
 import { getRelatedPosts } from "@/lib/blog-related";
 import { cn } from "@/lib/utils";
 
@@ -31,8 +36,21 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   return { title: post.title, description: post.excerpt };
 }
 
-function TocGrid({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("grid gap-8", POST_LAYOUT.tocColumns, className)}>{children}</div>;
+interface PostRailProps {
+  slug: string;
+  category: BlogCategoryName;
+  tocItems: TocItem[];
+}
+
+function PostRail({ slug, category, tocItems }: PostRailProps) {
+  return (
+    <div className="space-y-5 lg:sticky lg:top-[88px] lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pe-1">
+      <TableOfContents items={tocItems} />
+      <SidebarGuides currentSlug={slug} />
+      <SidebarCategories activeCategory={category} />
+      <SidebarAppCta />
+    </div>
+  );
 }
 
 export default async function PostPage({ params }: PostPageProps) {
@@ -47,31 +65,29 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <>
+      <ReadingProgress />
+
       <Section className="pb-0 sm:pb-0 lg:pb-0">
-        <TocGrid>
-          <div aria-hidden="true" className="hidden lg:block" />
-          <div className="min-w-0">
-            <Reveal>
-              <PostHeader post={post} />
-            </Reveal>
-          </div>
-        </TocGrid>
+        <Reveal>
+          <PostHeader post={post} />
+        </Reveal>
       </Section>
 
       <Section containerClassName="pt-0 sm:pt-0 lg:pt-0">
-        <TocGrid className="items-start">
-          <aside className="hidden self-stretch lg:block">
-            <TableOfContents items={headings} />
-          </aside>
-
-          <div className="min-w-0">
+        <div className={cn("grid gap-8 lg:items-start", POST_LAYOUT.postColumns)}>
+          <div className="min-w-0 lg:col-start-2 lg:row-start-1">
+            <TocCollapse items={headings} />
             <Reveal delay={80}>
-              <article>
+              <article className="mt-6 lg:mt-0">
                 <ArticleContent post={post} blocks={blocks} />
               </article>
             </Reveal>
           </div>
-        </TocGrid>
+
+          <aside aria-label="ابزارهای مقاله" className="min-w-0 self-stretch lg:col-start-1 lg:row-start-1">
+            <PostRail slug={post.slug} category={post.category} tocItems={headings} />
+          </aside>
+        </div>
 
         <div className="mt-10 sm:mt-12">
           <Reveal delay={100}>

@@ -1,46 +1,62 @@
 import Link from "next/link";
-import { ArrowRight, Clock } from "lucide-react";
+import { ArrowRight, CalendarDays, Clock } from "lucide-react";
 
 import { CATEGORY_STYLES } from "@/components/blog/data";
+import { PostCover } from "@/components/blog/post-cover";
 import { POST_LABELS } from "@/components/blog/post-config";
-import { Badge } from "@/components/ui/badge";
 import type { BlogPost } from "@/lib/blog";
+import { toFaDigits } from "@/lib/utils";
 
-function PostCover({ category }: { category: BlogPost["category"] }) {
-  const { color, Icon } = CATEGORY_STYLES[category];
-
+function AuthorBadge() {
   return (
-    <div
-      className="relative mt-8 h-48 w-full overflow-hidden rounded-2xl ring-1 ring-black/[0.06] sm:h-64 lg:h-72"
-      style={{ backgroundColor: color }}
-    >
-      <div className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.09)_0_2px,transparent_2px_16px)]" />
-      <Icon
-        className="absolute left-1/2 top-1/2 size-20 -translate-x-1/2 -translate-y-1/2 text-white/25"
-        strokeWidth={1.25}
-      />
-    </div>
+    <span className="flex items-center gap-2.5">
+      <span
+        aria-hidden="true"
+        className="flex size-9 shrink-0 items-center justify-center rounded-full bg-belt-black text-sm font-black text-white"
+      >
+        ت
+      </span>
+      <span className="flex flex-col leading-5">
+        <span className="text-[13px] font-bold text-foreground">{POST_LABELS.author}</span>
+        <span className="text-[11px] font-medium text-muted-foreground">
+          {POST_LABELS.authorRole}
+        </span>
+      </span>
+    </span>
   );
 }
 
 function PostMeta({ post }: { post: BlogPost }) {
-  const { color } = CATEGORY_STYLES[post.category];
+  const { color, Icon } = CATEGORY_STYLES[post.category];
 
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2">
-      <Badge
-        className="border-none text-xs font-semibold"
+    <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-4">
+      <Link
+        href="/blog"
+        className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold transition-opacity hover:opacity-80"
         style={{ backgroundColor: `${color}14`, color }}
       >
+        <Icon className="size-3.5" />
         {post.category}
-      </Badge>
-      <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-        <Clock className="size-3.5" />
-        {post.readTimeMinutes} {POST_LABELS.readTimeSuffix}
-      </span>
-      <span className="text-xs font-medium text-muted-foreground">{post.date}</span>
-      <span className="text-xs font-medium text-muted-foreground">
-        {POST_LABELS.author}
+      </Link>
+
+      <AuthorBadge />
+
+      <span className="h-8 w-px max-sm:hidden" aria-hidden="true" />
+
+      <span className="flex flex-col gap-y-1 sm:flex-row sm:items-center sm:gap-x-4">
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+          <CalendarDays className="size-3.5" />
+          {post.date}
+        </span>
+        <span
+          aria-hidden="true"
+          className="hidden size-1 rounded-full bg-muted-foreground/40 sm:inline-block"
+        />
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+          <Clock className="size-3.5" />
+          {toFaDigits(post.readTimeMinutes)} {POST_LABELS.readTimeSuffix}
+        </span>
       </span>
     </div>
   );
@@ -49,21 +65,28 @@ function PostMeta({ post }: { post: BlogPost }) {
 export function PostHeader({ post }: { post: BlogPost }) {
   return (
     <header>
-      <Link
-        href="/blog"
-        className="inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-      >
-        <ArrowRight className="size-4" />
-        {POST_LABELS.backToBlog}
-      </Link>
+      <div className="flex items-center justify-between gap-4 border-b border-black/[0.06] pb-5">
+        <Link
+          href="/blog"
+          className="inline-flex min-h-9 items-center gap-1.5 rounded-md text-sm font-semibold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          <ArrowRight className="size-4" />
+          {POST_LABELS.backToBlog}
+        </Link>
+
+        <p className="hidden items-center gap-2 text-xs font-bold tracking-wide text-muted-foreground/70 sm:flex">
+          <span aria-hidden="true" className="h-px w-8 bg-primary/40" />
+          وبلاگ تک‌یار
+        </p>
+      </div>
 
       <PostMeta post={post} />
 
-      <h1 className="mt-4 max-w-2xl text-[1.75rem] font-black leading-[1.4] sm:text-4xl sm:leading-[1.3]">
+      <h1 className="mt-5 max-w-3xl text-[1.75rem] font-black leading-[1.45] tracking-[-0.01em] sm:text-4xl sm:leading-[1.35] lg:text-[2.75rem] lg:leading-[1.3]">
         {post.title}
       </h1>
 
-      <p className="mt-5 border-s-2 border-primary/40 ps-4 text-[15px] leading-9 text-muted-foreground sm:text-base">
+      <p className="mt-6 max-w-2xl border-s-[3px] border-primary ps-5 text-[15px] leading-9 text-muted-foreground sm:text-lg sm:leading-10">
         {post.excerpt}
       </p>
 
