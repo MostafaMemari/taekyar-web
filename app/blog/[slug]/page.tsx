@@ -102,7 +102,7 @@ export default async function PostPage({ params }: PostPageProps) {
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-8 sm:pt-10 lg:pt-10">
+      <Section containerClassName="pt-6">
         <div>
           <Reveal delay={100}>
             <RelatedPosts posts={relatedPosts} />
