@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ArticleContent } from "@/components/blog/article-content";
-import { PostHeader } from "@/components/blog/post-header";
+import { PostCover } from "@/components/blog/post-cover";
+import { PostHeader, PostTopbar } from "@/components/blog/post-header";
 import { POST_CONTACT_CTA, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/components/blog/post-config";
 import { ReadingProgress } from "@/components/blog/reading-progress";
 import { RelatedPosts } from "@/components/blog/related-posts";
@@ -42,6 +43,7 @@ interface PostRailProps {
   tocItems: TocItem[];
 }
 
+/** Widget order: TOC (navigation for this article) → guides → categories → app CTA. */
 function PostRail({ slug, category, tocItems }: PostRailProps) {
   return (
     <div className="space-y-5 lg:sticky lg:top-[88px] lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pe-1">
@@ -69,26 +71,42 @@ export default async function PostPage({ params }: PostPageProps) {
 
       <Section className="pb-0 sm:pb-0 lg:pb-0">
         <Reveal>
-          <PostHeader post={post} />
+          <PostTopbar />
+
+          {/* RTL desktop composition: main reading column on the right (col 1),
+              cover image + sticky support rail on the left (col 2).
+              Rail order: TOC → guides → categories → app CTA. */}
+          <div
+            className={cn(
+              "mt-6 grid gap-8 sm:mt-8 lg:mt-10 lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-12 lg:gap-y-8 xl:gap-x-14",
+              POST_LAYOUT.postColumns
+            )}
+          >
+            <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+              <PostHeader post={post} />
+            </div>
+
+            <div className="min-w-0 lg:col-start-2 lg:row-start-1">
+              <PostCover category={post.category} />
+            </div>
+
+            <div className="min-w-0 lg:col-start-1 lg:row-start-2">
+              <TocCollapse items={headings} />
+              <Reveal delay={80}>
+                <article className="mt-6 lg:mt-0">
+                  <ArticleContent post={post} blocks={blocks} />
+                </article>
+              </Reveal>
+            </div>
+
+            <aside aria-label="ابزارهای مقاله" className="min-w-0 lg:col-start-2 lg:row-start-2">
+              <PostRail slug={post.slug} category={post.category} tocItems={headings} />
+            </aside>
+          </div>
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-0 sm:pt-0 lg:pt-0">
-        <div className={cn("grid gap-8 lg:items-start", POST_LAYOUT.postColumns)}>
-          <div className="min-w-0 lg:col-start-2 lg:row-start-1">
-            <TocCollapse items={headings} />
-            <Reveal delay={80}>
-              <article className="mt-6 lg:mt-0">
-                <ArticleContent post={post} blocks={blocks} />
-              </article>
-            </Reveal>
-          </div>
-
-          <aside aria-label="ابزارهای مقاله" className="min-w-0 self-stretch lg:col-start-1 lg:row-start-1">
-            <PostRail slug={post.slug} category={post.category} tocItems={headings} />
-          </aside>
-        </div>
-
+      <Section>
         <div className="mt-10 sm:mt-12">
           <Reveal delay={100}>
             <RelatedPosts posts={relatedPosts} />

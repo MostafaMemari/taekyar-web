@@ -1,5 +1,6 @@
 export const POST_LAYOUT = {
-  postColumns: "lg:grid-cols-[18rem_minmax(0,1fr)]",
+  /** RTL: first track (main reading column) sits on the right, cover rail on the left. */
+  postColumns: "lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_23rem]",
 } as const;
 
 export const RELATED_POSTS_COUNT = 3;
@@ -22,7 +23,6 @@ export const POST_CONTACT_CTA = {
 export const POST_LABELS = {
   backToBlog: "بازگشت به وبلاگ",
   author: "تیم تحریریه تک‌یار",
-  authorRole: "مقالات زیر نظر مربیان",
   tocTitle: "سرفصل‌ها",
   tocMobileTitle: "سرفصل‌های این مقاله",
   coachTipLabel: "نکته مربی",
