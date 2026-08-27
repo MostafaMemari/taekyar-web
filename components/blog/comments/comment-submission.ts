@@ -1,4 +1,5 @@
 import { COMMENT_FORM_ERRORS } from "@/data/blog/comments";
+import { isValidEmail, MIN_MESSAGE_LENGTH } from "@/lib/validation";
 
 export interface CommentDraft {
   name: string;
@@ -10,9 +11,6 @@ export type CommentDraftErrors = Partial<Record<keyof CommentDraft, string>>;
 
 export const EMPTY_COMMENT_DRAFT: CommentDraft = { name: "", email: "", message: "" };
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MIN_MESSAGE_LENGTH = 10;
-
 export function validateCommentDraft(draft: CommentDraft): CommentDraftErrors {
   const errors: CommentDraftErrors = {};
 
@@ -20,7 +18,7 @@ export function validateCommentDraft(draft: CommentDraft): CommentDraftErrors {
 
   if (!draft.email.trim()) {
     errors.email = COMMENT_FORM_ERRORS.emailRequired;
-  } else if (!EMAIL_PATTERN.test(draft.email)) {
+  } else if (!isValidEmail(draft.email)) {
     errors.email = COMMENT_FORM_ERRORS.emailInvalid;
   }
 
@@ -28,6 +26,7 @@ export function validateCommentDraft(draft: CommentDraft): CommentDraftErrors {
 
   return errors;
 }
+
 
 /** Local placeholder for the future POST /comments mutation; no persistence yet. */
 export async function submitComment(): Promise<void> {
