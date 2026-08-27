@@ -22,7 +22,6 @@ import {
 import { CommentDraftFields } from "./comment-form-fields";
 
 interface CommentFormProps {
-  /** Provided when the section toggles this form; renders the shared cancel affordance. */
   onCancel?: () => void;
 }
 

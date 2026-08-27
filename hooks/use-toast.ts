@@ -42,7 +42,6 @@ function dispatch(action: ToastAction) {
   emit();
 }
 
-/** Thin store shared by all `useToast()` subscribers. */
 export function useToast() {
   const [toasts, setToasts] = React.useState<ToastItem[]>(memoryToasts);
 

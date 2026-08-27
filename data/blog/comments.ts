@@ -1,13 +1,10 @@
 export interface PostComment {
   id: string;
   author: string;
-  /** Displayed next to the author name, e.g. «عضو تک‌یار» / «تیم تک‌یار». */
   role: string;
-  /** Editorial replies get an accented identity chip and avatar tint. */
   isTeamAuthor?: boolean;
   date: string;
   message: string;
-  /** One level of nesting, mirroring typical blog-comment threads. */
   replies?: PostComment[];
 }
 
@@ -56,7 +53,6 @@ export const COMMENT_FORM_ERRORS = {
   messageShort: "متن خیلی کوتاه است؛ کمی بیشتر بنویس (حداقل ۱۰ حرف).",
 } as const;
 
-/** Rotation of avatar tints, echoing the taekwondo belt palette. */
 export const COMMENT_AVATAR_TINTS = [
   "bg-primary/15 text-primary",
   "bg-belt-green/15 text-belt-green",

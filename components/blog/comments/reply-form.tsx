@@ -19,7 +19,6 @@ import {
 import { CommentDraftFields } from "./comment-form-fields";
 
 interface ReplyFormProps {
-  /** Author of the comment being replied to, shown as context. */
   parentAuthor: string;
   onCancel: () => void;
 }

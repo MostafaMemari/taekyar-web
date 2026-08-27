@@ -26,7 +26,6 @@ interface CommentListProps {
   comments: PostComment[];
 }
 
-/** Flat list of conversation threads; nesting lives inside each CommentItem. */
 export function CommentList({ comments }: CommentListProps) {
   if (comments.length === 0) return <CommentsEmptyState />;
 

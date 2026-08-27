@@ -19,7 +19,6 @@ interface ReplyItemProps {
   reply: PostComment;
 }
 
-/** One reply on the parent's soft thread panel — same row pattern as its parent, scaled down. */
 export function ReplyItem({ reply }: ReplyItemProps) {
   return (
     <article className="rounded-lg px-2.5 py-3 transition-colors duration-200 hover:bg-black/[0.025]">

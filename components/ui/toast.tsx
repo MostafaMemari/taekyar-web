@@ -51,7 +51,6 @@ function Toast({ tone, className, ...props }: React.ComponentProps<typeof ToastP
       )}
       {...props}
     >
-      {/* Tone accent on the start edge — flips automatically in RTL. */}
       <span aria-hidden="true" className={cn("absolute inset-y-0 start-0 w-1", TONE_ACCENT[tone])} />
       {props.children}
     </ToastPrimitive.Root>
@@ -81,7 +80,6 @@ function ToastDescription({
   );
 }
 
-/** Success-to-error tinting for the leading icon chip, driven by the `tone` prop. */
 function ToastLeadingIcon({ tone }: { tone: ToastTone }) {
   return (
     <span

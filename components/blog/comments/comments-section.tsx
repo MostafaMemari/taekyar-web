@@ -77,7 +77,6 @@ export function CommentsSection({ comments }: CommentsSectionProps) {
   );
 }
 
-/** Same visual language as the per-comment پاسخ chip: filled when active. */
 function cnToggleButton(isOpen: boolean): string {
   return isOpen
     ? "h-9 gap-2 rounded-xl bg-primary/10 px-4 text-sm font-bold text-primary shadow-none hover:bg-primary/10"

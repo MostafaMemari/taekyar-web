@@ -41,7 +41,6 @@ function RoleBadge({ role, accent }: { role: string; accent?: boolean }) {
   );
 }
 
-/** Replies displayed inside the parent comment, on a softly contrasting panel. */
 function ReplyThread({ replies }: { replies: PostComment[] }) {
   return (
     <section
@@ -74,7 +73,6 @@ export function CommentItem({ comment }: CommentItemProps) {
         "p-4 transition-shadow duration-300 hover:shadow-md hover:shadow-black/[0.06] sm:p-5",
       )}
     >
-      {/* Single-row header: identity + badge on the start side, date + reply action at the end */}
       <header className="flex items-center gap-3">
         <CommentAvatar author={comment.author} />
 
@@ -103,7 +101,6 @@ export function CommentItem({ comment }: CommentItemProps) {
         </div>
       </header>
 
-      {/* Comment body, visually separated from the metadata above */}
       <p className="mt-3 border-t border-black/[0.04] pt-3 text-pretty text-[14px] leading-7 text-muted-foreground sm:mt-3.5 sm:pt-3.5 sm:text-[15px] sm:leading-8">
         {comment.message}
       </p>

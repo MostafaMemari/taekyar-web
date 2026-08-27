@@ -9,7 +9,6 @@ import {
 import type { CommentDraft, CommentDraftErrors } from "./comment-submission";
 
 interface CommentDraftFieldsProps {
-  /** Unique prefix so main/reply forms never share DOM ids. */
   idPrefix: string;
   draft: CommentDraft;
   errors: CommentDraftErrors;
@@ -18,10 +17,6 @@ interface CommentDraftFieldsProps {
   onFieldChange: (key: keyof CommentDraft, value: string) => void;
 }
 
-/**
- * The name/email/message trio shared by the top-level comment form
- * and the reply form, so both stay visually identical.
- */
 export function CommentDraftFields({
   idPrefix,
   draft,
