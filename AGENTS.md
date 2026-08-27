@@ -10,32 +10,34 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Project Engineering Rules
 
-## General Principles
+## Core Principles
 
-- Always inspect the existing codebase before implementing changes.
+- Always inspect the existing codebase before making changes.
 - Follow existing project patterns and conventions.
-- Prefer simple, maintainable solutions over clever abstractions.
-- Reuse existing components, hooks, utilities, and installed packages before creating new ones.
-- Do not introduce new dependencies unless there is a clear and justified need.
-- Preserve existing functionality and design unless the task explicitly requires changing them.
+- Prefer simple, readable, maintainable solutions over clever abstractions.
+- Reuse existing components, hooks, utilities, and installed packages whenever possible.
+- Do not introduce new dependencies unless there is a clear and justified reason.
+- Preserve existing functionality and UI unless the task explicitly requires changing them.
+- Do not over-engineer.
+- Do not create abstractions without a practical benefit.
 
 ## React Component Architecture
 
-- Keep components small and focused.
-- Each component must have one clear responsibility.
+- Every component must have one clear responsibility.
+- Keep components small, focused, readable, and composable.
 - Avoid large monolithic components.
-- Do not create files with many unrelated exported components.
-- Prefer composition over complex prop-driven components.
-- Extract meaningful UI sections into separate components.
-- Do not split components into meaningless tiny components just for the sake of having smaller files.
-- If a component becomes difficult to understand or contains multiple responsibilities, refactor it.
+- Do not put multiple unrelated sections, behaviors, or responsibilities inside one component.
+- Extract meaningful sections into focused components when needed.
+- Prefer composition over large prop-driven components.
 - Reuse existing components before creating new ones.
+- Do not create unnecessary micro-components for trivial markup.
+- If a component becomes difficult to understand or modify, refactor it.
 
-## Component Responsibilities
+### Component Responsibilities
 
-A component should primarily be responsible for UI composition and presentation.
+A UI component should primarily handle presentation and composition.
 
-Avoid putting all of the following inside a single component:
+Avoid putting all of these responsibilities inside one component:
 
 - Large static datasets
 - Business logic
@@ -44,84 +46,102 @@ Avoid putting all of the following inside a single component:
 - Multiple unrelated UI sections
 - Large SVG definitions
 - Configuration objects
-- Utility functions
+- Utility/helper functions
+- Unrelated side effects
 
-If a component handles multiple unrelated responsibilities, separate them into focused components, hooks, utilities, or data files.
+When responsibilities grow, separate them into appropriate components, hooks, data files, or utilities.
 
 ## Hooks
 
-- Keep custom hooks focused on a single responsibility.
-- Avoid creating large "god hooks".
+- Each custom hook must have one clear responsibility.
+- Avoid large "god hooks".
+- Do not mix unrelated concerns inside one hook.
 - Do not mix UI state, API calls, business logic, and unrelated effects in one hook.
 - Avoid unnecessary `useEffect`.
-- Do not use `useEffect` for derived state.
+- Never use `useEffect` for derived state.
+- Prefer derived values over synchronization effects when possible.
 - Reusable hooks belong in the appropriate `hooks/` location.
-- Do not place reusable hooks inside component folders unless they are strictly local to that component.
-- Prefer existing hooks and utilities when available.
+- Do not place reusable hooks inside component folders.
+- A hook may live near a feature only when it is genuinely feature-specific.
+- Reuse existing hooks before creating a new one.
 
 ## Separation of Concerns
 
-- Keep UI components focused on rendering.
-- Keep business logic outside presentation components.
-- Separate data fetching, state management, utilities, and domain logic when needed.
-- Keep static content and configuration separate from UI components.
-- Do not mix large amounts of content/data with JSX.
+Keep these concerns separated when appropriate:
+
+- UI/presentation
+- Data
+- Business logic
+- Data fetching
+- State management
+- Utilities
+- Configuration
+- Types
+
+Do not mix large amounts of data or logic directly into JSX components.
 
 ## Static Data and Configuration
 
 Static data must not unnecessarily live inside UI components.
 
-Examples include:
+Examples:
 
 - Navigation items
 - Social links
 - FAQ items
-- Blog mock data
-- Trust badges
+- Blog data
 - Categories
+- Trust badges
+- CTA content
 - Configuration objects
-- Reusable content arrays
+- Reusable arrays
+- Static labels used by multiple components
 
-Keep them in appropriate files such as:
+Use appropriate files such as:
 
 - `data.ts`
 - `constants.ts`
 - `config.ts`
 
-The location must match ownership:
+### Data Ownership
 
-- Feature-specific data → inside that feature.
-- Shared/global data → shared data/constants location.
-- Do not place data files inside a component folder unless the data is truly local to that component.
+- Feature-specific data belongs to that feature.
+- Shared/global data belongs in a shared data/constants location.
+- Do not place static data files inside generic component folders unless the data is truly local to that component.
+- Do not duplicate the same static data across multiple components.
 
 ## Project Folder Structure
 
-Before creating or moving files:
+Before creating or moving a file:
 
-1. Inspect the existing project structure.
-2. Identify whether the file is a component, hook, utility, data file, configuration, or feature-specific module.
-3. Place it in the most appropriate existing location.
-4. Follow the project's established architecture.
+1. Inspect the current project structure.
+2. Determine what kind of file it is.
+3. Determine whether it is shared or feature-specific.
+4. Check whether an appropriate existing location already exists.
+5. Place it in the most appropriate existing location.
+6. Update all imports after moving it.
 
-General rules:
+### General Structure
 
-- `components/` → UI components.
-- `hooks/` → reusable custom hooks.
-- `lib/` → utilities, helpers, and shared logic.
-- `data/` or `constants/` → shared static data/configuration.
-- Feature-specific folders → feature-specific components, data, hooks, and logic.
+- `components/` → UI components
+- `hooks/` → reusable custom hooks
+- `lib/` → utilities and shared helpers
+- `data/` → shared/static data when appropriate
+- `constants/` → shared constants/configuration when appropriate
+- Feature folders → feature-specific UI, data, hooks, types, and utilities
 
 Do not put unrelated file types together just because they are used by the same page.
 
 Examples:
 
-- `use-active-heading.ts` belongs in an appropriate hooks location, not inside a generic component folder.
-- `use-toast.ts` belongs with hooks/utilities according to the existing architecture, not as a generic UI component.
-- Blog-specific data should live with the blog feature/data structure rather than inside a component file.
+- `use-active-heading.ts` → hooks, not components
+- `use-toast.ts` → hooks/utilities according to the project's architecture, not generic UI
+- Blog-specific data → blog feature/data structure
+- Large SVG/icon definitions → dedicated icon/component files when appropriate
 
 ## Feature Organization
 
-Prefer feature-based organization when a feature becomes large.
+Prefer feature-based organization when a feature has enough complexity to justify it.
 
 A feature may contain:
 
@@ -131,9 +151,9 @@ A feature may contain:
 - Types
 - Utilities
 
-Keep related code together while maintaining clear separation of responsibilities.
+Keep related code together, but maintain clear separation of responsibilities.
 
-Do not create deeply nested folders without a practical reason.
+Do not create unnecessary deep nesting.
 
 ## TypeScript
 
@@ -141,35 +161,61 @@ Do not create deeply nested folders without a practical reason.
 - Do not hide type errors with unsafe casts.
 - Prefer explicit and reusable types.
 - Keep API responses properly typed.
-- Avoid unnecessary type complexity.
 - Reuse shared types where appropriate.
+- Avoid unnecessary type complexity.
+- Keep types close to their ownership unless they are genuinely shared.
 
 ## Next.js
 
 - Respect Server Component and Client Component boundaries.
 - Do not add `"use client"` without a clear reason.
-- Follow existing project patterns for data fetching and mutations.
-- Check the installed Next.js documentation when using unfamiliar or changed APIs.
-- Never assume an API behaves like an older Next.js version.
-- Prefer framework-native solutions over unnecessary custom implementations.
+- Follow existing Next.js project patterns.
+- Use framework-native solutions whenever practical.
+- Do not assume behavior from older Next.js versions.
+- Before using unfamiliar Next.js APIs, inspect the installed Next.js documentation under `node_modules/next/dist/docs/`.
+- Follow current deprecation notices and framework conventions.
 
 ## UI and Design System
 
-- Follow the existing design system and visual language.
+- Follow the existing Taekyar design system and visual language.
 - Reuse existing UI components and installed packages.
-- Do not create duplicate components that already exist.
-- Do not introduce inconsistent spacing, colors, typography, radiuses, or interaction patterns.
-- Preserve RTL and Persian UX requirements.
-- Prefer simple, polished UI over unnecessary visual complexity.
+- Do not create duplicate UI primitives.
+- Maintain consistent spacing, typography, colors, borders, radiuses, shadows, and interaction states.
+- Preserve Persian RTL behavior.
+- Keep responsive behavior consistent with the existing project.
+- Prefer simple, polished UI over excessive visual effects.
 
-## Code Comments
+## SVG and Large Static Definitions
 
-Do not add unnecessary comments.
+- Do not place large SVG definitions directly inside large page/section components.
+- Extract reusable SVGs/icons into appropriate files or components.
+- Keep page and section components focused on composition.
+- Do not combine UI, data, logic, and large icon definitions in one file.
 
-Avoid comments that only describe obvious code or UI structure.
+# Strict Code Comment Policy
 
-Forbidden examples:
+## Default Rule
+
+**DO NOT ADD COMMENTS UNLESS EXPLICITLY REQUESTED.**
+
+The default behavior for this project is:
+
+**NO COMMENTS.**
+
+This applies to:
+
+- `// comments`
+- `/* comments */`
+- `/** JSDoc comments */`
+- JSX comments such as `{/* ... */}`
+- Descriptive block comments
+- Explanatory comments
+- Comments describing obvious UI or logic
+
+### Forbidden Examples
+
+Do NOT write comments like:
 
 ```ts
-/** Curated evergreen training guides, surfaced in the article sidebar. */
+/** Page scroll progress as a 0..1 fraction. */
 ```
