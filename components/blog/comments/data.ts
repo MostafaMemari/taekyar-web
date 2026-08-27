@@ -21,10 +21,15 @@ export const COMMENT_FORM_LABELS = {
   messagePlaceholder: "نظرت درباره این مقاله چیه؟",
   submit: "ثبت دیدگاه",
   formHint: "پیش از انتشار، دیدگاهت توسط تیم تحریریه بررسی می‌شود.",
+} as const;
+
+export const COMMENT_TOAST_MESSAGES = {
   successTitle: "دیدگاهت ثبت شد!",
   successDescription:
     "ممنون که با ما هم‌فکری می‌کنی؛ پس از بررسی، دیدگاهت در همین بخش منتشر می‌شود.",
-  resetAction: "نوشتن دیدگاه دیگر",
+  errorTitle: "ثبت دیدگاه انجام نشد",
+  errorDescription:
+    "یک خطای غیرمنتظره رخ داد؛ چند لحظه بعد دوباره تلاش کن.",
 } as const;
 
 export const COMMENT_FORM_ERRORS = {

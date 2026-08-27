@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Header } from "@/components/layout/header/header";
 import { Footer } from "@/components/layout/footer/footer";
 import { ScrollReset } from "@/components/layout/scroll-reset";
+import { Toaster } from "@/components/ui/toast";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Header />
         <main className="theme-light flex-1 bg-background">{children}</main>
         <Footer />
+        <Toaster />
       </body>
     </html>
   );
