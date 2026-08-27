@@ -7,8 +7,10 @@ import { BLOG_INDEX_LABELS, BLOG_PAGINATION } from "@/data/blog/index-page";
 import { PostGrid } from "@/components/blog/post-grid";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { blogCategories, blogPosts, type BlogCategoryName } from "@/data/blog/posts";
+import { getBlogPosts, blogCategories, type BlogCategoryName } from "@/lib/blog";
 import { toFaDigits } from "@/lib/utils";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "وبلاگ",
@@ -36,7 +38,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const { category, page } = await searchParams;
   const activeCategory = resolveCategory(category);
 
-  const posts = activeCategory ? blogPosts.filter((post) => post.category === activeCategory) : blogPosts;
+  const allPosts = await getBlogPosts();
+  const posts = activeCategory ? allPosts.filter((post) => post.category === activeCategory) : allPosts;
 
   const totalPages = Math.max(1, Math.ceil(posts.length / BLOG_PAGINATION.postsPerPage));
   const currentPage = Math.min(Math.max(Number(page) || 1, 1), totalPages);

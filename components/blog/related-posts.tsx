@@ -1,7 +1,7 @@
 import { BlogCard } from "@/components/blog/blog-card";
 import { POST_LABELS } from "@/data/blog/post-config";
 import { BeltDivider } from "@/components/shared/belt-divider";
-import type { BlogPost } from "@/data/blog/posts";
+import type { BlogPost } from "@/lib/blog";
 
 interface RelatedPostsProps {
   posts: BlogPost[];

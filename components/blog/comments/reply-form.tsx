@@ -9,9 +9,9 @@ import {
 } from "@/data/blog/comments";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { submitComment } from "@/lib/comment-actions";
 import {
   EMPTY_COMMENT_DRAFT,
-  submitComment,
   validateCommentDraft,
   type CommentDraft,
   type CommentDraftErrors,
@@ -19,11 +19,13 @@ import {
 import { CommentDraftFields } from "./comment-form-fields";
 
 interface ReplyFormProps {
+  postSlug: string;
+  parentId: string;
   parentAuthor: string;
   onCancel: () => void;
 }
 
-export function ReplyForm({ parentAuthor, onCancel }: ReplyFormProps) {
+export function ReplyForm({ postSlug, parentId, parentAuthor, onCancel }: ReplyFormProps) {
   const [draft, setDraft] = useState<CommentDraft>(EMPTY_COMMENT_DRAFT);
   const [errors, setErrors] = useState<CommentDraftErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,7 +45,8 @@ export function ReplyForm({ parentAuthor, onCancel }: ReplyFormProps) {
     setIsSubmitting(true);
 
     try {
-      await submitComment();
+      const result = await submitComment(postSlug, draft, parentId);
+      if (!result.ok) throw new Error();
       toast({
         tone: "success",
         title: COMMENT_TOAST_MESSAGES.successTitle,

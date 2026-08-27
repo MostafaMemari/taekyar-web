@@ -4,15 +4,16 @@ import { ArrowLeft } from "lucide-react";
 import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { POST_LABELS, TRAINING_GUIDE_SLUGS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
-import { blogPosts } from "@/data/blog/posts";
+import { getBlogPosts } from "@/lib/blog";
 import { Dumbbell } from "lucide-react";
 
 interface SidebarGuidesProps {
   currentSlug: string;
 }
 
-export function SidebarGuides({ currentSlug }: SidebarGuidesProps) {
-  const guides = blogPosts.filter(
+export async function SidebarGuides({ currentSlug }: SidebarGuidesProps) {
+  const posts = await getBlogPosts();
+  const guides = posts.filter(
     (post) => TRAINING_GUIDE_SLUGS.includes(post.slug as (typeof TRAINING_GUIDE_SLUGS)[number]) && post.slug !== currentSlug,
   );
 

@@ -26,8 +26,3 @@ export function validateCommentDraft(draft: CommentDraft): CommentDraftErrors {
 
   return errors;
 }
-
-
-export async function submitComment(): Promise<void> {
-  await new Promise((resolve) => setTimeout(resolve, 400));
-}

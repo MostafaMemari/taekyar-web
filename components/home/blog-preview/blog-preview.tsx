@@ -6,10 +6,12 @@ import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import { SectionHeader } from "@/components/shared/section-header";
 import { Button } from "@/components/ui/button";
-import { blogPosts } from "@/data/blog/posts";
+import { getBlogPosts } from "@/lib/blog";
 import { BLOG_PREVIEW_COUNT, BLOG_PREVIEW_INTRO } from "@/data/home/blog-preview";
 
-export function BlogPreview() {
+export async function BlogPreview() {
+  const posts = await getBlogPosts();
+
   return (
     <Section id="blog-preview" divider>
       <Reveal>
@@ -29,7 +31,7 @@ export function BlogPreview() {
       </Reveal>
 
       <div className="mt-8 grid gap-4 md:grid-cols-3 lg:mt-10 lg:gap-5">
-        {blogPosts.slice(0, BLOG_PREVIEW_COUNT).map((post, index) => (
+        {posts.slice(0, BLOG_PREVIEW_COUNT).map((post, index) => (
           <Reveal key={post.id} delay={index * 90} className="h-full">
             <BlogCard post={post} />
           </Reveal>

@@ -1,6 +1,6 @@
 import { Newspaper, Salad, Target } from "lucide-react";
 
-import type { BlogCategoryName } from "@/data/blog/posts";
+import type { BlogCategoryName } from "@/data/blog/categories";
 
 export const CATEGORY_STYLES: Record<
   BlogCategoryName,

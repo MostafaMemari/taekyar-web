@@ -3,7 +3,7 @@ import { SearchX } from "lucide-react";
 
 import { BlogCard } from "@/components/blog/blog-card";
 import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
-import type { BlogPost } from "@/data/blog/posts";
+import type { BlogPost } from "@/lib/blog";
 import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 

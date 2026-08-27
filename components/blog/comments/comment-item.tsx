@@ -60,9 +60,10 @@ function ReplyThread({ replies }: { replies: PostComment[] }) {
 
 interface CommentItemProps {
   comment: PostComment;
+  postSlug: string;
 }
 
-export function CommentItem({ comment }: CommentItemProps) {
+export function CommentItem({ comment, postSlug }: CommentItemProps) {
   const [isReplying, setIsReplying] = useState(false);
   const hasReplies = Boolean(comment.replies?.length);
 
@@ -107,7 +108,7 @@ export function CommentItem({ comment }: CommentItemProps) {
 
       {isReplying ? (
         <div id={`reply-form-${comment.id}`}>
-          <ReplyForm parentAuthor={comment.author} onCancel={() => setIsReplying(false)} />
+          <ReplyForm postSlug={postSlug} parentId={comment.id} parentAuthor={comment.author} onCancel={() => setIsReplying(false)} />
         </div>
       ) : null}
 

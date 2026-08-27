@@ -24,16 +24,17 @@ function CommentsEmptyState() {
 
 interface CommentListProps {
   comments: PostComment[];
+  postSlug: string;
 }
 
-export function CommentList({ comments }: CommentListProps) {
+export function CommentList({ comments, postSlug }: CommentListProps) {
   if (comments.length === 0) return <CommentsEmptyState />;
 
   return (
     <ul className="space-y-3.5 sm:space-y-4">
       {comments.map((comment) => (
         <li key={comment.id}>
-          <CommentItem comment={comment} />
+          <CommentItem comment={comment} postSlug={postSlug} />
         </li>
       ))}
     </ul>

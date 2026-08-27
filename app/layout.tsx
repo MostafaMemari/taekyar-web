@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { Geist_Mono, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Header } from "@/components/layout/header/header";
-import { Footer } from "@/components/layout/footer/footer";
-import { ScrollReset } from "@/components/layout/scroll-reset";
-import { ReadingProgress } from "@/components/shared/reading-progress";
-import { Toaster } from "@/components/ui/toast";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
@@ -36,16 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       data-scroll-behavior="smooth"
       className={cn("h-full antialiased dark font-sans", vazirmatn.variable, geistMono.variable)}
     >
-      <body className="flex min-h-full flex-col">
-        <Suspense fallback={null}>
-          <ScrollReset />
-        </Suspense>
-        <ReadingProgress />
-        <Header />
-        <main className="theme-light flex-1 bg-background">{children}</main>
-        <Footer />
-        <Toaster />
-      </body>
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }

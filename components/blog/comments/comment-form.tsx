@@ -11,10 +11,10 @@ import {
 } from "@/data/blog/comments";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { submitComment } from "@/lib/comment-actions";
 import { SURFACE_CARD } from "@/lib/styles";
 import {
   EMPTY_COMMENT_DRAFT,
-  submitComment,
   validateCommentDraft,
   type CommentDraft,
   type CommentDraftErrors,
@@ -22,10 +22,11 @@ import {
 import { CommentDraftFields } from "./comment-form-fields";
 
 interface CommentFormProps {
+  postSlug: string;
   onCancel?: () => void;
 }
 
-export function CommentForm({ onCancel }: CommentFormProps) {
+export function CommentForm({ postSlug, onCancel }: CommentFormProps) {
   const [draft, setDraft] = useState<CommentDraft>(EMPTY_COMMENT_DRAFT);
   const [errors, setErrors] = useState<CommentDraftErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,7 +46,8 @@ export function CommentForm({ onCancel }: CommentFormProps) {
     setIsSubmitting(true);
 
     try {
-      await submitComment();
+      const result = await submitComment(postSlug, draft);
+      if (!result.ok) throw new Error();
       setDraft(EMPTY_COMMENT_DRAFT);
       toast({
         tone: "success",

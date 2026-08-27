@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
-import { blogCategories, type BlogCategoryName } from "@/data/blog/posts";
+import { blogCategories, type BlogCategoryName } from "@/data/blog/categories";
 import { cn } from "@/lib/utils";
 
 function FilterChip({

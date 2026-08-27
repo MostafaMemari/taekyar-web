@@ -23,9 +23,10 @@ function countComments(comments: PostComment[]): number {
 
 interface CommentsSectionProps {
   comments: PostComment[];
+  postSlug: string;
 }
 
-export function CommentsSection({ comments }: CommentsSectionProps) {
+export function CommentsSection({ comments, postSlug }: CommentsSectionProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const totalComments = countComments(comments);
 
@@ -67,11 +68,11 @@ export function CommentsSection({ comments }: CommentsSectionProps) {
             id="comment-composer"
             className="animate-in fade-in-0 slide-in-from-bottom-4 overflow-hidden duration-500 ease-out"
           >
-            <CommentForm onCancel={() => setIsFormOpen(false)} />
+            <CommentForm postSlug={postSlug} onCancel={() => setIsFormOpen(false)} />
           </div>
         ) : null}
 
-        <CommentList comments={comments} />
+        <CommentList comments={comments} postSlug={postSlug} />
       </div>
     </section>
   );

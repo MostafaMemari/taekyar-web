@@ -4,7 +4,7 @@ import { ChevronDown, ListTree } from "lucide-react";
 
 import { useActiveHeading } from "@/hooks/use-active-heading";
 import { POST_LABELS } from "@/data/blog/post-config";
-import type { TocItem } from "@/data/blog/post-content";
+import type { TocItem } from "@/lib/post-content";
 import { cn, toFaDigits } from "@/lib/utils";
 
 interface TocCollapseProps {

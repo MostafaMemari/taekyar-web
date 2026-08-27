@@ -3,7 +3,8 @@ import Link from "next/link";
 import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { POST_LABELS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
-import { blogCategories, blogPosts, type BlogCategoryName } from "@/data/blog/posts";
+import { blogCategories, type BlogCategoryName } from "@/data/blog/categories";
+import { getBlogPosts } from "@/lib/blog";
 import { cn } from "@/lib/utils";
 import { Compass } from "lucide-react";
 
@@ -11,9 +12,10 @@ interface SidebarCategoriesProps {
   activeCategory?: BlogCategoryName;
 }
 
-export function SidebarCategories({ activeCategory }: SidebarCategoriesProps) {
+export async function SidebarCategories({ activeCategory }: SidebarCategoriesProps) {
+  const posts = await getBlogPosts();
   const counts = new Map<string, number>();
-  for (const post of blogPosts) {
+  for (const post of posts) {
     counts.set(post.category, (counts.get(post.category) ?? 0) + 1);
   }
 

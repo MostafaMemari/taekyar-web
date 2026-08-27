@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 
 import { ArticleContent } from "@/components/blog/article-content";
 import { CommentsSection } from "@/components/blog/comments/comments-section";
-import { getPostComments } from "@/data/blog/comments";
 import { PostCover } from "@/components/blog/post-cover";
 import { PostHeader, PostTopbar } from "@/components/blog/post-header";
 import { POST_CONTACT_CTA, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/data/blog/post-config";
@@ -16,8 +15,8 @@ import { TocCollapse } from "@/components/blog/toc-collapse";
 import { ContactBanner } from "@/components/shared/contact-banner";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { blogPosts, type BlogCategoryName } from "@/data/blog/posts";
-import { getHeadings, getPostBlocks, type TocItem } from "@/data/blog/post-content";
+import { getPostComments, getBlogPosts, getPostBySlug, type BlogCategoryName } from "@/lib/blog";
+import { getHeadings, type TocItem } from "@/lib/post-content";
 import { getRelatedPosts } from "@/lib/blog-related";
 import { cn } from "@/lib/utils";
 
@@ -25,13 +24,11 @@ interface PostPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = blogPosts.find((item) => item.slug === slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) return { title: "مقاله یافت نشد" };
 
@@ -59,14 +56,15 @@ function PostRail({ slug, category, tocItems }: PostRailProps) {
 
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
-  const post = blogPosts.find((item) => item.slug === slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) notFound();
 
-  const blocks = getPostBlocks(post.slug) ?? [];
+  const blocks = post.content;
   const headings = getHeadings(blocks);
-  const relatedPosts = getRelatedPosts(blogPosts, post.slug, post.category, RELATED_POSTS_COUNT);
-  const comments = getPostComments();
+  const allPosts = await getBlogPosts();
+  const relatedPosts = getRelatedPosts(allPosts, post.slug, post.category, RELATED_POSTS_COUNT);
+  const comments = await getPostComments(post.slug);
 
   return (
     <>
@@ -97,7 +95,7 @@ export default async function PostPage({ params }: PostPageProps) {
               </Reveal>
 
               <Reveal delay={120}>
-                <CommentsSection comments={comments} />
+                <CommentsSection comments={comments} postSlug={post.slug} />
               </Reveal>
             </div>
 
