@@ -7,7 +7,7 @@ import { BLOG_INDEX_LABELS, BLOG_PAGINATION } from "@/data/blog/index-page";
 import { PostGrid } from "@/components/blog/post-grid";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { blogCategories, blogPosts, type BlogCategoryName } from "@/lib/blog";
+import { blogCategories, blogPosts, type BlogCategoryName } from "@/data/blog/posts";
 import { toFaDigits } from "@/lib/utils";
 
 export const metadata: Metadata = {

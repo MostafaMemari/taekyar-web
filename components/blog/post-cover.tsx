@@ -1,6 +1,6 @@
 import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { BeltDivider } from "@/components/shared/belt-divider";
-import type { BlogPost } from "@/lib/blog";
+import type { BlogPost } from "@/data/blog/posts";
 
 export function PostCover({ category }: { category: BlogPost["category"] }) {
   const { color, Icon } = CATEGORY_STYLES[category];

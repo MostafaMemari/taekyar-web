@@ -3,7 +3,7 @@ import { ArrowRight, CalendarDays, Clock } from "lucide-react";
 
 import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { POST_LABELS } from "@/data/blog/post-config";
-import type { BlogPost } from "@/lib/blog";
+import type { BlogPost } from "@/data/blog/posts";
 import { toFaDigits } from "@/lib/utils";
 
 export function PostTopbar() {

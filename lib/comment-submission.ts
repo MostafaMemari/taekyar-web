@@ -28,7 +28,6 @@ export function validateCommentDraft(draft: CommentDraft): CommentDraftErrors {
 }
 
 
-/** Local placeholder for the future POST /comments mutation; no persistence yet. */
 export async function submitComment(): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, 400));
 }

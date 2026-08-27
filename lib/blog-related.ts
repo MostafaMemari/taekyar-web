@@ -1,4 +1,4 @@
-import type { BlogPost } from "@/lib/blog";
+import type { BlogPost } from "@/data/blog/posts";
 
 export function getRelatedPosts(
   posts: BlogPost[],

@@ -116,10 +116,6 @@ export const MOCK_COMMENTS: PostComment[] = [
   },
 ];
 
-/**
- * Frontend placeholder for per-post comments until a backend exists.
- * Swap the body with an API/DB call later without touching the UI.
- */
 export function getPostComments(): PostComment[] {
   return MOCK_COMMENTS;
 }

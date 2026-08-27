@@ -16,8 +16,8 @@ import { TocCollapse } from "@/components/blog/toc-collapse";
 import { ContactBanner } from "@/components/shared/contact-banner";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { blogPosts, type BlogCategoryName } from "@/lib/blog";
-import { getHeadings, getPostBlocks, type TocItem } from "@/lib/blog-content";
+import { blogPosts, type BlogCategoryName } from "@/data/blog/posts";
+import { getHeadings, getPostBlocks, type TocItem } from "@/data/blog/post-content";
 import { getRelatedPosts } from "@/lib/blog-related";
 import { cn } from "@/lib/utils";
 

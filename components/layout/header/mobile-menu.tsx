@@ -12,7 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { navLinks } from "@/lib/navigation";
+import { navLinks } from "@/data/layout/navigation";
 import { cn } from "@/lib/utils";
 import { NavLinkItem, useIsActive } from "./nav-link-item";
 import { Wordmark } from "./wordmark";

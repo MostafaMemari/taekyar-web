@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { POST_LABELS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
-import { blogCategories, blogPosts, type BlogCategoryName } from "@/lib/blog";
+import { blogCategories, blogPosts, type BlogCategoryName } from "@/data/blog/posts";
 import { cn } from "@/lib/utils";
 import { Compass } from "lucide-react";
 

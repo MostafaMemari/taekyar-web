@@ -3,7 +3,7 @@
 import { useActiveHeading } from "@/hooks/use-active-heading";
 import { POST_LABELS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
-import type { TocItem } from "@/lib/blog-content";
+import type { TocItem } from "@/data/blog/post-content";
 import { cn, toFaDigits } from "@/lib/utils";
 import { BookOpen } from "lucide-react";
 

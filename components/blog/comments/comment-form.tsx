@@ -18,7 +18,7 @@ import {
   validateCommentDraft,
   type CommentDraft,
   type CommentDraftErrors,
-} from "./comment-submission";
+} from "@/lib/comment-submission";
 import { CommentDraftFields } from "./comment-form-fields";
 
 interface CommentFormProps {

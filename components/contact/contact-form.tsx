@@ -6,14 +6,14 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SURFACE_CARD } from "@/lib/styles";
 import { FORM_LABELS, SUBJECT_OPTIONS, type ContactMessageDraft } from "@/data/contact";
-import { FieldError, FieldLabel, getAriaProps } from "./form-controls";
+import { FieldError, FieldLabel, getAriaProps } from "@/components/shared/form-controls";
 import { SubmissionSuccess } from "./submission-success";
 import {
   EMPTY_CONTACT_DRAFT,
   buildMailtoLink,
   validateContactDraft,
   type ContactDraftErrors,
-} from "./contact-submission";
+} from "@/lib/contact-submission";
 
 interface FieldProps {
   draft: ContactMessageDraft;

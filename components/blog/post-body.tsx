@@ -1,7 +1,7 @@
 import { Lightbulb } from "lucide-react";
 
 import { POST_LABELS } from "@/data/blog/post-config";
-import type { PostBlock } from "@/lib/blog-content";
+import type { PostBlock } from "@/data/blog/post-content";
 
 export const HEADING_ID_PREFIX = "heading";
 

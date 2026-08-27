@@ -3,8 +3,8 @@ import {
   FieldError,
   FieldLabel,
   getAriaProps,
-} from "@/components/contact/form-controls";
-import type { CommentDraft, CommentDraftErrors } from "./comment-submission";
+} from "@/components/shared/form-controls";
+import type { CommentDraft, CommentDraftErrors } from "@/lib/comment-submission";
 
 interface CommentDraftFieldsProps {
   idPrefix: string;

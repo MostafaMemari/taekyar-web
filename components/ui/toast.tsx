@@ -7,10 +7,6 @@ import { CircleCheck, TriangleAlert, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast, type ToastTone } from "@/hooks/use-toast";
 
-/**
- * Belt-red instead of --destructive: the raw token (#ff5257) is tuned for
- * dark surfaces and washes out on the light theme.
- */
 const TONE_ACCENT: Record<ToastTone, string> = {
   success: "bg-belt-green",
   error: "bg-belt-red",
@@ -31,11 +27,6 @@ const TONE_ICONS: Record<ToastTone, React.ReactNode> = {
   error: <TriangleAlert />,
 };
 
-/**
- * Light-surface colors are pinned as raw hexes because Radix portals the
- * toast viewport to <body> — outside every `.theme-light` scope, where
- * --background/--card resolve to the dark palette instead.
- */
 function Toast({ tone, className, ...props }: React.ComponentProps<typeof ToastPrimitive.Root> & { tone: ToastTone }) {
   return (
     <ToastPrimitive.Root

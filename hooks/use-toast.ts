@@ -23,7 +23,6 @@ type ToastAction =
 
 const TOAST_LIMIT = 1;
 
-/** Imperative emitter so non-component code (or any client component) can fire toasts. */
 let listeners: Array<(toasts: ToastItem[]) => void> = [];
 let memoryToasts: ToastItem[] = [];
 
@@ -71,7 +70,6 @@ function showToast({ tone, title, description }: ToastInput): string {
   const id = createToastId();
   dispatch({ type: "ADD_TOAST", toast: { id, tone, title, description } });
 
-  // Radix removes the node when its own timer closes it; keep the store in sync.
   window.setTimeout(() => dispatch({ type: "DISMISS_TOAST", toastId: id }), 5000);
   return id;
 }
