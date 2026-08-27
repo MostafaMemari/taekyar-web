@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
-import { POST_LABELS } from "@/components/blog/post-config";
+import { POST_LABELS } from "@/data/blog/post-config";
 import { Button } from "@/components/ui/button";
 
 export function SidebarAppCta() {

@@ -5,7 +5,7 @@ import { Toast as ToastPrimitive } from "radix-ui";
 import { CircleCheck, TriangleAlert, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { useToast, type ToastTone } from "./use-toast";
+import { useToast, type ToastTone } from "@/hooks/use-toast";
 
 /**
  * Belt-red instead of --destructive: the raw token (#ff5257) is tuned for

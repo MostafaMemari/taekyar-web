@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { CONTACT_CARD, FAQS, FAQ_INTRO } from "./data";
+import { CONTACT_CARD, FAQS, FAQ_INTRO } from "@/data/home/faq";
 
 function FaqList() {
   return (

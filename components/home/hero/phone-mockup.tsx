@@ -1,6 +1,6 @@
 import { Dumbbell, Users } from "lucide-react";
 
-import { BELT_COLORS, TODAY_TRAININGS } from "./data";
+import { BELT_COLORS, TODAY_TRAININGS } from "@/data/home/hero";
 import { StatCard } from "./stat-card";
 import { AppScreen } from "./app-screen";
 

@@ -1,6 +1,6 @@
 import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
-import { BELT_PATH, CURRENT_BELT_INDEX } from "./data";
+import { BELT_PATH, CURRENT_BELT_INDEX } from "@/data/home/features";
 import { BeltIcon } from "./belt-icon";
 
 const CELL_BASE =

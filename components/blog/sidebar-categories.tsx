@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { CATEGORY_STYLES } from "@/components/blog/data";
-import { POST_LABELS } from "@/components/blog/post-config";
+import { CATEGORY_STYLES } from "@/data/blog/index-page";
+import { POST_LABELS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
 import { blogCategories, blogPosts, type BlogCategoryName } from "@/lib/blog";
 import { cn } from "@/lib/utils";

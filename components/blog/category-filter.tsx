@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { BLOG_INDEX_LABELS } from "@/components/blog/data";
+import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
 import { blogCategories, type BlogCategoryName } from "@/lib/blog";
 import { cn } from "@/lib/utils";
 

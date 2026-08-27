@@ -4,7 +4,7 @@ import { BeltDivider } from "@/components/shared/belt-divider";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import { Button } from "@/components/ui/button";
-import { CTA_CONTENT } from "./data";
+import { CTA_CONTENT } from "@/data/home/cta";
 
 export function CtaSection() {
   return (

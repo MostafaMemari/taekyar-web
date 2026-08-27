@@ -9,7 +9,7 @@ import {
   COMMENT_REPLY_LABELS,
   COMMENTS_LABELS,
   type PostComment,
-} from "@/components/blog/comments/data";
+} from "@/data/blog/comments";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { Button } from "@/components/ui/button";
 import { toFaDigits } from "@/lib/utils";

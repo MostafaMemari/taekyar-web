@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { WEEKLY_PLAN, WEEKLY_STATS } from "./data";
+import { WEEKLY_PLAN, WEEKLY_STATS } from "@/data/home/features";
 
 function PlanHeader() {
   return (

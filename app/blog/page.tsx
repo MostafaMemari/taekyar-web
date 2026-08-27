@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { BlogHeader } from "@/components/blog/blog-header";
 import { CategoryFilter } from "@/components/blog/category-filter";
-import { BLOG_INDEX_LABELS } from "@/components/blog/data";
+import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
 import { PostGrid } from "@/components/blog/post-grid";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";

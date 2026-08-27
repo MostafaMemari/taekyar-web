@@ -6,9 +6,9 @@ import { CornerDownLeft } from "lucide-react";
 import {
   COMMENT_REPLY_LABELS,
   COMMENT_TOAST_MESSAGES,
-} from "@/components/blog/comments/data";
+} from "@/data/blog/comments";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import {
   EMPTY_COMMENT_DRAFT,
   submitComment,

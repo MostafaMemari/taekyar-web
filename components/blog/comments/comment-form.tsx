@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { PenLine } from "lucide-react";
@@ -8,9 +8,9 @@ import {
   COMMENT_REPLY_LABELS,
   COMMENTS_LABELS,
   COMMENT_TOAST_MESSAGES,
-} from "@/components/blog/comments/data";
+} from "@/data/blog/comments";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { SURFACE_CARD } from "@/lib/styles";
 import {
   EMPTY_COMMENT_DRAFT,

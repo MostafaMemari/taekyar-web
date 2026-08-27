@@ -1,5 +1,5 @@
 import { PostBody } from "@/components/blog/post-body";
-import { POST_LABELS } from "@/components/blog/post-config";
+import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
 import type { PostBlock } from "@/lib/blog-content";
 import { SURFACE_CARD } from "@/lib/styles";

@@ -11,7 +11,7 @@ import {
   SUBJECT_OPTIONS,
   SUPPORT_EMAIL,
   type ContactMessageDraft,
-} from "./data";
+} from "@/data/contact";
 import { FieldError, FieldLabel, getAriaProps } from "./form-controls";
 import { SubmissionSuccess } from "./submission-success";
 

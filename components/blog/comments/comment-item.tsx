@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { CornerDownLeft } from "lucide-react";
 
-import type { PostComment } from "@/components/blog/comments/data";
-import { COMMENT_AVATAR_TINTS, COMMENT_REPLY_LABELS } from "@/components/blog/comments/data";
+import type { PostComment } from "@/data/blog/comments";
+import { COMMENT_AVATAR_TINTS, COMMENT_REPLY_LABELS } from "@/data/blog/comments";
 import { ReplyForm } from "@/components/blog/comments/reply-form";
 import { ReplyItem } from "@/components/blog/comments/reply-item";
 import { Badge } from "@/components/ui/badge";

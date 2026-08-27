@@ -1,4 +1,4 @@
-import { CATEGORY_STYLES } from "@/components/blog/data";
+import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import type { BlogPost } from "@/lib/blog";
 

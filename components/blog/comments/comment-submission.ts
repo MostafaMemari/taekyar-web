@@ -1,4 +1,4 @@
-import { COMMENT_FORM_ERRORS } from "@/components/blog/comments/data";
+import { COMMENT_FORM_ERRORS } from "@/data/blog/comments";
 
 export interface CommentDraft {
   name: string;

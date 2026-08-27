@@ -2,8 +2,8 @@
 
 import { ChevronDown, ListTree } from "lucide-react";
 
-import { useActiveHeading } from "@/components/blog/use-active-heading";
-import { POST_LABELS } from "@/components/blog/post-config";
+import { useActiveHeading } from "@/hooks/use-active-heading";
+import { POST_LABELS } from "@/data/blog/post-config";
 import type { TocItem } from "@/lib/blog-content";
 import { cn, toFaDigits } from "@/lib/utils";
 

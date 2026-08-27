@@ -2,7 +2,7 @@ import { Check } from "lucide-react";
 
 import { SURFACE_CARD, SURFACE_CARD_INTERACTIVE } from "@/lib/styles";
 import { cn } from "@/lib/utils";
-import { FEATURED_FEATURE, PLAN_CHIPS, type SupportingFeature } from "./data";
+import { FEATURED_FEATURE, PLAN_CHIPS, type SupportingFeature } from "@/data/home/features";
 import { WeeklyPlanPreview } from "./weekly-plan-preview";
 
 export function FeaturedFeatureCard() {

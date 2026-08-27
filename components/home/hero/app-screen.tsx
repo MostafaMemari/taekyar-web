@@ -1,6 +1,6 @@
 import { Dumbbell, Home, Play, User } from "lucide-react";
 
-import type { Training } from "./data";
+import type { Training } from "@/data/home/hero";
 
 interface AppScreenProps {
   belts: string[];

@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 
 import { ArticleContent } from "@/components/blog/article-content";
 import { CommentsSection } from "@/components/blog/comments/comments-section";
-import { getPostComments } from "@/components/blog/comments/data";
+import { getPostComments } from "@/data/blog/comments";
 import { PostCover } from "@/components/blog/post-cover";
 import { PostHeader, PostTopbar } from "@/components/blog/post-header";
-import { POST_CONTACT_CTA, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/components/blog/post-config";
+import { POST_CONTACT_CTA, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/data/blog/post-config";
 import { ReadingProgress } from "@/components/blog/reading-progress";
 import { RelatedPosts } from "@/components/blog/related-posts";
 import { SidebarAppCta } from "@/components/blog/sidebar-app-cta";

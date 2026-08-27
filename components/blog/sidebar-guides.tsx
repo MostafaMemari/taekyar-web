@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import { CATEGORY_STYLES } from "@/components/blog/data";
-import { POST_LABELS, TRAINING_GUIDE_SLUGS } from "@/components/blog/post-config";
+import { CATEGORY_STYLES } from "@/data/blog/index-page";
+import { POST_LABELS, TRAINING_GUIDE_SLUGS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
 import { blogPosts } from "@/lib/blog";
 import { Dumbbell } from "lucide-react";

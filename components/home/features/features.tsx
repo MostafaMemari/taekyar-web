@@ -2,7 +2,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import { SectionHeader } from "@/components/shared/section-header";
 import { BeltPath } from "./belt-path";
-import { FEATURES_INTRO, SUPPORTING_FEATURES } from "./data";
+import { FEATURES_INTRO, SUPPORTING_FEATURES } from "@/data/home/features";
 import { FeatureCard, FeaturedFeatureCard } from "./feature-cards";
 
 export function Features() {

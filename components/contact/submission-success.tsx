@@ -4,7 +4,7 @@ import { CircleCheck, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SURFACE_CARD } from "@/lib/styles";
-import { FORM_LABELS } from "./data";
+import { FORM_LABELS } from "@/data/contact";
 
 export function SubmissionSuccess({ onReset }: { onReset: () => void }) {
   return (

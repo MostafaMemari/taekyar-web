@@ -3,7 +3,7 @@ import { Check, Download } from "lucide-react";
 import { Reveal } from "@/components/shared/reveal";
 import { Button } from "@/components/ui/button";
 import { PhoneMockup } from "./phone-mockup";
-import { TRUST_BADGES } from "./data";
+import { TRUST_BADGES } from "@/data/home/hero";
 
 export function Hero() {
   return (

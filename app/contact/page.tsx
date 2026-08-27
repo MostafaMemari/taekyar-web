@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { ChannelCard } from "@/components/contact/channel-card";
-import { CONTACT_CHANNELS } from "@/components/contact/data";
+import { CONTACT_CHANNELS } from "@/data/contact";
 import { ContactForm } from "@/components/contact/contact-form";
 import { ContactHeader } from "@/components/contact/contact-header";
 import { SupportInfo } from "@/components/contact/support-info";

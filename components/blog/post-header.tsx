@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Clock } from "lucide-react";
 
-import { CATEGORY_STYLES } from "@/components/blog/data";
-import { POST_LABELS } from "@/components/blog/post-config";
+import { CATEGORY_STYLES } from "@/data/blog/index-page";
+import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
 import { toFaDigits } from "@/lib/utils";
 

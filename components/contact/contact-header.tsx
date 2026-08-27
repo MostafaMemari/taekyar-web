@@ -1,4 +1,4 @@
-import { CONTACT_PAGE_INTRO } from "@/components/contact/data";
+import { CONTACT_PAGE_INTRO } from "@/data/contact";
 import { BeltDivider } from "@/components/shared/belt-divider";
 
 export function ContactHeader() {

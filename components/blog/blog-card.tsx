@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, Clock } from "lucide-react";
 
-import { BLOG_INDEX_LABELS, CATEGORY_STYLES } from "@/components/blog/data";
+import { BLOG_INDEX_LABELS, CATEGORY_STYLES } from "@/data/blog/index-page";
 import { Badge } from "@/components/ui/badge";
 import type { BlogPost } from "@/lib/blog";
 import { SURFACE_CARD } from "@/lib/styles";

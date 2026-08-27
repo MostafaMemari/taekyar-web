@@ -1,4 +1,4 @@
-import { BLOG_INDEX_INTRO } from "@/components/blog/data";
+import { BLOG_INDEX_INTRO } from "@/data/blog/index-page";
 import { BeltDivider } from "@/components/shared/belt-divider";
 
 export function BlogHeader() {

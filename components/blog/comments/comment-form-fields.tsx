@@ -1,6 +1,6 @@
 "use client";
 
-import { COMMENT_FORM_LABELS } from "@/components/blog/comments/data";
+import { COMMENT_FORM_LABELS } from "@/data/blog/comments";
 import {
   FieldError,
   FieldLabel,

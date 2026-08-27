@@ -1,4 +1,4 @@
-import type { PostComment } from "@/components/blog/comments/data";
+import type { PostComment } from "@/data/blog/comments";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 

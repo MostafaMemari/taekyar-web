@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
-import { FOLLOW_TITLE, PRE_CONTACT_TIPS, QUICK_FAQ_LABEL } from "@/components/contact/data";
-import { SOCIALS } from "@/components/layout/footer/data";
+import { FOLLOW_TITLE, PRE_CONTACT_TIPS, QUICK_FAQ_LABEL } from "@/data/contact";
+import { SOCIALS } from "@/data/socials";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { Button } from "@/components/ui/button";
 import { SURFACE_CARD } from "@/lib/styles";

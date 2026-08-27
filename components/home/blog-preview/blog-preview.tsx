@@ -7,7 +7,7 @@ import { Section } from "@/components/shared/section";
 import { SectionHeader } from "@/components/shared/section-header";
 import { Button } from "@/components/ui/button";
 import { blogPosts } from "@/lib/blog";
-import { BLOG_PREVIEW_COUNT, BLOG_PREVIEW_INTRO } from "./data";
+import { BLOG_PREVIEW_COUNT, BLOG_PREVIEW_INTRO } from "@/data/home/blog-preview";
 
 export function BlogPreview() {
   return (

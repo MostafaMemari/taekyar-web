@@ -6,7 +6,7 @@ import { Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { navLinks } from "@/lib/navigation";
-import { useScrolled } from "@/lib/use-scrolled";
+import { useScrolled } from "@/hooks/use-scrolled";
 import { cn } from "@/lib/utils";
 import { MobileMenu } from "./mobile-menu";
 import { NavLinkItem, useIsActive } from "./nav-link-item";

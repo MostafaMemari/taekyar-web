@@ -1,6 +1,6 @@
 import { MessageSquareDashed } from "lucide-react";
 
-import type { PostComment } from "@/components/blog/comments/data";
+import type { PostComment } from "@/data/blog/comments";
 import { CommentItem } from "@/components/blog/comments/comment-item";
 
 const EMPTY_STATE_COPY = {

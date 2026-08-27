@@ -1,4 +1,4 @@
-import type { ContactChannel } from "@/components/contact/data";
+import type { ContactChannel } from "@/data/contact";
 import { SURFACE_CARD, SURFACE_CARD_INTERACTIVE } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
