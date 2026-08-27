@@ -26,14 +26,15 @@ interface CommentListProps {
   comments: PostComment[];
 }
 
+/** Flat list of conversation threads; nesting lives inside each CommentItem. */
 export function CommentList({ comments }: CommentListProps) {
   if (comments.length === 0) return <CommentsEmptyState />;
 
   return (
     <ul className="space-y-3.5 sm:space-y-4">
-      {comments.map((comment, index) => (
+      {comments.map((comment) => (
         <li key={comment.id}>
-          <CommentItem comment={comment} index={index} />
+          <CommentItem comment={comment} />
         </li>
       ))}
     </ul>

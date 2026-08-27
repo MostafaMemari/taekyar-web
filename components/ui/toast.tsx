@@ -7,9 +7,23 @@ import { CircleCheck, TriangleAlert, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast, type ToastTone } from "./use-toast";
 
-const TONE_CLASSES: Record<ToastTone, string> = {
-  success: "bg-belt-green/15 text-belt-green ring-belt-green/25",
-  error: "bg-destructive/10 text-destructive ring-destructive/25",
+/**
+ * Belt-red instead of --destructive: the raw token (#ff5257) is tuned for
+ * dark surfaces and washes out on the light theme.
+ */
+const TONE_ACCENT: Record<ToastTone, string> = {
+  success: "bg-belt-green",
+  error: "bg-belt-red",
+};
+
+const TONE_RING: Record<ToastTone, string> = {
+  success: "ring-belt-green/25",
+  error: "ring-belt-red/25",
+};
+
+const TONE_ICON_CHIP: Record<ToastTone, string> = {
+  success: "bg-belt-green/15 text-belt-green ring-belt-green/20",
+  error: "bg-belt-red/10 text-belt-red ring-belt-red/20",
 };
 
 const TONE_ICONS: Record<ToastTone, React.ReactNode> = {
@@ -18,8 +32,9 @@ const TONE_ICONS: Record<ToastTone, React.ReactNode> = {
 };
 
 /**
- * Light-theme surface tokens are pinned here because Radix portals the
- * toast viewport to <body>, outside every `.theme-light` scope.
+ * Light-surface colors are pinned as raw hexes because Radix portals the
+ * toast viewport to <body> — outside every `.theme-light` scope, where
+ * --background/--card resolve to the dark palette instead.
  */
 function Toast({ tone, className, ...props }: React.ComponentProps<typeof ToastPrimitive.Root> & { tone: ToastTone }) {
   return (
@@ -27,14 +42,19 @@ function Toast({ tone, className, ...props }: React.ComponentProps<typeof ToastP
       data-slot="toast"
       data-tone={tone}
       className={cn(
-        "pointer-events-auto relative flex w-full items-start gap-3 overflow-hidden rounded-xl bg-white p-4 shadow-lg shadow-black/[0.08] ring-1 ring-black/[0.05]",
+        "pointer-events-auto relative w-full overflow-hidden rounded-xl bg-white p-4 ps-5 shadow-lg shadow-black/[0.08] ring-1",
+        TONE_RING[tone],
         "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-6",
         "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
         "data-[swipe=end]:animate-out data-[swipe=end]:fade-out-0",
         className,
       )}
       {...props}
-    />
+    >
+      {/* Tone accent on the start edge — flips automatically in RTL. */}
+      <span aria-hidden="true" className={cn("absolute inset-y-0 start-0 w-1", TONE_ACCENT[tone])} />
+      {props.children}
+    </ToastPrimitive.Root>
   );
 }
 
@@ -42,7 +62,7 @@ function ToastTitle({ className, ...props }: React.ComponentProps<typeof ToastPr
   return (
     <ToastPrimitive.Title
       data-slot="toast-title"
-      className={cn("text-sm font-extrabold leading-7", className)}
+      className={cn("text-sm font-extrabold leading-7 text-[#171717]", className)}
       {...props}
     />
   );
@@ -55,20 +75,20 @@ function ToastDescription({
   return (
     <ToastPrimitive.Description
       data-slot="toast-description"
-      className={cn("mt-1 text-[13px] leading-6 opacity-80 sm:text-sm", className)}
+      className={cn("mt-1 text-[13px] leading-6 text-[#6b6b66] sm:text-sm", className)}
       {...props}
     />
   );
 }
 
-/** Success-to-error tinting for the leading icon, driven by the `tone` prop. */
+/** Success-to-error tinting for the leading icon chip, driven by the `tone` prop. */
 function ToastLeadingIcon({ tone }: { tone: ToastTone }) {
   return (
     <span
       aria-hidden="true"
       className={cn(
-        "flex size-8 shrink-0 items-center justify-center rounded-full ring-1 [&_svg]:size-4",
-        TONE_CLASSES[tone],
+        "flex size-9 shrink-0 items-center justify-center rounded-full ring-1 [&_svg]:size-[18px]",
+        TONE_ICON_CHIP[tone],
       )}
     >
       {TONE_ICONS[tone]}
@@ -82,7 +102,7 @@ function ToastClose({ className, ...props }: React.ComponentProps<typeof ToastPr
       data-slot="toast-close"
       aria-label="بستن اعلان"
       className={cn(
-        "flex size-6 shrink-0 items-center justify-center self-start rounded-md opacity-50 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        "flex size-6 shrink-0 items-center justify-center self-start rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         className,
       )}
       {...props}
@@ -99,12 +119,14 @@ function Toaster() {
     <ToastPrimitive.Provider swipeDirection="left" label="اعلان">
       {toasts.map(({ id, tone, title, description }) => (
         <Toast key={id} tone={tone} onOpenChange={(open) => !open && dismiss(id)}>
-          <ToastLeadingIcon tone={tone} />
-          <div className="min-w-0 flex-1">
-            <ToastTitle>{title}</ToastTitle>
-            {description ? <ToastDescription>{description}</ToastDescription> : null}
+          <div className="flex items-start gap-3">
+            <ToastLeadingIcon tone={tone} />
+            <div className="min-w-0 flex-1">
+              <ToastTitle>{title}</ToastTitle>
+              {description ? <ToastDescription>{description}</ToastDescription> : null}
+            </div>
+            <ToastClose />
           </div>
-          <ToastClose />
         </Toast>
       ))}
 

@@ -1,17 +1,14 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
-import { PenLine } from "lucide-react";
+import { CornerDownLeft } from "lucide-react";
 
 import {
-  COMMENT_FORM_LABELS,
   COMMENT_REPLY_LABELS,
-  COMMENTS_LABELS,
   COMMENT_TOAST_MESSAGES,
 } from "@/components/blog/comments/data";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { SURFACE_CARD } from "@/lib/styles";
 import {
   EMPTY_COMMENT_DRAFT,
   submitComment,
@@ -21,12 +18,13 @@ import {
 } from "./comment-submission";
 import { CommentDraftFields } from "./comment-form-fields";
 
-interface CommentFormProps {
-  /** Provided when the section toggles this form; renders the shared cancel affordance. */
-  onCancel?: () => void;
+interface ReplyFormProps {
+  /** Author of the comment being replied to, shown as context. */
+  parentAuthor: string;
+  onCancel: () => void;
 }
 
-export function CommentForm({ onCancel }: CommentFormProps) {
+export function ReplyForm({ parentAuthor, onCancel }: ReplyFormProps) {
   const [draft, setDraft] = useState<CommentDraft>(EMPTY_COMMENT_DRAFT);
   const [errors, setErrors] = useState<CommentDraftErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,12 +45,12 @@ export function CommentForm({ onCancel }: CommentFormProps) {
 
     try {
       await submitComment();
-      setDraft(EMPTY_COMMENT_DRAFT);
       toast({
         tone: "success",
         title: COMMENT_TOAST_MESSAGES.successTitle,
         description: COMMENT_TOAST_MESSAGES.successDescription,
       });
+      onCancel();
     } catch {
       toast({
         tone: "error",
@@ -65,46 +63,41 @@ export function CommentForm({ onCancel }: CommentFormProps) {
   }
 
   return (
-    <div className={SURFACE_CARD + " p-5 sm:p-6"}>
+    <div className="mt-3.5 rounded-xl bg-background p-4 ring-1 ring-black/[0.04]">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="flex items-center gap-2 text-base font-extrabold">
-          <PenLine className="size-4 text-primary" aria-hidden="true" />
-          {COMMENTS_LABELS.formTitle}
-        </h3>
-        {onCancel ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={onCancel}
-            className="h-7 rounded-lg px-2.5 text-xs font-bold text-muted-foreground"
-          >
-            {COMMENT_REPLY_LABELS.cancel}
-          </Button>
-        ) : null}
+        <p className="inline-flex items-center gap-1.5 text-[13px] font-bold text-primary">
+          <CornerDownLeft className="size-3.5" aria-hidden="true" />
+          {COMMENT_REPLY_LABELS.replyToPrefix} «{parentAuthor}»
+        </p>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={onCancel}
+          className="h-7 rounded-lg px-2.5 text-xs font-bold text-muted-foreground"
+        >
+          {COMMENT_REPLY_LABELS.cancel}
+        </Button>
       </div>
 
-      <form noValidate onSubmit={handleSubmit} className="mt-5 space-y-4">
+      <form noValidate onSubmit={handleSubmit} className="mt-4 space-y-4">
         <CommentDraftFields
-          idPrefix="comment"
+          idPrefix="comment-reply"
           draft={draft}
           errors={errors}
+          messageLabel={COMMENT_REPLY_LABELS.messageLabel}
+          messagePlaceholder={COMMENT_REPLY_LABELS.messagePlaceholder}
           onFieldChange={handleFieldChange}
         />
 
-        <div>
-          <Button
-            type="submit"
-            size="lg"
-            disabled={isSubmitting}
-            className="h-11 w-full gap-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90 sm:w-auto sm:px-8"
-          >
-            {COMMENT_FORM_LABELS.submit}
-          </Button>
-          <p className="mt-3 text-xs leading-6 text-muted-foreground">
-            {COMMENT_FORM_LABELS.formHint}
-          </p>
-        </div>
+        <Button
+          type="submit"
+          size="lg"
+          disabled={isSubmitting}
+          className="h-10 w-full gap-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90 sm:w-auto sm:px-6"
+        >
+          {COMMENT_REPLY_LABELS.submit}
+        </Button>
       </form>
     </div>
   );
