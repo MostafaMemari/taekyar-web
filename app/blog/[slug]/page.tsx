@@ -7,7 +7,6 @@ import { getPostComments } from "@/data/blog/comments";
 import { PostCover } from "@/components/blog/post-cover";
 import { PostHeader, PostTopbar } from "@/components/blog/post-header";
 import { POST_CONTACT_CTA, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/data/blog/post-config";
-import { ReadingProgress } from "@/components/blog/reading-progress";
 import { RelatedPosts } from "@/components/blog/related-posts";
 import { SidebarAppCta } from "@/components/blog/sidebar-app-cta";
 import { SidebarCategories } from "@/components/blog/sidebar-categories";
@@ -71,8 +70,6 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <>
-      <ReadingProgress />
-
       <Section className="pb-0 sm:pb-0 lg:pb-0">
         <Reveal>
           <PostTopbar />
