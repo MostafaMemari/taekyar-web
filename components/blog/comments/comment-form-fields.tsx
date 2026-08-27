@@ -1,5 +1,3 @@
-"use client";
-
 import { COMMENT_FORM_LABELS } from "@/data/blog/comments";
 import {
   FieldError,
