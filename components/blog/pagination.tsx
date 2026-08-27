@@ -51,8 +51,9 @@ function EdgeLink({ page, hrefFor, label, ariaLabel, rel }: EdgeLinkProps) {
         aria-disabled="true"
         className="inline-flex h-9 cursor-default items-center gap-1 rounded-full border border-transparent px-3 text-[13px] font-medium text-muted-foreground/50"
       >
-        <Icon className="size-4" aria-hidden="true" />
+        {rel === "prev" && <Icon className="size-4" aria-hidden="true" />}
         {label}
+        {rel === "next" && <Icon className="size-4" aria-hidden="true" />}
       </span>
     );
   }
@@ -64,8 +65,9 @@ function EdgeLink({ page, hrefFor, label, ariaLabel, rel }: EdgeLinkProps) {
       rel={rel}
       className={cn(chipBase, "gap-1 border-transparent bg-card text-muted-foreground hover:border-primary/30 hover:text-primary")}
     >
-      <Icon className="size-4" aria-hidden="true" />
+      {rel === "prev" && <Icon className="size-4" aria-hidden="true" />}
       {label}
+      {rel === "next" && <Icon className="size-4" aria-hidden="true" />}
     </Link>
   );
 }
