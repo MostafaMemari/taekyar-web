@@ -27,3 +27,12 @@ export const BLOG_INDEX_LABELS = {
     "هنوز مقاله‌ای در این دسته‌بندی منتشر نشده؛ به‌زودی مطالب جدید اضافه می‌شود.",
   resultsSuffix: "مقاله",
 };
+
+export const BLOG_PAGINATION = {
+  postsPerPage: 4,
+  navLabel: "ناوبری صفحات وبلاگ",
+  prev: "صفحه قبل",
+  next: "صفحه بعد",
+  goTo: "رفتن به صفحه",
+} as const;
+
