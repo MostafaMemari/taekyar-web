@@ -30,7 +30,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fa" dir="rtl" className={cn("h-full antialiased dark font-sans", vazirmatn.variable, geistMono.variable)}>
+    <html
+      lang="fa"
+      dir="rtl"
+      data-scroll-behavior="smooth"
+      className={cn("h-full antialiased dark font-sans", vazirmatn.variable, geistMono.variable)}
+    >
       <body className="flex min-h-full flex-col">
         <Suspense fallback={null}>
           <ScrollReset />
