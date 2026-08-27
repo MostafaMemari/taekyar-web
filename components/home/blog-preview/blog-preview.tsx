@@ -30,7 +30,7 @@ export function BlogPreview() {
 
       <div className="mt-8 grid gap-4 md:grid-cols-3 lg:mt-10 lg:gap-5">
         {blogPosts.slice(0, BLOG_PREVIEW_COUNT).map((post, index) => (
-          <Reveal key={post.id} delay={index * 90}>
+          <Reveal key={post.id} delay={index * 90} className="h-full">
             <BlogCard post={post} />
           </Reveal>
         ))}

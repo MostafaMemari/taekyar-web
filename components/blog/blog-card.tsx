@@ -41,21 +41,21 @@ export function BlogCard({ post }: { post: BlogPost }) {
         <CardCover post={post} />
       </Link>
 
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <h3 className="text-balance text-[15px] font-bold leading-6 sm:text-[16px] sm:leading-7">
+      <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
+        <h3 className="text-[15px] font-bold leading-6 sm:text-[16px] sm:leading-7">
           <Link
             href={href}
-            className="line-clamp-2 rounded-sm transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="block truncate rounded-sm transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             {post.title}
           </Link>
         </h3>
 
-        <p className="mt-1.5 flex flex-wrap items-center gap-x-2 text-[11px] font-medium text-muted-foreground sm:text-xs">
+        <p className="mt-1.5 flex flex-nowrap items-center gap-x-2 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
           <span>{post.date}</span>
-          <span aria-hidden="true" className="size-1 rounded-full bg-muted-foreground/30" />
+          <span aria-hidden="true" className="size-1 shrink-0 rounded-full bg-muted-foreground/30" />
           <span className="inline-flex items-center gap-1">
-            <Clock className="size-3" />
+            <Clock className="size-3 shrink-0" />
             {post.readTimeMinutes} {BLOG_INDEX_LABELS.readTimeSuffix}
           </span>
         </p>
