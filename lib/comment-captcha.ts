@@ -20,10 +20,6 @@ function pepper(): string {
   return process.env.COMMENT_IP_PEPPER ?? "taekyar-comment-ip-pepper";
 }
 
-function toPersianDigits(value: number): string {
-  return String(value).replace(/\d/g, (digit) => FA_DIGITS[Number(digit)]);
-}
-
 function normalizeDigits(value: string): string {
   return value
     .replace(/[۰-۹]/g, (digit) => String(FA_DIGITS.indexOf(digit)))

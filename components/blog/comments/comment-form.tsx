@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PenLine } from "lucide-react";
+import { Loader2, PenLine } from "lucide-react";
 
 import {
   COMMENT_FORM_LABELS,
@@ -105,7 +105,7 @@ export function CommentForm({ postSlug, onCancel }: CommentFormProps) {
   }
 
   return (
-    <div className={SURFACE_CARD + " p-5 sm:p-6"}>
+    <div className={SURFACE_CARD + " relative p-5 sm:p-6"}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="flex items-center gap-2 text-base font-extrabold">
           <PenLine className="size-4 text-primary" aria-hidden="true" />
@@ -124,7 +124,7 @@ export function CommentForm({ postSlug, onCancel }: CommentFormProps) {
         ) : null}
       </div>
 
-      <form noValidate onSubmit={handleSubmit} className="mt-5 space-y-4">
+      <form noValidate onSubmit={handleSubmit} aria-busy={isSubmitting} className="mt-5 space-y-4">
         <CommentDraftFields
           idPrefix="comment"
           draft={draft}
@@ -153,16 +153,19 @@ export function CommentForm({ postSlug, onCancel }: CommentFormProps) {
           onRefresh={() => void captcha.refresh()}
         />
 
-        <div>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
           <Button
             type="submit"
             size="lg"
             disabled={isSubmitting || captcha.isLoading || !captcha.challenge}
-            className="h-11 w-full gap-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90 sm:w-auto sm:px-8"
+            className="h-11 gap-2 rounded-xl px-8 text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90"
           >
-            {COMMENT_FORM_LABELS.submit}
+            {isSubmitting ? (
+              <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+            ) : null}
+            {isSubmitting ? COMMENT_FORM_LABELS.submitting : COMMENT_FORM_LABELS.submit}
           </Button>
-          <p className="mt-3 text-xs leading-6 text-muted-foreground">
+          <p className="text-xs leading-6 text-muted-foreground">
             {COMMENT_FORM_LABELS.formHint}
           </p>
         </div>

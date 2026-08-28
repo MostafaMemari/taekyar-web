@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CornerDownLeft } from "lucide-react";
+import { CornerDownLeft, Loader2 } from "lucide-react";
 
 import {
   COMMENT_REPLY_LABELS,
@@ -91,7 +91,7 @@ export function ReplyForm({ postSlug, parentId, parentAuthor, onCancel }: ReplyF
   }
 
   return (
-    <div className="mt-3.5 rounded-xl bg-background p-4 ring-1 ring-black/[0.04]">
+    <div className="relative mt-3.5 rounded-xl bg-background p-4 ring-1 ring-black/[0.04]">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="inline-flex items-center gap-1.5 text-[13px] font-bold text-primary">
           <CornerDownLeft className="size-3.5" aria-hidden="true" />
@@ -108,7 +108,7 @@ export function ReplyForm({ postSlug, parentId, parentAuthor, onCancel }: ReplyF
         </Button>
       </div>
 
-      <form noValidate onSubmit={handleSubmit} className="mt-4 space-y-4">
+      <form noValidate onSubmit={handleSubmit} aria-busy={isSubmitting} className="mt-4 space-y-4">
         <CommentDraftFields
           idPrefix="comment-reply"
           draft={draft}
@@ -143,9 +143,12 @@ export function ReplyForm({ postSlug, parentId, parentAuthor, onCancel }: ReplyF
           type="submit"
           size="lg"
           disabled={isSubmitting || captcha.isLoading || !captcha.challenge}
-          className="h-10 w-full gap-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90 sm:w-auto sm:px-6"
+          className="h-10 gap-2 rounded-xl px-6 text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90"
         >
-          {COMMENT_REPLY_LABELS.submit}
+          {isSubmitting ? (
+            <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+          ) : null}
+          {isSubmitting ? COMMENT_REPLY_LABELS.submitting : COMMENT_REPLY_LABELS.submit}
         </Button>
       </form>
     </div>

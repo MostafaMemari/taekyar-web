@@ -31,7 +31,6 @@ export function CommentDraftFields({
           {...getAriaProps(`${idPrefix}-name`, errors.name)}
           type="text"
           autoComplete="name"
-          autoFocus
           value={draft.name}
           placeholder={COMMENT_FORM_LABELS.namePlaceholder}
           required
