@@ -260,13 +260,14 @@
 }
 .article-content ul,
 .article-content ol {
+  margin-block: 0.25rem;
   padding-inline-start: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
   color: var(--muted-foreground);
   font-size: 0.9375rem;
   line-height: 2;
+}
+.article-content li + li {
+  margin-top: 0.625rem;
 }
 .article-content ul {
   list-style: disc;
@@ -274,9 +275,13 @@
 .article-content ol {
   list-style: decimal;
 }
+.article-content ol:dir(rtl) {
+  list-style-type: persian;
+}
 .article-content li::marker {
   color: var(--primary);
   font-weight: 700;
+  font-family: var(--font-vazirmatn);
 }
 .article-content a {
   color: var(--primary);
