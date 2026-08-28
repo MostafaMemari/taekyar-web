@@ -1,9 +1,12 @@
 "use client";
 
 import { useActionState } from "react";
+import { AlertCircle } from "lucide-react";
 
-import { FieldError, FieldLabel, INPUT_CLASSES } from "@/components/shared/form-controls";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { LOGIN_LABELS } from "@/data/dashboard/ui";
 import { login } from "@/lib/admin-actions";
 
@@ -11,10 +14,12 @@ export function LoginForm() {
   const [state, formAction, isPending] = useActionState(login, {});
 
   return (
-    <form action={formAction} noValidate className="mt-5 space-y-4">
-      <div>
-        <FieldLabel htmlFor="login-username">{LOGIN_LABELS.username}</FieldLabel>
-        <input
+    <form action={formAction} noValidate className="mt-6 space-y-4">
+      <div className="space-y-1.5">
+        <Label htmlFor="login-username" className="text-[13px] font-bold">
+          {LOGIN_LABELS.username}
+        </Label>
+        <Input
           id="login-username"
           name="username"
           type="text"
@@ -22,13 +27,16 @@ export function LoginForm() {
           autoComplete="username"
           required
           placeholder={LOGIN_LABELS.usernamePlaceholder}
-          className={INPUT_CLASSES}
+          className="h-11 rounded-xl bg-card text-start font-mono text-sm"
+          aria-invalid={Boolean(state.error)}
         />
       </div>
 
-      <div>
-        <FieldLabel htmlFor="login-password">{LOGIN_LABELS.password}</FieldLabel>
-        <input
+      <div className="space-y-1.5">
+        <Label htmlFor="login-password" className="text-[13px] font-bold">
+          {LOGIN_LABELS.password}
+        </Label>
+        <Input
           id="login-password"
           name="password"
           type="password"
@@ -36,21 +44,30 @@ export function LoginForm() {
           autoComplete="current-password"
           required
           placeholder={LOGIN_LABELS.passwordPlaceholder}
-          className={INPUT_CLASSES}
+          className="h-11 rounded-xl bg-card text-start"
+          aria-invalid={Boolean(state.error)}
         />
       </div>
 
       {state.error ? (
-        <FieldError errorId="login-error" message={LOGIN_LABELS.invalid} />
+        <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
+          <AlertCircle className="size-4" aria-hidden="true" />
+          <AlertTitle className="text-[13px] font-bold">ورود ناموفق</AlertTitle>
+          <AlertDescription className="text-[13px] leading-5">{LOGIN_LABELS.invalid}</AlertDescription>
+        </Alert>
       ) : null}
 
       <Button
         type="submit"
         disabled={isPending}
-        className="h-11 w-full gap-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90"
+        className="mt-1 h-11 w-full gap-2 rounded-xl text-[13px] font-black shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none"
       >
-        {LOGIN_LABELS.submit}
+        {isPending ? "در حال ورود…" : LOGIN_LABELS.submit}
       </Button>
+
+      <p className="text-center text-[11px] leading-5 text-muted-foreground">
+        دسترسی فقط برای مدیران تک‌یار — در صورت فراموشی گذرواژه با پشتیبانی تماس بگیرید.
+      </p>
     </form>
   );
 }
