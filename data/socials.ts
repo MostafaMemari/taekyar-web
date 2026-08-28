@@ -1,9 +1,7 @@
-import { Send } from "lucide-react";
+export type SocialIconName = "instagram" | "telegram" | "youtube";
 
-import { InstagramIcon, YoutubeIcon } from "@/components/shared/icons";
-
-export const SOCIALS = [
-  { label: "اینستاگرام", href: "#", Icon: InstagramIcon },
-  { label: "تلگرام", href: "#", Icon: Send },
-  { label: "یوتیوب", href: "#", Icon: YoutubeIcon },
+export const SOCIALS: Array<{ label: string; href: string; iconName: SocialIconName }> = [
+  { label: "اینستاگرام", href: "#", iconName: "instagram" },
+  { label: "تلگرام", href: "#", iconName: "telegram" },
+  { label: "یوتیوب", href: "#", iconName: "youtube" },
 ];

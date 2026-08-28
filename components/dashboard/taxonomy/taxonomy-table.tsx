@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 
@@ -39,10 +40,12 @@ export function TaxonomyTable({ kind, rows }: { kind: "category" | "tag"; rows: 
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     {row.image ? (
-                      <img
+                      <Image
                         src={r2PublicUrl(row.image)}
                         alt=""
                         aria-hidden="true"
+                        width={40}
+                        height={40}
                         className="size-10 shrink-0 rounded-lg object-cover ring-1 ring-black/[0.06]"
                       />
                     ) : (

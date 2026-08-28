@@ -20,8 +20,7 @@ export default function LoginPage() {
         </div>
 
         <div className={cn(SURFACE_CARD, "relative overflow-hidden")}>
-          <BeltDivider
-            fullWidth
+          <BeltDivider width="full"
             className="absolute inset-x-0 top-0 h-[3px] border-0 opacity-90"
           />
 

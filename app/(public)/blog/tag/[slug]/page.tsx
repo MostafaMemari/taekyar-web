@@ -5,7 +5,7 @@ import { TaxonomyArchive } from "@/components/blog/taxonomy-archive";
 import { getPostsByTag, getTagBySlug } from "@/lib/blog";
 import { r2PublicUrl } from "@/lib/r2-url";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 interface TagPageProps {
   params: Promise<{ slug: string }>;

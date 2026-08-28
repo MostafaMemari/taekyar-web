@@ -26,7 +26,7 @@ export function MottoCard() {
       <span aria-hidden="true" className={cn(SHEET, "rotate-[1.6deg]")} />
       <span aria-hidden="true" className={cn(SHEET, "-rotate-[1.6deg]")} />
 
-      <BeltDivider fullWidth={false} variant="pill" className="h-1 w-14" />
+      <BeltDivider variant="pill" width="contained" className="h-1 w-14" />
 
       <div aria-live="polite" className="grid py-5">
         {quotes.map((item, index) => (

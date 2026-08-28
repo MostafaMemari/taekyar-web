@@ -11,7 +11,7 @@ export function AboutHeader() {
       <h1 className="mt-2.5 text-balance text-[1.65rem] font-black leading-[1.35] tracking-tight sm:mt-3 sm:text-[2rem] sm:leading-[1.35] lg:text-[2.35rem]">
         {ABOUT_INTRO.title}
       </h1>
-      <BeltDivider fullWidth={false} variant="pill" className="mt-3.5 h-1 w-16 sm:w-20" />
+      <BeltDivider variant="pill" width="contained" className="mt-3.5 h-1 w-16 sm:w-20" />
       <p className="mt-3.5 max-w-xl text-pretty text-[14px] leading-7 text-muted-foreground sm:text-[15px] sm:leading-7">
         {ABOUT_INTRO.description}
       </p>

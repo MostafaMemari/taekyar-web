@@ -1,5 +1,4 @@
-import { BookOpen, Clock, Mail, Phone, Send } from "lucide-react";
-import { InstagramIcon } from "@/components/shared/icons";
+
 
 export const CONTACT_PAGE_INTRO = {
   eyebrow: "تماس با ما",
@@ -11,6 +10,8 @@ export const CONTACT_PAGE_INTRO = {
 export const SUPPORT_EMAIL = "info@taekyar.ir";
 export const SUPPORT_PHONE_NUMBER = "+982191008524";
 
+export type ContactIconName = "mail" | "phone" | "send" | "instagram";
+
 export interface ContactChannel {
   id: string;
   title: string;
@@ -19,7 +20,7 @@ export interface ContactChannel {
   href: string;
   isExternal: boolean;
   chipClassName: string;
-  Icon: typeof Mail | typeof InstagramIcon;
+  iconName: ContactIconName;
 }
 
 export const CONTACT_CHANNELS: ContactChannel[] = [
@@ -31,7 +32,7 @@ export const CONTACT_CHANNELS: ContactChannel[] = [
     href: `mailto:${SUPPORT_EMAIL}`,
     isExternal: false,
     chipClassName: "bg-primary/15 text-primary ring-primary/25",
-    Icon: Mail,
+    iconName: "mail",
   },
   {
     id: "phone",
@@ -41,7 +42,7 @@ export const CONTACT_CHANNELS: ContactChannel[] = [
     href: `tel:${SUPPORT_PHONE_NUMBER}`,
     isExternal: false,
     chipClassName: "bg-belt-green/15 text-belt-green ring-belt-green/25",
-    Icon: Phone,
+    iconName: "phone",
   },
   {
     id: "telegram",
@@ -51,7 +52,7 @@ export const CONTACT_CHANNELS: ContactChannel[] = [
     href: "https://t.me/TaekyarApp",
     isExternal: true,
     chipClassName: "bg-belt-blue/15 text-belt-blue ring-belt-blue/25",
-    Icon: Send,
+    iconName: "send",
   },
   {
     id: "instagram",
@@ -61,26 +62,28 @@ export const CONTACT_CHANNELS: ContactChannel[] = [
     href: "https://instagram.com/taekyar.app",
     isExternal: true,
     chipClassName: "bg-belt-yellow/20 text-yellow-700 ring-belt-yellow/40",
-    Icon: InstagramIcon,
+    iconName: "instagram",
   },
 ];
+
+export type TipIconName = "clock" | "book-open";
 
 export interface PreContactTip {
   title: string;
   description: string;
-  Icon: typeof Clock;
+  iconName: TipIconName;
 }
 
 export const PRE_CONTACT_TIPS: PreContactTip[] = [
   {
     title: "زمان پاسخگویی",
     description: "معمولاً در کمتر از ۲۴ ساعت کاری به پیامت جواب می‌دهیم.",
-    Icon: Clock,
+    iconName: "clock",
   },
   {
     title: "ساعات کاری",
     description: "شنبه تا پنج‌شنبه، از ساعت ۹ صبح تا ۶ عصر همراهیم.",
-    Icon: BookOpen,
+    iconName: "book-open",
   },
 ];
 

@@ -1,6 +1,6 @@
 import { Flame, Footprints, Zap, type LucideIcon } from "lucide-react";
 
-import { BELT_LEVELS } from "@/data/belts";
+import { BELT_LEVELS } from "@/data/shared/belts";
 
 export interface Training {
   Icon: LucideIcon;

@@ -7,11 +7,11 @@ import { BLOG_INDEX_LABELS, BLOG_PAGINATION } from "@/data/blog/index-page";
 import { PostGrid } from "@/components/blog/post-grid";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { getBlogPosts } from "@/lib/blog";
+import { getBlogPostsCount, getPaginatedBlogPosts } from "@/lib/blog";
 import { blogCategories, type BlogCategoryName } from "@/data/blog/categories";
 import { toFaDigits } from "@/lib/utils";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "وبلاگ",
@@ -22,9 +22,13 @@ interface BlogPageProps {
   searchParams: Promise<{ category?: string; page?: string }>;
 }
 
+function isBlogCategoryName(value: string): value is BlogCategoryName {
+  return (blogCategories as readonly string[]).includes(value);
+}
+
 function resolveCategory(value?: string): BlogCategoryName | null {
   if (!value) return null;
-  return (blogCategories as string[]).includes(value) ? (value as BlogCategoryName) : null;
+  return isBlogCategoryName(value) ? value : null;
 }
 
 function buildPageHref(activeCategory: BlogCategoryName | null, page: number): string {
@@ -39,15 +43,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const { category, page } = await searchParams;
   const activeCategory = resolveCategory(category);
 
-  const allPosts = await getBlogPosts();
-  const posts = activeCategory ? allPosts.filter((post) => post.category === activeCategory) : allPosts;
-
-  const totalPages = Math.max(1, Math.ceil(posts.length / BLOG_PAGINATION.postsPerPage));
+  const totalCount = await getBlogPostsCount(activeCategory);
+  const totalPages = Math.max(1, Math.ceil(totalCount / BLOG_PAGINATION.postsPerPage));
   const currentPage = Math.min(Math.max(Number(page) || 1, 1), totalPages);
-  const visiblePosts = posts.slice(
-    (currentPage - 1) * BLOG_PAGINATION.postsPerPage,
-    currentPage * BLOG_PAGINATION.postsPerPage,
-  );
+  const { posts: visiblePosts } = await getPaginatedBlogPosts({
+    category: activeCategory,
+    page: currentPage,
+    perPage: BLOG_PAGINATION.postsPerPage,
+  });
   const hrefFor = (targetPage: number) => buildPageHref(activeCategory, targetPage);
 
   return (
@@ -61,7 +64,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           <div className="mt-6 flex flex-col gap-3 border-b border-black/[0.06] pb-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pb-5">
             <CategoryFilter activeCategory={activeCategory} />
             <p className="shrink-0 text-xs font-medium text-muted-foreground sm:text-[13px]">
-              <span className="font-bold tabular-nums text-foreground">{toFaDigits(posts.length)}</span> {BLOG_INDEX_LABELS.resultsSuffix}
+              <span className="font-bold tabular-nums text-foreground">{toFaDigits(totalCount)}</span> {BLOG_INDEX_LABELS.resultsSuffix}
               {totalPages > 1 && (
                 <>
                   {" · "}

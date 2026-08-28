@@ -1,6 +1,6 @@
 import { Dumbbell, Flame, Footprints, MessageCircle, Moon, Swords, TrendingUp, Video, Zap } from "lucide-react";
 
-import { BELT_LEVELS } from "@/data/belts";
+import { BELT_LEVELS } from "@/data/shared/belts";
 
 export interface SupportingFeature {
   Icon: typeof Zap;

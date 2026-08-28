@@ -36,7 +36,7 @@ function FaqList() {
 
 export function Faq() {
   return (
-    <Section id="faq" divider>
+    <Section id="faq" divider="top">
       <Reveal>
         <SectionHeader {...FAQ_INTRO} />
       </Reveal>

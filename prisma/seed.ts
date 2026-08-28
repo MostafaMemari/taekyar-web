@@ -1,10 +1,10 @@
 import prismaPackage from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-import { blogPosts } from "../data/blog/posts.ts";
-import { getPostBlocks } from "../data/blog/post-content.ts";
+import { blogPosts } from "./seed-data/posts.ts";
+import { getPostBlocks } from "./seed-data/post-content.ts";
 import { blogCategories } from "../data/blog/categories.ts";
-import { MOCK_COMMENTS } from "../data/blog/comments.ts";
+import { MOCK_COMMENTS } from "./seed-data/comments.ts";
 import { hashPassword } from "../lib/session.ts";
 
 const { PrismaClient } = prismaPackage;

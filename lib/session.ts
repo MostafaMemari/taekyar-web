@@ -58,10 +58,13 @@ export function verifySessionToken(token: string | undefined): SessionPayload | 
   }
 
   try {
-    const payload = JSON.parse(Buffer.from(body, "base64url").toString()) as SessionPayload;
-    if (!payload.username || typeof payload.exp !== "number") return null;
+    const parsed: unknown = JSON.parse(Buffer.from(body, "base64url").toString());
+    if (typeof parsed !== "object" || parsed === null) return null;
+    const payload = parsed as Record<string, unknown>;
+    if (typeof payload.username !== "string" || payload.username.trim().length === 0) return null;
+    if (typeof payload.exp !== "number" || !Number.isFinite(payload.exp)) return null;
     if (payload.exp * 1000 < Date.now()) return null;
-    return payload;
+    return { username: payload.username, exp: payload.exp };
   } catch {
     return null;
   }

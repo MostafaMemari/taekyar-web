@@ -1,3 +1,5 @@
+import { cva, type VariantProps } from "class-variance-authority";
+
 import { cn } from "@/lib/utils";
 
 const BELT_ORDER = [
@@ -9,27 +11,38 @@ const BELT_ORDER = [
   "bg-belt-black",
 ] as const;
 
-interface BeltDividerProps {
-  fullWidth?: boolean;
+const beltDividerVariants = cva("overflow-hidden", {
+  variants: {
+    variant: {
+      strip: "h-[5px] w-full border-y border-foreground/10",
+      pill: "h-1.5 w-24 rounded-full",
+      slant: "h-3 w-full gap-2 [&>div]:-skew-x-12",
+    },
+    width: {
+      full: "w-full",
+      contained: "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",
+    },
+  },
+  defaultVariants: {
+    variant: "strip",
+    width: "full",
+  },
+});
+
+type BeltDividerVariants = VariantProps<typeof beltDividerVariants>;
+
+interface BeltDividerProps extends BeltDividerVariants {
   className?: string;
-  variant?: "strip" | "pill" | "slant";
 }
 
-export function BeltDivider({
-  fullWidth = true,
-  className,
-  variant = "strip",
-}: BeltDividerProps) {
+export function BeltDivider({ variant = "strip", width = "full", className }: BeltDividerProps) {
   const segments = BELT_ORDER.map((color) => (
     <div key={color} className={cn("h-full flex-1", color)} />
   ));
 
   if (variant === "pill") {
     return (
-      <div
-        aria-hidden="true"
-        className={cn("h-1.5 w-24 overflow-hidden rounded-full", className)}
-      >
+      <div aria-hidden="true" className={cn(beltDividerVariants({ variant, width: "full" }), className)}>
         <div className="flex h-full">{segments}</div>
       </div>
     );
@@ -40,28 +53,29 @@ export function BeltDivider({
       <div
         aria-hidden="true"
         className={cn(
-          "h-3 w-full overflow-hidden",
-          !fullWidth && "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",
-          className
+          beltDividerVariants({ variant, width }),
+          "flex h-full items-stretch",
+          className,
         )}
       >
-        <div className="flex h-full items-stretch gap-2 [&>div]:-skew-x-12">
-          {segments}
-        </div>
+        <div className="flex h-full w-full items-stretch gap-2 [&>div]:-skew-x-12">{segments}</div>
       </div>
     );
   }
 
   return (
-    <div
-      aria-hidden="true"
-      className={cn(
-        "h-[5px] w-full overflow-hidden border-y border-foreground/10",
-        !fullWidth && "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",
-        className
-      )}
-    >
+    <div aria-hidden="true" className={cn(beltDividerVariants({ variant, width }), className)}>
       <div className="flex h-full">{segments}</div>
     </div>
   );
 }
+
+export const BeltStripDivider = (props: Omit<BeltDividerProps, "variant">) => (
+  <BeltDivider variant="strip" {...props} />
+);
+export const BeltPillDivider = (props: Omit<BeltDividerProps, "variant">) => (
+  <BeltDivider variant="pill" {...props} />
+);
+export const BeltSlantDivider = (props: Omit<BeltDividerProps, "variant">) => (
+  <BeltDivider variant="slant" {...props} />
+);

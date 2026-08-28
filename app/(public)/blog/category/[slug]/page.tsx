@@ -6,7 +6,7 @@ import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
 import { getCategoryBySlug, getPostsByCategory } from "@/lib/blog";
 import { r2PublicUrl } from "@/lib/r2-url";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;

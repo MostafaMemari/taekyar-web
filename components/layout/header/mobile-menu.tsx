@@ -93,7 +93,7 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
           >
             <Link href="/contact">تماس با ما</Link>
           </Button>
-          <BeltDivider fullWidth className="mt-4" />
+          <BeltDivider width="full" className="mt-4" />
         </div>
       </SheetContent>
     </Sheet>

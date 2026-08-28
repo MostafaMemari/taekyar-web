@@ -1,11 +1,22 @@
+import { Mail, Phone, Send } from "lucide-react";
+
 import type { ContactChannel } from "@/data/contact";
+import { InstagramIcon } from "@/components/shared/icons";
 import { SURFACE_CARD, SURFACE_CARD_INTERACTIVE } from "@/lib/styles";
 import { cn } from "@/lib/utils";
+
+const CONTACT_ICONS = {
+  mail: Mail,
+  phone: Phone,
+  send: Send,
+  instagram: InstagramIcon,
+} as const;
 
 const BASE_LINK_CLASS =
   "focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded-2xl";
 
-export function ChannelCard({ title, value, hint, href, isExternal, chipClassName, Icon }: ContactChannel) {
+export function ChannelCard({ title, value, hint, href, isExternal, chipClassName, iconName }: ContactChannel) {
+  const Icon = CONTACT_ICONS[iconName];
   return (
     <a
       href={href}

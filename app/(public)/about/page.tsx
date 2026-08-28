@@ -24,7 +24,7 @@ export default function AboutPage() {
         </Reveal>
       </Section>
 
-      <Section divider containerClassName="pt-6 pb-10 sm:pt-7 sm:pb-12 lg:pb-14">
+      <Section divider="top" containerClassName="pt-6 pb-10 sm:pt-7 sm:pb-12 lg:pb-14">
         <Reveal delay={80}>
           <AboutStats />
         </Reveal>

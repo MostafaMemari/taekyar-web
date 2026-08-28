@@ -7,7 +7,7 @@ import { FeatureCard, FeaturedFeatureCard } from "./feature-cards";
 
 export function Features() {
   return (
-    <Section id="features" divider>
+    <Section id="features" divider="top">
       <Reveal>
         <SectionHeader {...FEATURES_INTRO} />
       </Reveal>

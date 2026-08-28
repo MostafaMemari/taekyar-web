@@ -1,5 +1,3 @@
-import { MessagesSquare, Sparkles, Target, TrendingUp } from "lucide-react";
-
 export const ABOUT_INTRO = {
   eyebrow: "درباره تک‌یار",
   title: "همراه تمرینی تو، از اولین کمربند تا مشکی",
@@ -42,11 +40,13 @@ export const ABOUT_MOTTO_CARD = {
 };
 
 
+export type AboutIconName = "target" | "trending-up" | "messages-square" | "sparkles";
+
 export interface AboutValue {
   id: string;
   title: string;
   description: string;
-  Icon: typeof Target;
+  iconName: AboutIconName;
   chipClassName: string;
 }
 
@@ -55,28 +55,28 @@ export const ABOUT_VALUES: AboutValue[] = [
     id: "precision",
     title: "آموزش دقیق",
     description: "هر فن با جزئیات فنی، اشتباه‌های رایج و نکات داوری؛ همان چیزی که در آزمون نیاز داری.",
-    Icon: Target,
+    iconName: "target",
     chipClassName: "bg-primary/15 text-primary ring-primary/25",
   },
   {
     id: "motivation",
     title: "انگیزه پایدار",
     description: "پیشرفت را دیدنی می‌کنیم؛ رشد کمربندی، رکورد تمرین و گزارش هفتگی که تو را پای تشک نگه می‌دارد.",
-    Icon: TrendingUp,
+    iconName: "trending-up",
     chipClassName: "bg-belt-green/15 text-belt-green ring-belt-green/25",
   },
   {
     id: "community",
     title: "جامعه ورزشی",
     description: "وبلاگ، بحث‌ها و تجربه‌های ورزشکاران؛ جایی که یاد گرفتن تنها اتفاق نمی‌افتد.",
-    Icon: MessagesSquare,
+    iconName: "messages-square",
     chipClassName: "bg-belt-blue/15 text-belt-blue ring-belt-blue/25",
   },
   {
     id: "simplicity",
     title: "سادگی و تمرکز",
     description: "بدون شلوغی و تبلیغ اضافه؛ فقط ابزارهایی که واقعاً در تمرین روزانه به کارت می‌آیند.",
-    Icon: Sparkles,
+    iconName: "sparkles",
     chipClassName: "bg-belt-yellow/20 text-yellow-700 ring-belt-yellow/40",
   },
 ];

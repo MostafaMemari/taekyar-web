@@ -13,7 +13,7 @@ export async function BlogPreview() {
   const posts = await getBlogPosts();
 
   return (
-    <Section id="blog-preview" divider>
+    <Section id="blog-preview" divider="top">
       <Reveal>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeader {...BLOG_PREVIEW_INTRO} className="max-w-xl" />

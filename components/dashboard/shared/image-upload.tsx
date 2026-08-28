@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState, useTransition } from "react";
 import { ImagePlus, Loader2, X } from "lucide-react";
 
@@ -54,10 +55,13 @@ export function ImageUpload({ id, initialKey, initialUrl, onChange }: ImageUploa
 
       {image ? (
         <div className="relative w-fit">
-          <img
+          <Image
             src={image.url}
             alt={TAXONOMY_LABELS.imageAlt}
+            width={320}
+            height={128}
             className="h-32 w-auto rounded-xl object-cover shadow-sm ring-1 ring-black/[0.06]"
+            unoptimized
           />
           <button
             type="button"

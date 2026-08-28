@@ -28,7 +28,7 @@ export function PostCover({ category }: { category: BlogPost["category"] }) {
           strokeWidth={1.1}
         />
         <span aria-hidden="true" className="pointer-events-none absolute inset-3 rounded-xl ring-1 ring-white/20" />
-        <BeltDivider fullWidth className="absolute inset-x-0 bottom-0 h-[4px] border-0 opacity-90" />
+        <BeltDivider width="full" className="absolute inset-x-0 bottom-0 h-[4px] border-0 opacity-90" />
       </div>
     </div>
   );
