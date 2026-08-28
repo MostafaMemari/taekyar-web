@@ -47,11 +47,17 @@ export function CommentForm({ postSlug, onCancel }: CommentFormProps) {
         title: COMMENT_TOAST_MESSAGES.rateLimitedTitle,
         description: COMMENT_TOAST_MESSAGES.rateLimitedDescription,
       });
-    } else {
+    } else if (result.reason === "captcha_wrong") {
       toast({
         tone: "error",
-        title: COMMENT_TOAST_MESSAGES.captchaTitle,
-        description: COMMENT_TOAST_MESSAGES.captchaDescription,
+        title: COMMENT_TOAST_MESSAGES.captchaWrongTitle,
+        description: COMMENT_TOAST_MESSAGES.captchaWrongDescription,
+      });
+    } else if (result.reason === "captcha_expired") {
+      toast({
+        tone: "error",
+        title: COMMENT_TOAST_MESSAGES.captchaExpiredTitle,
+        description: COMMENT_TOAST_MESSAGES.captchaExpiredDescription,
       });
     }
     void captcha.refresh();
@@ -67,8 +73,8 @@ export function CommentForm({ postSlug, onCancel }: CommentFormProps) {
     if (!captcha.answer.trim()) {
       toast({
         tone: "error",
-        title: COMMENT_TOAST_MESSAGES.captchaTitle,
-        description: COMMENT_TOAST_MESSAGES.captchaDescription,
+        title: COMMENT_TOAST_MESSAGES.captchaMissingTitle,
+        description: COMMENT_TOAST_MESSAGES.captchaMissingDescription,
       });
       return;
     }

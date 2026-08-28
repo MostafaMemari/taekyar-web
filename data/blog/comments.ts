@@ -37,9 +37,9 @@ export const COMMENT_FORM_LABELS = {
   formHint: "پیش از انتشار، دیدگاهت توسط تیم تحریریه بررسی می‌شود.",
   captchaLabel: "تأیید امنیتی",
   captchaHint: "اعداد داخل تصویر را وارد کنید",
+  captchaClickHint: "برای کد جدید روی تصویر کلیک کنید",
   captchaPlaceholder: "مثلاً ۷۳۹۴",
-  captchaRefresh: "تصویر جدید",
-  captchaUnavailable: "سؤال امنیتی موقتاً در دسترس نیست؛ چند لحظه بعد دکمهٔ تازه‌سازی را بزنید.",
+  captchaUnavailable: "کد امنیتی موقتاً در دسترس نیست؛ روی تصویر کلیک کنید.",
 } as const;
 
 export const COMMENT_TOAST_MESSAGES = {
@@ -52,15 +52,20 @@ export const COMMENT_TOAST_MESSAGES = {
   rateLimitedTitle: "کمی صبر کن",
   rateLimitedDescription:
     "در مدت کوتاه چند دیدگاه ثبت کرده‌ای؛ چند دقیقه بعد دوباره تلاش کن.",
-  captchaTitle: "تأیید امنیتی ناموفق بود",
-  captchaDescription: "پاسخ سؤال امنیتی درست نیست یا منقضی شده؛ سؤال جدید را امتحان کن.",
+  captchaWrongTitle: "کد امنیتی اشتباه است",
+  captchaWrongDescription: "کد امنیتی اشتباه است؛ دوباره امتحان کنید.",
+  captchaExpiredTitle: "کد امنیتی منقضی شد",
+  captchaExpiredDescription:
+    "کد امنیتی منقضی شده است؛ روی تصویر کلیک کنید تا کد جدید بگیرید.",
+  captchaMissingTitle: "کد امنیتی را وارد کنید",
+  captchaMissingDescription: "اعداد داخل تصویر را در کادر مربوطه بنویسید.",
 } as const;
 
 export const COMMENT_FORM_ERRORS = {
   name: "نام‌ات را بنویس تا در گفت‌وگو شناخته شوی.",
   messageShort: "متن خیلی کوتاه است؛ کمی بیشتر بنویس (حداقل ۱۰ حرف).",
   messageLong: "متن دیدگاه بیش از حد طولانی است.",
-  captchaRequired: "پاسخ سؤال امنیتی را بنویس.",
+  captchaRequired: "کد امنیتی را وارد کنید.",
 } as const;
 
 export const COMMENT_AVATAR_TINTS = [

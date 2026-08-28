@@ -104,23 +104,25 @@ export function createCaptchaChallenge(
   return { id, svg: generateCaptchaSvg(digits) };
 }
 
-export function validateCaptchaAnswer(
+export type CaptchaVerifyResult = "ok" | "wrong" | "expired";
+
+export function verifyCaptchaAnswer(
   id: string,
   answer: string,
   ipHash: string | null,
   now = Date.now(),
-): boolean {
+): CaptchaVerifyResult {
   const challenge = challenges.get(id);
-  if (!challenge) return false;
+  if (!challenge) return "expired";
 
   challenges.delete(id);
 
-  if (challenge.ipHash !== ipHash) return false;
-  if (challenge.expiresAt <= now) return false;
+  if (challenge.ipHash !== ipHash) return "expired";
+  if (challenge.expiresAt <= now) return "expired";
 
   const normalized = normalizeDigits(answer.trim());
-  if (!/^\d+$/.test(normalized)) return false;
-  if (normalized.length < DIGIT_COUNT_MIN || normalized.length > DIGIT_COUNT_MAX) return false;
+  if (!/^\d+$/.test(normalized)) return "wrong";
+  if (normalized.length < DIGIT_COUNT_MIN || normalized.length > DIGIT_COUNT_MAX) return "wrong";
 
-  return hashCaptchaAnswer(normalized, id) === challenge.answerHash;
+  return hashCaptchaAnswer(normalized, id) === challenge.answerHash ? "ok" : "wrong";
 }

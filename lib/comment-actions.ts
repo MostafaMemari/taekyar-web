@@ -10,10 +10,15 @@ import {
   hashClientIp,
   sanitizeCommentText,
 } from "@/lib/comment-security";
-import { createCaptchaChallenge, validateCaptchaAnswer } from "@/lib/comment-captcha";
+import { createCaptchaChallenge, verifyCaptchaAnswer } from "@/lib/comment-captcha";
 import { isAttemptRateLimited, isGenerationRateLimited } from "@/lib/comment-rate-limit";
 
-export type CommentRejectReason = "validation" | "captcha" | "rate_limited" | "not_found";
+export type CommentRejectReason =
+  | "validation"
+  | "captcha_wrong"
+  | "captcha_expired"
+  | "rate_limited"
+  | "not_found";
 
 export interface SubmitCommentResult {
   ok: boolean;
@@ -60,9 +65,9 @@ export async function submitComment(
     return { ok: false, reason: "rate_limited" };
   }
 
-  if (!validateCaptchaAnswer(options.captchaId, options.captchaAnswer, ipHash)) {
-    return { ok: false, reason: "captcha" };
-  }
+  const captchaResult = verifyCaptchaAnswer(options.captchaId, options.captchaAnswer, ipHash);
+  if (captchaResult === "wrong") return { ok: false, reason: "captcha_wrong" };
+  if (captchaResult === "expired") return { ok: false, reason: "captcha_expired" };
 
   const name = sanitizeCommentText(draft.name);
   const message = sanitizeCommentText(draft.message);

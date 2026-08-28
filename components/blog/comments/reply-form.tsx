@@ -49,8 +49,8 @@ export function ReplyForm({ postSlug, parentId, parentAuthor, onCancel }: ReplyF
     if (!captcha.answer.trim()) {
       toast({
         tone: "error",
-        title: COMMENT_TOAST_MESSAGES.captchaTitle,
-        description: COMMENT_TOAST_MESSAGES.captchaDescription,
+        title: COMMENT_TOAST_MESSAGES.captchaMissingTitle,
+        description: COMMENT_TOAST_MESSAGES.captchaMissingDescription,
       });
       return;
     }
@@ -65,11 +65,19 @@ export function ReplyForm({ postSlug, parentId, parentAuthor, onCancel }: ReplyF
         honeypot,
       });
       if (!result.ok) {
-        toast({
-          tone: "error",
-          title: COMMENT_TOAST_MESSAGES.captchaTitle,
-          description: COMMENT_TOAST_MESSAGES.captchaDescription,
-        });
+        if (result.reason === "captcha_wrong") {
+          toast({
+            tone: "error",
+            title: COMMENT_TOAST_MESSAGES.captchaWrongTitle,
+            description: COMMENT_TOAST_MESSAGES.captchaWrongDescription,
+          });
+        } else {
+          toast({
+            tone: "error",
+            title: COMMENT_TOAST_MESSAGES.captchaExpiredTitle,
+            description: COMMENT_TOAST_MESSAGES.captchaExpiredDescription,
+          });
+        }
         await captcha.refresh();
         return;
       }
