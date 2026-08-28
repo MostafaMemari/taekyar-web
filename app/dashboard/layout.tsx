@@ -1,3 +1,4 @@
+import { DashboardMobileNav } from "@/components/dashboard/layout/dashboard-mobile-nav";
 import { DashboardSidebar } from "@/components/dashboard/layout/dashboard-sidebar";
 import { Toaster } from "@/components/ui/toast";
 import { requireAdmin } from "@/lib/auth";
@@ -14,11 +15,20 @@ export default async function DashboardLayout({
   const session = await requireAdmin();
 
   return (
-    <div className="theme-light flex min-h-full flex-col bg-muted/30 lg:flex-row">
-      <DashboardSidebar username={session.username} />
-      <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-        {children}
-      </main>
+    <div className="theme-light flex min-h-screen flex-col bg-muted/30 lg:flex-row">
+      <div className="hidden lg:flex lg:w-[280px] lg:shrink-0 lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden lg:border-e lg:border-border/60 lg:bg-card">
+        <div className="flex min-h-0 flex-1 flex-col">
+          <DashboardSidebar username={session.username} />
+        </div>
+      </div>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <DashboardMobileNav username={session.username} />
+        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+          <div className="mx-auto w-full max-w-6xl">{children}</div>
+        </main>
+      </div>
+
       <Toaster />
     </div>
   );
