@@ -15,7 +15,7 @@ export default async function DashboardLayout({
   const session = await requireAdmin();
 
   return (
-    <div className="theme-light flex min-h-screen flex-col bg-muted/30 lg:flex-row">
+    <div className="theme-light flex min-h-screen flex-col bg-background lg:flex-row">
       <div className="hidden lg:flex lg:w-[280px] lg:shrink-0 lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden lg:border-e lg:border-border/60 lg:bg-card">
         <div className="flex min-h-0 flex-1 flex-col">
           <DashboardSidebar username={session.username} />
