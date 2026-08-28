@@ -42,7 +42,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   return (
     <div className="mx-auto max-w-3xl space-y-5">
       <div>
-        <h1 className="text-xl font-black sm:text-2xl">{POST_FORM_LABELS.editTitle}</h1>
+        <h1 className="text-xl font-black text-foreground sm:text-2xl">{POST_FORM_LABELS.editTitle}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{POST_FORM_LABELS.editDescription}</p>
       </div>
 

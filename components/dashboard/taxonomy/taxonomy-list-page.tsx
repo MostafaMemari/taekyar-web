@@ -59,7 +59,7 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
     <div className="space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-[22px] font-black tracking-tight sm:text-2xl">{copy.title}</h1>
+          <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{copy.title}</h1>
           <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
             {copy.description}
           </p>

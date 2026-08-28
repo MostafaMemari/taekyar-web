@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ExternalLink, Inbox } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, Inbox } from "lucide-react";
 
 import { CommentActions } from "@/components/dashboard/comments/comment-actions";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ import { prisma } from "@/lib/prisma";
 import { cn, toFaDigits } from "@/lib/utils";
 
 const STATUS_FILTERS: CommentStatus[] = ["PENDING", "APPROVED", "REJECTED"];
+const COMMENTS_PER_PAGE = 10;
 
 interface CommentEntry {
   id: string;
@@ -28,19 +29,23 @@ interface CommentRow extends CommentEntry {
 }
 
 interface CommentsPageProps {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; page?: string }>;
 }
 
 export default async function DashboardCommentsPage({ searchParams }: CommentsPageProps) {
-  const { status } = await searchParams;
+  const { status, page } = await searchParams;
   const statusFilter = STATUS_FILTERS.find((candidate) => candidate === status);
 
-  const [counts, comments] = await Promise.all([
+  const where = { parentId: null, ...(statusFilter ? { status: statusFilter } : {}) };
+
+  const [counts, total, comments] = await Promise.all([
     prisma.comment.groupBy({ by: ["status"], _count: { _all: true } }),
+    prisma.comment.count({ where }),
     prisma.comment.findMany({
-      where: { parentId: null, ...(statusFilter ? { status: statusFilter } : {}) },
+      where,
       orderBy: { createdAt: "desc" },
-      take: 50,
+      skip: (Math.max(Number(page) || 1, 1) - 1) * COMMENTS_PER_PAGE,
+      take: COMMENTS_PER_PAGE,
       include: {
         post: { select: { title: true, slug: true } },
         replies: {
@@ -50,6 +55,9 @@ export default async function DashboardCommentsPage({ searchParams }: CommentsPa
       },
     }),
   ]);
+
+  const totalPages = Math.max(1, Math.ceil(total / COMMENTS_PER_PAGE));
+  const currentPage = Math.min(Math.max(Number(page) || 1, 1), totalPages);
 
   const countByStatus = new Map(counts.map((entry) => [entry.status, entry._count._all]));
   const totalCount = STATUS_FILTERS.reduce((sum, key) => sum + (countByStatus.get(key) ?? 0), 0);
@@ -63,10 +71,18 @@ export default async function DashboardCommentsPage({ searchParams }: CommentsPa
     })),
   ];
 
+  function buildHref(targetPage: number, statusKey?: CommentStatus | null) {
+    const params = new URLSearchParams();
+    if (statusKey) params.set("status", statusKey);
+    if (targetPage > 1) params.set("page", String(targetPage));
+    const queryString = params.toString();
+    return queryString ? `/dashboard/comments?${queryString}` : "/dashboard/comments";
+  }
+
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-[22px] font-black tracking-tight sm:text-2xl">{COMMENTS_ADMIN_LABELS.title}</h1>
+        <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{COMMENTS_ADMIN_LABELS.title}</h1>
         <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
           {COMMENTS_ADMIN_LABELS.description}
         </p>
@@ -75,7 +91,7 @@ export default async function DashboardCommentsPage({ searchParams }: CommentsPa
       <Card className="p-3">
         <nav aria-label={COMMENTS_ADMIN_LABELS.title} className="flex flex-wrap items-center gap-2">
           {filters.map((filter) => {
-            const href = filter.key ? `/dashboard/comments?status=${filter.key}` : "/dashboard/comments";
+            const href = buildHref(1, filter.key);
             const active = (statusFilter ?? null) === filter.key;
 
             return (
@@ -124,6 +140,16 @@ export default async function DashboardCommentsPage({ searchParams }: CommentsPa
           ))}
         </ul>
       )}
+
+      {totalPages > 1 ? (
+        <CommentsPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          total={total}
+          buildHref={buildHref}
+          statusFilter={statusFilter}
+        />
+      ) : null}
     </div>
   );
 }
@@ -220,5 +246,57 @@ function CommentBody({
         <CommentActions id={comment.id} status={comment.status} />
       </div>
     </div>
+  );
+}
+
+interface CommentsPaginationProps {
+  currentPage: number;
+  totalPages: number;
+  total: number;
+  buildHref: (page: number, status?: CommentStatus | null) => string;
+  statusFilter: CommentStatus | null | undefined;
+}
+
+function CommentsPagination({
+  currentPage,
+  totalPages,
+  total,
+  buildHref,
+  statusFilter,
+}: CommentsPaginationProps) {
+  return (
+    <nav
+      className="flex items-center justify-between rounded-xl border border-border/60 bg-card px-2 py-2 shadow-sm shadow-black/[0.03]"
+      aria-label={COMMENTS_ADMIN_LABELS.title}
+    >
+      {currentPage > 1 ? (
+        <Link
+          href={buildHref(currentPage - 1, statusFilter)}
+          className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+        >
+          <ArrowRight className="size-4" aria-hidden="true" />
+          {COMMENTS_ADMIN_LABELS.prevPage}
+        </Link>
+      ) : (
+        <span className="min-h-8 px-3" aria-hidden="true" />
+      )}
+
+      <span className="rounded-full bg-muted px-3 py-1 text-[13px] font-medium tabular-nums text-foreground ring-1 ring-border/60">
+        {toFaDigits(currentPage)} / {toFaDigits(totalPages)} {COMMENTS_ADMIN_LABELS.pageInfoSuffix} ·{" "}
+        {toFaDigits(total)} {COMMENTS_ADMIN_LABELS.resultsSuffix}
+      </span>
+
+      {currentPage < totalPages ? (
+        <Link
+          href={buildHref(currentPage + 1, statusFilter)}
+          className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+        >
+          {COMMENTS_ADMIN_LABELS.nextPage}
+          <ArrowLeft className="size-4" aria-hidden="true" />
+        </Link>
+      ) : (
+        <span className="min-h-8 px-3" aria-hidden="true" />
+      )}
+    </nav>
   );
 }

@@ -16,12 +16,16 @@ export const COMMENTS_ADMIN_LABELS = {
   error: "انجام نشد؛ دوباره تلاش کنید.",
   confirmDelete: "این دیدگاه حذف شود؟",
   repliesLabel: "پاسخ‌ها",
+  prevPage: "صفحه قبل",
+  nextPage: "صفحه بعد",
+  pageInfoSuffix: "صفحه",
+  resultsSuffix: "دیدگاه",
 } as const;
 
 export const COMMENT_STATUS_META: Record<CommentStatus, { label: string; badgeClassName: string }> = {
   PENDING: {
     label: "در انتظار بررسی",
-    badgeClassName: "bg-belt-yellow/20 text-[#8a6d00] ring-belt-yellow/40",
+    badgeClassName: "bg-belt-yellow/20 text-belt-yellow-fg ring-belt-yellow/40",
   },
   APPROVED: {
     label: "تأییدشده",

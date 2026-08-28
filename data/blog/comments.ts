@@ -57,5 +57,5 @@ export const COMMENT_AVATAR_TINTS = [
   "bg-primary/15 text-primary",
   "bg-belt-green/15 text-belt-green",
   "bg-belt-blue/15 text-belt-blue",
-  "bg-belt-yellow/20 text-[#8a6d00]",
+  "bg-belt-yellow/20 text-belt-yellow-fg",
 ] as const;

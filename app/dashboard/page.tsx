@@ -57,7 +57,7 @@ export default async function DashboardOverviewPage() {
       value: pendingCount,
       icon: Clock3,
       tint: "border-t-belt-yellow bg-belt-yellow/[0.06]",
-      iconClass: "bg-belt-yellow/15 text-[#8a6d00] ring-belt-yellow/20",
+      iconClass: "bg-belt-yellow/15 text-belt-yellow-fg ring-belt-yellow/20",
     },
     {
       label: OVERVIEW_LABELS.rejectedComments,
@@ -72,7 +72,7 @@ export default async function DashboardOverviewPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-[22px] font-black tracking-tight sm:text-2xl">{OVERVIEW_LABELS.title}</h1>
+          <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{OVERVIEW_LABELS.title}</h1>
           <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
             {OVERVIEW_LABELS.description}
           </p>
@@ -117,12 +117,12 @@ export default async function DashboardOverviewPage() {
           <CardHeader className="gap-0 pb-0">
             <div className="flex items-center justify-between gap-3">
               <CardTitle className="flex items-center gap-2.5 text-[14px] font-black">
-                <span className="flex size-8 items-center justify-center rounded-lg bg-belt-yellow/15 text-[#8a6d00] ring-1 ring-belt-yellow/20">
+                <span className="flex size-8 items-center justify-center rounded-lg bg-belt-yellow/15 text-belt-yellow-fg ring-1 ring-belt-yellow/20">
                   <MessagesSquare className="size-4" aria-hidden="true" />
                 </span>
                 {OVERVIEW_LABELS.pendingTitle}
               </CardTitle>
-              <Badge variant="secondary" className="rounded-full bg-belt-yellow/15 px-2.5 text-[11px] font-bold tabular-nums text-[#8a6d00] ring-belt-yellow/20">
+              <Badge variant="secondary" className="rounded-full bg-belt-yellow/15 px-2.5 text-[11px] font-bold tabular-nums text-belt-yellow-fg ring-belt-yellow/20">
                 {toFaDigits(pendingCount)} در انتظار
               </Badge>
             </div>

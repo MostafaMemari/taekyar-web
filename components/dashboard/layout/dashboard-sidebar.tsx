@@ -50,7 +50,7 @@ export function DashboardSidebar({ username }: { username: string }) {
                   "group flex min-h-10 items-center gap-3 rounded-xl border border-transparent px-2.5 text-[13px] leading-5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-0 motion-reduce:transition-none",
                   active
                     ? "border-primary/10 bg-primary/[0.07] ps-2 font-bold text-primary shadow-sm shadow-primary/[0.04] border-s-2 border-s-primary"
-                    : "font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+                    : "font-medium text-foreground hover:bg-muted/60 hover:text-foreground",
                 )}
               >
                 <span
@@ -58,7 +58,7 @@ export function DashboardSidebar({ username }: { username: string }) {
                     "flex size-8 shrink-0 items-center justify-center rounded-lg border text-[13px] transition-colors motion-reduce:transition-none",
                     active
                       ? "border-primary/15 bg-primary text-primary-foreground shadow-sm shadow-primary/20"
-                      : "border-border bg-card text-muted-foreground group-hover:border-primary/15 group-hover:text-foreground",
+                      : "border-border bg-card text-foreground/70 group-hover:border-primary/15 group-hover:text-foreground",
                   )}
                 >
                   <Icon className="size-4" aria-hidden="true" />
