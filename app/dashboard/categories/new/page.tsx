@@ -9,6 +9,7 @@ export default function NewCategoryPage() {
     name: "",
     slug: "",
     image: null,
+    description: null,
     metaTitle: null,
     metaDescription: null,
   };

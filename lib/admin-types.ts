@@ -6,6 +6,7 @@ export interface TaxonomyInput {
   name: string;
   slug: string;
   image: string | null;
+  description: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
 }

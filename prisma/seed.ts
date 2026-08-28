@@ -3,6 +3,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 
 import { blogPosts } from "./seed-data/posts.ts";
 import { getPostBlocks } from "./seed-data/post-content.ts";
+import { TAG_DESCRIPTIONS } from "./seed-data/taxonomy.ts";
 import { blogCategories } from "../data/blog/categories.ts";
 import { MOCK_COMMENTS } from "./seed-data/comments.ts";
 import { hashPassword } from "../lib/session.ts";
@@ -61,7 +62,7 @@ async function seedContent() {
         tags: {
           connectOrCreate: post.tags.map((tagName) => ({
             where: { name: tagName },
-            create: { name: tagName, slug: tagName },
+            create: { name: tagName, slug: tagName, description: TAG_DESCRIPTIONS[tagName] ?? null },
           })),
         },
       },

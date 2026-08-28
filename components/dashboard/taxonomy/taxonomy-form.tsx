@@ -27,6 +27,7 @@ export function TaxonomyForm({ kind, mode, initial, initialImageUrl, currentId }
   const [fields, setFields] = useState({
     name: initial.name,
     slug: initial.slug,
+    description: initial.description ?? "",
     metaTitle: initial.metaTitle ?? "",
     metaDescription: initial.metaDescription ?? "",
   });
@@ -45,6 +46,7 @@ export function TaxonomyForm({ kind, mode, initial, initialImageUrl, currentId }
       name: fields.name,
       slug: fields.slug.trim(),
       image,
+      description: fields.description,
       metaTitle: fields.metaTitle,
       metaDescription: fields.metaDescription,
     };
@@ -115,6 +117,20 @@ export function TaxonomyForm({ kind, mode, initial, initialImageUrl, currentId }
         </CardHeader>
         <Separator className="bg-border/60" />
         <CardContent className="space-y-4 pt-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="taxonomy-description" className="text-[13px] font-bold">
+              {TAXONOMY_LABELS.descriptionLabel}
+            </Label>
+            <Textarea
+              id="taxonomy-description"
+              rows={4}
+              value={fields.description}
+              placeholder={TAXONOMY_LABELS.descriptionPlaceholder}
+              className="min-h-[104px] resize-y rounded-xl"
+              onChange={(event) => setField("description", event.target.value)}
+            />
+          </div>
+
           <div className="space-y-1.5">
             <Label htmlFor="taxonomy-meta-title" className="text-[13px] font-bold">
               {TAXONOMY_LABELS.metaTitleLabel}

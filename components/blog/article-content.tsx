@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { PostBody } from "@/components/blog/post-body";
 import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
@@ -5,17 +7,18 @@ import type { PostBlock } from "@/lib/post-content";
 import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
-function PostTags({ tags }: { tags: BlogPost["tags"] }) {
+export function PostTags({ tags }: { tags: BlogPost["tags"] }) {
   return (
     <div className="mt-8 flex flex-wrap items-center gap-2 border-t border-black/[0.06] pt-5 sm:mt-10 sm:pt-6">
       <span className="text-xs font-bold text-foreground">{POST_LABELS.tagsLabel}</span>
       {tags.map((tag) => (
-        <span
+        <Link
           key={tag.id}
-          className="rounded-full bg-muted px-3 py-1.5 text-[11px] font-medium text-muted-foreground"
+          href={`/blog/tag/${encodeURIComponent(tag.slug)}`}
+          className="rounded-full bg-muted px-3 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           {tag.name}
-        </span>
+        </Link>
       ))}
     </div>
   );

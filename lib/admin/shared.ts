@@ -42,6 +42,7 @@ export function normalizeTaxonomyInput(input: TaxonomyInput): TaxonomyInput | nu
     name,
     slug,
     image: normalizeOptionalText(input.image),
+    description: normalizeOptionalText(input.description),
     metaTitle: normalizeOptionalText(input.metaTitle),
     metaDescription: normalizeOptionalText(input.metaDescription),
   };

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { SITE_URL } from "@/lib/site";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
@@ -14,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "تک‌یار | همراه تمرینی تکواندو",
     template: "%s | تک‌یار",

@@ -41,6 +41,7 @@ model Category {
   name            String @unique
   slug            String @unique
   image           String?
+  description     String?
   metaTitle       String?
   metaDescription String?
   posts           Post[]
@@ -51,6 +52,7 @@ model Tag {
   name            String @unique
   slug            String @unique
   image           String?
+  description     String?
   metaTitle       String?
   metaDescription String?
   posts           Post[]

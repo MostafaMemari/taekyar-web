@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PostGrid } from "@/components/blog/post-grid";
+import { TaxonomySeoContent } from "@/components/blog/taxonomy-seo-content";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
@@ -14,6 +15,7 @@ interface TaxonomyArchiveProps {
   description?: string | null;
   imageUrl?: string | null;
   posts: BlogPost[];
+  seoContent?: string | null;
   backHref: string;
   backLabel: string;
 }
@@ -24,6 +26,7 @@ export function TaxonomyArchive({
   description,
   imageUrl,
   posts,
+  seoContent,
   backHref,
   backLabel,
 }: TaxonomyArchiveProps) {
@@ -73,6 +76,12 @@ export function TaxonomyArchive({
       <Section containerClassName="pt-6 pb-2 sm:pt-7 lg:pt-8">
         <PostGrid posts={posts} />
       </Section>
+
+      {seoContent ? (
+        <Section containerClassName="pt-8 pb-2 sm:pt-10">
+          <TaxonomySeoContent title={title} content={seoContent} postsCount={posts.length} />
+        </Section>
+      ) : null}
     </>
   );
 }

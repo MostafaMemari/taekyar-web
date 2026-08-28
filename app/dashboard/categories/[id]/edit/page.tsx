@@ -29,6 +29,7 @@ export default async function EditCategoryPage({ params }: EditCategoryPageProps
     name: category.name,
     slug: category.slug,
     image: category.image,
+    description: category.description,
     metaTitle: category.metaTitle,
     metaDescription: category.metaDescription,
   };

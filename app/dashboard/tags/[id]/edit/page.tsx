@@ -29,6 +29,7 @@ export default async function EditTagPage({ params }: EditTagPageProps) {
     name: tag.name,
     slug: tag.slug,
     image: tag.image,
+    description: tag.description,
     metaTitle: tag.metaTitle,
     metaDescription: tag.metaDescription,
   };

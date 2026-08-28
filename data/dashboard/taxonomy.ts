@@ -45,6 +45,8 @@ export const TAXONOMY_LABELS = {
   metaTitlePlaceholder: "عنوان صفحه در نتایج جستجو",
   metaDescriptionLabel: "توضیحات سئو",
   metaDescriptionPlaceholder: "توضیح کوتاه صفحه در نتایج جستجو",
+  descriptionLabel: "توضیحات صفحه",
+  descriptionPlaceholder: "متن معرفی و محتوای سئوی این صفحه برای بازدیدکنندگان",
   submitCreate: "ایجاد",
   submitUpdate: "ذخیره تغییرات",
   saving: "در حال ذخیره…",
