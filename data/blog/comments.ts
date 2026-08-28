@@ -29,12 +29,14 @@ export const COMMENT_REPLY_LABELS = {
 export const COMMENT_FORM_LABELS = {
   name: "نام و نام خانوادگی",
   namePlaceholder: "مثلاً سارا محمدی",
-  email: "آدرس ایمیل",
-  emailPlaceholder: "you@example.com",
   message: "دیدگاه شما",
   messagePlaceholder: "نظرت درباره این مقاله چیه؟",
   submit: "ثبت دیدگاه",
   formHint: "پیش از انتشار، دیدگاهت توسط تیم تحریریه بررسی می‌شود.",
+  captchaLabel: "تأیید امنیتی",
+  captchaHint: "حاصل عبارت زیر را بنویسید",
+  captchaPlaceholder: "پاسخ…",
+  captchaRefresh: "تولید سؤال جدید",
 } as const;
 
 export const COMMENT_TOAST_MESSAGES = {
@@ -44,13 +46,18 @@ export const COMMENT_TOAST_MESSAGES = {
   errorTitle: "ثبت انجام نشد",
   errorDescription:
     "یک خطای غیرمنتظره رخ داد؛ چند لحظه بعد دوباره تلاش کن.",
+  rateLimitedTitle: "کمی صبر کن",
+  rateLimitedDescription:
+    "در مدت کوتاه چند دیدگاه ثبت کرده‌ای؛ چند دقیقه بعد دوباره تلاش کن.",
+  captchaTitle: "تأیید امنیتی ناموفق بود",
+  captchaDescription: "پاسخ سؤال امنیتی درست نیست یا منقضی شده؛ سؤال جدید را امتحان کن.",
 } as const;
 
 export const COMMENT_FORM_ERRORS = {
   name: "نام‌ات را بنویس تا در گفت‌وگو شناخته شوی.",
-  emailRequired: "برای اطلاع از انتشار دیدگاه، ایمیل‌ات را وارد کن.",
-  emailInvalid: "این یک نشانی ایمیل معتبر نیست؛ بررسی کن.",
   messageShort: "متن خیلی کوتاه است؛ کمی بیشتر بنویس (حداقل ۱۰ حرف).",
+  messageLong: "متن دیدگاه بیش از حد طولانی است.",
+  captchaRequired: "پاسخ سؤال امنیتی را بنویس.",
 } as const;
 
 export const COMMENT_AVATAR_TINTS = [

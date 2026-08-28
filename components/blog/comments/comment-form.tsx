@@ -11,7 +11,7 @@ import {
 } from "@/data/blog/comments";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import { submitComment } from "@/lib/comment-actions";
+import { submitComment, type SubmitCommentResult } from "@/lib/comment-actions";
 import { SURFACE_CARD } from "@/lib/styles";
 import {
   EMPTY_COMMENT_DRAFT,
@@ -20,6 +20,8 @@ import {
   type CommentDraftErrors,
 } from "@/lib/comment-submission";
 import { CommentDraftFields } from "./comment-form-fields";
+import { CommentCaptcha } from "./comment-captcha";
+import { useCommentCaptcha } from "./hooks/use-comment-captcha";
 
 interface CommentFormProps {
   postSlug: string;
@@ -29,11 +31,30 @@ interface CommentFormProps {
 export function CommentForm({ postSlug, onCancel }: CommentFormProps) {
   const [draft, setDraft] = useState<CommentDraft>(EMPTY_COMMENT_DRAFT);
   const [errors, setErrors] = useState<CommentDraftErrors>({});
+  const [honeypot, setHoneypot] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const captcha = useCommentCaptcha();
 
   function handleFieldChange(key: keyof CommentDraft, value: string) {
     setDraft((previous) => ({ ...previous, [key]: value }));
     setErrors((previous) => ({ ...previous, [key]: undefined }));
+  }
+
+  function handleRejection(result: SubmitCommentResult) {
+    if (result.reason === "rate_limited") {
+      toast({
+        tone: "error",
+        title: COMMENT_TOAST_MESSAGES.rateLimitedTitle,
+        description: COMMENT_TOAST_MESSAGES.rateLimitedDescription,
+      });
+    } else {
+      toast({
+        tone: "error",
+        title: COMMENT_TOAST_MESSAGES.captchaTitle,
+        description: COMMENT_TOAST_MESSAGES.captchaDescription,
+      });
+    }
+    void captcha.refresh();
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -42,13 +63,31 @@ export function CommentForm({ postSlug, onCancel }: CommentFormProps) {
     const nextErrors = validateCommentDraft(draft);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
+    if (!captcha.challenge) return;
+    if (!captcha.answer.trim()) {
+      toast({
+        tone: "error",
+        title: COMMENT_TOAST_MESSAGES.captchaTitle,
+        description: COMMENT_TOAST_MESSAGES.captchaDescription,
+      });
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
-      const result = await submitComment(postSlug, draft);
-      if (!result.ok) throw new Error();
+      const result = await submitComment(postSlug, draft, {
+        captchaId: captcha.challenge.id,
+        captchaAnswer: captcha.answer,
+        honeypot,
+      });
+      if (!result.ok) {
+        handleRejection(result);
+        return;
+      }
       setDraft(EMPTY_COMMENT_DRAFT);
+      setHoneypot("");
+      await captcha.refresh();
       toast({
         tone: "success",
         title: COMMENT_TOAST_MESSAGES.successTitle,
@@ -93,11 +132,32 @@ export function CommentForm({ postSlug, onCancel }: CommentFormProps) {
           onFieldChange={handleFieldChange}
         />
 
+        <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+          <label htmlFor="comment-company">شرکت</label>
+          <input
+            id="comment-company"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={honeypot}
+            onChange={(event) => setHoneypot(event.target.value)}
+          />
+        </div>
+
+        <CommentCaptcha
+          idPrefix="comment"
+          question={captcha.challenge?.question ?? null}
+          isLoading={captcha.isLoading}
+          value={captcha.answer}
+          onValueChange={captcha.setAnswer}
+          onRefresh={() => void captcha.refresh()}
+        />
+
         <div>
           <Button
             type="submit"
             size="lg"
-            disabled={isSubmitting}
+            disabled={isSubmitting || captcha.isLoading || !captcha.challenge}
             className="h-11 w-full gap-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90 sm:w-auto sm:px-8"
           >
             {COMMENT_FORM_LABELS.submit}

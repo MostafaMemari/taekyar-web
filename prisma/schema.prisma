@@ -67,6 +67,7 @@ model Comment {
   isTeamAuthor Boolean       @default(false)
   date         String
   message      String
+  ipHash       String?
   status       CommentStatus @default(PENDING)
   parentId     String?
   parent       Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
