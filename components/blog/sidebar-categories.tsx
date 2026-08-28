@@ -3,8 +3,8 @@ import Link from "next/link";
 import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { POST_LABELS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
-import { blogCategories, type BlogCategoryName } from "@/data/blog/categories";
-import { getBlogPosts } from "@/lib/blog";
+import type { BlogCategoryName } from "@/data/blog/categories";
+import { getCategories } from "@/lib/blog";
 import { cn } from "@/lib/utils";
 import { Compass } from "lucide-react";
 
@@ -13,23 +13,20 @@ interface SidebarCategoriesProps {
 }
 
 export async function SidebarCategories({ activeCategory }: SidebarCategoriesProps) {
-  const posts = await getBlogPosts();
-  const counts = new Map<string, number>();
-  for (const post of posts) {
-    counts.set(post.category, (counts.get(post.category) ?? 0) + 1);
-  }
+  const categories = await getCategories();
 
   return (
     <SidebarSection title={POST_LABELS.categoriesTitle} icon={Compass}>
       <ul className="space-y-0.5">
-        {blogCategories.map((category) => {
-          const { color, Icon } = CATEGORY_STYLES[category];
-          const active = category === activeCategory;
+        {categories.map((category) => {
+          const style = CATEGORY_STYLES[category.name as BlogCategoryName];
+          const { color, Icon } = style ?? { color: "#1f5fa8", Icon: Compass };
+          const active = category.name === activeCategory;
 
           return (
-            <li key={category}>
+            <li key={category.id}>
               <Link
-                href={`/blog?category=${encodeURIComponent(category)}`}
+                href={`/blog/category/${encodeURIComponent(category.slug)}`}
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "group flex min-h-10 items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors",
@@ -51,10 +48,10 @@ export async function SidebarCategories({ activeCategory }: SidebarCategoriesPro
                     active ? "font-bold text-primary" : "font-medium text-foreground"
                   )}
                 >
-                  {category}
+                  {category.name}
                 </span>
                 <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold tabular-nums text-muted-foreground">
-                  {counts.get(category)}
+                  {category._count.posts}
                 </span>
               </Link>
             </li>

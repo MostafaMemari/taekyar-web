@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
-import { blogCategories, type BlogCategoryName } from "@/data/blog/categories";
+import { getCategories } from "@/lib/blog";
+import type { BlogCategoryName } from "@/data/blog/categories";
 import { cn } from "@/lib/utils";
 
 function FilterChip({
@@ -29,11 +30,13 @@ function FilterChip({
   );
 }
 
-export function CategoryFilter({
+export async function CategoryFilter({
   activeCategory,
 }: {
   activeCategory: BlogCategoryName | null;
 }) {
+  const categories = await getCategories();
+
   return (
     <nav
       aria-label={BLOG_INDEX_LABELS.filterNav}
@@ -43,13 +46,13 @@ export function CategoryFilter({
         <FilterChip href="/blog" active={!activeCategory}>
           {BLOG_INDEX_LABELS.allCategories}
         </FilterChip>
-        {blogCategories.map((name) => (
+        {categories.map((category) => (
           <FilterChip
-            key={name}
-            href={`/blog?category=${encodeURIComponent(name)}`}
-            active={activeCategory === name}
+            key={category.id}
+            href={`/blog/category/${encodeURIComponent(category.slug)}`}
+            active={activeCategory === category.name}
           >
-            {name}
+            {category.name}
           </FilterChip>
         ))}
       </div>

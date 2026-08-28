@@ -2,15 +2,25 @@ import type { PostBlock } from "@/lib/post-content";
 
 export type CommentStatus = "PENDING" | "APPROVED" | "REJECTED";
 
+export interface TaxonomyInput {
+  name: string;
+  slug: string;
+  image: string | null;
+  metaTitle: string | null;
+  metaDescription: string | null;
+}
+
 export interface PostInput {
   title: string;
   slug: string;
   excerpt: string;
-  category: string;
-  tags: string[];
+  categoryId: number;
+  tagIds: number[];
   date: string;
   readTimeMinutes: number;
   content: PostBlock[];
+  metaTitle: string | null;
+  metaDescription: string | null;
 }
 
 export interface PostFormState {
@@ -21,3 +31,4 @@ export interface PostFormState {
 export interface LoginState {
   error?: string;
 }
+

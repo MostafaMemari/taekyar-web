@@ -24,13 +24,36 @@ model Post {
   slug            String   @unique
   title           String
   excerpt         String
-  category        String
-  tags            String[]
+  categoryId      Int
+  category        Category @relation(fields: [categoryId], references: [id])
+  tags            Tag[]
   date            String
   readTimeMinutes Int
   content         Json
+  metaTitle       String?
+  metaDescription String?
   createdAt       DateTime @default(now())
   comments        Comment[]
+}
+
+model Category {
+  id              Int    @id @default(autoincrement())
+  name            String @unique
+  slug            String @unique
+  image           String?
+  metaTitle       String?
+  metaDescription String?
+  posts           Post[]
+}
+
+model Tag {
+  id              Int    @id @default(autoincrement())
+  name            String @unique
+  slug            String @unique
+  image           String?
+  metaTitle       String?
+  metaDescription String?
+  posts           Post[]
 }
 
 model Comment {

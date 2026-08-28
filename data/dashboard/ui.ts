@@ -1,4 +1,4 @@
-import { FileText, LayoutDashboard, MessagesSquare } from "lucide-react";
+import { FileText, FolderTree, LayoutDashboard, MessagesSquare, Tag as TagIcon } from "lucide-react";
 
 import type { CommentStatus } from "@/lib/admin-types";
 import type { PostBlock } from "@/lib/post-content";
@@ -6,6 +6,8 @@ import type { PostBlock } from "@/lib/post-content";
 export const DASHBOARD_NAV = [
   { href: "/dashboard", label: "نمای کلی", Icon: LayoutDashboard },
   { href: "/dashboard/posts", label: "مقالات", Icon: FileText },
+  { href: "/dashboard/categories", label: "دسته‌بندی‌ها", Icon: FolderTree },
+  { href: "/dashboard/tags", label: "برچسب‌ها", Icon: TagIcon },
   { href: "/dashboard/comments", label: "دیدگاه‌ها", Icon: MessagesSquare },
 ];
 
@@ -79,8 +81,8 @@ export const POST_FORM_LABELS = {
   excerptPlaceholder: "چکیده‌ای کوتاه برای نمایش در فهرست مقالات",
   categoryLabel: "دسته‌بندی",
   tagsLabel: "برچسب‌ها",
-  tagsPlaceholder: "برچسب‌ها را با ویرگول جدا کنید",
-  tagsHint: "مثلاً: ضربات پا، اصلاح فرم",
+  tagsHint: "چند برچسب را می‌توانید انتخاب کنید.",
+  tagsEmpty: "برچسبی ساخته نشده؛ از بخش برچسب‌ها اضافه کنید.",
   dateLabel: "تاریخ نمایش",
   datePlaceholder: "۲۵ مرداد ۱۴۰۵",
   readTimeLabel: "زمان مطالعه (دقیقه)",
@@ -143,3 +145,62 @@ export const COMMENT_STATUS_META: Record<
     badgeClassName: "bg-belt-red/10 text-belt-red ring-belt-red/20",
   },
 };
+
+export const TAXONOMY_LABELS = {
+  kinds: {
+    category: {
+      title: "دسته‌بندی‌ها",
+      description: "مدیریت دسته‌بندی‌های مقالات وبلاگ.",
+      new: "دسته‌بندی جدید",
+      newTitle: "دسته‌بندی جدید",
+      newDescription: "یک دسته‌بندی برای مقالات بسازید.",
+      editTitle: "ویرایش دسته‌بندی",
+      editDescription: "اطلاعات دسته‌بندی را به‌روزرسانی کنید.",
+      searchPlaceholder: "جستجو در دسته‌بندی‌ها…",
+      empty: "دسته‌بندی‌ای یافت نشد.",
+      deleted: "دسته‌بندی حذف شد.",
+      confirmDelete: "این دسته‌بندی حذف شود؟ مقالات حذف نمی‌شوند.",
+      postsSuffix: "مقاله",
+    },
+    tag: {
+      title: "برچسب‌ها",
+      description: "مدیریت برچسب‌های مقالات وبلاگ.",
+      new: "برچسب جدید",
+      newTitle: "برچسب جدید",
+      newDescription: "یک برچسب برای مقالات بسازید.",
+      editTitle: "ویرایش برچسب",
+      editDescription: "اطلاعات برچسب را به‌روزرسانی کنید.",
+      searchPlaceholder: "جستجو در برچسب‌ها…",
+      empty: "برچسبی یافت نشد.",
+      deleted: "برچسب حذف شد.",
+      confirmDelete: "این برچسب حذف شود؟ مقالات حذف نمی‌شوند.",
+      postsSuffix: "مقاله",
+    },
+  },
+  nameLabel: "نام",
+  namePlaceholder: "نام",
+  slugLabel: "نشانی (اسلاگ)",
+  slugPlaceholder: "category-slug",
+  imageLabel: "تصویر",
+  imageHint: "JPG، PNG یا WebP — حداکثر ۵ مگابایت",
+  imageAlt: "پیش‌نمایش تصویر",
+  upload: "انتخاب تصویر",
+  uploading: "در حال آپلود…",
+  removeImage: "حذف تصویر",
+  seoTitle: "سئو",
+  seoHint: "اگر خالی بماند، از نام و اطلاعات خود صفحه استفاده می‌شود.",
+  metaTitleLabel: "عنوان سئو",
+  metaTitlePlaceholder: "عنوان صفحه در نتایج جستجو",
+  metaDescriptionLabel: "توضیحات سئو",
+  metaDescriptionPlaceholder: "توضیح کوتاه صفحه در نتایج جستجو",
+  submitCreate: "ایجاد",
+  submitUpdate: "ذخیره تغییرات",
+  saving: "در حال ذخیره…",
+  error: "ذخیره انجام نشد؛ دوباره تلاش کنید.",
+  slugTaken: "این نام یا نشانی قبلاً استفاده شده است.",
+  deleteError: "حذف انجام نشد؛ دوباره تلاش کنید.",
+  uploadError: "آپلود انجام نشد؛ دوباره تلاش کنید.",
+  unsupportedType: "فرمت تصویر پشتیبانی نمی‌شود (JPG، PNG یا WebP).",
+  fileTooLarge: "حجم تصویر بیشتر از ۵ مگابایت است.",
+} as const;
+

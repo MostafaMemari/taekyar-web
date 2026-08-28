@@ -27,7 +27,10 @@ export default async function DashboardPostsPage({ searchParams }: PostsPageProp
   const posts = await prisma.post.findMany({
     where,
     orderBy: { createdAt: "desc" },
-    include: { _count: { select: { comments: true } } },
+    include: {
+      _count: { select: { comments: true } },
+      category: { select: { name: true } },
+    },
     skip: (currentPage - 1) * POSTS_PER_PAGE,
     take: POSTS_PER_PAGE,
   });
@@ -101,7 +104,7 @@ interface PostsTableProps {
     id: number;
     slug: string;
     title: string;
-    category: string;
+    category: { name: string };
     date: string;
     _count: { comments: number };
   }>;
@@ -138,7 +141,7 @@ function PostsTable({ posts }: PostsTableProps) {
                     /blog/{post.slug}
                   </span>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-[13px] text-muted-foreground">{post.category}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-[13px] text-muted-foreground">{post.category.name}</td>
                 <td className="whitespace-nowrap px-4 py-3 text-[13px] text-muted-foreground">{post.date}</td>
                 <td className="whitespace-nowrap px-4 py-3 text-[13px] tabular-nums text-muted-foreground">
                   {toFaDigits(post._count.comments)}

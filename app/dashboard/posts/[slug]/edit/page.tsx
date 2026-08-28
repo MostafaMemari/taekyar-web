@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { PostInput } from "@/lib/admin-types";
 import { PostForm } from "@/components/dashboard/posts/post-form";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
-import { getPostBySlug } from "@/lib/blog";
+import { getCategories, getPostBySlug, getTags } from "@/lib/blog";
 
 export const dynamic = "force-dynamic";
 
@@ -19,18 +19,24 @@ export async function generateMetadata({ params }: EditPostPageProps) {
 
 export default async function EditPostPage({ params }: EditPostPageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const [post, categories, tags] = await Promise.all([
+    getPostBySlug(slug),
+    getCategories(),
+    getTags(),
+  ]);
   if (!post) notFound();
 
   const initial: PostInput = {
     title: post.title,
     slug: post.slug,
     excerpt: post.excerpt,
-    category: post.category,
-    tags: post.tags,
+    categoryId: post.categoryId,
+    tagIds: post.tags.map((tag) => tag.id),
     date: post.date,
     readTimeMinutes: post.readTimeMinutes,
     content: post.content,
+    metaTitle: post.metaTitle,
+    metaDescription: post.metaDescription,
   };
 
   return (
@@ -41,7 +47,13 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
       </div>
 
       <div className="rounded-2xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05] sm:p-6">
-        <PostForm mode="edit" initial={initial} currentSlug={post.slug} />
+        <PostForm
+          mode="edit"
+          initial={initial}
+          currentSlug={post.slug}
+          categories={categories}
+          tags={tags}
+        />
       </div>
     </div>
   );

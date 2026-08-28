@@ -1,0 +1,75 @@
+import Link from "next/link";
+
+import { PostGrid } from "@/components/blog/post-grid";
+import { BeltDivider } from "@/components/shared/belt-divider";
+import { Reveal } from "@/components/shared/reveal";
+import { Section } from "@/components/shared/section";
+import type { BlogPost } from "@/lib/blog";
+import { r2PublicUrl } from "@/lib/r2-url";
+
+interface TaxonomyArchiveProps {
+  eyebrow: string;
+  title: string;
+  description?: string | null;
+  imageUrl?: string | null;
+  posts: BlogPost[];
+  backHref: string;
+  backLabel: string;
+}
+
+export function TaxonomyArchive({
+  eyebrow,
+  title,
+  description,
+  imageUrl,
+  posts,
+  backHref,
+  backLabel,
+}: TaxonomyArchiveProps) {
+  return (
+    <>
+      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10">
+        <Reveal>
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 text-[11px] font-bold tracking-widest text-primary sm:text-xs">
+              <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
+              {eyebrow}
+            </span>
+            <h1 className="mt-2.5 text-balance text-[1.65rem] font-black leading-[1.35] tracking-tight sm:mt-3 sm:text-[2rem] sm:leading-[1.35] lg:text-[2.35rem]">
+              {title}
+            </h1>
+            <BeltDivider fullWidth={false} variant="pill" className="mt-3.5 h-1 w-16 sm:w-20" />
+            {description ? (
+              <p className="mt-3.5 max-w-xl text-pretty text-[14px] leading-7 text-muted-foreground sm:text-[15px] sm:leading-7">
+                {description}
+              </p>
+            ) : null}
+          </div>
+
+          {imageUrl ? (
+            <div className="relative mt-8 overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06]">
+              <img
+                src={r2PublicUrl(imageUrl)}
+                alt={title}
+                className="aspect-[16/6] w-full object-cover"
+              />
+            </div>
+          ) : null}
+
+          <div className="mt-6">
+            <Link
+              href={backHref}
+              className="inline-flex min-h-9 items-center text-[13px] font-semibold text-muted-foreground transition-colors hover:text-primary"
+            >
+              {backLabel}
+            </Link>
+          </div>
+        </Reveal>
+      </Section>
+
+      <Section containerClassName="pt-6 pb-2 sm:pt-7 lg:pt-8">
+        <PostGrid posts={posts} />
+      </Section>
+    </>
+  );
+}

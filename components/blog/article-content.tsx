@@ -5,16 +5,16 @@ import type { PostBlock } from "@/lib/post-content";
 import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
-function PostTags({ tags }: { tags: string[] }) {
+function PostTags({ tags }: { tags: BlogPost["tags"] }) {
   return (
     <div className="mt-8 flex flex-wrap items-center gap-2 border-t border-black/[0.06] pt-5 sm:mt-10 sm:pt-6">
       <span className="text-xs font-bold text-foreground">{POST_LABELS.tagsLabel}</span>
       {tags.map((tag) => (
         <span
-          key={tag}
+          key={tag.id}
           className="rounded-full bg-muted px-3 py-1.5 text-[11px] font-medium text-muted-foreground"
         >
-          {tag}
+          {tag.name}
         </span>
       ))}
     </div>

@@ -5,9 +5,15 @@ import { redirect } from "next/navigation";
 
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { endSession, getSession, startSession } from "@/lib/auth";
-import type { LoginState, PostFormState, PostInput } from "@/lib/admin-types";
-import { blogCategories } from "@/data/blog/categories";
+import type {
+  LoginState,
+  PostFormState,
+  PostInput,
+  TaxonomyInput,
+} from "@/lib/admin-types";
 import { prisma } from "@/lib/prisma";
+import { deleteImage, uploadImage } from "@/lib/r2";
+import { r2PublicUrl } from "@/lib/r2-url";
 import { verifyPassword } from "@/lib/session";
 
 async function requireSession() {
@@ -24,19 +30,40 @@ function revalidatePostPaths(slug: string) {
   revalidatePath("/dashboard/comments");
 }
 
+function normalizeOptionalText(value: unknown): string | null {
+  const text = String(value ?? "").trim();
+  return text.length > 0 ? text : null;
+}
+
+function normalizeTaxonomyInput(
+  input: TaxonomyInput,
+): TaxonomyInput | null {
+  const name = String(input.name ?? "").trim();
+  const slug = String(input.slug ?? "").trim().toLowerCase();
+  if (!name || !slug) return null;
+
+  return {
+    name,
+    slug,
+    image: normalizeOptionalText(input.image),
+    metaTitle: normalizeOptionalText(input.metaTitle),
+    metaDescription: normalizeOptionalText(input.metaDescription),
+  };
+}
+
 function normalizePostInput(input: PostInput): PostInput | null {
   const title = String(input.title ?? "").trim();
   const slug = String(input.slug ?? "").trim().toLowerCase();
   const excerpt = String(input.excerpt ?? "").trim();
-  const category = String(input.category ?? "");
+  const categoryId = Number(input.categoryId);
+  const tagIds = Array.isArray(input.tagIds)
+    ? input.tagIds.map((id) => Number(id)).filter((id) => Number.isInteger(id) && id > 0)
+    : [];
   const date = String(input.date ?? "").trim();
   const readTimeMinutes = Number(input.readTimeMinutes);
-  const tags = Array.isArray(input.tags)
-    ? input.tags.map((tag) => String(tag).trim()).filter(Boolean)
-    : [];
 
   if (!title || !slug || !excerpt || !date) return null;
-  if (!(blogCategories as string[]).includes(category)) return null;
+  if (!Number.isInteger(categoryId) || categoryId <= 0) return null;
   if (!Number.isFinite(readTimeMinutes) || readTimeMinutes <= 0) return null;
 
   const content = Array.isArray(input.content)
@@ -53,7 +80,18 @@ function normalizePostInput(input: PostInput): PostInput | null {
       })
     : [];
 
-  return { title, slug, excerpt, category, tags, date, readTimeMinutes, content };
+  return {
+    title,
+    slug,
+    excerpt,
+    categoryId,
+    tagIds,
+    date,
+    readTimeMinutes,
+    content,
+    metaTitle: normalizeOptionalText(input.metaTitle),
+    metaDescription: normalizeOptionalText(input.metaDescription),
+  };
 }
 
 export async function login(
@@ -89,7 +127,13 @@ export async function createPost(
   if (!data) return { status: "error", message: POST_FORM_LABELS.error };
 
   try {
-    await prisma.post.create({ data: { ...data, tags: data.tags } });
+    const { tagIds, ...postData } = data;
+    await prisma.post.create({
+      data: {
+        ...postData,
+        tags: { connect: tagIds.map((id) => ({ id })) },
+      },
+    });
   } catch {
     return { status: "error", message: POST_FORM_LABELS.slugTaken };
   }
@@ -109,7 +153,14 @@ export async function updatePost(
   if (!data) return { status: "error", message: POST_FORM_LABELS.error };
 
   try {
-    await prisma.post.update({ where: { slug: currentSlug }, data });
+    const { tagIds, ...postData } = data;
+    await prisma.post.update({
+      where: { slug: currentSlug },
+      data: {
+        ...postData,
+        tags: { set: tagIds.map((id) => ({ id })) },
+      },
+    });
   } catch {
     return { status: "error", message: POST_FORM_LABELS.slugTaken };
   }
@@ -178,4 +229,97 @@ export async function deleteComment(id: string): Promise<{ ok: boolean }> {
   revalidatePath("/dashboard/comments");
   revalidatePath("/dashboard");
   return { ok: true };
+}
+
+function revalidateTaxonomy(kind: "categories" | "tags") {
+  revalidatePath("/");
+  revalidatePath("/blog");
+  revalidatePath(`/dashboard/${kind}`);
+  revalidatePath("/dashboard");
+}
+
+export async function saveTaxonomy(
+  kind: "category" | "tag",
+  id: number | null,
+  input: TaxonomyInput,
+): Promise<PostFormState> {
+  await requireSession();
+
+  const data = normalizeTaxonomyInput(input);
+  if (!data) return { status: "error", message: POST_FORM_LABELS.error };
+
+  try {
+    if (kind === "category") {
+      if (id === null) {
+        await prisma.category.create({ data });
+      } else {
+        await prisma.category.update({ where: { id }, data });
+      }
+    } else if (id === null) {
+      await prisma.tag.create({ data });
+    } else {
+      await prisma.tag.update({ where: { id }, data });
+    }
+  } catch {
+    return { status: "error", message: POST_FORM_LABELS.slugTaken };
+  }
+
+  revalidateTaxonomy(kind === "category" ? "categories" : "tags");
+  redirect(`/dashboard/${kind === "category" ? "categories" : "tags"}`);
+}
+
+export async function deleteTaxonomy(
+  kind: "category" | "tag",
+  id: number,
+): Promise<{ ok: boolean }> {
+  await requireSession();
+
+  const existing =
+    kind === "category"
+      ? await prisma.category.findUnique({ where: { id }, select: { image: true } })
+      : await prisma.tag.findUnique({ where: { id }, select: { image: true } });
+  if (!existing) return { ok: false };
+
+  try {
+    if (kind === "category") {
+      await prisma.category.delete({ where: { id } });
+    } else {
+      await prisma.tag.delete({ where: { id } });
+    }
+  } catch {
+    return { ok: false };
+  }
+
+  if (existing.image) {
+    await deleteImage(existing.image).catch(() => undefined);
+  }
+
+  revalidateTaxonomy(kind === "category" ? "categories" : "tags");
+  return { ok: true };
+}
+
+export async function uploadImageAction(
+  file: File,
+): Promise<{
+  ok: boolean;
+  key?: string;
+  url?: string;
+  error?: "UNSUPPORTED_TYPE" | "FILE_TOO_LARGE" | "UPLOAD_FAILED";
+}> {
+  await requireSession();
+
+  try {
+    const key = await uploadImage(file);
+    return { ok: true, key, url: r2PublicUrl(key) };
+  } catch (error) {
+    const code = error instanceof Error ? error.message : "UPLOAD_FAILED";
+    if (
+      code === "UNSUPPORTED_TYPE" ||
+      code === "FILE_TOO_LARGE" ||
+      code === "UPLOAD_FAILED"
+    ) {
+      return { ok: false, error: code };
+    }
+    return { ok: false, error: "UPLOAD_FAILED" };
+  }
 }

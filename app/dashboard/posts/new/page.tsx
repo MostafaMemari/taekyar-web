@@ -1,22 +1,26 @@
 import type { PostInput } from "@/lib/admin-types";
 import { PostForm } from "@/components/dashboard/posts/post-form";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
-import { blogCategories } from "@/data/blog/categories";
+import { getCategories, getTags } from "@/lib/blog";
 
 export const metadata = {
   title: POST_FORM_LABELS.newTitle,
 };
 
-export default function NewPostPage() {
+export default async function NewPostPage() {
+  const [categories, tags] = await Promise.all([getCategories(), getTags()]);
+
   const initial: PostInput = {
     title: "",
     slug: "",
     excerpt: "",
-    category: blogCategories[0],
-    tags: [],
+    categoryId: categories[0]?.id ?? 0,
+    tagIds: [],
     date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
     readTimeMinutes: 5,
     content: [{ type: "paragraph", text: "" }],
+    metaTitle: null,
+    metaDescription: null,
   };
 
   return (
@@ -27,7 +31,12 @@ export default function NewPostPage() {
       </div>
 
       <div className="rounded-2xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05] sm:p-6">
-        <PostForm mode="create" initial={initial} />
+        <PostForm
+          mode="create"
+          initial={initial}
+          categories={categories}
+          tags={tags}
+        />
       </div>
     </div>
   );

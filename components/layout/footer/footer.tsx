@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
-import { blogCategories } from "@/data/blog/categories";
+import { getCategories } from "@/lib/blog";
 import { navLinks, type NavLink } from "@/data/layout/navigation";
 import { FOOTER_BLURB, FOOTER_COPYRIGHT } from "@/data/layout/footer";
 import { SOCIALS } from "@/data/socials";
@@ -34,10 +34,11 @@ function LinkColumn({
   );
 }
 
-export function Footer() {
-  const categoryLinks = blogCategories.map((category) => ({
-    label: category,
-    href: "/blog",
+export async function Footer() {
+  const categories = await getCategories();
+  const categoryLinks = categories.map((category) => ({
+    label: category.name,
+    href: `/blog/category/${encodeURIComponent(category.slug)}`,
   }));
 
   return (

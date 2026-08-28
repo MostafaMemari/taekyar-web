@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
 
 import { FieldError, FieldLabel, INPUT_CLASSES } from "@/components/shared/form-controls";
 import { Button } from "@/components/ui/button";
-import { BLOCK_TYPE_LABELS, POST_FORM_LABELS } from "@/data/dashboard/ui";
+import { BLOCK_TYPE_LABELS, POST_FORM_LABELS, TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { createPost, updatePost } from "@/lib/admin-actions";
 import type { PostInput } from "@/lib/admin-types";
-import { blogCategories } from "@/data/blog/categories";
 import type { PostBlock } from "@/lib/post-content";
 import { cn } from "@/lib/utils";
 
@@ -16,16 +15,19 @@ interface PostFormProps {
   mode: "create" | "edit";
   initial: PostInput;
   currentSlug?: string;
+  categories: Array<{ id: number; name: string }>;
+  tags: Array<{ id: number; name: string }>;
 }
 
 interface FieldDraft {
   title: string;
   slug: string;
   excerpt: string;
-  category: string;
-  tags: string;
+  categoryId: string;
   date: string;
   readTimeMinutes: string;
+  metaTitle: string;
+  metaDescription: string;
 }
 
 const BLOCK_TYPE_ITEMS: PostBlock["type"][] = ["paragraph", "heading", "list", "tip", "quote"];
@@ -34,22 +36,30 @@ function defaultBlock(type: PostBlock["type"]): PostBlock {
   return type === "list" ? { type: "list", items: [""] } : { type, text: "" };
 }
 
-export function PostForm({ mode, initial, currentSlug }: PostFormProps) {
+export function PostForm({ mode, initial, currentSlug, categories, tags }: PostFormProps) {
   const [fields, setFields] = useState<FieldDraft>({
     title: initial.title,
     slug: initial.slug,
     excerpt: initial.excerpt,
-    category: initial.category,
-    tags: initial.tags.join("، "),
+    categoryId: String(initial.categoryId),
     date: initial.date,
     readTimeMinutes: String(initial.readTimeMinutes),
+    metaTitle: initial.metaTitle ?? "",
+    metaDescription: initial.metaDescription ?? "",
   });
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>(initial.tagIds);
   const [blocks, setBlocks] = useState<PostBlock[]>(initial.content);
   const [isPending, startTransition] = useTransition();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   function setField<K extends keyof FieldDraft>(key: K, value: FieldDraft[K]) {
     setFields((previous) => ({ ...previous, [key]: value }));
+  }
+
+  function toggleTag(id: number) {
+    setSelectedTagIds((previous) =>
+      previous.includes(id) ? previous.filter((tagId) => tagId !== id) : [...previous, id],
+    );
   }
 
   function addBlock(type: PostBlock["type"]) {
@@ -81,11 +91,13 @@ export function PostForm({ mode, initial, currentSlug }: PostFormProps) {
       title: fields.title,
       slug: fields.slug.trim(),
       excerpt: fields.excerpt,
-      category: fields.category,
-      tags: fields.tags.split(/[,،]/).map((tag) => tag.trim()).filter(Boolean),
+      categoryId: Number(fields.categoryId),
+      tagIds: selectedTagIds,
       date: fields.date,
       readTimeMinutes: Number(fields.readTimeMinutes),
       content: blocks,
+      metaTitle: fields.metaTitle,
+      metaDescription: fields.metaDescription,
     };
 
     setErrorMessage(null);
@@ -103,7 +115,14 @@ export function PostForm({ mode, initial, currentSlug }: PostFormProps) {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      <FormFields fields={fields} onFieldChange={setField} />
+      <FormFields
+        fields={fields}
+        onFieldChange={setField}
+        categories={categories}
+        tags={tags}
+        selectedTagIds={selectedTagIds}
+        onToggleTag={toggleTag}
+      />
       <BlocksSection
         blocks={blocks}
         onAdd={addBlock}
@@ -136,9 +155,20 @@ export function PostForm({ mode, initial, currentSlug }: PostFormProps) {
 interface FormFieldsProps {
   fields: FieldDraft;
   onFieldChange: <K extends keyof FieldDraft>(key: K, value: FieldDraft[K]) => void;
+  categories: Array<{ id: number; name: string }>;
+  tags: Array<{ id: number; name: string }>;
+  selectedTagIds: number[];
+  onToggleTag: (id: number) => void;
 }
 
-function FormFields({ fields, onFieldChange }: FormFieldsProps) {
+function FormFields({
+  fields,
+  onFieldChange,
+  categories,
+  tags,
+  selectedTagIds,
+  onToggleTag,
+}: FormFieldsProps) {
   return (
     <>
       <div>
@@ -173,13 +203,13 @@ function FormFields({ fields, onFieldChange }: FormFieldsProps) {
           <FieldLabel htmlFor="post-category">{POST_FORM_LABELS.categoryLabel}</FieldLabel>
           <select
             id="post-category"
-            value={fields.category}
+            value={fields.categoryId}
             className={INPUT_CLASSES}
-            onChange={(event) => onFieldChange("category", event.target.value)}
+            onChange={(event) => onFieldChange("categoryId", event.target.value)}
           >
-            {blogCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
               </option>
             ))}
           </select>
@@ -228,17 +258,71 @@ function FormFields({ fields, onFieldChange }: FormFieldsProps) {
         </div>
       </div>
 
-      <div>
-        <FieldLabel htmlFor="post-tags">{POST_FORM_LABELS.tagsLabel}</FieldLabel>
-        <input
-          id="post-tags"
-          type="text"
-          value={fields.tags}
-          placeholder={POST_FORM_LABELS.tagsPlaceholder}
-          className={INPUT_CLASSES}
-          onChange={(event) => onFieldChange("tags", event.target.value)}
-        />
+      <fieldset>
+        <legend className="mb-1.5 text-[13px] font-bold text-foreground">
+          {POST_FORM_LABELS.tagsLabel}
+        </legend>
+
+        {tags.length === 0 ? (
+          <p className="text-xs text-muted-foreground">{POST_FORM_LABELS.tagsEmpty}</p>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag) => {
+              const selected = selectedTagIds.includes(tag.id);
+
+              return (
+                <button
+                  key={tag.id}
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => onToggleTag(tag.id)}
+                  className={cn(
+                    "inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3.5 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                    selected
+                      ? "border-primary bg-primary text-white shadow-sm shadow-primary/20"
+                      : "border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground",
+                  )}
+                >
+                  {selected ? <Check className="size-3.5" aria-hidden="true" /> : null}
+                  {tag.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         <p className="mt-1.5 text-xs text-muted-foreground">{POST_FORM_LABELS.tagsHint}</p>
+      </fieldset>
+
+      <div className="space-y-4 border-t border-black/[0.06] pt-5">
+        <div>
+          <p className="text-[13px] font-bold">{TAXONOMY_LABELS.seoTitle}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">{TAXONOMY_LABELS.seoHint}</p>
+        </div>
+
+        <div>
+          <FieldLabel htmlFor="post-meta-title">{TAXONOMY_LABELS.metaTitleLabel}</FieldLabel>
+          <input
+            id="post-meta-title"
+            type="text"
+            value={fields.metaTitle}
+            placeholder={TAXONOMY_LABELS.metaTitlePlaceholder}
+            className={INPUT_CLASSES}
+            onChange={(event) => onFieldChange("metaTitle", event.target.value)}
+          />
+        </div>
+
+        <div>
+          <FieldLabel htmlFor="post-meta-description">{TAXONOMY_LABELS.metaDescriptionLabel}</FieldLabel>
+          <textarea
+            id="post-meta-description"
+            rows={3}
+            value={fields.metaDescription}
+            placeholder={TAXONOMY_LABELS.metaDescriptionPlaceholder}
+            className={cn(INPUT_CLASSES, "resize-y")}
+            onChange={(event) => onFieldChange("metaDescription", event.target.value)}
+          />
+        </div>
       </div>
     </>
   );

@@ -7,7 +7,8 @@ import { BLOG_INDEX_LABELS, BLOG_PAGINATION } from "@/data/blog/index-page";
 import { PostGrid } from "@/components/blog/post-grid";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { getBlogPosts, blogCategories, type BlogCategoryName } from "@/lib/blog";
+import { getBlogPosts } from "@/lib/blog";
+import { blogCategories, type BlogCategoryName } from "@/data/blog/categories";
 import { toFaDigits } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";

@@ -15,7 +15,8 @@ import { TocCollapse } from "@/components/blog/toc-collapse";
 import { ContactBanner } from "@/components/shared/contact-banner";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { getPostComments, getBlogPosts, getPostBySlug, type BlogCategoryName } from "@/lib/blog";
+import { getPostComments, getBlogPosts, getPostBySlug } from "@/lib/blog";
+import type { BlogCategoryName } from "@/data/blog/categories";
 import { getHeadings, type TocItem } from "@/lib/post-content";
 import { getRelatedPosts } from "@/lib/blog-related";
 import { cn } from "@/lib/utils";
@@ -32,7 +33,10 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
   if (!post) return { title: "مقاله یافت نشد" };
 
-  return { title: post.title, description: post.excerpt };
+  return {
+    title: post.metaTitle ?? post.title,
+    description: post.metaDescription ?? post.excerpt,
+  };
 }
 
 interface PostRailProps {
