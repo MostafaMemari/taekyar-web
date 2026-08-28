@@ -1,8 +1,12 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Pencil, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, FileText, Inbox, Pencil, Search } from "lucide-react";
 
 import { DeletePostButton } from "@/components/dashboard/posts/delete-post-button";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
 import { toFaDigits } from "@/lib/utils";
@@ -45,47 +49,67 @@ export default async function DashboardPostsPage({ searchParams }: PostsPageProp
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-xl font-black sm:text-2xl">{POSTS_TABLE_LABELS.title}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{POSTS_TABLE_LABELS.description}</p>
+          <h1 className="text-[22px] font-black tracking-tight sm:text-2xl">{POSTS_TABLE_LABELS.title}</h1>
+          <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
+            {POSTS_TABLE_LABELS.description}
+          </p>
         </div>
 
-        <Button asChild className="h-10 gap-2 rounded-xl text-sm font-bold shadow-md shadow-primary/20">
+        <Button asChild className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15">
           <Link href="/dashboard/posts/new">
             {POSTS_TABLE_LABELS.newPost}
-            <ArrowLeft className="size-4" />
+            <ArrowLeft className="size-4" aria-hidden="true" />
           </Link>
         </Button>
       </div>
 
-      <form
-        role="search"
-        aria-label={POSTS_TABLE_LABELS.searchLabel}
-        action="/dashboard/posts"
-        className="relative"
-      >
-        <Search
-          aria-hidden="true"
-          className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/60"
-        />
-        <input
-          type="search"
-          name="q"
-          defaultValue={query}
-          placeholder={POSTS_TABLE_LABELS.searchPlaceholder}
-          aria-label={POSTS_TABLE_LABELS.searchLabel}
-          className="h-11 w-full rounded-xl border border-border bg-card ps-10 pe-4 text-sm outline-none transition-colors placeholder:text-muted-foreground/60 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        />
-      </form>
-
-      {posts.length === 0 ? (
-        <div className="rounded-2xl bg-card p-10 text-center text-sm text-muted-foreground ring-1 ring-black/[0.05]">
-          {POSTS_TABLE_LABELS.empty}
+      <Card className="p-0">
+        <div className="p-3 sm:p-4">
+          <form role="search" aria-label={POSTS_TABLE_LABELS.searchLabel} action="/dashboard/posts" className="relative">
+            <Search
+              aria-hidden="true"
+              className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/50"
+            />
+            <Input
+              type="search"
+              name="q"
+              defaultValue={query}
+              placeholder={POSTS_TABLE_LABELS.searchPlaceholder}
+              aria-label={POSTS_TABLE_LABELS.searchLabel}
+              className="h-10 rounded-xl bg-card ps-9 pe-4 text-[13px] placeholder:text-muted-foreground/60"
+            />
+          </form>
         </div>
-      ) : (
-        <PostsTable posts={posts} />
-      )}
+        <Separator className="bg-border/60" />
+
+        {posts.length === 0 ? (
+          <CardContent className="flex flex-col items-center justify-center px-6 py-12 text-center">
+            <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
+              <Inbox className="size-6" aria-hidden="true" />
+            </span>
+            <p className="mt-3 text-[14px] font-bold">{POSTS_TABLE_LABELS.empty}</p>
+            <p className="mt-1 max-w-sm text-xs leading-5 text-muted-foreground">
+              {query ? "جستجوی دیگری را امتحان کنید یا فیلتر را پاک کنید." : "اولین مقاله را بسازید تا فهرست اینجا پر شود."}
+            </p>
+            {query ? (
+              <Button variant="outline" asChild className="mt-4 h-9 rounded-xl px-4 text-[13px] font-bold">
+                <Link href="/dashboard/posts">پاک کردن جستجو</Link>
+              </Button>
+            ) : (
+              <Button asChild className="mt-4 h-9 rounded-xl px-4 text-[13px] font-bold">
+                <Link href="/dashboard/posts/new">
+                  {POSTS_TABLE_LABELS.newPost}
+                  <ArrowLeft className="size-4" aria-hidden="true" />
+                </Link>
+              </Button>
+            )}
+          </CardContent>
+        ) : (
+          <PostsTable posts={posts} />
+        )}
+      </Card>
 
       {totalPages > 1 ? (
         <PaginationNav
@@ -112,55 +136,82 @@ interface PostsTableProps {
 
 function PostsTable({ posts }: PostsTableProps) {
   return (
-    <div className="overflow-hidden rounded-2xl bg-card shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05]">
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[720px] text-sm">
-          <thead>
-            <tr className="border-b border-black/[0.06] text-xs text-muted-foreground">
-              <th scope="col" className="px-4 py-3 text-start font-bold">{POSTS_TABLE_LABELS.columnTitle}</th>
-              <th scope="col" className="px-4 py-3 text-start font-bold">{POSTS_TABLE_LABELS.columnCategory}</th>
-              <th scope="col" className="px-4 py-3 text-start font-bold">{POSTS_TABLE_LABELS.columnDate}</th>
-              <th scope="col" className="px-4 py-3 text-start font-bold">{POSTS_TABLE_LABELS.columnComments}</th>
-              <th scope="col" className="px-4 py-3 text-start font-bold">{POSTS_TABLE_LABELS.columnActions}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post) => (
-              <tr
-                key={post.id}
-                className="border-b border-black/[0.04] transition-colors last:border-b-0 hover:bg-muted/40"
-              >
-                <td className="max-w-[22rem] px-4 py-3">
-                  <Link
-                    href={`/dashboard/posts/${post.slug}/edit`}
-                    className="block truncate font-bold hover:text-primary"
-                  >
-                    {post.title}
-                  </Link>
-                  <span dir="ltr" className="mt-0.5 block truncate text-[11px] text-muted-foreground">
-                    /blog/{post.slug}
-                  </span>
-                </td>
-                <td className="whitespace-nowrap px-4 py-3 text-[13px] text-muted-foreground">{post.category.name}</td>
-                <td className="whitespace-nowrap px-4 py-3 text-[13px] text-muted-foreground">{post.date}</td>
-                <td className="whitespace-nowrap px-4 py-3 text-[13px] tabular-nums text-muted-foreground">
+    <div className="overflow-x-auto">
+      <Table className="min-w-[720px]">
+        <TableHeader className="bg-muted/30">
+          <TableRow className="border-b border-border/60 hover:bg-transparent">
+            <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
+              {POSTS_TABLE_LABELS.columnTitle}
+            </TableHead>
+            <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
+              {POSTS_TABLE_LABELS.columnCategory}
+            </TableHead>
+            <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
+              {POSTS_TABLE_LABELS.columnDate}
+            </TableHead>
+            <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
+              {POSTS_TABLE_LABELS.columnComments}
+            </TableHead>
+            <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
+              {POSTS_TABLE_LABELS.columnActions}
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {posts.map((post) => (
+            <TableRow
+              key={post.id}
+              className="border-b border-border/40 last:border-0 hover:bg-muted/30 motion-reduce:transition-none"
+            >
+              <TableCell className="max-w-[22rem] px-4 py-3.5">
+                <Link
+                  href={`/dashboard/posts/${post.slug}/edit`}
+                  className="block truncate text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 rounded-sm"
+                >
+                  {post.title}
+                </Link>
+                <span
+                  dir="ltr"
+                  className="mt-0.5 flex items-center gap-1 truncate text-[11px] text-muted-foreground"
+                >
+                  <FileText className="size-3 shrink-0" aria-hidden="true" />
+                  /blog/{post.slug}
+                </span>
+              </TableCell>
+              <TableCell className="whitespace-nowrap px-4 py-3.5">
+                <span className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground">
+                  <span className="size-1.5 rounded-full bg-belt-blue" aria-hidden="true" />
+                  {post.category.name}
+                </span>
+              </TableCell>
+              <TableCell className="whitespace-nowrap px-4 py-3.5 text-[13px] text-muted-foreground">
+                {post.date}
+              </TableCell>
+              <TableCell className="whitespace-nowrap px-4 py-3.5">
+                <span className="inline-flex min-w-6 justify-center rounded-full bg-muted px-2 py-0.5 text-[12px] font-bold tabular-nums text-muted-foreground ring-1 ring-border/60">
                   {toFaDigits(post._count.comments)}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="icon-sm" asChild aria-label={POSTS_TABLE_LABELS.edit}>
-                      <Link href={`/dashboard/posts/${post.slug}/edit`}>
-                        <Pencil className="size-4" />
-                      </Link>
-                    </Button>
-                    <DeletePostButton slug={post.slug} />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                </span>
+              </TableCell>
+              <TableCell className="px-4 py-3">
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    asChild
+                    aria-label={POSTS_TABLE_LABELS.edit}
+                    className="size-8 rounded-lg"
+                  >
+                    <Link href={`/dashboard/posts/${post.slug}/edit`}>
+                      <Pencil className="size-4" aria-hidden="true" />
+                    </Link>
+                  </Button>
+                  <DeletePostButton slug={post.slug} />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
@@ -174,20 +225,23 @@ interface PaginationNavProps {
 
 function PaginationNav({ currentPage, totalPages, total, buildHref }: PaginationNavProps) {
   return (
-    <nav className="flex items-center justify-between" aria-label={POSTS_TABLE_LABELS.title}>
+    <nav
+      className="flex items-center justify-between rounded-xl border border-border/60 bg-card px-2 py-2 shadow-sm shadow-black/[0.03]"
+      aria-label={POSTS_TABLE_LABELS.title}
+    >
       {currentPage > 1 ? (
         <Link
           href={buildHref(currentPage - 1)}
-          className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
         >
-          <ArrowRight className="size-4" />
+          <ArrowRight className="size-4" aria-hidden="true" />
           {POSTS_TABLE_LABELS.prevPage}
         </Link>
       ) : (
-        <span />
+        <span className="min-h-8 px-3" aria-hidden="true" />
       )}
 
-      <span className="text-[13px] tabular-nums text-muted-foreground">
+      <span className="rounded-full bg-muted px-3 py-1 text-[13px] font-medium tabular-nums text-muted-foreground ring-1 ring-border/60">
         {toFaDigits(currentPage)} / {toFaDigits(totalPages)} {POSTS_TABLE_LABELS.pageInfoSuffix} ·{" "}
         {toFaDigits(total)} {POSTS_TABLE_LABELS.resultsSuffix}
       </span>
@@ -195,13 +249,13 @@ function PaginationNav({ currentPage, totalPages, total, buildHref }: Pagination
       {currentPage < totalPages ? (
         <Link
           href={buildHref(currentPage + 1)}
-          className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
         >
           {POSTS_TABLE_LABELS.nextPage}
-          <ArrowLeft className="size-4" />
+          <ArrowLeft className="size-4" aria-hidden="true" />
         </Link>
       ) : (
-        <span />
+        <span className="min-h-8 px-3" aria-hidden="true" />
       )}
     </nav>
   );

@@ -1,7 +1,10 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, Inbox, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { POSTS_TABLE_LABELS, TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
 import { toFaDigits } from "@/lib/utils";
@@ -54,71 +57,99 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-xl font-black sm:text-2xl">{copy.title}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{copy.description}</p>
+          <h1 className="text-[22px] font-black tracking-tight sm:text-2xl">{copy.title}</h1>
+          <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
+            {copy.description}
+          </p>
         </div>
 
-        <Button asChild className="h-10 gap-2 rounded-xl text-sm font-bold shadow-md shadow-primary/20">
+        <Button asChild className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15">
           <Link href={`${basePath}/new`}>
             {copy.new}
-            <ArrowLeft className="size-4" />
+            <ArrowLeft className="size-4" aria-hidden="true" />
           </Link>
         </Button>
       </div>
 
-      <form role="search" action={basePath} className="relative">
-        <Search
-          aria-hidden="true"
-          className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/60"
-        />
-        <input
-          type="search"
-          name="q"
-          defaultValue={query}
-          placeholder={copy.searchPlaceholder}
-          aria-label={copy.searchPlaceholder}
-          className="h-11 w-full rounded-xl border border-border bg-card ps-10 pe-4 text-sm outline-none transition-colors placeholder:text-muted-foreground/60 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        />
-      </form>
-
-      {rows.length === 0 ? (
-        <div className="rounded-2xl bg-card p-10 text-center text-sm text-muted-foreground ring-1 ring-black/[0.05]">
-          {copy.empty}
+      <Card className="p-0">
+        <div className="p-3 sm:p-4">
+          <form role="search" action={basePath} className="relative">
+            <Search
+              aria-hidden="true"
+              className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/50"
+            />
+            <Input
+              type="search"
+              name="q"
+              defaultValue={query}
+              placeholder={copy.searchPlaceholder}
+              aria-label={copy.searchPlaceholder}
+              className="h-10 rounded-xl bg-card ps-9 pe-4 text-[13px] placeholder:text-muted-foreground/60"
+            />
+          </form>
         </div>
-      ) : (
-        <TaxonomyTable kind={kind} rows={rows} />
-      )}
+        <Separator className="bg-border/60" />
+
+        {rows.length === 0 ? (
+          <CardContent className="flex flex-col items-center justify-center px-6 py-12 text-center">
+            <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
+              <Inbox className="size-6" aria-hidden="true" />
+            </span>
+            <p className="mt-3 text-[14px] font-bold">{copy.empty}</p>
+            <p className="mt-1 max-w-sm text-xs leading-5 text-muted-foreground">
+              {query ? "جستجوی دیگری را امتحان کنید یا فیلتر را پاک کنید." : "اولین مورد را بسازید تا فهرست اینجا نمایش داده شود."}
+            </p>
+            {query ? (
+              <Button variant="outline" asChild className="mt-4 h-9 rounded-xl px-4 text-[13px] font-bold">
+                <Link href={basePath}>پاک کردن جستجو</Link>
+              </Button>
+            ) : (
+              <Button asChild className="mt-4 h-9 rounded-xl px-4 text-[13px] font-bold">
+                <Link href={`${basePath}/new`}>
+                  {copy.new}
+                  <ArrowLeft className="size-4" aria-hidden="true" />
+                </Link>
+              </Button>
+            )}
+          </CardContent>
+        ) : (
+          <TaxonomyTable kind={kind} rows={rows} />
+        )}
+      </Card>
 
       {totalPages > 1 ? (
-        <nav className="flex items-center justify-between">
+        <nav
+          className="flex items-center justify-between rounded-xl border border-border/60 bg-card px-2 py-2 shadow-sm shadow-black/[0.03]"
+          aria-label="صفحه‌بندی"
+        >
           {currentPage > 1 ? (
             <Link
               href={buildHref(currentPage - 1)}
-              className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
             >
-              <ArrowRight className="size-4" />
+              <ArrowRight className="size-4" aria-hidden="true" />
               {POSTS_TABLE_LABELS.prevPage}
             </Link>
           ) : (
-            <span />
+            <span className="min-h-8 px-3" aria-hidden="true" />
           )}
 
-          <span className="text-[13px] tabular-nums text-muted-foreground">
+          <span className="rounded-full bg-muted px-3 py-1 text-[13px] font-medium tabular-nums text-muted-foreground ring-1 ring-border/60">
             {toFaDigits(currentPage)} / {toFaDigits(totalPages)}
           </span>
 
           {currentPage < totalPages ? (
             <Link
               href={buildHref(currentPage + 1)}
-              className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
             >
               {POSTS_TABLE_LABELS.nextPage}
-              <ArrowLeft className="size-4" />
+              <ArrowLeft className="size-4" aria-hidden="true" />
             </Link>
           ) : (
-            <span />
+            <span className="min-h-8 px-3" aria-hidden="true" />
           )}
         </nav>
       ) : null}
