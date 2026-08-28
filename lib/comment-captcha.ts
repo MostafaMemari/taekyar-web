@@ -1,20 +1,40 @@
 import { createHash, randomUUID } from "crypto";
+import { existsSync } from "fs";
+import { join } from "path";
+import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 
 const CAPTCHA_TTL_MS = 5 * 60 * 1000;
 const MAX_STORED_CHALLENGES = 500;
 const DIGIT_COUNT_MIN = 4;
 const DIGIT_COUNT_MAX = 5;
 
+const IMAGE_WIDTH = 190;
+const IMAGE_HEIGHT = 68;
+const IMAGE_CONTENT_TYPE = "image/png";
+
 const FA_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
 const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+
+const CAPTCHA_FONT_PATH = join(process.cwd(), "lib/captcha-fonts/Vazirmatn-Regular.ttf");
 
 interface CaptchaChallenge {
   answerHash: string;
   ipHash: string | null;
   expiresAt: number;
+  image: Buffer;
 }
 
 const challenges = new Map<string, CaptchaChallenge>();
+
+let fontRegistered = false;
+
+function ensureFont(): void {
+  if (fontRegistered) return;
+  if (existsSync(CAPTCHA_FONT_PATH)) {
+    GlobalFonts.registerFromPath(CAPTCHA_FONT_PATH, "Vazirmatn");
+    fontRegistered = true;
+  }
+}
 
 function pepper(): string {
   return process.env.COMMENT_IP_PEPPER ?? "taekyar-comment-ip-pepper";
@@ -30,48 +50,76 @@ function randomInt(min: number, max: number): number {
   return min + Math.floor(Math.random() * (max - min + 1));
 }
 
+function randomOpacity(minPercent: number, maxPercent: number): number {
+  return randomInt(minPercent, maxPercent) / 100;
+}
+
 export function hashCaptchaAnswer(answer: string, captchaId: string): string {
   return createHash("sha256")
     .update(`${normalizeDigits(answer.trim())}${captchaId}${pepper()}`)
     .digest("hex");
 }
 
-function randomColorOpacity(minPercent: number, maxPercent: number): string {
-  return (randomInt(minPercent, maxPercent) / 100).toFixed(2);
-}
+function renderCaptchaImage(digits: string[]): Buffer {
+  ensureFont();
 
-function generateCaptchaSvg(digits: string[]): string {
-  const width = 190;
-  const height = 68;
-  const slot = (width - 24) / digits.length;
-  const fontFamily = "font-family:var(--font-vazirmatn), Vazirmatn, Tahoma, sans-serif";
+  const canvas = createCanvas(IMAGE_WIDTH, IMAGE_HEIGHT);
+  const ctx = canvas.getContext("2d");
 
-  let digitElements = "";
+  ctx.clearRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
+  ctx.fillStyle = "rgba(243, 244, 246, 0.9)";
+  ctx.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
+
+  const ink = "rgba(23, 23, 23, ";
+
+  for (let i = 0; i < randomInt(3, 4); i += 1) {
+    ctx.strokeStyle = `${ink}${randomOpacity(8, 20).toFixed(2)})`;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(randomInt(0, 20), randomInt(4, IMAGE_HEIGHT - 4));
+    if (Math.random() < 0.5) {
+      ctx.lineTo(IMAGE_WIDTH, randomInt(4, IMAGE_HEIGHT - 4));
+    } else {
+      ctx.quadraticCurveTo(
+        IMAGE_WIDTH / 2,
+        randomInt(0, IMAGE_HEIGHT),
+        IMAGE_WIDTH,
+        randomInt(4, IMAGE_HEIGHT - 4),
+      );
+    }
+    ctx.stroke();
+  }
+
+  for (let i = 0; i < randomInt(26, 40); i += 1) {
+    ctx.fillStyle = `${ink}${randomOpacity(10, 26).toFixed(2)})`;
+    ctx.beginPath();
+    ctx.arc(randomInt(1, IMAGE_WIDTH - 1), randomInt(1, IMAGE_HEIGHT - 1), randomInt(1, 2), 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  const slot = (IMAGE_WIDTH - 24) / digits.length;
   digits.forEach((digit, index) => {
-    const cx = 12 + slot * index + slot / 2 + randomInt(-3, 3);
-    const cy = height / 2 + randomInt(-4, 4);
+    const x = 12 + slot * index + slot / 2 + randomInt(-3, 3);
+    const y = IMAGE_HEIGHT / 2 + randomInt(-5, 5);
     const fontSize = randomInt(34, 46);
-    const rotation = randomInt(-24, 24);
-    digitElements += `<text x="${cx.toFixed(1)}" y="${cy.toFixed(1)}" font-size="${fontSize}" text-anchor="middle" dominant-baseline="central" font-weight="700" style="${fontFamily}" fill="currentColor" fill-opacity="${randomColorOpacity(72, 100)}" transform="rotate(${rotation} ${cx.toFixed(1)} ${cy.toFixed(1)})">${digit}</text>`;
+    const rotation = randomInt(-24, 24) * (Math.PI / 180);
+    const skew = randomInt(-8, 8) / 100;
+
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rotation);
+    ctx.transform(1, 0, skew, 1, 0, 0);
+    ctx.font = `700 ${fontSize}px Vazirmatn, Tahoma, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = `${ink}${randomOpacity(72, 100).toFixed(2)})`;
+    ctx.fillText(digit, 0, 0);
+    ctx.fillStyle = `${ink}${randomOpacity(70, 90).toFixed(2)})`;
+    ctx.fillText(digit, 0.8, 0.8);
+    ctx.restore();
   });
 
-  let noise = "";
-  for (let i = 0; i < randomInt(3, 4); i += 1) {
-    const y1 = randomInt(6, height - 6);
-    const y2 = randomInt(6, height - 6);
-    if (Math.random() < 0.5) {
-      noise += `<line x1="0" y1="${y1}" x2="${width}" y2="${y2}" stroke="currentColor" stroke-opacity="${randomColorOpacity(10, 22)}" stroke-width="1.5" />`;
-    } else {
-      const midY = (y1 + y2) / 2 + randomInt(-10, 10);
-      noise += `<path d="M 0 ${y1} Q ${width / 2} ${midY} ${width} ${y2}" fill="none" stroke="currentColor" stroke-opacity="${randomColorOpacity(10, 22)}" stroke-width="1.5" />`;
-    }
-  }
-
-  for (let i = 0; i < randomInt(24, 36); i += 1) {
-    noise += `<circle cx="${randomInt(2, width - 2)}" cy="${randomInt(2, height - 2)}" r="${(randomInt(8, 22) / 10).toFixed(1)}" fill="currentColor" fill-opacity="${randomColorOpacity(12, 30)}" />`;
-  }
-
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="کد امنیتی"><rect width="${width}" height="${height}" fill="transparent" />${noise}${digitElements}</svg>`;
+  return canvas.toBuffer("image/png");
 }
 
 function pruneExpired(now: number): void {
@@ -85,23 +133,36 @@ function pruneExpired(now: number): void {
   }
 }
 
-export function createCaptchaChallenge(
-  ipHash: string | null,
-): { id: string; svg: string } {
+export function createCaptchaChallenge(ipHash: string | null, explicitDigits?: string[]): { id: string } {
   const now = Date.now();
   pruneExpired(now);
 
-  const digitCount = randomInt(DIGIT_COUNT_MIN, DIGIT_COUNT_MAX);
-  const digits: string[] = [];
-  for (let i = 0; i < digitCount; i += 1) {
-    digits.push(FA_DIGITS[randomInt(0, 9)]);
-  }
+  const isValidDigits =
+    explicitDigits !== undefined &&
+    explicitDigits.length >= DIGIT_COUNT_MIN &&
+    explicitDigits.length <= DIGIT_COUNT_MAX &&
+    explicitDigits.every((digit) => FA_DIGITS.includes(digit));
+
+  const digits: string[] = isValidDigits
+    ? explicitDigits
+    : Array.from({ length: randomInt(DIGIT_COUNT_MIN, DIGIT_COUNT_MAX) }, () =>
+        FA_DIGITS[randomInt(0, 9)],
+      );
 
   const id = randomUUID();
   const answerHash = hashCaptchaAnswer(digits.join(""), id);
-  challenges.set(id, { answerHash, ipHash, expiresAt: now + CAPTCHA_TTL_MS });
+  const image = renderCaptchaImage(digits);
 
-  return { id, svg: generateCaptchaSvg(digits) };
+  challenges.set(id, { answerHash, ipHash, expiresAt: now + CAPTCHA_TTL_MS, image });
+
+  return { id };
+}
+
+export function getCaptchaImage(id: string): { buffer: Buffer; contentType: string } | null {
+  pruneExpired(Date.now());
+  const challenge = challenges.get(id);
+  if (!challenge) return null;
+  return { buffer: challenge.image, contentType: IMAGE_CONTENT_TYPE };
 }
 
 export type CaptchaVerifyResult = "ok" | "wrong" | "expired";

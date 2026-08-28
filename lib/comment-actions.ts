@@ -27,7 +27,7 @@ export interface SubmitCommentResult {
 
 export interface CommentCaptchaChallenge {
   id: string;
-  svg: string;
+  imageUrl: string;
 }
 
 const DB_RATE_WINDOW_MINUTES = 10;
@@ -41,7 +41,8 @@ export async function createCommentCaptcha(): Promise<CommentCaptchaChallenge | 
   const ip = getClientIp(await headers());
   const ipHash = ip ? hashClientIp(ip) : null;
   if (ipHash && isGenerationRateLimited(ipHash)) return null;
-  return createCaptchaChallenge(ipHash);
+  const { id } = createCaptchaChallenge(ipHash);
+  return { id, imageUrl: `/api/captcha/${id}` };
 }
 
 export async function submitComment(

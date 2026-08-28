@@ -7,14 +7,14 @@ import { COMMENT_FORM_LABELS } from "@/data/blog/comments";
 
 interface CommentCaptchaProps {
   idPrefix: string;
-  svg: string | null;
+  imageUrl: string | null;
   isLoading: boolean;
   value: string;
   onValueChange: (value: string) => void;
   onRefresh: () => void;
 }
 
-export function CommentCaptcha({ idPrefix, svg, isLoading, value, onValueChange, onRefresh }: CommentCaptchaProps) {
+export function CommentCaptcha({ idPrefix, imageUrl, isLoading, value, onValueChange, onRefresh }: CommentCaptchaProps) {
   return (
     <div>
       <FieldLabel htmlFor={`${idPrefix}-captcha`}>{COMMENT_FORM_LABELS.captchaLabel}</FieldLabel>
@@ -26,10 +26,15 @@ export function CommentCaptcha({ idPrefix, svg, isLoading, value, onValueChange,
           disabled={isLoading}
           title={COMMENT_FORM_LABELS.captchaClickHint}
           aria-label={COMMENT_FORM_LABELS.captchaClickHint}
-          className="group relative flex min-h-[68px] w-40 select-none items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-muted/60 p-2 text-foreground transition-colors hover:cursor-pointer hover:border-primary/40 hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50"
+          className="group relative flex h-[68px] w-40 shrink-0 select-none items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-muted/60 text-foreground transition-colors hover:cursor-pointer hover:border-primary/40 hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50 sm:w-48"
         >
-          {svg && !isLoading ? (
-            <div aria-hidden="true" className="[&_svg]:h-auto [&_svg]:w-full" dangerouslySetInnerHTML={{ __html: svg }} />
+          {imageUrl && !isLoading ? (
+            <div
+              role="img"
+              aria-label={COMMENT_FORM_LABELS.captchaLabel}
+              className="h-full w-full bg-contain bg-center bg-no-repeat"
+              style={{ backgroundImage: `url("${imageUrl}")` }}
+            />
           ) : isLoading ? (
             <span aria-hidden="true" className="text-xs font-medium text-muted-foreground">
               …
