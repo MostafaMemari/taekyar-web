@@ -16,7 +16,7 @@ export function LoginForm() {
   return (
     <form action={formAction} noValidate className="mt-6 space-y-4">
       <div className="space-y-1.5">
-        <Label htmlFor="login-username" className="text-[13px] font-bold">
+        <Label htmlFor="login-username" className="font-sans text-[13px] font-bold text-card-foreground">
           {LOGIN_LABELS.username}
         </Label>
         <Input
@@ -27,13 +27,13 @@ export function LoginForm() {
           autoComplete="username"
           required
           placeholder={LOGIN_LABELS.usernamePlaceholder}
-          className="h-11 rounded-xl bg-card text-start font-mono text-sm"
+          className="h-11 rounded-xl bg-card font-sans text-sm text-card-foreground placeholder:text-muted-foreground"
           aria-invalid={Boolean(state.error)}
         />
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="login-password" className="text-[13px] font-bold">
+        <Label htmlFor="login-password" className="font-sans text-[13px] font-bold text-card-foreground">
           {LOGIN_LABELS.password}
         </Label>
         <Input
@@ -44,7 +44,7 @@ export function LoginForm() {
           autoComplete="current-password"
           required
           placeholder={LOGIN_LABELS.passwordPlaceholder}
-          className="h-11 rounded-xl bg-card text-start"
+          className="h-11 rounded-xl bg-card font-sans text-card-foreground placeholder:text-muted-foreground"
           aria-invalid={Boolean(state.error)}
         />
       </div>
@@ -60,12 +60,12 @@ export function LoginForm() {
       <Button
         type="submit"
         disabled={isPending}
-        className="mt-1 h-11 w-full gap-2 rounded-xl text-[13px] font-black shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none"
+        className="mt-1 h-11 w-full gap-2 rounded-xl font-sans text-[13px] font-black shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none"
       >
         {isPending ? "در حال ورود…" : LOGIN_LABELS.submit}
       </Button>
 
-      <p className="text-center text-[11px] leading-5 text-muted-foreground">
+      <p className="text-center font-sans text-[11px] leading-5 text-muted-foreground">
         دسترسی فقط برای مدیران تک‌یار — در صورت فراموشی گذرواژه با پشتیبانی تماس بگیرید.
       </p>
     </form>
