@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import { useRef, useState, useTransition } from "react";
-import { ImagePlus, Loader2, X } from "lucide-react";
+import { AlertCircle, ImagePlus, Loader2, X } from "lucide-react";
 
-import { FieldError, FieldLabel } from "@/components/shared/form-controls";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { uploadImageAction } from "@/lib/admin-actions";
 import { cn } from "@/lib/utils";
@@ -50,63 +52,88 @@ export function ImageUpload({ id, initialKey, initialUrl, onChange }: ImageUploa
   }
 
   return (
-    <div className="space-y-2.5">
-      <FieldLabel htmlFor={id}>{TAXONOMY_LABELS.imageLabel}</FieldLabel>
+    <div className="space-y-3">
+      <Label htmlFor={id} className="text-[13px] font-bold">
+        {TAXONOMY_LABELS.imageLabel}
+      </Label>
 
-      {image ? (
-        <div className="relative w-fit">
-          <Image
-            src={image.url}
-            alt={TAXONOMY_LABELS.imageAlt}
-            width={320}
-            height={128}
-            className="h-32 w-auto rounded-xl object-cover shadow-sm ring-1 ring-black/[0.06]"
-            unoptimized
-          />
-          <button
-            type="button"
-            onClick={handleRemove}
-            aria-label={TAXONOMY_LABELS.removeImage}
-            className={REMOVE_BUTTON}
-          >
-            <X className="size-4" />
-          </button>
-        </div>
-      ) : null}
-
-      <div className="flex flex-wrap items-center gap-3">
-        <input
-          ref={inputRef}
-          id={id}
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="hidden"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (file) handleFile(file);
-            event.target.value = "";
-          }}
-        />
-
-        <Button
-          type="button"
-          variant="outline"
-          disabled={isPending}
-          onClick={() => inputRef.current?.click()}
-          className={cn("h-10 gap-2 rounded-xl text-[13px] font-bold", !image && "border-dashed")}
-        >
-          {isPending ? (
-            <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+      <Card className={cn("overflow-hidden", !image && "border-dashed border-border/70 bg-muted/20")}>
+        <CardContent className="p-3 sm:p-4">
+          {image ? (
+            <div className="relative overflow-hidden rounded-xl bg-card ring-1 ring-border/60">
+              <Image
+                src={image.url}
+                alt={TAXONOMY_LABELS.imageAlt}
+                width={640}
+                height={360}
+                className="aspect-[16/9] w-full object-cover"
+                unoptimized
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/40 to-transparent p-3">
+                <p className="truncate text-xs font-medium text-white">{image.key}</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleRemove}
+                aria-label={TAXONOMY_LABELS.removeImage}
+                className={REMOVE_BUTTON}
+              >
+                <X className="size-4" aria-hidden="true" />
+              </button>
+            </div>
           ) : (
-            <ImagePlus className="size-4" />
+            <div className="flex flex-col items-center justify-center rounded-xl bg-card px-6 py-8 text-center ring-1 ring-border/60">
+              <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
+                <ImagePlus className="size-6" aria-hidden="true" />
+              </span>
+              <p className="mt-3 text-[13px] font-bold">تصویری انتخاب نشده</p>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">{TAXONOMY_LABELS.imageHint}</p>
+            </div>
           )}
-          {isPending ? TAXONOMY_LABELS.uploading : TAXONOMY_LABELS.upload}
-        </Button>
 
-        <span className="text-xs text-muted-foreground">{TAXONOMY_LABELS.imageHint}</span>
-      </div>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <input
+              ref={inputRef}
+              id={id}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) handleFile(file);
+                event.target.value = "";
+              }}
+            />
 
-      {error ? <FieldError errorId={`${id}-error`} message={error} /> : null}
+            <Button
+              type="button"
+              variant={image ? "outline" : "default"}
+              disabled={isPending}
+              onClick={() => inputRef.current?.click()}
+              className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-sm"
+            >
+              {isPending ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+              ) : (
+                <ImagePlus className="size-4" aria-hidden="true" />
+              )}
+              {isPending ? TAXONOMY_LABELS.uploading : image ? "تغییر تصویر" : TAXONOMY_LABELS.upload}
+            </Button>
+
+            <span className="text-xs font-medium text-muted-foreground">
+              JPG، PNG یا WebP — تا ۵ مگابایت
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+
+      {error ? (
+        <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
+          <AlertCircle className="size-4" aria-hidden="true" />
+          <AlertTitle className="text-[13px] font-bold">خطا در آپلود</AlertTitle>
+          <AlertDescription className="text-[13px] leading-5">{error}</AlertDescription>
+        </Alert>
+      ) : null}
     </div>
   );
 }

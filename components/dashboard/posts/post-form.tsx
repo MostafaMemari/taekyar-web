@@ -2,8 +2,11 @@
 
 import { useState, useTransition } from "react";
 
-import { FieldError } from "@/components/shared/form-controls";
+import { AlertCircle } from "lucide-react";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { createPost, updatePost } from "@/lib/admin-actions";
 import type { PostInput } from "@/lib/admin-types";
@@ -115,13 +118,21 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
         onMove={moveBlock}
       />
 
-      {errorMessage ? <FieldError errorId="post-form-error" message={errorMessage} /> : null}
+      {errorMessage ? (
+        <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
+          <AlertCircle className="size-4" aria-hidden="true" />
+          <AlertTitle className="text-[13px] font-bold">خطا در ذخیره</AlertTitle>
+          <AlertDescription className="text-[13px] leading-5">{errorMessage}</AlertDescription>
+        </Alert>
+      ) : null}
 
-      <div className="flex flex-wrap items-center gap-3 border-t border-black/[0.06] pt-5">
+      <Separator className="bg-border/60" />
+
+      <div className="flex flex-wrap items-center gap-3">
         <Button
           type="submit"
           disabled={isPending}
-          className="h-11 gap-2 rounded-xl px-8 text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90"
+          className="h-11 gap-2 rounded-xl px-8 text-[13px] font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none"
         >
           {isPending
             ? POST_FORM_LABELS.saving
@@ -129,6 +140,7 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
               ? POST_FORM_LABELS.submitUpdate
               : POST_FORM_LABELS.submitCreate}
         </Button>
+        <span className="text-xs text-muted-foreground">ذخیره پس از اعتبارسنجی انجام می‌شود</span>
       </div>
     </form>
   );
