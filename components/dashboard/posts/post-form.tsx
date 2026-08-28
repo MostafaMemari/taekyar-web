@@ -11,7 +11,7 @@ import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { createPost, updatePost } from "@/lib/admin-actions";
 import type { PostInput } from "@/lib/admin-types";
 import type { PostBlock } from "@/lib/post-content";
-import { BlocksSection } from "./post-form/blocks-section";
+import { BlocksEditor } from "./post-form/blocks-editor";
 import { FormFields } from "./post-form/form-fields";
 import { defaultBlock, type FieldDraft } from "./post-form/types";
 
@@ -53,6 +53,14 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
     setBlocks((previous) => [...previous, defaultBlock(type)]);
   }
 
+  function insertBlockAfter(index: number, type: PostBlock["type"]) {
+    setBlocks((previous) => {
+      const next = [...previous];
+      next.splice(index + 1, 0, defaultBlock(type));
+      return next;
+    });
+  }
+
   function updateBlock(index: number, next: PostBlock) {
     setBlocks((previous) => previous.map((block, i) => (i === index ? next : block)));
   }
@@ -61,12 +69,29 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
     setBlocks((previous) => previous.filter((_, i) => i !== index));
   }
 
+  function duplicateBlock(index: number) {
+    setBlocks((previous) => {
+      const next = [...previous];
+      next.splice(index + 1, 0, structuredClone(previous[index]));
+      return next;
+    });
+  }
+
   function moveBlock(index: number, step: -1 | 1) {
     setBlocks((previous) => {
       const target = index + step;
       if (target < 0 || target >= previous.length) return previous;
       const next = [...previous];
       [next[index], next[target]] = [next[target], next[index]];
+      return next;
+    });
+  }
+
+  function reorderBlocks(from: number, to: number) {
+    setBlocks((previous) => {
+      const next = [...previous];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
       return next;
     });
   }
@@ -110,12 +135,15 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
         selectedTagIds={selectedTagIds}
         onToggleTag={toggleTag}
       />
-      <BlocksSection
+      <BlocksEditor
         blocks={blocks}
         onAdd={addBlock}
+        onInsertAfter={insertBlockAfter}
         onUpdate={updateBlock}
         onRemove={removeBlock}
         onMove={moveBlock}
+        onDuplicate={duplicateBlock}
+        onReorder={reorderBlocks}
       />
 
       {errorMessage ? (

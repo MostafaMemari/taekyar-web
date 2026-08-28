@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { PostBody } from "@/components/blog/post-body";
+import { BlogContentRenderer } from "@/components/blog/content/content-renderer";
 import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
 import type { PostBlock } from "@/lib/post-content";
@@ -33,7 +33,7 @@ export function ArticleContent({ post, blocks }: ArticleContentProps) {
   return (
     <div className={cn(SURFACE_CARD, "p-4 sm:p-6 lg:p-10 xl:p-12")}>
       <div className="max-w-3xl">
-        <PostBody blocks={blocks} />
+        <BlogContentRenderer blocks={blocks} />
       </div>
       <PostTags tags={post.tags} />
     </div>
