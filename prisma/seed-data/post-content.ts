@@ -1,6 +1,16 @@
-import type { PostBlock } from "@/lib/post-content";
+interface SeedBlock {
+  type: string;
+  text?: string;
+  level?: number;
+  ordered?: boolean;
+  items?: string[];
+  src?: string;
+  alt?: string;
+  caption?: string | null;
+}
 
-const CONTENT: Record<string, PostBlock[]> = {
+
+const CONTENT: Record<string, SeedBlock[]> = {
   "dollyo-chagki-common-mistakes": [
     {
       type: "paragraph",
@@ -209,6 +219,6 @@ const CONTENT: Record<string, PostBlock[]> = {
   ],
 };
 
-export function getPostBlocks(slug: string): PostBlock[] | undefined {
+export function getPostBlocks(slug: string): SeedBlock[] | undefined {
   return CONTENT[slug];
 }

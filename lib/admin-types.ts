@@ -1,5 +1,3 @@
-import type { PostBlock } from "@/lib/post-content";
-
 export type CommentStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 export interface TaxonomyInput {
@@ -19,7 +17,7 @@ export interface PostInput {
   tagIds: number[];
   date: string;
   readTimeMinutes: number;
-  content: PostBlock[];
+  content: string;
   metaTitle: string | null;
   metaDescription: string | null;
 }

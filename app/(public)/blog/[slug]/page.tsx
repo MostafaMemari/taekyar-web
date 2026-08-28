@@ -64,8 +64,8 @@ export default async function PostPage({ params }: PostPageProps) {
 
   if (!post) notFound();
 
-  const blocks = post.content;
-  const headings = getHeadings(blocks);
+  const content = post.content;
+  const headings = getHeadings(content);
   const allPosts = await getBlogPosts();
   const relatedPosts = getRelatedPosts(allPosts, post.slug, post.category, RELATED_POSTS_COUNT);
   const comments = await getPostComments(post.slug);
@@ -94,7 +94,7 @@ export default async function PostPage({ params }: PostPageProps) {
               <TocCollapse items={headings} />
               <Reveal delay={80}>
                 <article className="mt-5 sm:mt-6 lg:mt-0">
-                  <ArticleContent post={post} blocks={blocks} />
+                  <ArticleContent post={post} content={content} />
                 </article>
               </Reveal>
 

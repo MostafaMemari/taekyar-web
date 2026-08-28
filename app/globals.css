@@ -213,3 +213,163 @@
     animation: none !important;
   }
 }
+/* Rendered blog article content (Tiptap HTML) */
+.article-content > *:first-child {
+  margin-top: 0;
+}
+.article-content p {
+  color: var(--muted-foreground);
+  font-size: 0.9375rem;
+  line-height: 2.1;
+}
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+  color: var(--foreground);
+  font-weight: 900;
+  line-height: 1.55;
+  padding-top: 1.25rem;
+  scroll-margin-top: 7rem;
+}
+.article-content h1 {
+  font-size: 1.5rem;
+}
+.article-content h2 {
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.article-content h2::before {
+  content: "";
+  display: inline-block;
+  flex-shrink: 0;
+  width: 0.25rem;
+  height: 1.375rem;
+  border-radius: 9999px;
+  background: var(--primary);
+}
+.article-content h3 {
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+.article-content h4 {
+  font-size: 1rem;
+  font-weight: 800;
+}
+.article-content ul,
+.article-content ol {
+  padding-inline-start: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  color: var(--muted-foreground);
+  font-size: 0.9375rem;
+  line-height: 2;
+}
+.article-content ul {
+  list-style: disc;
+}
+.article-content ol {
+  list-style: decimal;
+}
+.article-content li::marker {
+  color: var(--primary);
+  font-weight: 700;
+}
+.article-content a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.article-content blockquote {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border-inline-start: 3px solid var(--primary);
+  background: var(--background);
+  padding: 1rem;
+  padding-inline-start: 2.5rem;
+  margin-block: 0.25rem;
+}
+.article-content blockquote::before {
+  content: "«»";
+  position: absolute;
+  inset-inline-start: 0.875rem;
+  top: 0.875rem;
+  font-size: 1.125rem;
+  font-weight: 900;
+  line-height: 1;
+  color: color-mix(in oklab, var(--primary) 15%, transparent);
+  user-select: none;
+}
+.article-content blockquote p {
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
+  font-weight: 600;
+}
+.article-content figure {
+  overflow: hidden;
+  border-radius: 1rem;
+  background: var(--muted);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.06);
+}
+.article-content figure img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.article-content figcaption {
+  padding: 0.625rem 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.5rem;
+  color: var(--muted-foreground);
+}
+.article-content aside.coach-tip,
+.article-content aside.important-note {
+  display: flex;
+  gap: 0.875rem;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+.article-content aside.coach-tip {
+  border: 1px solid color-mix(in oklab, var(--color-belt-yellow) 40%, transparent);
+  background: color-mix(in oklab, var(--color-belt-yellow) 9%, transparent);
+}
+.article-content aside.important-note {
+  border: 1px solid color-mix(in oklab, var(--destructive) 30%, transparent);
+  background: color-mix(in oklab, var(--destructive) 6%, transparent);
+}
+.article-content aside.coach-tip .coach-tip-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--color-belt-yellow-fg);
+}
+.article-content aside.important-note .important-note-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--destructive);
+}
+.article-content aside.coach-tip p,
+.article-content aside.important-note p {
+  margin-top: 0.25rem;
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
+  font-size: 0.8125rem;
+  line-height: 1.75rem;
+}
+.article-content hr {
+  border: 0;
+  border-top: 1px dashed color-mix(in oklab, var(--border) 70%, transparent);
+}
+
+.tiptap-area {
+  caret-color: var(--primary);
+}
+.editor-figcaption:empty::before {
+  content: "زیرنویس تصویر (اختیاری)";
+  opacity: 0.6;
+}

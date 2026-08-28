@@ -1,81 +1,119 @@
-import { z } from "zod";
-
-export type HeadingLevel = 1 | 2 | 3 | 4;
-
-export type PostBlock =
-  | { type: "paragraph"; text: string }
-  | { type: "heading"; level: HeadingLevel; text: string }
-  | { type: "list"; ordered: boolean; items: string[] }
-  | { type: "quote"; text: string }
-  | { type: "tip"; text: string }
-  | { type: "warning"; text: string }
-  | { type: "divider" }
-  | { type: "image"; src: string; alt: string; caption: string | null };
-
-const postBlockSchema = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("paragraph"), text: z.string() }),
-  z.object({
-    type: z.literal("heading"),
-    level: z.number().int().min(1).max(4).nullish(),
-    text: z.string(),
-  }),
-  z.object({
-    type: z.literal("list"),
-    ordered: z.boolean().nullish(),
-    items: z.array(z.string()),
-  }),
-  z.object({ type: z.literal("quote"), text: z.string() }),
-  z.object({ type: z.literal("tip"), text: z.string() }),
-  z.object({ type: z.literal("warning"), text: z.string() }),
-  z.object({ type: z.literal("divider") }),
-  z.object({
-    type: z.literal("image"),
-    src: z.string(),
-    alt: z.string().nullish(),
-    caption: z.string().nullish(),
-  }),
-]);
-
-const postBlocksSchema = z.array(postBlockSchema);
-
-function normalizeBlock(block: z.infer<typeof postBlockSchema>): PostBlock | null {
-  switch (block.type) {
-    case "paragraph":
-    case "quote":
-    case "tip":
-    case "warning":
-      return { type: block.type, text: block.text };
-    case "heading":
-      return { type: "heading", level: (block.level ?? 2) as HeadingLevel, text: block.text };
-    case "list":
-      return { type: "list", ordered: block.ordered ?? false, items: block.items };
-    case "divider":
-      return { type: "divider" };
-    case "image":
-      if (!block.src) return null;
-      return { type: "image", src: block.src, alt: block.alt ?? "", caption: block.caption ?? null };
-  }
-}
-
-export function parsePostBlocks(value: unknown): PostBlock[] {
-  const result = postBlocksSchema.safeParse(value);
-  if (!result.success) return [];
-  return result.data
-    .map(normalizeBlock)
-    .filter((block): block is PostBlock => block !== null);
-}
-
-export function headingId(index: number): string {
-  return `heading-${index}`;
-}
+import { r2PublicUrl } from "@/lib/r2-url";
 
 export interface TocItem {
   id: string;
   text: string;
 }
 
-export function getHeadings(blocks: PostBlock[]): TocItem[] {
-  return blocks.flatMap((block, index) =>
-    block.type === "heading" ? [{ id: headingId(index), text: block.text }] : [],
-  );
+export function headingId(index: number): string {
+  return `heading-${index}`;
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function escapeAttr(value: string): string {
+  return escapeHtml(value).replaceAll("'", "&#39;");
+}
+
+interface LegacyBlock {
+  type: string;
+  level?: number;
+  ordered?: boolean;
+  text?: string;
+  items?: unknown;
+  src?: string;
+  alt?: string;
+  caption?: string | null;
+}
+
+function legacyBlockToHtml(block: LegacyBlock): string {
+  const text = String(block.text ?? "").trim();
+
+  switch (block.type) {
+    case "paragraph":
+      return text ? `<p>${escapeHtml(text)}</p>` : "";
+    case "heading": {
+      const level = ([1, 2, 3, 4] as const).includes(block.level as 1)
+        ? Math.min(Math.max(block.level ?? 2, 1), 4)
+        : 2;
+      return text ? `<h${level}>${escapeHtml(text)}</h${level}>` : "";
+    }
+    case "list": {
+      const items = (Array.isArray(block.items) ? block.items : [])
+        .map((item) => String(item).trim())
+        .filter(Boolean);
+      if (items.length === 0) return "";
+      const tag = block.ordered ? "ol" : "ul";
+      return `<${tag}>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</${tag}>`;
+    }
+    case "quote":
+      return text ? `<blockquote><p>${escapeHtml(text)}</p></blockquote>` : "";
+    case "tip":
+      return text
+        ? `<aside class="coach-tip"><span class="coach-tip-label">نکته مربی</span><p>${escapeHtml(text)}</p></aside>`
+        : "";
+    case "warning":
+      return text
+        ? `<aside class="important-note"><span class="important-note-label">نکته مهم</span><p>${escapeHtml(text)}</p></aside>`
+        : "";
+    case "divider":
+      return "<hr>";
+    case "image": {
+      const src = String(block.src ?? "").trim();
+      if (!src) return "";
+      const alt = escapeAttr(String(block.alt ?? ""));
+      const caption = String(block.caption ?? "").trim();
+      return `<figure><img src="${escapeAttr(r2PublicUrl(src))}" alt="${alt}" loading="lazy" decoding="async" />${
+        caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : ""
+      }</figure>`;
+    }
+    default:
+      return "";
+  }
+}
+
+export function legacyBlocksToHtml(blocks: LegacyBlock[]): string {
+  return blocks.map(legacyBlockToHtml).filter(Boolean).join("\n");
+}
+
+export function parsePostHtml(value: unknown): string {
+  if (typeof value === "string") return value;
+  if (Array.isArray(value)) return legacyBlocksToHtml(value as LegacyBlock[]);
+  return "";
+}
+
+export function injectHeadingIds(html: string): string {
+  let index = 0;
+  return html.replace(/<h([1-4])(\s[^>]*)?>/g, (match) => {
+    const id = headingId(index++);
+    return match.replace(/>$/, ` id="${id}">`);
+  });
+}
+
+export function getHeadings(html: string): TocItem[] {
+  const items: TocItem[] = [];
+  const pattern = /<h([1-4])[^>]*>(.*?)<\/h\1>/g;
+  let match: RegExpExecArray | null;
+  let index = 0;
+
+  while ((match = pattern.exec(html)) !== null) {
+    const text = match[2].replace(/<[^>]*>/g, "").trim();
+    if (text) items.push({ id: headingId(index++), text });
+  }
+
+  return items;
+}
+
+export function sanitizePostHtml(html: string): string {
+  return html
+    .replaceAll(/<script[\s\S]*?<\/script>/gi, "")
+    .replaceAll(/<script[^>]*\/?>/gi, "")
+    .replaceAll(/\son\w+\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi, "")
+    .replaceAll(/(href|src)\s*=\s*("|')\s*javascript:[^"']*\2/gi, '$1="#"');
 }

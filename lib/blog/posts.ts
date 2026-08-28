@@ -2,7 +2,7 @@ import { cache } from "react";
 
 import { prisma } from "@/lib/prisma";
 import type { BlogCategoryName } from "@/data/blog/categories";
-import { parsePostBlocks } from "@/lib/post-content";
+import { parsePostHtml } from "@/lib/post-content";
 import { POST_INCLUDE, toPostRows, toBlogPost } from "./types";
 import type { BlogPost, PostWithContent } from "./types";
 
@@ -65,7 +65,7 @@ export const getPostBySlug = cache(
       });
       if (!post) return null;
       const blogPost = toBlogPost(post);
-      return { ...blogPost, content: parsePostBlocks(post.content) };
+      return { ...blogPost, content: parsePostHtml(post.content) };
     } catch {
       return null;
     }

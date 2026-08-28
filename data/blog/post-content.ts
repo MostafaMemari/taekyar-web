@@ -1,2 +1,3 @@
-export type { PostBlock, TocItem } from "@/lib/post-content";
-export { getHeadings } from "@/lib/post-content";
+export type { TocItem } from "@/lib/post-content";
+export { getHeadings, parsePostHtml } from "@/lib/post-content";
+

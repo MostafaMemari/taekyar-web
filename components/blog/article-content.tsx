@@ -1,9 +1,8 @@
 import Link from "next/link";
 
-import { BlogContentRenderer } from "@/components/blog/content/content-renderer";
 import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
-import type { PostBlock } from "@/lib/post-content";
+import { injectHeadingIds } from "@/lib/post-content";
 import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
@@ -26,14 +25,18 @@ export function PostTags({ tags }: { tags: BlogPost["tags"] }) {
 
 interface ArticleContentProps {
   post: BlogPost;
-  blocks: PostBlock[];
+  content: string;
 }
 
-export function ArticleContent({ post, blocks }: ArticleContentProps) {
+export function ArticleContent({ post, content }: ArticleContentProps) {
   return (
     <div className={cn(SURFACE_CARD, "p-4 sm:p-6 lg:p-10 xl:p-12")}>
       <div className="max-w-3xl">
-        <BlogContentRenderer blocks={blocks} />
+        <article
+          className="article-content"
+          // Admin-authored HTML produced by the Tiptap editor (sanitized on save).
+          dangerouslySetInnerHTML={{ __html: injectHeadingIds(content) }}
+        />
       </div>
       <PostTags tags={post.tags} />
     </div>

@@ -10,10 +10,10 @@ import { Separator } from "@/components/ui/separator";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { createPost, updatePost } from "@/lib/admin-actions";
 import type { PostInput } from "@/lib/admin-types";
-import type { PostBlock } from "@/lib/post-content";
-import { BlocksEditor } from "./post-form/blocks-editor";
+import { parsePostHtml } from "@/lib/post-content";
+import { RichContentEditor } from "./rich-content-editor";
 import { FormFields } from "./post-form/form-fields";
-import { defaultBlock, type FieldDraft } from "./post-form/types";
+import type { FieldDraft } from "./post-form/types";
 
 interface PostFormProps {
   mode: "create" | "edit";
@@ -35,7 +35,7 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
     metaDescription: initial.metaDescription ?? "",
   });
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(initial.tagIds);
-  const [blocks, setBlocks] = useState<PostBlock[]>(initial.content);
+  const [content, setContent] = useState<string>(parsePostHtml(initial.content));
   const [isPending, startTransition] = useTransition();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -49,53 +49,6 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
     );
   }
 
-  function addBlock(type: PostBlock["type"]) {
-    setBlocks((previous) => [...previous, defaultBlock(type)]);
-  }
-
-  function insertBlockAfter(index: number, type: PostBlock["type"]) {
-    setBlocks((previous) => {
-      const next = [...previous];
-      next.splice(index + 1, 0, defaultBlock(type));
-      return next;
-    });
-  }
-
-  function updateBlock(index: number, next: PostBlock) {
-    setBlocks((previous) => previous.map((block, i) => (i === index ? next : block)));
-  }
-
-  function removeBlock(index: number) {
-    setBlocks((previous) => previous.filter((_, i) => i !== index));
-  }
-
-  function duplicateBlock(index: number) {
-    setBlocks((previous) => {
-      const next = [...previous];
-      next.splice(index + 1, 0, structuredClone(previous[index]));
-      return next;
-    });
-  }
-
-  function moveBlock(index: number, step: -1 | 1) {
-    setBlocks((previous) => {
-      const target = index + step;
-      if (target < 0 || target >= previous.length) return previous;
-      const next = [...previous];
-      [next[index], next[target]] = [next[target], next[index]];
-      return next;
-    });
-  }
-
-  function reorderBlocks(from: number, to: number) {
-    setBlocks((previous) => {
-      const next = [...previous];
-      const [moved] = next.splice(from, 1);
-      next.splice(to, 0, moved);
-      return next;
-    });
-  }
-
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -107,7 +60,7 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
       tagIds: selectedTagIds,
       date: fields.date,
       readTimeMinutes: Number(fields.readTimeMinutes),
-      content: blocks,
+      content,
       metaTitle: fields.metaTitle,
       metaDescription: fields.metaDescription,
     };
@@ -135,16 +88,7 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
         selectedTagIds={selectedTagIds}
         onToggleTag={toggleTag}
       />
-      <BlocksEditor
-        blocks={blocks}
-        onAdd={addBlock}
-        onInsertAfter={insertBlockAfter}
-        onUpdate={updateBlock}
-        onRemove={removeBlock}
-        onMove={moveBlock}
-        onDuplicate={duplicateBlock}
-        onReorder={reorderBlocks}
-      />
+      <RichContentEditor initialContent={content} onChange={setContent} />
 
       {errorMessage ? (
         <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">

@@ -16,7 +16,7 @@ export interface BlogPost {
 }
 
 export interface PostWithContent extends BlogPost {
-  content: import("@/lib/post-content").PostBlock[];
+  content: string;
 }
 
 export interface BlogPostRow {

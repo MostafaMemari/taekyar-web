@@ -18,7 +18,7 @@ export default async function NewPostPage() {
     tagIds: [],
     date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
     readTimeMinutes: 5,
-    content: [{ type: "paragraph", text: "" }],
+    content: "",
     metaTitle: null,
     metaDescription: null,
   };

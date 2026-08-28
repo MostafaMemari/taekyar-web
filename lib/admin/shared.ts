@@ -1,8 +1,8 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
-import type { PostBlock } from "@/lib/post-content";
 import type { PostInput, TaxonomyInput } from "@/lib/admin-types";
+import { sanitizePostHtml } from "@/lib/post-content";
 
 export async function requireSession() {
   const session = await getSession();
@@ -49,53 +49,6 @@ export function normalizeTaxonomyInput(input: TaxonomyInput): TaxonomyInput | nu
   };
 }
 
-export function normalizeContentBlock(raw: unknown): PostBlock | null {
-  const block = raw as Record<string, unknown>;
-  const type = typeof block.type === "string" ? block.type : "";
-  const text = String(block.text ?? "").trim();
-
-  switch (type) {
-    case "list":
-      return {
-        type: "list",
-        ordered: block.ordered === true,
-        items: (Array.isArray(block.items) ? block.items : [])
-          .map((item) => String(item).trim())
-          .filter(Boolean),
-      };
-    case "heading": {
-      const level = Number(block.level);
-      const safeLevel = ([1, 2, 3, 4] as const).includes(level as 1) ? (level as 1 | 2 | 3 | 4) : 2;
-      return { type: "heading", level: safeLevel, text };
-    }
-    case "image": {
-      const src = String(block.src ?? "").trim();
-      if (!src) return null;
-      return {
-        type: "image",
-        src,
-        alt: String(block.alt ?? "").trim(),
-        caption: String(block.caption ?? "").trim() || null,
-      };
-    }
-    case "divider":
-      return { type: "divider" };
-    case "paragraph":
-    case "quote":
-    case "tip":
-    case "warning":
-      return { type, text };
-    default:
-      return null;
-  }
-}
-
-function isNonEmptyBlock(block: PostBlock): boolean {
-  if (block.type === "list") return block.items.length > 0;
-  if (block.type === "divider" || block.type === "image") return true;
-  return block.text.length > 0;
-}
-
 export function normalizePostInput(input: PostInput): PostInput | null {
   const title = String(input.title ?? "").trim();
   const slug = String(input.slug ?? "").trim().toLowerCase();
@@ -111,11 +64,8 @@ export function normalizePostInput(input: PostInput): PostInput | null {
   if (!Number.isInteger(categoryId) || categoryId <= 0) return null;
   if (!Number.isFinite(readTimeMinutes) || readTimeMinutes <= 0) return null;
 
-  const content = Array.isArray(input.content)
-    ? input.content
-        .map(normalizeContentBlock)
-        .filter((block): block is PostBlock => block !== null && isNonEmptyBlock(block))
-    : [];
+  const content = sanitizePostHtml(String(input.content ?? "").trim());
+  if (!content) return null;
 
   return {
     title,
