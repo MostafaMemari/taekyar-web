@@ -1,6 +1,6 @@
 "use client";
 
-import { useActiveHeading } from "@/hooks/use-active-heading";
+import { useActiveHeading } from "@/components/blog/hooks/use-active-heading";
 import { POST_LABELS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
 import type { TocItem } from "@/lib/post-content";

@@ -1,13 +1,7 @@
-export type BlogCategoryName =
-  | "تکنیک‌ها"
-  | "اخبار و مسابقات"
-  | "تغذیه و تناسب اندام";
+import type { BlogCategoryName } from "@/data/blog/categories";
 
-export const blogCategories: BlogCategoryName[] = [
-  "تکنیک‌ها",
-  "اخبار و مسابقات",
-  "تغذیه و تناسب اندام",
-];
+export { blogCategories } from "@/data/blog/categories";
+export type { BlogCategoryName } from "@/data/blog/categories";
 
 export interface BlogPost {
   id: number;

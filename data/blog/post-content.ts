@@ -1,9 +1,7 @@
-export type PostBlock =
-  | { type: "paragraph"; text: string }
-  | { type: "heading"; text: string }
-  | { type: "list"; items: string[] }
-  | { type: "tip"; text: string }
-  | { type: "quote"; text: string };
+import type { PostBlock } from "@/lib/post-content";
+
+export type { PostBlock, TocItem } from "@/lib/post-content";
+export { getHeadings } from "@/lib/post-content";
 
 const CONTENT: Record<string, PostBlock[]> = {
   "dollyo-chagki-common-mistakes": [
@@ -216,17 +214,4 @@ const CONTENT: Record<string, PostBlock[]> = {
 
 export function getPostBlocks(slug: string): PostBlock[] | undefined {
   return CONTENT[slug];
-}
-
-export interface TocItem {
-  id: string;
-  text: string;
-}
-
-export function getHeadings(blocks: PostBlock[]): TocItem[] {
-  return blocks.flatMap((block, index) =>
-    block.type === "heading"
-      ? [{ id: `heading-${index}`, text: block.text }]
-      : []
-  );
 }
