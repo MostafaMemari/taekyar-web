@@ -132,7 +132,7 @@ export function ReplyForm({ postSlug, parentId, parentAuthor, onCancel }: ReplyF
 
         <CommentCaptcha
           idPrefix="comment-reply"
-          question={captcha.challenge?.question ?? null}
+          svg={captcha.challenge?.svg ?? null}
           isLoading={captcha.isLoading}
           value={captcha.answer}
           onValueChange={captcha.setAnswer}

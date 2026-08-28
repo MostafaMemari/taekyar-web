@@ -34,9 +34,10 @@ export const COMMENT_FORM_LABELS = {
   submit: "ثبت دیدگاه",
   formHint: "پیش از انتشار، دیدگاهت توسط تیم تحریریه بررسی می‌شود.",
   captchaLabel: "تأیید امنیتی",
-  captchaHint: "حاصل عبارت زیر را بنویسید",
-  captchaPlaceholder: "پاسخ…",
-  captchaRefresh: "تولید سؤال جدید",
+  captchaHint: "اعداد داخل تصویر را وارد کنید",
+  captchaPlaceholder: "مثلاً ۷۳۹۴",
+  captchaRefresh: "تصویر جدید",
+  captchaUnavailable: "سؤال امنیتی موقتاً در دسترس نیست؛ چند لحظه بعد دکمهٔ تازه‌سازی را بزنید.",
 } as const;
 
 export const COMMENT_TOAST_MESSAGES = {

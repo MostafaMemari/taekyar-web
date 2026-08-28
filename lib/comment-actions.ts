@@ -11,7 +11,7 @@ import {
   sanitizeCommentText,
 } from "@/lib/comment-security";
 import { createCaptchaChallenge, validateCaptchaAnswer } from "@/lib/comment-captcha";
-import { isAttemptRateLimited } from "@/lib/comment-rate-limit";
+import { isAttemptRateLimited, isGenerationRateLimited } from "@/lib/comment-rate-limit";
 
 export type CommentRejectReason = "validation" | "captcha" | "rate_limited" | "not_found";
 
@@ -22,7 +22,7 @@ export interface SubmitCommentResult {
 
 export interface CommentCaptchaChallenge {
   id: string;
-  question: string;
+  svg: string;
 }
 
 const DB_RATE_WINDOW_MINUTES = 10;
@@ -32,9 +32,11 @@ function toFaDate(date: Date): string {
   return new Intl.DateTimeFormat("fa-IR").format(date);
 }
 
-export async function createCommentCaptcha(): Promise<CommentCaptchaChallenge> {
+export async function createCommentCaptcha(): Promise<CommentCaptchaChallenge | null> {
   const ip = getClientIp(await headers());
-  return createCaptchaChallenge(ip ? hashClientIp(ip) : null);
+  const ipHash = ip ? hashClientIp(ip) : null;
+  if (ipHash && isGenerationRateLimited(ipHash)) return null;
+  return createCaptchaChallenge(ipHash);
 }
 
 export async function submitComment(

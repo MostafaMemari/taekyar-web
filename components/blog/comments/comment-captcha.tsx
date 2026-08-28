@@ -7,7 +7,7 @@ import { COMMENT_FORM_LABELS } from "@/data/blog/comments";
 
 interface CommentCaptchaProps {
   idPrefix: string;
-  question: string | null;
+  svg: string | null;
   isLoading: boolean;
   value: string;
   onValueChange: (value: string) => void;
@@ -16,7 +16,7 @@ interface CommentCaptchaProps {
 
 export function CommentCaptcha({
   idPrefix,
-  question,
+  svg,
   isLoading,
   value,
   onValueChange,
@@ -27,16 +27,19 @@ export function CommentCaptcha({
       <FieldLabel htmlFor={`${idPrefix}-captcha`}>{COMMENT_FORM_LABELS.captchaLabel}</FieldLabel>
 
       <div className="flex flex-wrap items-stretch gap-2">
-        <div
-          aria-hidden="true"
-          className="flex min-h-[46px] min-w-28 select-none items-center justify-center rounded-xl border border-dashed border-border bg-muted/60 px-4 font-black tracking-widest text-foreground"
-          dir="ltr"
-        >
-          {isLoading || !question ? (
-            <span className="text-xs font-medium text-muted-foreground">…</span>
+        <div className="flex min-h-[68px] min-w-48 select-none items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-muted/60 px-3 text-foreground">
+          {svg && !isLoading ? (
+            <div
+              role="img"
+              aria-label={COMMENT_FORM_LABELS.captchaLabel}
+              className="[&_svg]:h-auto [&_svg]:w-full"
+              dangerouslySetInnerHTML={{ __html: svg }}
+            />
+          ) : isLoading ? (
+            <span aria-hidden="true" className="text-xs font-medium text-muted-foreground">…</span>
           ) : (
-            <span className="text-lg">
-              {question} = <span className="text-primary">؟</span>
+            <span className="px-2 text-center text-[11px] leading-5 text-muted-foreground">
+              {COMMENT_FORM_LABELS.captchaUnavailable}
             </span>
           )}
         </div>

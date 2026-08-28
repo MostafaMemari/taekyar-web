@@ -146,7 +146,7 @@ export function CommentForm({ postSlug, onCancel }: CommentFormProps) {
 
         <CommentCaptcha
           idPrefix="comment"
-          question={captcha.challenge?.question ?? null}
+          svg={captcha.challenge?.svg ?? null}
           isLoading={captcha.isLoading}
           value={captcha.answer}
           onValueChange={captcha.setAnswer}
