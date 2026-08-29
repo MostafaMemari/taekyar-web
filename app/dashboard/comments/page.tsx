@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ExternalLink, Inbox } from "lucide-react";
+import { ExternalLink, Inbox } from "lucide-react";
 
 import { CommentActions } from "@/components/dashboard/comments/comment-actions";
+import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -142,12 +143,12 @@ export default async function DashboardCommentsPage({ searchParams }: CommentsPa
       )}
 
       {totalPages > 1 ? (
-        <CommentsPagination
+        <PaginationNav
           currentPage={currentPage}
           totalPages={totalPages}
           total={total}
-          buildHref={buildHref}
-          statusFilter={statusFilter}
+          buildHref={(page) => buildHref(page, statusFilter)}
+          labels={COMMENTS_ADMIN_LABELS}
         />
       ) : null}
     </div>
@@ -249,54 +250,3 @@ function CommentBody({
   );
 }
 
-interface CommentsPaginationProps {
-  currentPage: number;
-  totalPages: number;
-  total: number;
-  buildHref: (page: number, status?: CommentStatus | null) => string;
-  statusFilter: CommentStatus | null | undefined;
-}
-
-function CommentsPagination({
-  currentPage,
-  totalPages,
-  total,
-  buildHref,
-  statusFilter,
-}: CommentsPaginationProps) {
-  return (
-    <nav
-      className="flex items-center justify-between rounded-xl border border-border/60 bg-card px-2 py-2 shadow-sm shadow-black/[0.03]"
-      aria-label={COMMENTS_ADMIN_LABELS.title}
-    >
-      {currentPage > 1 ? (
-        <Link
-          href={buildHref(currentPage - 1, statusFilter)}
-          className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
-        >
-          <ArrowRight className="size-4" aria-hidden="true" />
-          {COMMENTS_ADMIN_LABELS.prevPage}
-        </Link>
-      ) : (
-        <span className="min-h-8 px-3" aria-hidden="true" />
-      )}
-
-      <span className="rounded-full bg-muted px-3 py-1 text-[13px] font-medium tabular-nums text-foreground ring-1 ring-border/60">
-        {toFaDigits(currentPage)} / {toFaDigits(totalPages)} {COMMENTS_ADMIN_LABELS.pageInfoSuffix} ·{" "}
-        {toFaDigits(total)} {COMMENTS_ADMIN_LABELS.resultsSuffix}
-      </span>
-
-      {currentPage < totalPages ? (
-        <Link
-          href={buildHref(currentPage + 1, statusFilter)}
-          className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
-        >
-          {COMMENTS_ADMIN_LABELS.nextPage}
-          <ArrowLeft className="size-4" aria-hidden="true" />
-        </Link>
-      ) : (
-        <span className="min-h-8 px-3" aria-hidden="true" />
-      )}
-    </nav>
-  );
-}
