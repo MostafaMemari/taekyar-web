@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { RotateCcw } from "lucide-react";
 
 import { FieldLabel, getAriaProps } from "@/components/shared/form-controls";
@@ -30,6 +31,14 @@ export function CommentCaptcha({
 }: CommentCaptchaProps) {
   const isBusy = status === "loading" || status === "refreshing";
   const isUnavailable = status === "unavailable";
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const node = imageRef.current;
+    if (!node || !node.complete) return;
+    if (node.naturalWidth > 0) onImageLoad();
+    else onImageError();
+  }, [imageUrl, onImageLoad, onImageError]);
 
   return (
     <div>
@@ -42,7 +51,7 @@ export function CommentCaptcha({
           disabled={isBusy}
           title={COMMENT_FORM_LABELS.captchaClickHint}
           aria-label={COMMENT_FORM_LABELS.captchaClickHint}
-          className="group relative flex h-[72px] w-44 shrink-0 select-none items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-muted/60 text-foreground transition-colors hover:cursor-pointer hover:border-primary/40 hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50 sm:w-[200px]"
+          className="group relative flex h-[58px] w-40 shrink-0 select-none items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-muted/60 text-foreground transition-colors hover:cursor-pointer hover:border-primary/40 hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50 sm:w-[161px]"
         >
           {isUnavailable ? (
             <span className="text-center text-[11px] leading-4 text-muted-foreground">{COMMENT_FORM_LABELS.captchaUnavailable}</span>
@@ -50,6 +59,7 @@ export function CommentCaptcha({
             // eslint-disable-next-line @next/next/no-img-element
             <img
               key={imageUrl}
+              ref={imageRef}
               src={imageUrl}
               alt={COMMENT_FORM_LABELS.captchaLabel}
               width={200}
@@ -80,7 +90,7 @@ export function CommentCaptcha({
 
         <div className="flex min-w-0 flex-1 basis-full items-center sm:basis-40">
           <input
-            {...getAriaProps(`${idPrefix}-captcha`, undefined, "h-11 text-center font-bold tracking-[0.25em]")}
+            {...getAriaProps(`${idPrefix}-captcha`, undefined, "h-10 text-center font-bold tracking-[0.25em]")}
             type="text"
             dir="ltr"
             inputMode="numeric"
