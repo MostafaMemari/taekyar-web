@@ -34,7 +34,6 @@ export function ArticleContent({ post, content }: ArticleContentProps) {
       <div className="max-w-3xl">
         <article
           className="article-content"
-          // Admin-authored HTML produced by the Tiptap editor (sanitized on save).
           dangerouslySetInnerHTML={{ __html: injectHeadingIds(content) }}
         />
       </div>

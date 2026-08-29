@@ -39,9 +39,10 @@ function legacyBlockToHtml(block: LegacyBlock): string {
     case "paragraph":
       return text ? `<p>${escapeHtml(text)}</p>` : "";
     case "heading": {
-      const level = ([1, 2, 3, 4] as const).includes(block.level as 1)
-        ? Math.min(Math.max(block.level ?? 2, 1), 4)
-        : 2;
+      const level =
+        typeof block.level === "number"
+          ? Math.min(Math.max(Math.round(block.level), 1), 4)
+          : 2;
       return text ? `<h${level}>${escapeHtml(text)}</h${level}>` : "";
     }
     case "list": {

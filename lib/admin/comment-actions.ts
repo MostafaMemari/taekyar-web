@@ -1,8 +1,7 @@
 "use server";
 
-import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { requireSession } from "./shared";
+import { requireSession, revalidateCommentTargets } from "./shared";
 
 export async function setCommentStatus(
   id: string,
@@ -22,11 +21,8 @@ export async function setCommentStatus(
     return { ok: false };
   }
 
-  revalidatePath(`/blog/${comment.post.slug}`);
-  revalidatePath("/dashboard/comments");
-  revalidatePath("/dashboard");
-  revalidateTag("blog", "max");
-  revalidateTag("comments", "max");
+  revalidateCommentTargets(comment.post.slug);
+
   return { ok: true };
 }
 
@@ -45,10 +41,7 @@ export async function deleteComment(id: string): Promise<{ ok: boolean }> {
     return { ok: false };
   }
 
-  revalidatePath(`/blog/${comment.post.slug}`);
-  revalidatePath("/dashboard/comments");
-  revalidatePath("/dashboard");
-  revalidateTag("blog", "max");
-  revalidateTag("comments", "max");
+  revalidateCommentTargets(comment.post.slug);
+
   return { ok: true };
 }

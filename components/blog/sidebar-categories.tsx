@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { POST_LABELS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
+import { CategoryIconBadge } from "@/components/blog/category-icon-badge";
 import type { BlogCategoryName } from "@/data/blog/categories";
 import { getCategories } from "@/lib/blog";
 import { cn } from "@/lib/utils";
@@ -19,8 +19,6 @@ export async function SidebarCategories({ activeCategory }: SidebarCategoriesPro
     <SidebarSection title={POST_LABELS.categoriesTitle} icon={Compass}>
       <ul className="space-y-0.5">
         {categories.map((category) => {
-          const style = CATEGORY_STYLES[category.name as BlogCategoryName];
-          const { color, Icon } = style ?? { color: "#1f5fa8", Icon: Compass };
           const active = category.name === activeCategory;
 
           return (
@@ -35,13 +33,11 @@ export async function SidebarCategories({ activeCategory }: SidebarCategoriesPro
                     : "hover:bg-black/[0.03] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                 )}
               >
-                <span
-                  aria-hidden="true"
-                  className="flex size-7 shrink-0 items-center justify-center rounded-md"
-                  style={{ backgroundColor: `${color}14`, color }}
-                >
-                  <Icon className="size-3.5" />
-                </span>
+                <CategoryIconBadge
+                  category={category.name as BlogCategoryName}
+                  className="size-7 rounded-md"
+                  iconClassName="size-3.5"
+                />
                 <span
                   className={cn(
                     "flex-1 text-[13px]",

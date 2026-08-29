@@ -52,8 +52,6 @@ export async function submitComment(
     return { ok: false, reason: "rate_limited" };
   }
 
-  // The challenge is identified purely by the HttpOnly cookie the image endpoint set; the
-  // browser never learns a challenge id and cannot choose which one to validate against.
   const sessionToken = (await cookies()).get(CAPTCHA_SESSION_COOKIE)?.value ?? null;
   const captchaResult = verifyCaptchaAnswer({
     sessionToken,

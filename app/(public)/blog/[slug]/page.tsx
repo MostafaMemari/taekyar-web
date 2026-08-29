@@ -66,9 +66,11 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const content = post.content;
   const headings = getHeadings(content);
-  const allPosts = await getBlogPosts();
+  const [allPosts, comments] = await Promise.all([
+    getBlogPosts(),
+    getPostComments(post.slug),
+  ]);
   const relatedPosts = getRelatedPosts(allPosts, post.slug, post.category, RELATED_POSTS_COUNT);
-  const comments = await getPostComments(post.slug);
 
   return (
     <>

@@ -46,7 +46,7 @@ export function CommentCaptcha({
           {isUnavailable ? (
             <span className="text-center text-[11px] leading-4 text-muted-foreground">{COMMENT_FORM_LABELS.captchaUnavailable}</span>
           ) : (
-            // eslint-disable-next-line @next/next/no-img-element -- the captcha is a per-request server-rendered image; next/image would cache and re-serve a stale challenge to other visitors.
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               key={imageUrl}
               src={imageUrl}

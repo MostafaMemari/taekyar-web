@@ -1,19 +1,11 @@
 import Link from "next/link";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Clock3,
-  FileText,
-  Inbox,
-  MessagesSquare,
-  XCircle,
-} from "lucide-react";
+import { ArrowLeft, FileText, Inbox, MessagesSquare } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { COMMENT_STATUS_META, OVERVIEW_LABELS } from "@/data/dashboard/ui";
+import { COMMENT_STATUS_META, OVERVIEW_LABELS, OVERVIEW_STAT_CARDS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
 import { toFaDigits } from "@/lib/utils";
 
@@ -37,36 +29,12 @@ export default async function DashboardOverviewPage() {
       }),
     ]);
 
-  const stats = [
-    {
-      label: OVERVIEW_LABELS.postsCount,
-      value: postsCount,
-      icon: FileText,
-      tint: "border-t-belt-blue bg-belt-blue/[0.04]",
-      iconClass: "bg-belt-blue/10 text-belt-blue ring-belt-blue/15",
-    },
-    {
-      label: OVERVIEW_LABELS.approvedComments,
-      value: approvedCount,
-      icon: CheckCircle2,
-      tint: "border-t-belt-green bg-belt-green/[0.04]",
-      iconClass: "bg-belt-green/10 text-belt-green ring-belt-green/15",
-    },
-    {
-      label: OVERVIEW_LABELS.pendingComments,
-      value: pendingCount,
-      icon: Clock3,
-      tint: "border-t-belt-yellow bg-belt-yellow/[0.06]",
-      iconClass: "bg-belt-yellow/15 text-belt-yellow-fg ring-belt-yellow/20",
-    },
-    {
-      label: OVERVIEW_LABELS.rejectedComments,
-      value: rejectedCount,
-      icon: XCircle,
-      tint: "border-t-belt-red bg-belt-red/[0.04]",
-      iconClass: "bg-belt-red/10 text-belt-red ring-belt-red/15",
-    },
-  ];
+  const statValues: Record<(typeof OVERVIEW_STAT_CARDS)[number]["key"], number> = {
+    posts: postsCount,
+    approved: approvedCount,
+    pending: pendingCount,
+    rejected: rejectedCount,
+  };
 
   return (
     <div className="space-y-6">
@@ -86,8 +54,8 @@ export default async function DashboardOverviewPage() {
       </div>
 
       <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-        {stats.map(({ label, value, icon: Icon, tint, iconClass }) => (
-          <li key={label}>
+        {OVERVIEW_STAT_CARDS.map(({ key, label, icon: Icon, tint, iconClass }) => (
+          <li key={key}>
             <Card
               size="sm"
               className={`relative h-full overflow-hidden border-t-[3px] ${tint} shadow-sm shadow-black/[0.04] transition-colors hover:shadow-md motion-reduce:transition-none`}
@@ -99,11 +67,11 @@ export default async function DashboardOverviewPage() {
                     <Icon className="size-4" aria-hidden="true" />
                   </span>
                   <span className="rounded-full bg-card px-2 py-1 text-[10px] font-bold tracking-widest text-muted-foreground ring-1 ring-border/60">
-                    {label === OVERVIEW_LABELS.pendingComments && pendingCount > 0 ? "نیاز به بررسی" : "به‌روز"}
+                    {key === "pending" && pendingCount > 0 ? "نیاز به بررسی" : "به‌روز"}
                   </span>
                 </div>
                 <p className="mt-3 text-[28px] font-black leading-none tabular-nums tracking-tight">
-                  {toFaDigits(value)}
+                  {toFaDigits(statValues[key])}
                 </p>
                 <p className="mt-1.5 text-xs font-bold leading-4 text-muted-foreground">{label}</p>
               </CardContent>

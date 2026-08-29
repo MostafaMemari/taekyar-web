@@ -21,6 +21,14 @@ export function revalidatePostPaths(slug: string) {
   revalidateTag(`post-${slug}`, "max");
 }
 
+export function revalidateCommentTargets(slug: string) {
+  revalidatePath(`/blog/${slug}`);
+  revalidatePath("/dashboard/comments");
+  revalidatePath("/dashboard");
+  revalidateTag("blog", "max");
+  revalidateTag("comments", "max");
+}
+
 export function revalidateTaxonomy(kind: "categories" | "tags") {
   revalidatePath("/");
   revalidatePath("/blog");

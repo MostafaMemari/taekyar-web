@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { POST_LABELS, TRAINING_GUIDE_SLUGS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
+import { CategoryIconBadge } from "@/components/blog/category-icon-badge";
 import { getBlogPosts } from "@/lib/blog";
 import { Dumbbell } from "lucide-react";
 
@@ -23,21 +23,17 @@ export async function SidebarGuides({ currentSlug }: SidebarGuidesProps) {
     <SidebarSection title={POST_LABELS.guidesTitle} icon={Dumbbell}>
       <ul className="space-y-1">
         {guides.map((post) => {
-          const { color, Icon } = CATEGORY_STYLES[post.category];
-
           return (
             <li key={post.id}>
               <Link
                 href={`/blog/${post.slug}`}
                 className="group flex items-start gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-black/[0.03] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
               >
-                <span
-                  aria-hidden="true"
-                  className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg"
-                  style={{ backgroundColor: `${color}14`, color }}
-                >
-                  <Icon className="size-4" />
-                </span>
+                <CategoryIconBadge
+                  category={post.category}
+                  className="mt-0.5 size-8 rounded-lg"
+                  iconClassName="size-4"
+                />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[13px] font-bold leading-6 text-foreground transition-colors group-hover:text-primary">
                     {post.title}

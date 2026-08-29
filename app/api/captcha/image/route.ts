@@ -14,14 +14,6 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const fetchCache = "force-no-store";
 
-/**
- * GET /api/captcha/image
- *
- * Every request mints a brand new challenge and returns a freshly rasterised image. The
- * URL never changes and carries no challenge identifier: the only thing that ties the
- * image back to a challenge is an HttpOnly session cookie set on this response, so the
- * browser receives pixels and nothing else.
- */
 export function GET(request: Request): NextResponse {
   const ip = getClientIp(request.headers);
   const ipHash = ip ? hashClientIp(ip) : null;
@@ -47,12 +39,10 @@ export function GET(request: Request): NextResponse {
     headers: {
       "Content-Type": image.contentType,
       "Content-Length": String(image.buffer.byteLength),
-      // Nothing may reuse this response: not the browser, not a proxy, not a CDN.
       "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0, s-maxage=0, proxy-revalidate",
       Pragma: "no-cache",
       Expires: "0",
       "Surrogate-Control": "no-store",
-      // Suppress any conditional-request handling so a cached copy can never be revalidated.
       "Last-Modified": new Date(0).toUTCString(),
       "X-Content-Type-Options": "nosniff",
       "X-Robots-Tag": "noindex, noimageindex",

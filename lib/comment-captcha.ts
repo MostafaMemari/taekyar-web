@@ -22,8 +22,6 @@ const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
 const BUNDLED_FONT_PATH = join(process.cwd(), "lib/captcha-fonts/Vazirmatn-Regular.ttf");
 const BUNDLED_FONT_FAMILY = "CaptchaVazirmatn";
 
-// Extra typefaces are picked up from the host when they actually contain Persian digits.
-// Everything here is optional: if none of them qualify, the bundled Vazirmatn alone is used.
 const SYSTEM_FONT_CANDIDATES = [
   "Tahoma",
   "Arial",
@@ -36,7 +34,6 @@ const SYSTEM_FONT_CANDIDATES = [
 const MAX_SYSTEM_FONTS = 3;
 
 const PROBE_DIGIT = "۵";
-// A private-use codepoint that no real font maps, so it always renders the .notdef box.
 const PROBE_MISSING = "";
 
 interface CaptchaChallenge {
@@ -54,11 +51,6 @@ export interface CaptchaImage {
 
 export type CaptchaVerifyResult = "ok" | "wrong" | "expired";
 
-// Next.js compiles this module once per server layer (the "react-server" layer used by
-// server actions, and the plain Node layer used by route handlers). A module-scoped Map
-// therefore exists once per layer, which previously meant challenges minted by one layer
-// were invisible to the other. Pinning the store to globalThis guarantees one shared
-// instance per process.
 const CHALLENGE_STORE_KEY = "__taekyarCaptchaChallenges__";
 
 type CaptchaStoreGlobal = typeof globalThis & {
@@ -82,8 +74,6 @@ function normalizeDigits(value: string): string {
     .replace(/[٠-٩]/g, (digit) => String(AR_DIGITS.indexOf(digit)));
 }
 
-// Crypto-backed randomness for anything an attacker could guess; Math.random is fine for
-// purely cosmetic jitter.
 function pickInt(min: number, max: number): number {
   return cryptoRandomInt(min, max + 1);
 }
@@ -107,10 +97,6 @@ function hashesMatch(a: string, b: string): boolean {
   return timingSafeEqual(Buffer.from(a, "utf8"), Buffer.from(b, "utf8"));
 }
 
-/* -------------------------------------------------------------------------- */
-/* Fonts                                                                      */
-/* -------------------------------------------------------------------------- */
-
 function renderGlyphProbe(family: string, char: string): string {
   const canvas = createCanvas(80, 80);
   const ctx = canvas.getContext("2d");
@@ -124,8 +110,6 @@ function renderGlyphProbe(family: string, char: string): string {
   return canvas.toBuffer("image/png").toString("base64");
 }
 
-// A font that lacks the glyph draws either nothing or the same .notdef box it draws for a
-// guaranteed-missing private-use codepoint. Both cases are rejected.
 function supportsPersianDigits(family: string): boolean {
   try {
     const blank = renderGlyphProbe(family, "");
@@ -158,10 +142,6 @@ function ensureFonts(): string[] {
   return resolvedFonts;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Rendering                                                                  */
-/* -------------------------------------------------------------------------- */
-
 function drawBackground(ctx: SKRSContext2D): void {
   const gradient = ctx.createLinearGradient(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
   const hue = pickInt(195, 255);
@@ -170,7 +150,6 @@ function drawBackground(ctx: SKRSContext2D): void {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
 
-  // Soft blotches break up the flat background without adding readable structure.
   for (let i = 0; i < pickInt(3, 6); i += 1) {
     ctx.fillStyle = `hsla(${pickInt(190, 260)}, 30%, 70%, ${pickFloat(0.04, 0.1).toFixed(3)})`;
     ctx.beginPath();
@@ -188,7 +167,6 @@ function drawBackground(ctx: SKRSContext2D): void {
 }
 
 function drawNoise(ctx: SKRSContext2D): void {
-  // Long interference strokes, straight or gently curved.
   for (let i = 0; i < pickInt(3, 5); i += 1) {
     ctx.strokeStyle = `hsla(${pickInt(190, 280)}, ${pickInt(20, 55)}%, ${pickInt(30, 62)}%, ${pickFloat(0.16, 0.4).toFixed(3)})`;
     ctx.lineWidth = pickFloat(0.8, 2.2);
@@ -212,7 +190,6 @@ function drawNoise(ctx: SKRSContext2D): void {
     ctx.stroke();
   }
 
-  // Speckle.
   const dots = pickInt(40, 90);
   for (let i = 0; i < dots; i += 1) {
     ctx.fillStyle = `hsla(${pickInt(190, 290)}, ${pickInt(15, 60)}%, ${pickInt(25, 65)}%, ${pickFloat(0.15, 0.5).toFixed(3)})`;
@@ -221,7 +198,6 @@ function drawNoise(ctx: SKRSContext2D): void {
     ctx.fill();
   }
 
-  // Short random dashes for texture.
   for (let i = 0; i < pickInt(6, 14); i += 1) {
     const x = pickFloat(0, IMAGE_WIDTH);
     const y = pickFloat(0, IMAGE_HEIGHT);
@@ -242,11 +218,11 @@ function drawDigits(ctx: SKRSContext2D, digits: string[], fonts: string[]): void
   digits.forEach((digit, index) => {
     const font = pickOne(fonts);
     const fontSize = pickInt(34, 46);
-    const rotation = pickFloat(-0.38, 0.38); // radians, ~ +/- 22 degrees
+    const rotation = pickFloat(-0.38, 0.38);
     const skew = pickFloat(-0.12, 0.12);
     const scaleX = pickFloat(0.84, 1.18);
     const scaleY = pickFloat(0.92, 1.12);
-    const weight = pickFloat(0, 1.5); // synthetic bold via stroke
+    const weight = pickFloat(0, 1.5);
     const x = padding + slot * index + slot / 2 + pickFloat(-4, 4);
     const y = IMAGE_HEIGHT / 2 + pickFloat(-6, 6);
 
@@ -270,7 +246,6 @@ function drawDigits(ctx: SKRSContext2D, digits: string[], fonts: string[]): void
       ctx.strokeText(digit, 0, 0);
     }
 
-    // Faint offset ghost makes character segmentation harder for OCR.
     ctx.fillStyle = `hsla(${hue}, 20%, 40%, ${pickFloat(0.12, 0.26).toFixed(3)})`;
     ctx.fillText(digit, pickFloat(0.6, 1.6), pickFloat(0.6, 1.6));
 
@@ -288,18 +263,12 @@ function renderCaptchaImage(digits: string[]): CaptchaImage {
   drawNoise(ctx);
   drawDigits(ctx, digits, fonts);
 
-  // WebP is ~2x smaller than PNG for this kind of flat artwork and every current browser
-  // supports it. Fall back to PNG if the encoder is unavailable.
   try {
     return { buffer: canvas.toBuffer("image/webp"), contentType: "image/webp" };
   } catch {
     return { buffer: canvas.toBuffer("image/png"), contentType: "image/png" };
   }
 }
-
-/* -------------------------------------------------------------------------- */
-/* Store                                                                      */
-/* -------------------------------------------------------------------------- */
 
 function pruneExpired(now: number): void {
   for (const [id, challenge] of challenges) {
@@ -340,11 +309,6 @@ export const captchaSessionMaxAge = SESSION_TTL_SECONDS;
 export function createCaptchaChallenge(params: {
   sessionToken: string;
   ipHash: string | null;
-  /**
-   * Test hook only. Lets `captcha-flow-test.mts` mint a challenge with a known answer so it
-   * can assert on verification outcomes. Application code never passes it, and it only
-   * chooses which glyphs get drawn — storage and verification behave identically.
-   */
   forcedDigits?: string[];
 }): { id: string; image: CaptchaImage } {
   const now = Date.now();
@@ -392,13 +356,6 @@ function liveChallengesFor(sessionToken: string, ipHash: string | null, now: num
   return found.sort((a, b) => b.challenge.createdAt - a.challenge.createdAt);
 }
 
-/**
- * Validates an answer without ever telling the caller which challenge it matched.
- *
- * The caller supplies only the answer plus its own session cookie and IP; the challenge id
- * never reaches the browser. A correct answer consumes the matched challenge; a wrong
- * answer burns the newest one, so every guess costs the attacker a freshly loaded image.
- */
 export function verifyCaptchaAnswer(params: {
   sessionToken: string | null;
   answer: string;

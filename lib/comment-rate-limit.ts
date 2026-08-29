@@ -4,9 +4,6 @@ const MAX_ATTEMPTS_PER_WINDOW = 4;
 const GENERATION_WINDOW_MS = 10 * 60 * 1000;
 const MAX_GENERATIONS_PER_WINDOW = 20;
 
-// Same reasoning as the CAPTCHA challenge store: this module can be instantiated once per
-// Next.js server layer, so the counters must live on globalThis or each layer would only
-// see its own slice of the traffic and the limits would be silently multiplied.
 const RATE_LIMIT_STORE_KEY = "__taekyarCommentRateLimit__";
 
 type RateLimitStore = {
