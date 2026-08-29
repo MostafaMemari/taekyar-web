@@ -173,7 +173,7 @@ function CommentRowItem({ comment }: { comment: CommentRow }) {
                     key={reply.id}
                     className="rounded-xl border border-border/60 bg-card px-3 py-3 shadow-sm shadow-black/[0.02]"
                   >
-                    <CommentBody comment={reply} post={comment.post} isReply />
+                    <CommentBody comment={reply} post={comment.post} variant="reply" />
                   </li>
                 ))}
               </ul>
@@ -188,16 +188,16 @@ function CommentRowItem({ comment }: { comment: CommentRow }) {
 function CommentBody({
   comment,
   post,
-  isReply = false,
+  variant = "comment",
 }: {
   comment: CommentEntry;
   post: { title: string; slug: string };
-  isReply?: boolean;
+  variant?: "comment" | "reply";
 }) {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-2">
-        {isReply ? (
+        {variant === "reply" ? (
           <Badge variant="secondary" className="rounded-full bg-muted px-2 text-[10px] font-bold text-muted-foreground ring-1 ring-border/60">
             {COMMENTS_ADMIN_LABELS.replyTag}
           </Badge>
