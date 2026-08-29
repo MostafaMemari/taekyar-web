@@ -1,39 +1,46 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
-import { createCommentCaptcha, type CommentCaptchaChallenge } from "@/lib/comment-actions";
+export type CaptchaStatus = "loading" | "refreshing" | "ready" | "unavailable";
 
+const IMAGE_ENDPOINT = "/api/captcha/image";
+
+/**
+ * The image endpoint mints a brand new challenge on every request, so "refreshing" is just
+ * asking for the endpoint again. The counter only exists to change the `src` attribute:
+ * React will not re-request an identical URL, and some browsers reuse a cached subresource
+ * even under `no-store` unless the URL differs. The server ignores it and never reuses output.
+ */
 export function useCommentCaptcha() {
-  const [challenge, setChallenge] = useState<CommentCaptchaChallenge | null>(null);
+  const [nonce, setNonce] = useState(0);
   const [answer, setAnswer] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [status, setStatus] = useState<CaptchaStatus>("loading");
 
   const refresh = useCallback(() => {
-    setIsLoading(true);
     setAnswer("");
-    createCommentCaptcha()
-      .then(setChallenge)
-      .catch(() => setChallenge(null))
-      .finally(() => setIsLoading(false));
+    // Keep the previous frame visible while a new one is fetched, unless there is none.
+    setStatus((previous) => (previous === "ready" ? "refreshing" : "loading"));
+    setNonce((previous) => previous + 1);
   }, []);
 
-  useEffect(() => {
-    let cancelled = false;
-    createCommentCaptcha()
-      .then((next) => {
-        if (!cancelled) setChallenge(next);
-      })
-      .catch(() => {
-        if (!cancelled) setChallenge(null);
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
+  const handleImageLoad = useCallback(() => {
+    setStatus("ready");
   }, []);
 
-  return { challenge, answer, setAnswer, refresh, isLoading };
+  const handleImageError = useCallback(() => {
+    setStatus("unavailable");
+  }, []);
+
+  return {
+    imageUrl: `${IMAGE_ENDPOINT}?v=${nonce}`,
+    answer,
+    setAnswer,
+    refresh,
+    status,
+    isReady: status === "ready",
+    isBusy: status === "loading" || status === "refreshing",
+    onImageLoad: handleImageLoad,
+    onImageError: handleImageError,
+  };
 }

@@ -1,40 +1,76 @@
-import { createHash, randomUUID } from "crypto";
+import { createHash, randomBytes, randomInt as cryptoRandomInt, timingSafeEqual } from "crypto";
 import { existsSync } from "fs";
 import { join } from "path";
-import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
+import { createCanvas, GlobalFonts, type SKRSContext2D } from "@napi-rs/canvas";
+
+export const CAPTCHA_SESSION_COOKIE = "tc_captcha";
 
 const CAPTCHA_TTL_MS = 5 * 60 * 1000;
+const SESSION_TTL_SECONDS = 10 * 60;
 const MAX_STORED_CHALLENGES = 500;
+const MAX_LIVE_CHALLENGES_PER_SESSION = 6;
+
 const DIGIT_COUNT_MIN = 4;
 const DIGIT_COUNT_MAX = 5;
 
-const IMAGE_WIDTH = 190;
-const IMAGE_HEIGHT = 68;
-const IMAGE_CONTENT_TYPE = "image/png";
+const IMAGE_WIDTH = 200;
+const IMAGE_HEIGHT = 72;
 
 const FA_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
 const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
 
-const CAPTCHA_FONT_PATH = join(process.cwd(), "lib/captcha-fonts/Vazirmatn-Regular.ttf");
+const BUNDLED_FONT_PATH = join(process.cwd(), "lib/captcha-fonts/Vazirmatn-Regular.ttf");
+const BUNDLED_FONT_FAMILY = "CaptchaVazirmatn";
+
+// Extra typefaces are picked up from the host when they actually contain Persian digits.
+// Everything here is optional: if none of them qualify, the bundled Vazirmatn alone is used.
+const SYSTEM_FONT_CANDIDATES = [
+  "Tahoma",
+  "Arial",
+  "Segoe UI",
+  "Times New Roman",
+  "Trebuchet MS",
+  "Verdana",
+  "Courier New",
+];
+const MAX_SYSTEM_FONTS = 3;
+
+const PROBE_DIGIT = "۵";
+// A private-use codepoint that no real font maps, so it always renders the .notdef box.
+const PROBE_MISSING = "";
 
 interface CaptchaChallenge {
   answerHash: string;
+  sessionToken: string;
   ipHash: string | null;
+  createdAt: number;
   expiresAt: number;
-  image: Buffer;
 }
 
-const challenges = new Map<string, CaptchaChallenge>();
-
-let fontRegistered = false;
-
-function ensureFont(): void {
-  if (fontRegistered) return;
-  if (existsSync(CAPTCHA_FONT_PATH)) {
-    GlobalFonts.registerFromPath(CAPTCHA_FONT_PATH, "Vazirmatn");
-    fontRegistered = true;
-  }
+export interface CaptchaImage {
+  buffer: Buffer;
+  contentType: string;
 }
+
+export type CaptchaVerifyResult = "ok" | "wrong" | "expired";
+
+// Next.js compiles this module once per server layer (the "react-server" layer used by
+// server actions, and the plain Node layer used by route handlers). A module-scoped Map
+// therefore exists once per layer, which previously meant challenges minted by one layer
+// were invisible to the other. Pinning the store to globalThis guarantees one shared
+// instance per process.
+const CHALLENGE_STORE_KEY = "__taekyarCaptchaChallenges__";
+
+type CaptchaStoreGlobal = typeof globalThis & {
+  __taekyarCaptchaChallenges__?: Map<string, CaptchaChallenge>;
+};
+
+const globalForCaptcha = globalThis as CaptchaStoreGlobal;
+
+const challenges: Map<string, CaptchaChallenge> =
+  globalForCaptcha[CHALLENGE_STORE_KEY] ?? new Map<string, CaptchaChallenge>();
+
+globalForCaptcha[CHALLENGE_STORE_KEY] = challenges;
 
 function pepper(): string {
   return process.env.COMMENT_IP_PEPPER ?? "taekyar-comment-ip-pepper";
@@ -46,12 +82,18 @@ function normalizeDigits(value: string): string {
     .replace(/[٠-٩]/g, (digit) => String(AR_DIGITS.indexOf(digit)));
 }
 
-function randomInt(min: number, max: number): number {
-  return min + Math.floor(Math.random() * (max - min + 1));
+// Crypto-backed randomness for anything an attacker could guess; Math.random is fine for
+// purely cosmetic jitter.
+function pickInt(min: number, max: number): number {
+  return cryptoRandomInt(min, max + 1);
 }
 
-function randomOpacity(minPercent: number, maxPercent: number): number {
-  return randomInt(minPercent, maxPercent) / 100;
+function pickFloat(min: number, max: number): number {
+  return min + Math.random() * (max - min);
+}
+
+function pickOne<T>(items: readonly T[]): T {
+  return items[cryptoRandomInt(0, items.length)];
 }
 
 export function hashCaptchaAnswer(answer: string, captchaId: string): string {
@@ -60,67 +102,204 @@ export function hashCaptchaAnswer(answer: string, captchaId: string): string {
     .digest("hex");
 }
 
-function renderCaptchaImage(digits: string[]): Buffer {
-  ensureFont();
+function hashesMatch(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(Buffer.from(a, "utf8"), Buffer.from(b, "utf8"));
+}
 
-  const canvas = createCanvas(IMAGE_WIDTH, IMAGE_HEIGHT);
+/* -------------------------------------------------------------------------- */
+/* Fonts                                                                      */
+/* -------------------------------------------------------------------------- */
+
+function renderGlyphProbe(family: string, char: string): string {
+  const canvas = createCanvas(80, 80);
   const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, 80, 80);
+  ctx.fillStyle = "#000000";
+  ctx.font = `56px "${family}"`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(char, 40, 40);
+  return canvas.toBuffer("image/png").toString("base64");
+}
 
-  ctx.clearRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
-  ctx.fillStyle = "rgba(243, 244, 246, 0.9)";
+// A font that lacks the glyph draws either nothing or the same .notdef box it draws for a
+// guaranteed-missing private-use codepoint. Both cases are rejected.
+function supportsPersianDigits(family: string): boolean {
+  try {
+    const blank = renderGlyphProbe(family, "");
+    const digit = renderGlyphProbe(family, PROBE_DIGIT);
+    if (digit === blank) return false;
+    return digit !== renderGlyphProbe(family, PROBE_MISSING);
+  } catch {
+    return false;
+  }
+}
+
+let resolvedFonts: string[] | null = null;
+
+function ensureFonts(): string[] {
+  if (resolvedFonts) return resolvedFonts;
+
+  const fonts: string[] = [];
+
+  if (existsSync(BUNDLED_FONT_PATH)) {
+    GlobalFonts.registerFromPath(BUNDLED_FONT_PATH, BUNDLED_FONT_FAMILY);
+    fonts.push(BUNDLED_FONT_FAMILY);
+  }
+
+  for (const family of SYSTEM_FONT_CANDIDATES) {
+    if (fonts.length >= MAX_SYSTEM_FONTS + 1) break;
+    if (supportsPersianDigits(family)) fonts.push(family);
+  }
+
+  resolvedFonts = fonts.length > 0 ? fonts : ["sans-serif"];
+  return resolvedFonts;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Rendering                                                                  */
+/* -------------------------------------------------------------------------- */
+
+function drawBackground(ctx: SKRSContext2D): void {
+  const gradient = ctx.createLinearGradient(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
+  const hue = pickInt(195, 255);
+  gradient.addColorStop(0, `hsl(${hue}, 24%, 97%)`);
+  gradient.addColorStop(1, `hsl(${hue + pickInt(-30, 30)}, 18%, 90%)`);
+  ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
 
-  const ink = "rgba(23, 23, 23, ";
-
-  for (let i = 0; i < randomInt(3, 4); i += 1) {
-    ctx.strokeStyle = `${ink}${randomOpacity(8, 20).toFixed(2)})`;
-    ctx.lineWidth = 1.4;
+  // Soft blotches break up the flat background without adding readable structure.
+  for (let i = 0; i < pickInt(3, 6); i += 1) {
+    ctx.fillStyle = `hsla(${pickInt(190, 260)}, 30%, 70%, ${pickFloat(0.04, 0.1).toFixed(3)})`;
     ctx.beginPath();
-    ctx.moveTo(randomInt(0, 20), randomInt(4, IMAGE_HEIGHT - 4));
+    ctx.ellipse(
+      pickFloat(0, IMAGE_WIDTH),
+      pickFloat(0, IMAGE_HEIGHT),
+      pickFloat(14, 46),
+      pickFloat(8, 26),
+      pickFloat(0, Math.PI),
+      0,
+      Math.PI * 2,
+    );
+    ctx.fill();
+  }
+}
+
+function drawNoise(ctx: SKRSContext2D): void {
+  // Long interference strokes, straight or gently curved.
+  for (let i = 0; i < pickInt(3, 5); i += 1) {
+    ctx.strokeStyle = `hsla(${pickInt(190, 280)}, ${pickInt(20, 55)}%, ${pickInt(30, 62)}%, ${pickFloat(0.16, 0.4).toFixed(3)})`;
+    ctx.lineWidth = pickFloat(0.8, 2.2);
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    const startY = pickFloat(2, IMAGE_HEIGHT - 2);
+    const endY = pickFloat(2, IMAGE_HEIGHT - 2);
+    ctx.moveTo(pickFloat(-6, 12), startY);
     if (Math.random() < 0.5) {
-      ctx.lineTo(IMAGE_WIDTH, randomInt(4, IMAGE_HEIGHT - 4));
+      ctx.quadraticCurveTo(IMAGE_WIDTH / 2, pickFloat(-10, IMAGE_HEIGHT + 10), IMAGE_WIDTH + 6, endY);
     } else {
-      ctx.quadraticCurveTo(
-        IMAGE_WIDTH / 2,
-        randomInt(0, IMAGE_HEIGHT),
-        IMAGE_WIDTH,
-        randomInt(4, IMAGE_HEIGHT - 4),
+      ctx.bezierCurveTo(
+        IMAGE_WIDTH * 0.33,
+        pickFloat(-8, IMAGE_HEIGHT + 8),
+        IMAGE_WIDTH * 0.66,
+        pickFloat(-8, IMAGE_HEIGHT + 8),
+        IMAGE_WIDTH + 6,
+        endY,
       );
     }
     ctx.stroke();
   }
 
-  for (let i = 0; i < randomInt(26, 40); i += 1) {
-    ctx.fillStyle = `${ink}${randomOpacity(10, 26).toFixed(2)})`;
+  // Speckle.
+  const dots = pickInt(40, 90);
+  for (let i = 0; i < dots; i += 1) {
+    ctx.fillStyle = `hsla(${pickInt(190, 290)}, ${pickInt(15, 60)}%, ${pickInt(25, 65)}%, ${pickFloat(0.15, 0.5).toFixed(3)})`;
     ctx.beginPath();
-    ctx.arc(randomInt(1, IMAGE_WIDTH - 1), randomInt(1, IMAGE_HEIGHT - 1), randomInt(1, 2), 0, Math.PI * 2);
+    ctx.arc(pickFloat(0, IMAGE_WIDTH), pickFloat(0, IMAGE_HEIGHT), pickFloat(0.5, 1.9), 0, Math.PI * 2);
     ctx.fill();
   }
 
-  const slot = (IMAGE_WIDTH - 24) / digits.length;
+  // Short random dashes for texture.
+  for (let i = 0; i < pickInt(6, 14); i += 1) {
+    const x = pickFloat(0, IMAGE_WIDTH);
+    const y = pickFloat(0, IMAGE_HEIGHT);
+    const length = pickFloat(3, 12);
+    ctx.strokeStyle = `hsla(${pickInt(190, 290)}, 25%, 45%, ${pickFloat(0.12, 0.3).toFixed(3)})`;
+    ctx.lineWidth = pickFloat(0.6, 1.4);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + length, y + pickFloat(-4, 4));
+    ctx.stroke();
+  }
+}
+
+function drawDigits(ctx: SKRSContext2D, digits: string[], fonts: string[]): void {
+  const padding = 14;
+  const slot = (IMAGE_WIDTH - padding * 2) / digits.length;
+
   digits.forEach((digit, index) => {
-    const x = 12 + slot * index + slot / 2 + randomInt(-3, 3);
-    const y = IMAGE_HEIGHT / 2 + randomInt(-5, 5);
-    const fontSize = randomInt(34, 46);
-    const rotation = randomInt(-24, 24) * (Math.PI / 180);
-    const skew = randomInt(-8, 8) / 100;
+    const font = pickOne(fonts);
+    const fontSize = pickInt(34, 46);
+    const rotation = pickFloat(-0.38, 0.38); // radians, ~ +/- 22 degrees
+    const skew = pickFloat(-0.12, 0.12);
+    const scaleX = pickFloat(0.84, 1.18);
+    const scaleY = pickFloat(0.92, 1.12);
+    const weight = pickFloat(0, 1.5); // synthetic bold via stroke
+    const x = padding + slot * index + slot / 2 + pickFloat(-4, 4);
+    const y = IMAGE_HEIGHT / 2 + pickFloat(-6, 6);
 
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(rotation);
-    ctx.transform(1, 0, skew, 1, 0, 0);
-    ctx.font = `700 ${fontSize}px Vazirmatn, Tahoma, sans-serif`;
+    ctx.transform(scaleX, 0, skew, scaleY, 0, 0);
+    ctx.font = `${fontSize}px "${font}"`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillStyle = `${ink}${randomOpacity(72, 100).toFixed(2)})`;
+
+    const hue = pickInt(200, 265);
+    const ink = `hsla(${hue}, ${pickInt(18, 45)}%, ${pickInt(8, 26)}%, ${pickFloat(0.82, 1).toFixed(3)})`;
+    ctx.fillStyle = ink;
     ctx.fillText(digit, 0, 0);
-    ctx.fillStyle = `${ink}${randomOpacity(70, 90).toFixed(2)})`;
-    ctx.fillText(digit, 0.8, 0.8);
+
+    if (weight > 0.35) {
+      ctx.lineWidth = weight;
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = ink;
+      ctx.strokeText(digit, 0, 0);
+    }
+
+    // Faint offset ghost makes character segmentation harder for OCR.
+    ctx.fillStyle = `hsla(${hue}, 20%, 40%, ${pickFloat(0.12, 0.26).toFixed(3)})`;
+    ctx.fillText(digit, pickFloat(0.6, 1.6), pickFloat(0.6, 1.6));
+
     ctx.restore();
   });
-
-  return canvas.toBuffer("image/png");
 }
+
+function renderCaptchaImage(digits: string[]): CaptchaImage {
+  const fonts = ensureFonts();
+  const canvas = createCanvas(IMAGE_WIDTH, IMAGE_HEIGHT);
+  const ctx = canvas.getContext("2d");
+
+  ctx.clearRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
+  drawBackground(ctx);
+  drawNoise(ctx);
+  drawDigits(ctx, digits, fonts);
+
+  // WebP is ~2x smaller than PNG for this kind of flat artwork and every current browser
+  // supports it. Fall back to PNG if the encoder is unavailable.
+  try {
+    return { buffer: canvas.toBuffer("image/webp"), contentType: "image/webp" };
+  } catch {
+    return { buffer: canvas.toBuffer("image/png"), contentType: "image/png" };
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Store                                                                      */
+/* -------------------------------------------------------------------------- */
 
 function pruneExpired(now: number): void {
   for (const [id, challenge] of challenges) {
@@ -133,57 +312,123 @@ function pruneExpired(now: number): void {
   }
 }
 
-export function createCaptchaChallenge(ipHash: string | null, explicitDigits?: string[]): { id: string } {
+function dropOldestForSession(sessionToken: string): void {
+  let oldestId: string | null = null;
+  let oldestAt = Number.POSITIVE_INFINITY;
+  let count = 0;
+
+  for (const [id, challenge] of challenges) {
+    if (challenge.sessionToken !== sessionToken) continue;
+    count += 1;
+    if (challenge.createdAt < oldestAt) {
+      oldestAt = challenge.createdAt;
+      oldestId = id;
+    }
+  }
+
+  if (oldestId !== null && count >= MAX_LIVE_CHALLENGES_PER_SESSION) {
+    challenges.delete(oldestId);
+  }
+}
+
+export function createCaptchaSessionToken(): string {
+  return randomBytes(16).toString("base64url");
+}
+
+export const captchaSessionMaxAge = SESSION_TTL_SECONDS;
+
+export function createCaptchaChallenge(params: {
+  sessionToken: string;
+  ipHash: string | null;
+  /**
+   * Test hook only. Lets `captcha-flow-test.mts` mint a challenge with a known answer so it
+   * can assert on verification outcomes. Application code never passes it, and it only
+   * chooses which glyphs get drawn — storage and verification behave identically.
+   */
+  forcedDigits?: string[];
+}): { id: string; image: CaptchaImage } {
   const now = Date.now();
   pruneExpired(now);
+  dropOldestForSession(params.sessionToken);
 
-  const isValidDigits =
-    explicitDigits !== undefined &&
-    explicitDigits.length >= DIGIT_COUNT_MIN &&
-    explicitDigits.length <= DIGIT_COUNT_MAX &&
-    explicitDigits.every((digit) => FA_DIGITS.includes(digit));
+  const forced = params.forcedDigits;
+  const useForced =
+    forced !== undefined &&
+    forced.length >= DIGIT_COUNT_MIN &&
+    forced.length <= DIGIT_COUNT_MAX &&
+    forced.every((digit) => FA_DIGITS.includes(digit));
 
-  const digits: string[] = isValidDigits
-    ? explicitDigits
-    : Array.from({ length: randomInt(DIGIT_COUNT_MIN, DIGIT_COUNT_MAX) }, () =>
-        FA_DIGITS[randomInt(0, 9)],
-      );
+  const digits = useForced
+    ? (forced as string[])
+    : Array.from({ length: pickInt(DIGIT_COUNT_MIN, DIGIT_COUNT_MAX) }, () => FA_DIGITS[cryptoRandomInt(0, 10)]);
 
-  const id = randomUUID();
+  const id = randomBytes(16).toString("base64url");
   const answerHash = hashCaptchaAnswer(digits.join(""), id);
-  const image = renderCaptchaImage(digits);
 
-  challenges.set(id, { answerHash, ipHash, expiresAt: now + CAPTCHA_TTL_MS, image });
+  challenges.set(id, {
+    answerHash,
+    sessionToken: params.sessionToken,
+    ipHash: params.ipHash,
+    createdAt: now,
+    expiresAt: now + CAPTCHA_TTL_MS,
+  });
 
-  return { id };
+  return { id, image: renderCaptchaImage(digits) };
 }
 
-export function getCaptchaImage(id: string): { buffer: Buffer; contentType: string } | null {
-  pruneExpired(Date.now());
-  const challenge = challenges.get(id);
-  if (!challenge) return null;
-  return { buffer: challenge.image, contentType: IMAGE_CONTENT_TYPE };
+interface LiveChallenge {
+  id: string;
+  challenge: CaptchaChallenge;
 }
 
-export type CaptchaVerifyResult = "ok" | "wrong" | "expired";
+function liveChallengesFor(sessionToken: string, ipHash: string | null, now: number): LiveChallenge[] {
+  const found: LiveChallenge[] = [];
+  for (const [id, challenge] of challenges) {
+    if (challenge.expiresAt <= now) continue;
+    if (challenge.sessionToken !== sessionToken) continue;
+    if (challenge.ipHash !== ipHash) continue;
+    found.push({ id, challenge });
+  }
+  return found.sort((a, b) => b.challenge.createdAt - a.challenge.createdAt);
+}
 
-export function verifyCaptchaAnswer(
-  id: string,
-  answer: string,
-  ipHash: string | null,
-  now = Date.now(),
-): CaptchaVerifyResult {
-  const challenge = challenges.get(id);
-  if (!challenge) return "expired";
+/**
+ * Validates an answer without ever telling the caller which challenge it matched.
+ *
+ * The caller supplies only the answer plus its own session cookie and IP; the challenge id
+ * never reaches the browser. A correct answer consumes the matched challenge; a wrong
+ * answer burns the newest one, so every guess costs the attacker a freshly loaded image.
+ */
+export function verifyCaptchaAnswer(params: {
+  sessionToken: string | null;
+  answer: string;
+  ipHash: string | null;
+  now?: number;
+}): CaptchaVerifyResult {
+  const now = params.now ?? Date.now();
+  pruneExpired(now);
 
-  challenges.delete(id);
+  if (!params.sessionToken) return "expired";
 
-  if (challenge.ipHash !== ipHash) return "expired";
-  if (challenge.expiresAt <= now) return "expired";
+  const live = liveChallengesFor(params.sessionToken, params.ipHash, now);
+  if (live.length === 0) return "expired";
 
-  const normalized = normalizeDigits(answer.trim());
-  if (!/^\d+$/.test(normalized)) return "wrong";
-  if (normalized.length < DIGIT_COUNT_MIN || normalized.length > DIGIT_COUNT_MAX) return "wrong";
+  const normalized = normalizeDigits(params.answer.trim());
+  const wellFormed =
+    /^\d+$/.test(normalized) &&
+    normalized.length >= DIGIT_COUNT_MIN &&
+    normalized.length <= DIGIT_COUNT_MAX;
 
-  return hashCaptchaAnswer(normalized, id) === challenge.answerHash ? "ok" : "wrong";
+  if (wellFormed) {
+    const match = live.find(({ id, challenge }) =>
+      hashesMatch(hashCaptchaAnswer(normalized, id), challenge.answerHash),
+    );
+    if (match) {
+      challenges.delete(match.id);
+      return "ok";
+    }
+  }
+
+  challenges.delete(live[0].id);
+  return "wrong";
 }

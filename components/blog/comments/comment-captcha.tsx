@@ -4,17 +4,32 @@ import { RotateCcw } from "lucide-react";
 
 import { FieldLabel, getAriaProps } from "@/components/shared/form-controls";
 import { COMMENT_FORM_LABELS } from "@/data/blog/comments";
+import type { CaptchaStatus } from "./hooks/use-comment-captcha";
 
 interface CommentCaptchaProps {
   idPrefix: string;
-  imageUrl: string | null;
-  isLoading: boolean;
+  imageUrl: string;
+  status: CaptchaStatus;
   value: string;
   onValueChange: (value: string) => void;
   onRefresh: () => void;
+  onImageLoad: () => void;
+  onImageError: () => void;
 }
 
-export function CommentCaptcha({ idPrefix, imageUrl, isLoading, value, onValueChange, onRefresh }: CommentCaptchaProps) {
+export function CommentCaptcha({
+  idPrefix,
+  imageUrl,
+  status,
+  value,
+  onValueChange,
+  onRefresh,
+  onImageLoad,
+  onImageError,
+}: CommentCaptchaProps) {
+  const isBusy = status === "loading" || status === "refreshing";
+  const isUnavailable = status === "unavailable";
+
   return (
     <div>
       <FieldLabel htmlFor={`${idPrefix}-captcha`}>{COMMENT_FORM_LABELS.captchaLabel}</FieldLabel>
@@ -23,25 +38,36 @@ export function CommentCaptcha({ idPrefix, imageUrl, isLoading, value, onValueCh
         <button
           type="button"
           onClick={onRefresh}
-          disabled={isLoading}
+          disabled={isBusy}
           title={COMMENT_FORM_LABELS.captchaClickHint}
           aria-label={COMMENT_FORM_LABELS.captchaClickHint}
-          className="group relative flex h-[68px] w-40 shrink-0 select-none items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-muted/60 text-foreground transition-colors hover:cursor-pointer hover:border-primary/40 hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50 sm:w-48"
+          className="group relative flex h-[72px] w-44 shrink-0 select-none items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-muted/60 text-foreground transition-colors hover:cursor-pointer hover:border-primary/40 hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50 sm:w-[200px]"
         >
-          {imageUrl && !isLoading ? (
-            <div
-              role="img"
-              aria-label={COMMENT_FORM_LABELS.captchaLabel}
-              className="h-full w-full bg-contain bg-center bg-no-repeat"
-              style={{ backgroundImage: `url("${imageUrl}")` }}
+          {isUnavailable ? (
+            <span className="text-center text-[11px] leading-4 text-muted-foreground">{COMMENT_FORM_LABELS.captchaUnavailable}</span>
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element -- the captcha is a per-request server-rendered image; next/image would cache and re-serve a stale challenge to other visitors.
+            <img
+              key={imageUrl}
+              src={imageUrl}
+              alt={COMMENT_FORM_LABELS.captchaLabel}
+              width={200}
+              height={72}
+              draggable={false}
+              onLoad={onImageLoad}
+              onError={onImageError}
+              className="h-full w-full object-contain"
             />
-          ) : isLoading ? (
-            <span aria-hidden="true" className="text-xs font-medium text-muted-foreground">
+          )}
+
+          {status === "loading" ? (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 flex items-center justify-center bg-muted/70 text-xs font-medium text-muted-foreground"
+            >
               …
             </span>
-          ) : (
-            <span className="text-center text-[11px] leading-4 text-muted-foreground">{COMMENT_FORM_LABELS.captchaUnavailable}</span>
-          )}
+          ) : null}
 
           <span
             aria-hidden="true"

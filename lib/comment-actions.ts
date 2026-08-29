@@ -1,6 +1,6 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 import { prisma } from "@/lib/prisma";
 import type { CommentDraft } from "@/lib/comment-submission";
@@ -10,8 +10,8 @@ import {
   hashClientIp,
   sanitizeCommentText,
 } from "@/lib/comment-security";
-import { createCaptchaChallenge, verifyCaptchaAnswer } from "@/lib/comment-captcha";
-import { isAttemptRateLimited, isGenerationRateLimited } from "@/lib/comment-rate-limit";
+import { CAPTCHA_SESSION_COOKIE, verifyCaptchaAnswer } from "@/lib/comment-captcha";
+import { isAttemptRateLimited } from "@/lib/comment-rate-limit";
 
 export type CommentRejectReason =
   | "validation"
@@ -25,11 +25,6 @@ export interface SubmitCommentResult {
   reason?: CommentRejectReason;
 }
 
-export interface CommentCaptchaChallenge {
-  id: string;
-  imageUrl: string;
-}
-
 const DB_RATE_WINDOW_MINUTES = 10;
 const DB_RATE_MAX_COMMENTS = 3;
 
@@ -37,20 +32,11 @@ function toFaDate(date: Date): string {
   return new Intl.DateTimeFormat("fa-IR").format(date);
 }
 
-export async function createCommentCaptcha(): Promise<CommentCaptchaChallenge | null> {
-  const ip = getClientIp(await headers());
-  const ipHash = ip ? hashClientIp(ip) : null;
-  if (ipHash && isGenerationRateLimited(ipHash)) return null;
-  const { id } = createCaptchaChallenge(ipHash);
-  return { id, imageUrl: `/api/captcha/${id}` };
-}
-
 export async function submitComment(
   slug: string,
   draft: CommentDraft,
   options: {
     parentId?: string;
-    captchaId: string;
     captchaAnswer: string;
     honeypot: string;
   },
@@ -66,7 +52,14 @@ export async function submitComment(
     return { ok: false, reason: "rate_limited" };
   }
 
-  const captchaResult = verifyCaptchaAnswer(options.captchaId, options.captchaAnswer, ipHash);
+  // The challenge is identified purely by the HttpOnly cookie the image endpoint set; the
+  // browser never learns a challenge id and cannot choose which one to validate against.
+  const sessionToken = (await cookies()).get(CAPTCHA_SESSION_COOKIE)?.value ?? null;
+  const captchaResult = verifyCaptchaAnswer({
+    sessionToken,
+    answer: options.captchaAnswer,
+    ipHash,
+  });
   if (captchaResult === "wrong") return { ok: false, reason: "captcha_wrong" };
   if (captchaResult === "expired") return { ok: false, reason: "captcha_expired" };
 

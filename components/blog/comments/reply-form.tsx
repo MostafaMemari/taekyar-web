@@ -45,7 +45,7 @@ export function ReplyForm({ postSlug, parentId, parentAuthor, onCancel }: ReplyF
     const nextErrors = validateCommentDraft(draft);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
-    if (!captcha.challenge) return;
+    if (!captcha.isReady) return;
     if (!captcha.answer.trim()) {
       toast({
         tone: "error",
@@ -60,7 +60,6 @@ export function ReplyForm({ postSlug, parentId, parentAuthor, onCancel }: ReplyF
     try {
       const result = await submitComment(postSlug, draft, {
         parentId,
-        captchaId: captcha.challenge.id,
         captchaAnswer: captcha.answer,
         honeypot,
       });
@@ -140,17 +139,19 @@ export function ReplyForm({ postSlug, parentId, parentAuthor, onCancel }: ReplyF
 
         <CommentCaptcha
           idPrefix="comment-reply"
-          imageUrl={captcha.challenge?.imageUrl ?? null}
-          isLoading={captcha.isLoading}
+          imageUrl={captcha.imageUrl}
+          status={captcha.status}
           value={captcha.answer}
           onValueChange={captcha.setAnswer}
-          onRefresh={() => void captcha.refresh()}
+          onRefresh={captcha.refresh}
+          onImageLoad={captcha.onImageLoad}
+          onImageError={captcha.onImageError}
         />
 
         <Button
           type="submit"
           size="lg"
-          disabled={isSubmitting || captcha.isLoading || !captcha.challenge}
+          disabled={isSubmitting || !captcha.isReady}
           className="h-10 gap-2 rounded-xl px-6 text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90"
         >
           {isSubmitting ? (
