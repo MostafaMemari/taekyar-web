@@ -7,4 +7,5 @@ export const LOGIN_LABELS = {
   passwordPlaceholder: "••••••••",
   submit: "ورود",
   invalid: "نام کاربری یا گذرواژه اشتباه است.",
+  captchaInvalid: "کد امنیتی نادرست است یا منقضی شده است.",
 } as const;

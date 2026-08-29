@@ -4,6 +4,7 @@ import { RotateCcw } from "lucide-react";
 
 import { FieldLabel, getAriaProps } from "@/components/shared/form-controls";
 import { COMMENT_FORM_LABELS } from "@/data/blog/comments";
+import { toPersianDigits } from "@/lib/utils";
 import type { CaptchaStatus } from "./hooks/use-comment-captcha";
 
 interface CommentCaptchaProps {
@@ -88,7 +89,7 @@ export function CommentCaptcha({
             placeholder={COMMENT_FORM_LABELS.captchaPlaceholder}
             aria-label={COMMENT_FORM_LABELS.captchaHint}
             aria-describedby={`${idPrefix}-captcha-hint`}
-            onChange={(event) => onValueChange(event.target.value)}
+            onChange={(event) => onValueChange(toPersianDigits(event.target.value))}
           />
         </div>
       </div>

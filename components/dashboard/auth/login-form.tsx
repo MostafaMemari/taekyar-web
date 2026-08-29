@@ -1,17 +1,24 @@
 "use client";
 
-import { useActionState } from "react";
+import { useEffect, useActionState } from "react";
 import { AlertCircle } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CommentCaptcha } from "@/components/blog/comments/comment-captcha";
+import { useCommentCaptcha } from "@/components/blog/comments/hooks/use-comment-captcha";
 import { LOGIN_LABELS } from "@/data/dashboard/ui";
 import { login } from "@/lib/admin-actions";
 
 export function LoginForm() {
   const [state, formAction, isPending] = useActionState(login, {});
+  const captcha = useCommentCaptcha();
+
+  useEffect(() => {
+    if (state.error) captcha.refresh();
+  }, [state, captcha.refresh]);
 
   return (
     <form action={formAction} noValidate className="mt-6 space-y-4">
@@ -49,11 +56,25 @@ export function LoginForm() {
         />
       </div>
 
+      <CommentCaptcha
+        idPrefix="login"
+        imageUrl={captcha.imageUrl}
+        status={captcha.status}
+        value={captcha.answer}
+        onValueChange={captcha.setAnswer}
+        onRefresh={captcha.refresh}
+        onImageLoad={captcha.onImageLoad}
+        onImageError={captcha.onImageError}
+      />
+      <input type="hidden" name="captchaAnswer" value={captcha.answer} />
+
       {state.error ? (
         <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
           <AlertCircle className="size-4" aria-hidden="true" />
           <AlertTitle className="text-[13px] font-bold">ورود ناموفق</AlertTitle>
-          <AlertDescription className="text-[13px] leading-5">{LOGIN_LABELS.invalid}</AlertDescription>
+          <AlertDescription className="text-[13px] leading-5">
+            {state.error === "captcha" ? LOGIN_LABELS.captchaInvalid : LOGIN_LABELS.invalid}
+          </AlertDescription>
         </Alert>
       ) : null}
 

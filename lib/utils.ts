@@ -8,3 +8,13 @@ export function cn(...inputs: ClassValue[]) {
 export function toFaDigits(n: number) {
   return String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)])
 }
+
+const ENGLISH_DIGITS = "0123456789";
+const ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+const PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
+
+export function toPersianDigits(value: string): string {
+  return value
+    .replace(/[0-9]/g, (digit) => PERSIAN_DIGITS[ENGLISH_DIGITS.indexOf(digit)])
+    .replace(/[٠-٩]/g, (digit) => PERSIAN_DIGITS[ARABIC_DIGITS.indexOf(digit)]);
+}
