@@ -37,6 +37,7 @@ export const MEDIA_LABELS = {
   pageInfoSuffix: "صفحه",
   pageOf: "از",
   resultsSuffix: "فایل",
+  paginationNavLabel: "ناوبری صفحات رسانه",
   pickerSearchLabel: "جستجوی رسانه",
   pickerSearchPlaceholder: "جستجو در نام فایل…",
   pickerEmpty: "تصویری برای انتخاب نیست.",

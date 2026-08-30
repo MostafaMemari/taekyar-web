@@ -1,14 +1,14 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Inbox, Search } from "lucide-react";
+import { ArrowLeft, Inbox, Search } from "lucide-react";
 
+import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { POSTS_TABLE_LABELS, TAXONOMY_LABELS } from "@/data/dashboard/ui";
+import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { filterCategoryRowsWithAncestors } from "@/lib/blog/categories";
 import { prisma } from "@/lib/prisma";
-import { toFaDigits } from "@/lib/utils";
 
 import { TaxonomyTable } from "./taxonomy-table";
 
@@ -140,38 +140,17 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
       </Card>
 
       {totalPages > 1 ? (
-        <nav
-          className="flex items-center justify-between rounded-xl border border-border/60 bg-card px-2 py-2 shadow-sm shadow-black/[0.03]"
-          aria-label="صفحه‌بندی"
-        >
-          {currentPage > 1 ? (
-            <Link
-              href={buildHref(currentPage - 1)}
-              className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
-            >
-              <ArrowRight className="size-4" aria-hidden="true" />
-              {POSTS_TABLE_LABELS.prevPage}
-            </Link>
-          ) : (
-            <span className="min-h-8 px-3" aria-hidden="true" />
-          )}
-
-          <span className="rounded-full bg-muted px-3 py-1 text-[13px] font-medium tabular-nums text-muted-foreground ring-1 ring-border/60">
-            {toFaDigits(currentPage)} / {toFaDigits(totalPages)}
-          </span>
-
-          {currentPage < totalPages ? (
-            <Link
-              href={buildHref(currentPage + 1)}
-              className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
-            >
-              {POSTS_TABLE_LABELS.nextPage}
-              <ArrowLeft className="size-4" aria-hidden="true" />
-            </Link>
-          ) : (
-            <span className="min-h-8 px-3" aria-hidden="true" />
-          )}
-        </nav>
+        <PaginationNav
+          currentPage={currentPage}
+          totalPages={totalPages}
+          buildHref={buildHref}
+          labels={{
+            prevPage: TAXONOMY_LABELS.prevPage,
+            nextPage: TAXONOMY_LABELS.nextPage,
+            pageInfoSuffix: TAXONOMY_LABELS.pageInfoSuffix,
+            title: TAXONOMY_LABELS.paginationNavLabel,
+          }}
+        />
       ) : null}
     </div>
   );

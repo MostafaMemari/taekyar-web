@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MEDIA_LABELS, POST_FORM_LABELS } from "@/data/dashboard/ui";
 import type { MediaPage } from "@/lib/media-list";
@@ -262,35 +263,43 @@ export function MediaPicker({
                   />
 
                   {mediaPage.totalPages > 1 ? (
-                    <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-3">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        disabled={mediaPage.currentPage <= 1}
-                        onClick={() => handleSelectPage(mediaPage.currentPage - 1)}
-                        className="h-8 gap-1.5 rounded-lg px-3 text-[12px] font-bold"
-                      >
-                        <ArrowRight className="size-3.5" aria-hidden="true" />
-                        {MEDIA_LABELS.prevPage}
-                      </Button>
-                      <span className="text-[12px] font-medium tabular-nums text-muted-foreground">
-                        {toPersianDigits(String(mediaPage.total))} {MEDIA_LABELS.resultsSuffix} ·{" "}
-                        {MEDIA_LABELS.pageInfoSuffix} {toPersianDigits(String(mediaPage.currentPage))}{" "}
-                        {MEDIA_LABELS.pageOf} {toPersianDigits(String(mediaPage.totalPages))}
-                      </span>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        disabled={mediaPage.currentPage >= mediaPage.totalPages}
-                        onClick={() => handleSelectPage(mediaPage.currentPage + 1)}
-                        className="h-8 gap-1.5 rounded-lg px-3 text-[12px] font-bold"
-                      >
-                        {MEDIA_LABELS.nextPage}
-                        <ArrowLeft className="size-3.5" aria-hidden="true" />
-                      </Button>
-                    </div>
+                    <Pagination aria-label={MEDIA_LABELS.paginationNavLabel} className="mt-4 justify-between border-t border-border/60 pt-3">
+                      <PaginationContent className="w-full items-center justify-between">
+                        <PaginationItem>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            disabled={mediaPage.currentPage <= 1}
+                            onClick={() => handleSelectPage(mediaPage.currentPage - 1)}
+                            className="h-8 gap-1.5 rounded-lg px-3 text-[12px] font-bold"
+                          >
+                            <ArrowRight className="size-3.5" aria-hidden="true" />
+                            {MEDIA_LABELS.prevPage}
+                          </Button>
+                        </PaginationItem>
+                        <PaginationItem>
+                          <span className="text-[12px] font-medium tabular-nums text-muted-foreground">
+                            {toPersianDigits(String(mediaPage.total))} {MEDIA_LABELS.resultsSuffix} ·{" "}
+                            {MEDIA_LABELS.pageInfoSuffix} {toPersianDigits(String(mediaPage.currentPage))}{" "}
+                            {MEDIA_LABELS.pageOf} {toPersianDigits(String(mediaPage.totalPages))}
+                          </span>
+                        </PaginationItem>
+                        <PaginationItem>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            disabled={mediaPage.currentPage >= mediaPage.totalPages}
+                            onClick={() => handleSelectPage(mediaPage.currentPage + 1)}
+                            className="h-8 gap-1.5 rounded-lg px-3 text-[12px] font-bold"
+                          >
+                            {MEDIA_LABELS.nextPage}
+                            <ArrowLeft className="size-3.5" aria-hidden="true" />
+                          </Button>
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
                   ) : null}
                 </>
               )}
