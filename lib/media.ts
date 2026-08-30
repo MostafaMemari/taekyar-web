@@ -34,6 +34,19 @@ const MEDIA_DATE_FORMAT = new Intl.DateTimeFormat("fa-IR", {
   minute: "2-digit",
 });
 
+const MEDIA_KEY_PATTERN = /^[A-Za-z0-9][A-Za-z0-9/_.-]{0,299}$/;
+const MEDIA_FILE_PATTERN = /\.(jpe?g|png|webp)$/i;
+
+export function isMediaKey(key: string): boolean {
+  return (
+    key.startsWith(MEDIA_PREFIX) &&
+    !key.includes("..") &&
+    !key.includes("//") &&
+    MEDIA_KEY_PATTERN.test(key) &&
+    MEDIA_FILE_PATTERN.test(key)
+  );
+}
+
 export function mediaFileName(key: string): string {
   return key.slice(key.lastIndexOf("/") + 1);
 }

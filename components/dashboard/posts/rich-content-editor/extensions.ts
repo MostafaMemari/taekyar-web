@@ -14,7 +14,7 @@ declare module "@tiptap/core" {
       toggleImportantNote: () => ReturnType;
     };
     blogImage: {
-      insertBlogImage: (attrs: { src: string; alt: string }) => ReturnType;
+      insertBlogImage: (attrs: { src: string; alt: string; caption?: string }) => ReturnType;
     };
   }
 }
@@ -143,8 +143,8 @@ export const BlogImage = Node.create({
         ({ commands }) =>
           commands.insertContent({
             type: this.name,
-            attrs,
-            content: [],
+            attrs: { src: attrs.src, alt: attrs.alt },
+            content: attrs.caption ? [{ type: "text", text: attrs.caption }] : [],
           }),
     };
   },

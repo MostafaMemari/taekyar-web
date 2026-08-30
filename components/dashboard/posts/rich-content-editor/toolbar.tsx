@@ -11,7 +11,6 @@ import {
   Heading2,
   Heading3,
   Heading4,
-  ImagePlus,
   Italic,
   List,
   ListOrdered,
@@ -29,10 +28,10 @@ import { cn } from "@/lib/utils";
 
 interface ToolbarProps {
   editor: Editor;
-  onImageClick: () => void;
+  imagePicker?: React.ReactNode;
 }
 
-function ToolbarButton({
+export function ToolbarButton({
   active,
   label,
   onClick,
@@ -40,7 +39,7 @@ function ToolbarButton({
 }: {
   active?: boolean;
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   children: React.ReactNode;
 }) {
   return (
@@ -63,7 +62,7 @@ function ToolbarButton({
 
 const Divider = () => <span aria-hidden="true" className="mx-1 h-5 w-px shrink-0 bg-border" />;
 
-export function EditorToolbar({ editor, onImageClick }: ToolbarProps) {
+export function EditorToolbar({ editor, imagePicker }: ToolbarProps) {
   const [linkOpen, setLinkOpen] = useState(false);
   const linkInputRef = useRef<HTMLInputElement>(null);
 
@@ -177,9 +176,7 @@ export function EditorToolbar({ editor, onImageClick }: ToolbarProps) {
       <ToolbarButton label={POST_FORM_LABELS.importantNoteLabel} active={editor.isActive("importantNote")} onClick={() => editor.chain().focus().toggleImportantNote().run()}>
         <TriangleAlert className="size-4" aria-hidden="true" />
       </ToolbarButton>
-      <ToolbarButton label={POST_FORM_LABELS.imageLabel} onClick={onImageClick}>
-        <ImagePlus className="size-4" aria-hidden="true" />
-      </ToolbarButton>
+      {imagePicker}
 
       <Divider />
 

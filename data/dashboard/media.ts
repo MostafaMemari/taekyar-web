@@ -36,4 +36,12 @@ export const MEDIA_LABELS = {
   nextPage: "صفحه بعد",
   pageInfoSuffix: "صفحه",
   resultsSuffix: "فایل",
+  pickerSearchLabel: "جستجوی رسانه",
+  pickerSearchPlaceholder: "جستجو در نام فایل…",
+  pickerEmpty: "تصویری برای انتخاب نیست.",
+  pickerEmptyHint: "فایل جدیدی آپلود کنید یا جستجوی دیگری را امتحان کنید.",
+  pickerBack: "بازگشت به گالری",
+  pickerChange: "انتخاب تصویر دیگر",
+  pickerPreview: "پیش‌نمایش تصویر انتخاب‌شده",
+  pickerLoadError: "دریافت فهرست تصاویر انجام نشد.",
 } as const;

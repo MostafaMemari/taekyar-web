@@ -10,16 +10,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { MEDIA_LABELS } from "@/data/dashboard/ui";
-import { MEDIA_PREFIX, toMediaItem } from "@/lib/media";
-import { listObjects, type R2Object } from "@/lib/r2";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { getMediaPage } from "@/lib/media-list";
 import { toFaDigits } from "@/lib/utils";
 
 interface MediaPageProps {
   searchParams: Promise<{ q?: string; page?: string }>;
 }
-
-const MEDIA_PER_PAGE = 24;
 
 export const metadata = {
   title: MEDIA_LABELS.title,
@@ -28,25 +24,9 @@ export const metadata = {
 export default async function DashboardMediaPage({ searchParams }: MediaPageProps) {
   const { q, page } = await searchParams;
   const query = (q ?? "").trim();
+  const mediaPage = await getMediaPage({ query, page: Number(page) });
 
-  let objects: R2Object[] = [];
-  let loadFailed = false;
-
-  try {
-    objects = await listObjects(MEDIA_PREFIX);
-  } catch {
-    loadFailed = true;
-  }
-
-  const items = objects
-    .map((object) => toMediaItem(object, r2PublicUrl(object.key)))
-    .filter((item) => !query || item.name.toLowerCase().includes(query.toLowerCase()))
-    .sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt));
-
-  const total = items.length;
-  const totalPages = Math.max(1, Math.ceil(total / MEDIA_PER_PAGE));
-  const currentPage = Math.min(Math.max(Number(page) || 1, 1), totalPages);
-  const pageItems = items.slice((currentPage - 1) * MEDIA_PER_PAGE, currentPage * MEDIA_PER_PAGE);
+  const { items, total, totalPages, currentPage, failed } = mediaPage;
 
   function buildHref(targetPage: number) {
     const params = new URLSearchParams();
@@ -93,7 +73,7 @@ export default async function DashboardMediaPage({ searchParams }: MediaPageProp
 
         <Separator className="bg-border/60" />
 
-        {loadFailed ? (
+        {failed ? (
           <CardContent className="p-4">
             <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
               <AlertCircle className="size-4" aria-hidden="true" />
@@ -101,7 +81,7 @@ export default async function DashboardMediaPage({ searchParams }: MediaPageProp
               <AlertDescription className="text-[13px] leading-5">{MEDIA_LABELS.loadErrorHint}</AlertDescription>
             </Alert>
           </CardContent>
-        ) : pageItems.length === 0 ? (
+        ) : items.length === 0 ? (
           <CardContent className="flex flex-col items-center justify-center px-6 py-12 text-center">
             <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
               {query ? <Inbox className="size-6" aria-hidden="true" /> : <ImagePlus className="size-6" aria-hidden="true" />}
@@ -120,7 +100,7 @@ export default async function DashboardMediaPage({ searchParams }: MediaPageProp
           </CardContent>
         ) : (
           <CardContent className="p-3 sm:p-4">
-            <MediaBrowser items={pageItems} />
+            <MediaBrowser items={items} />
           </CardContent>
         )}
       </Card>
@@ -137,3 +117,4 @@ export default async function DashboardMediaPage({ searchParams }: MediaPageProp
     </div>
   );
 }
+

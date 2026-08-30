@@ -1,24 +1,22 @@
 "use server";
 
-import { MEDIA_PREFIX } from "@/lib/media";
+import { isMediaKey } from "@/lib/media";
+import type { MediaPage } from "@/lib/media-list";
+import { getMediaPage } from "@/lib/media-list";
 import { deleteImage } from "@/lib/r2";
 import { requireSession, revalidateMedia } from "./shared";
 
-const MEDIA_KEY_PATTERN = /^[A-Za-z0-9][A-Za-z0-9/_.-]{0,299}$/;
-
-function isDeletableMediaKey(key: string): boolean {
-  return (
-    key.startsWith(MEDIA_PREFIX) &&
-    !key.includes("..") &&
-    !key.includes("//") &&
-    MEDIA_KEY_PATTERN.test(key)
-  );
+export async function listMediaAction(
+  options: { query?: string; page?: number } = {},
+): Promise<MediaPage> {
+  await requireSession();
+  return getMediaPage(options);
 }
 
 export async function deleteMedia(key: string): Promise<{ ok: boolean }> {
   await requireSession();
 
-  if (!isDeletableMediaKey(key)) return { ok: false };
+  if (!isMediaKey(key)) return { ok: false };
 
   try {
     await deleteImage(key);
