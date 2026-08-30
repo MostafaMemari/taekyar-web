@@ -13,21 +13,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === "" ? 1 : 0.8,
   }));
 
-  const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `${SITE_URL}${postHref(post.slug)}`,
-    lastModified: post.createdAt,
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
+  const postRoutes: MetadataRoute.Sitemap = [...posts]
+    .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+    .map((post) => ({
+      url: `${SITE_URL}${postHref(post.slug)}`,
+      lastModified: post.updatedAt,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    }));
 
   const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
     url: `${SITE_URL}${categoryHref(category.slug)}`,
+    lastModified: category.updatedAt,
     changeFrequency: "weekly",
     priority: 0.6,
   }));
 
   const tagRoutes: MetadataRoute.Sitemap = tags.map((tag) => ({
     url: `${SITE_URL}${tagHref(tag.slug)}`,
+    lastModified: tag.updatedAt,
     changeFrequency: "weekly",
     priority: 0.4,
   }));

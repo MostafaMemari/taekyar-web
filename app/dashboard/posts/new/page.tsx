@@ -2,6 +2,7 @@ import type { PostInput } from "@/lib/admin-types";
 import { PostForm } from "@/components/dashboard/posts/post-form";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { getCategories, getTags } from "@/lib/blog";
+import { formatFaDate } from "@/lib/utils";
 
 export const metadata = {
   title: POST_FORM_LABELS.newTitle,
@@ -16,7 +17,7 @@ export default async function NewPostPage() {
     excerpt: "",
     categoryId: categories[0]?.id ?? 0,
     tagIds: [],
-    date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
+    date: formatFaDate(new Date()),
     readTimeMinutes: 5,
     content: "",
     coverImage: null,

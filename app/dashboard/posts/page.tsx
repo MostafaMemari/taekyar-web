@@ -14,7 +14,7 @@ import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
 import { postHref } from "@/lib/routes";
 import { r2PublicUrl } from "@/lib/r2-url";
-import { toFaDigits } from "@/lib/utils";
+import { formatFaDate, toFaDigits } from "@/lib/utils";
 
 interface PostsPageProps {
   searchParams: Promise<{ q?: string; page?: string }>;
@@ -147,7 +147,8 @@ interface PostsTableProps {
     coverImage: string | null;
     status: "DRAFT" | "PUBLISHED";
     category: { name: string };
-    date: string;
+    createdAt: Date;
+    updatedAt: Date;
     _count: { comments: number };
   }>;
 }
@@ -236,8 +237,11 @@ function PostsTable({ posts }: PostsTableProps) {
                   {post.category.name}
                 </span>
               </TableCell>
-              <TableCell className="whitespace-nowrap px-4 py-3.5 text-[13px] text-muted-foreground">
-                {post.date}
+              <TableCell className="whitespace-nowrap px-4 py-3.5">
+                <span className="block text-[13px] text-foreground">{formatFaDate(post.createdAt)}</span>
+                <span className="mt-0.5 block text-[11px] text-muted-foreground">
+                  {POSTS_TABLE_LABELS.updatedLabel} {formatFaDate(post.updatedAt)}
+                </span>
               </TableCell>
               <TableCell className="whitespace-nowrap px-4 py-3.5">
                 <span className="inline-flex min-w-6 justify-center rounded-full bg-muted px-2 py-0.5 text-[12px] font-bold tabular-nums text-muted-foreground ring-1 ring-border/60">

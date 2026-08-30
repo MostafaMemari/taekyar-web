@@ -9,6 +9,16 @@ export function toFaDigits(n: number) {
   return String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)])
 }
 
+const faDateFormatter = new Intl.DateTimeFormat("fa-IR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+export function formatFaDate(date: Date) {
+  return faDateFormatter.format(date);
+}
+
 const ENGLISH_DIGITS = "0123456789";
 const ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩";
 const PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹";

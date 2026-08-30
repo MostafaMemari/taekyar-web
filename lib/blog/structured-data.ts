@@ -37,6 +37,7 @@ export function articleJsonLd(post: BlogPost) {
     description: post.metaDescription ?? post.excerpt,
     ...(image ? { image: r2PublicUrl(image) } : {}),
     datePublished: post.createdAt.toISOString(),
+    dateModified: post.updatedAt.toISOString(),
     author: { "@type": "Organization", name: SITE_NAME },
     publisher: { "@type": "Organization", name: SITE_NAME },
     mainEntityOfPage: absoluteUrl(postHref(post.slug)),

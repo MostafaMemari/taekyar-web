@@ -22,6 +22,7 @@ model Admin {
   username     String   @unique
   passwordHash String
   createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Post {
@@ -42,28 +43,39 @@ model Post {
   status          PostStatus @default(PUBLISHED)
   deletedAt       DateTime?
   createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   comments        Comment[]
 }
 
 model Category {
-  id              Int    @id @default(autoincrement())
-  name            String @unique
-  slug            String @unique
+  id              Int        @id @default(autoincrement())
+  name            String     @unique
+  slug            String     @unique
+  path            String     @unique
+  parentId        Int?
+  parent          Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  children        Category[] @relation("CategoryHierarchy")
   image           String?
   description     String?
   metaTitle       String?
   metaDescription String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
   posts           Post[]
+
+  @@index([parentId])
 }
 
 model Tag {
-  id              Int    @id @default(autoincrement())
-  name            String @unique
-  slug            String @unique
+  id              Int      @id @default(autoincrement())
+  name            String   @unique
+  slug            String   @unique
   image           String?
   description     String?
   metaTitle       String?
   metaDescription String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   posts           Post[]
 }
 
@@ -82,4 +94,5 @@ model Comment {
   parent       Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies      Comment[]     @relation("CommentReplies")
   createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }

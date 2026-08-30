@@ -10,6 +10,8 @@ export const POSTS_TABLE_LABELS = {
   columnTitle: "عنوان",
   columnCategory: "دسته‌بندی",
   columnDate: "تاریخ",
+  updatedLabel: "به‌روزرسانی:",
+  columnDeleted: "تاریخ حذف",
   columnReadTime: "زمان مطالعه",
   columnComments: "دیدگاه‌ها",
   columnActions: "عملیات",

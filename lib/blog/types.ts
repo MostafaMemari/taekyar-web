@@ -17,6 +17,7 @@ export interface BlogPost {
   metaTitle: string | null;
   metaDescription: string | null;
   createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface PostWithContent extends BlogPost {
@@ -36,6 +37,7 @@ export interface BlogPostRow {
   metaTitle: string | null;
   metaDescription: string | null;
   createdAt: Date;
+  updatedAt: Date;
   category: { id: number; name: string; slug: string; image: string | null };
   tags: Array<{ id: number; name: string; slug: string }>;
 }
@@ -58,6 +60,7 @@ export function toBlogPost(post: BlogPostRow): BlogPost {
     metaTitle: post.metaTitle,
     metaDescription: post.metaDescription,
     createdAt: post.createdAt,
+    updatedAt: post.updatedAt,
   };
 }
 

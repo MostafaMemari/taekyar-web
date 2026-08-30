@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
 import { r2PublicUrl } from "@/lib/r2-url";
-import { toFaDigits } from "@/lib/utils";
+import { formatFaDate, toFaDigits } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -70,6 +70,7 @@ interface TrashTableProps {
     slug: string;
     title: string;
     coverImage: string | null;
+    deletedAt: Date | null;
     category: { name: string };
     _count: { comments: number };
   }>;
@@ -86,6 +87,9 @@ function TrashTable({ posts }: TrashTableProps) {
             </TableHead>
             <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
               {POSTS_TABLE_LABELS.columnCategory}
+            </TableHead>
+            <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
+              {POSTS_TABLE_LABELS.columnDeleted}
             </TableHead>
             <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
               {POSTS_TABLE_LABELS.columnComments}
@@ -138,6 +142,9 @@ function TrashTable({ posts }: TrashTableProps) {
                   <span className="size-1.5 rounded-full bg-belt-blue" aria-hidden="true" />
                   {post.category.name}
                 </span>
+              </TableCell>
+              <TableCell className="whitespace-nowrap px-4 py-3.5 text-[13px] text-muted-foreground">
+                {post.deletedAt ? formatFaDate(post.deletedAt) : "—"}
               </TableCell>
               <TableCell className="whitespace-nowrap px-4 py-3.5">
                 <span className="inline-flex min-w-6 justify-center rounded-full bg-muted px-2 py-0.5 text-[12px] font-bold tabular-nums text-muted-foreground ring-1 ring-border/60">

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { COMMENT_STATUS_META, OVERVIEW_LABELS, OVERVIEW_STAT_CARDS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
-import { toFaDigits } from "@/lib/utils";
+import { formatFaDate, toFaDigits } from "@/lib/utils";
 
 export default async function DashboardOverviewPage() {
   const [postsCount, approvedCount, pendingCount, rejectedCount, pendingComments, recentPosts] =
@@ -26,7 +26,7 @@ export default async function DashboardOverviewPage() {
         where: { deletedAt: null },
         orderBy: { createdAt: "desc" },
         take: 4,
-        select: { slug: true, title: true, date: true },
+        select: { slug: true, title: true, createdAt: true },
       }),
     ]);
 
@@ -194,7 +194,7 @@ export default async function DashboardOverviewPage() {
                     >
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-[13px] font-bold leading-5 group-hover:text-primary">{post.title}</p>
-                        <p className="mt-0.5 text-[11px] leading-4 text-muted-foreground">{post.date}</p>
+                        <p className="mt-0.5 text-[11px] leading-4 text-muted-foreground">{formatFaDate(post.createdAt)}</p>
                       </div>
                       <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border bg-card text-muted-foreground opacity-0 transition-all group-hover:opacity-100 motion-reduce:transition-none">
                         <ArrowLeft className="size-3.5" aria-hidden="true" />

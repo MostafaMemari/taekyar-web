@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import type { CommentStatus } from "@/lib/admin-types";
 import { COMMENT_STATUS_META, COMMENTS_ADMIN_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
-import { cn, toFaDigits } from "@/lib/utils";
+import { cn, formatFaDate, toFaDigits } from "@/lib/utils";
 
 const STATUS_FILTERS: CommentStatus[] = ["PENDING", "APPROVED", "REJECTED"];
 const COMMENTS_PER_PAGE = 10;
@@ -19,7 +19,7 @@ interface CommentEntry {
   author: string;
   role: string;
   isTeamAuthor: boolean;
-  date: string;
+  createdAt: Date;
   message: string;
   status: CommentStatus;
 }
@@ -223,7 +223,7 @@ function CommentBody({
         </Badge>
 
         <time className="ms-auto whitespace-nowrap rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground ring-1 ring-border/60">
-          {comment.date}
+          {formatFaDate(comment.createdAt)}
         </time>
       </div>
 
