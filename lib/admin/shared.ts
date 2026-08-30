@@ -38,6 +38,11 @@ export function revalidateTaxonomy(kind: "categories" | "tags") {
   revalidateTag(kind, "max");
 }
 
+export function revalidateMedia() {
+  revalidatePath("/dashboard/media");
+  revalidatePath("/dashboard");
+}
+
 export function normalizeOptionalText(value: unknown): string | null {
   const text = String(value ?? "").trim();
   return text.length > 0 ? text : null;

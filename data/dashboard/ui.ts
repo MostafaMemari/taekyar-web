@@ -5,3 +5,5 @@ export * from "./overview";
 export * from "./posts";
 export * from "./comments";
 export * from "./taxonomy";
+export * from "./uploads";
+export * from "./media";

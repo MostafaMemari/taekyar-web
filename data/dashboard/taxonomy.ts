@@ -1,3 +1,5 @@
+import { UPLOAD_ERROR_LABELS } from "./uploads";
+
 export const TAXONOMY_LABELS = {
   kinds: {
     category: {
@@ -53,7 +55,7 @@ export const TAXONOMY_LABELS = {
   error: "ذخیره انجام نشد؛ دوباره تلاش کنید.",
   slugTaken: "این نام یا نشانی قبلاً استفاده شده است.",
   deleteError: "حذف انجام نشد؛ دوباره تلاش کنید.",
-  uploadError: "آپلود انجام نشد؛ دوباره تلاش کنید.",
-  unsupportedType: "فرمت تصویر پشتیبانی نمی‌شود (JPG، PNG یا WebP).",
-  fileTooLarge: "حجم تصویر بیشتر از ۵ مگابایت است.",
+  uploadError: UPLOAD_ERROR_LABELS.uploadError,
+  unsupportedType: UPLOAD_ERROR_LABELS.unsupportedType,
+  fileTooLarge: UPLOAD_ERROR_LABELS.fileTooLarge,
 } as const;

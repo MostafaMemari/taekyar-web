@@ -50,6 +50,88 @@ export async function uploadImage(file: File): Promise<string> {
   return key;
 }
 
+export interface R2Object {
+  key: string;
+  size: number;
+  lastModified: string;
+}
+
+interface ListObjectsPage {
+  objects: R2Object[];
+  isTruncated: boolean;
+  continuationToken: string | null;
+}
+
+const LIST_PAGE_SIZE = 1000;
+const LIST_MAX_KEYS = 5000;
+
+const CONTENTS_PATTERN = /<Contents>([\s\S]*?)<\/Contents>/g;
+const TAG_PATTERN = /<([A-Za-z]+)>([\s\S]*?)<\/\1>/g;
+
+function decodeXmlEntities(value: string): string {
+  return value
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, "&");
+}
+
+function readXmlTags(source: string): Record<string, string> {
+  const tags: Record<string, string> = {};
+  for (const [, name, value] of source.matchAll(TAG_PATTERN)) {
+    tags[name] = decodeXmlEntities(value);
+  }
+  return tags;
+}
+
+function parseListObjectsXml(xml: string): ListObjectsPage {
+  const objects = Array.from(xml.matchAll(CONTENTS_PATTERN), ([, block]) => {
+    const tags = readXmlTags(block);
+    return {
+      key: tags.Key ?? "",
+      size: Number(tags.Size) || 0,
+      lastModified: tags.LastModified ?? "",
+    };
+  });
+
+  const root = readXmlTags(xml);
+  return {
+    objects,
+    isTruncated: root.IsTruncated === "true",
+    continuationToken: root.NextContinuationToken ?? null,
+  };
+}
+
+export async function listObjects(prefix = ""): Promise<R2Object[]> {
+  const bucket = getRequiredEnv("R2_BUCKET_NAME");
+  const client = createR2Client();
+  const objects: R2Object[] = [];
+  let continuationToken: string | null = null;
+
+  while (objects.length < LIST_MAX_KEYS) {
+    const params = new URLSearchParams({
+      "list-type": "2",
+      "max-keys": String(Math.min(LIST_PAGE_SIZE, LIST_MAX_KEYS - objects.length)),
+    });
+    if (prefix) params.set("prefix", prefix);
+    if (continuationToken) params.set("continuation-token", continuationToken);
+
+    const response = await client.fetch(`${getEndpoint()}/${bucket}/?${params.toString()}`, {
+      method: "GET",
+    });
+    if (!response.ok) throw new Error("LIST_FAILED");
+
+    const page = parseListObjectsXml(await response.text());
+    objects.push(...page.objects);
+
+    if (!page.isTruncated || !page.continuationToken || page.objects.length === 0) break;
+    continuationToken = page.continuationToken;
+  }
+
+  return objects;
+}
+
 export async function deleteImage(key: string): Promise<void> {
   const bucket = getRequiredEnv("R2_BUCKET_NAME");
   const client = createR2Client();
