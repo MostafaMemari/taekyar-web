@@ -13,12 +13,15 @@ import { SidebarGuides } from "@/components/blog/sidebar-guides";
 import { TableOfContents } from "@/components/blog/table-of-contents";
 import { TocCollapse } from "@/components/blog/toc-collapse";
 import { ContactBanner } from "@/components/shared/contact-banner";
+import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import { getPostComments, getBlogPosts, getPostBySlug } from "@/lib/blog";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
 import type { BlogCategoryName } from "@/data/blog/categories";
 import { getHeadings, type TocItem } from "@/lib/post-content";
 import { getRelatedPosts } from "@/lib/blog-related";
+import { buildPageMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 interface PostPageProps {
@@ -33,10 +36,13 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
   if (!post) return { title: "مقاله یافت نشد" };
 
-  return {
+  return buildPageMetadata({
     title: post.metaTitle ?? post.title,
     description: post.metaDescription ?? post.excerpt,
-  };
+    path: `/blog/${post.slug}`,
+    imageUrl: post.coverImage ?? post.categoryImage,
+    publishedTime: post.createdAt,
+  });
 }
 
 interface PostRailProps {
@@ -74,6 +80,14 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <>
+      <JsonLd data={articleJsonLd(post)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "وبلاگ", path: "/blog" },
+          { name: post.category, path: `/blog/category/${encodeURIComponent(post.categorySlug)}` },
+          { name: post.title, path: `/blog/${post.slug}` },
+        ])}
+      />
       <Section className="pb-0 sm:pb-0 lg:pb-0">
         <Reveal>
           <PostTopbar />
@@ -89,7 +103,7 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
 
             <div className="min-w-0 lg:col-start-2 lg:row-start-1">
-              <PostCover category={post.category} />
+              <PostCover post={post} />
             </div>
 
             <div className="min-w-0 lg:col-start-1 lg:row-start-2">

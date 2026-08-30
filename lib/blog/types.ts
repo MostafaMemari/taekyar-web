@@ -8,11 +8,15 @@ export interface BlogPost {
   categoryId: number;
   category: BlogCategoryName;
   categorySlug: string;
+  categoryImage: string | null;
   tags: Array<{ id: number; name: string; slug: string }>;
   date: string;
   readTimeMinutes: number;
+  coverImage: string | null;
+  coverImageAlt: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
+  createdAt: Date;
 }
 
 export interface PostWithContent extends BlogPost {
@@ -27,8 +31,11 @@ export interface BlogPostRow {
   date: string;
   readTimeMinutes: number;
   content?: unknown;
+  coverImage: string | null;
+  coverImageAlt: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
+  createdAt: Date;
   category: { id: number; name: string; slug: string; image: string | null };
   tags: Array<{ id: number; name: string; slug: string }>;
 }
@@ -42,11 +49,15 @@ export function toBlogPost(post: BlogPostRow): BlogPost {
     categoryId: post.category.id,
     category: post.category.name as BlogCategoryName,
     categorySlug: post.category.slug,
+    categoryImage: post.category.image,
     tags: post.tags,
     date: post.date,
     readTimeMinutes: post.readTimeMinutes,
+    coverImage: post.coverImage,
+    coverImageAlt: post.coverImageAlt,
     metaTitle: post.metaTitle,
     metaDescription: post.metaDescription,
+    createdAt: post.createdAt,
   };
 }
 

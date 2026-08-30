@@ -18,6 +18,8 @@ export interface PostInput {
   date: string;
   readTimeMinutes: number;
   content: string;
+  coverImage: string | null;
+  coverImageAlt: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
 }

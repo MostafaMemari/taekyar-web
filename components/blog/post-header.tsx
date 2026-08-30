@@ -31,7 +31,7 @@ function PostMeta({ post }: { post: BlogPost }) {
   return (
     <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2 sm:gap-x-3 sm:gap-y-2.5">
       <Link
-        href="/blog"
+        href={`/blog/category/${encodeURIComponent(post.categorySlug)}`}
         className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-bold transition-opacity hover:opacity-80 sm:px-3 sm:py-1.5 sm:text-xs"
         style={{ backgroundColor: `${color}14`, color }}
       >

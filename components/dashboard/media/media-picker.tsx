@@ -26,6 +26,7 @@ import type { MediaPage } from "@/lib/media-list";
 import { toPersianDigits } from "@/lib/utils";
 
 export interface MediaPickerSelection {
+  key: string;
   src: string;
   alt: string;
   caption: string;
@@ -34,9 +35,20 @@ export interface MediaPickerSelection {
 interface MediaPickerProps {
   trigger: React.ReactNode;
   onSelect: (selection: MediaPickerSelection) => void;
+  fields?: { alt?: boolean; caption?: boolean };
+  dialogTitle?: string;
+  insertLabel?: string;
 }
 
-export function MediaPicker({ trigger, onSelect }: MediaPickerProps) {
+export function MediaPicker({
+  trigger,
+  onSelect,
+  fields,
+  dialogTitle = POST_FORM_LABELS.imageDialogTitle,
+  insertLabel = POST_FORM_LABELS.imageInsert,
+}: MediaPickerProps) {
+  const showAlt = fields?.alt ?? true;
+  const showCaption = fields?.caption ?? true;
   const [mediaPage, setMediaPage] = useState<MediaPage | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -85,7 +97,7 @@ export function MediaPicker({ trigger, onSelect }: MediaPickerProps) {
 
   function handleInsert() {
     if (!selected) return;
-    onSelect({ src: selected.url, alt: alt.trim(), caption: caption.trim() });
+    onSelect({ key: selected.key, src: selected.url, alt: alt.trim(), caption: caption.trim() });
     reset();
   }
 
@@ -94,7 +106,7 @@ export function MediaPicker({ trigger, onSelect }: MediaPickerProps) {
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{POST_FORM_LABELS.imageDialogTitle}</DialogTitle>
+          <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>{MEDIA_LABELS.description}</DialogDescription>
         </DialogHeader>
 
@@ -125,30 +137,34 @@ export function MediaPicker({ trigger, onSelect }: MediaPickerProps) {
             </p>
 
             <div className="mt-4 space-y-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="picker-image-alt" className="text-[12px] font-bold">
-                  {POST_FORM_LABELS.imageAltLabel}
-                </Label>
-                <Input
-                  id="picker-image-alt"
-                  value={alt}
-                  placeholder={POST_FORM_LABELS.imageAltPlaceholder}
-                  className="h-9 rounded-xl"
-                  onChange={(event) => setAlt(event.target.value)}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="picker-image-caption" className="text-[12px] font-bold">
-                  {POST_FORM_LABELS.imageCaptionLabel}
-                </Label>
-                <Input
-                  id="picker-image-caption"
-                  value={caption}
-                  placeholder={POST_FORM_LABELS.imageCaptionPlaceholder}
-                  className="h-9 rounded-xl"
-                  onChange={(event) => setCaption(event.target.value)}
-                />
-              </div>
+              {showAlt ? (
+                <div className="space-y-1.5">
+                  <Label htmlFor="picker-image-alt" className="text-[12px] font-bold">
+                    {POST_FORM_LABELS.imageAltLabel}
+                  </Label>
+                  <Input
+                    id="picker-image-alt"
+                    value={alt}
+                    placeholder={POST_FORM_LABELS.imageAltPlaceholder}
+                    className="h-9 rounded-xl"
+                    onChange={(event) => setAlt(event.target.value)}
+                  />
+                </div>
+              ) : null}
+              {showCaption ? (
+                <div className="space-y-1.5">
+                  <Label htmlFor="picker-image-caption" className="text-[12px] font-bold">
+                    {POST_FORM_LABELS.imageCaptionLabel}
+                  </Label>
+                  <Input
+                    id="picker-image-caption"
+                    value={caption}
+                    placeholder={POST_FORM_LABELS.imageCaptionPlaceholder}
+                    className="h-9 rounded-xl"
+                    onChange={(event) => setCaption(event.target.value)}
+                  />
+                </div>
+              ) : null}
             </div>
 
             <DialogFooter className="mt-5">
@@ -158,13 +174,13 @@ export function MediaPicker({ trigger, onSelect }: MediaPickerProps) {
                 </Button>
               </DialogClose>
               <DialogClose asChild>
-                <Button
-                  type="button"
-                  className="h-9 rounded-xl px-5 text-[13px] font-bold"
-                  onClick={handleInsert}
-                >
-                  {POST_FORM_LABELS.imageInsert}
-                </Button>
+              <Button
+                type="button"
+                className="h-9 rounded-xl px-5 text-[13px] font-bold"
+                onClick={handleInsert}
+              >
+                {insertLabel}
+              </Button>
               </DialogClose>
             </DialogFooter>
           </div>

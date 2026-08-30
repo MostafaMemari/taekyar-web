@@ -1,9 +1,36 @@
+import Image from "next/image";
+
 import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import type { BlogPost } from "@/lib/blog";
+import { r2PublicUrl } from "@/lib/r2-url";
 
-export function PostCover({ category }: { category: BlogPost["category"] }) {
-  const { color, Icon } = CATEGORY_STYLES[category];
+export function PostCover({ post }: { post: BlogPost }) {
+  const { color, Icon } = CATEGORY_STYLES[post.category];
+
+  if (post.coverImage) {
+    return (
+      <div className="relative">
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-5 top-5 -bottom-3 hidden rounded-3xl opacity-15 lg:block"
+          style={{ backgroundColor: color }}
+        />
+
+        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06]">
+          <Image
+            src={r2PublicUrl(post.coverImage)}
+            alt={post.coverImageAlt || post.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 800px"
+            priority
+          />
+          <BeltDivider width="full" className="absolute inset-x-0 bottom-0 h-[4px] border-0 opacity-90" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative">

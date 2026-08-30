@@ -19,6 +19,8 @@ export default async function NewPostPage() {
     date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
     readTimeMinutes: 5,
     content: "",
+    coverImage: null,
+    coverImageAlt: null,
     metaTitle: null,
     metaDescription: null,
   };

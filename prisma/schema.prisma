@@ -30,6 +30,8 @@ model Post {
   date            String
   readTimeMinutes Int
   content         Json
+  coverImage      String?
+  coverImageAlt   String?
   metaTitle       String?
   metaDescription String?
   createdAt       DateTime @default(now())

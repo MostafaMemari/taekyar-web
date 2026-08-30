@@ -120,20 +120,17 @@ export const BlogImage = Node.create({
   },
 
   renderHTML({ node, HTMLAttributes }) {
-    return [
-      "figure",
-      mergeAttributes(HTMLAttributes, { "data-type": "blog-image" }),
-      [
-        "img",
-        {
-          src: node.attrs.src,
-          alt: node.attrs.alt,
-          loading: "lazy",
-          decoding: "async",
-        },
-      ],
-      ["figcaption", 0],
-    ];
+    const img = [
+      "img",
+      {
+        src: node.attrs.src,
+        alt: node.attrs.alt,
+        loading: "lazy",
+        decoding: "async",
+      },
+    ] as const;
+    const children = node.childCount > 0 ? [img, ["figcaption", 0]] : [img];
+    return ["figure", mergeAttributes(HTMLAttributes, { "data-type": "blog-image" }), ...children];
   },
 
   addCommands() {

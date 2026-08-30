@@ -12,18 +12,20 @@ import { createPost, updatePost } from "@/lib/admin-actions";
 import type { PostInput } from "@/lib/admin-types";
 import { parsePostHtml } from "@/lib/post-content";
 import { RichContentEditor } from "./rich-content-editor";
+import { CoverImageField, type CoverImageValue } from "./post-form/cover-image-field";
 import { FormFields } from "./post-form/form-fields";
 import type { FieldDraft } from "./post-form/types";
 
 interface PostFormProps {
   mode: "create" | "edit";
   initial: PostInput;
+  initialCoverUrl?: string | null;
   currentSlug?: string;
   categories: Array<{ id: number; name: string }>;
   tags: Array<{ id: number; name: string }>;
 }
 
-export function PostForm({ mode, initial, currentSlug, categories, tags }: PostFormProps) {
+export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categories, tags }: PostFormProps) {
   const [fields, setFields] = useState<FieldDraft>({
     title: initial.title,
     slug: initial.slug,
@@ -35,6 +37,11 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
     metaDescription: initial.metaDescription ?? "",
   });
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(initial.tagIds);
+  const [coverImage, setCoverImage] = useState<CoverImageValue>({
+    key: initial.coverImage ?? null,
+    url: initialCoverUrl ?? null,
+    alt: initial.coverImageAlt ?? "",
+  });
   const [content, setContent] = useState<string>(parsePostHtml(initial.content));
   const [isPending, startTransition] = useTransition();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -61,6 +68,8 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
       date: fields.date,
       readTimeMinutes: Number(fields.readTimeMinutes),
       content,
+      coverImage: coverImage.key,
+      coverImageAlt: coverImage.alt.trim() || null,
       metaTitle: fields.metaTitle,
       metaDescription: fields.metaDescription,
     };
@@ -88,6 +97,7 @@ export function PostForm({ mode, initial, currentSlug, categories, tags }: PostF
         selectedTagIds={selectedTagIds}
         onToggleTag={toggleTag}
       />
+      <CoverImageField value={coverImage} onChange={setCoverImage} />
       <RichContentEditor initialContent={content} onChange={setContent} />
 
       {errorMessage ? (

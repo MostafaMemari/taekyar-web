@@ -41,6 +41,8 @@ export const TAXONOMY_LABELS = {
   upload: "انتخاب تصویر",
   uploading: "در حال آپلود…",
   removeImage: "حذف تصویر",
+  mediaDialogTitle: "انتخاب تصویر",
+  mediaInsertLabel: "انتخاب",
   seoTitle: "سئو",
   seoHint: "اگر خالی بماند، از نام و اطلاعات خود صفحه استفاده می‌شود.",
   metaTitleLabel: "عنوان سئو",

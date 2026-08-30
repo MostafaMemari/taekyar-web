@@ -89,6 +89,8 @@ export function normalizePostInput(input: PostInput): PostInput | null {
     date,
     readTimeMinutes,
     content,
+    coverImage: normalizeOptionalText(input.coverImage),
+    coverImageAlt: normalizeOptionalText(input.coverImageAlt),
     metaTitle: normalizeOptionalText(input.metaTitle),
     metaDescription: normalizeOptionalText(input.metaDescription),
   };
