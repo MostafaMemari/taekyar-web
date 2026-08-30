@@ -1,6 +1,7 @@
 "use client";
 
 import type { MediaItem } from "@/lib/media";
+import { cn } from "@/lib/utils";
 
 import { MediaCard } from "./media-card";
 
@@ -8,11 +9,17 @@ interface MediaGridProps {
   items: MediaItem[];
   selectedKey: string | null;
   onSelect: (key: string) => void;
+  className?: string;
 }
 
-export function MediaGrid({ items, selectedKey, onSelect }: MediaGridProps) {
+export function MediaGrid({ items, selectedKey, onSelect, className }: MediaGridProps) {
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+    <ul
+      className={cn(
+        "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4",
+        className,
+      )}
+    >
       {items.map((item) => (
         <li key={item.key} className="min-w-0">
           <MediaCard item={item} isSelected={item.key === selectedKey} onSelect={onSelect} />
@@ -21,3 +28,4 @@ export function MediaGrid({ items, selectedKey, onSelect }: MediaGridProps) {
     </ul>
   );
 }
+

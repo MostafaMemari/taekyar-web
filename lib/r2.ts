@@ -103,25 +103,6 @@ function parseListObjectsXml(xml: string): ListObjectsPage {
   };
 }
 
-export interface MediaObject {
-  body: ReadableStream<Uint8Array>;
-  contentType: string;
-  contentLength: number;
-}
-
-export async function fetchObject(key: string): Promise<MediaObject | null> {
-  const bucket = getRequiredEnv("R2_BUCKET_NAME");
-  const client = createR2Client();
-  const response = await client.fetch(`${getEndpoint()}/${bucket}/${key}`, { method: "GET" });
-  if (!response.ok || !response.body) return null;
-
-  return {
-    body: response.body,
-    contentType: response.headers.get("content-type") ?? "application/octet-stream",
-    contentLength: Number(response.headers.get("content-length")) || 0,
-  };
-}
-
 export async function listObjects(prefix = ""): Promise<R2Object[]> {
   const bucket = getRequiredEnv("R2_BUCKET_NAME");
   const client = createR2Client();

@@ -23,6 +23,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MEDIA_LABELS, POST_FORM_LABELS } from "@/data/dashboard/ui";
 import type { MediaPage } from "@/lib/media-list";
+import { toPersianDigits } from "@/lib/utils";
 
 export interface MediaPickerSelection {
   src: string;
@@ -91,7 +92,7 @@ export function MediaPicker({ trigger, onSelect }: MediaPickerProps) {
   return (
     <Dialog onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>{POST_FORM_LABELS.imageDialogTitle}</DialogTitle>
           <DialogDescription>{MEDIA_LABELS.description}</DialogDescription>
@@ -237,10 +238,15 @@ export function MediaPicker({ trigger, onSelect }: MediaPickerProps) {
                 </div>
               ) : (
                 <>
-                  <MediaGrid items={mediaPage.items} selectedKey={selectedKey} onSelect={setSelectedKey} />
+                  <MediaGrid
+                    items={mediaPage.items}
+                    selectedKey={selectedKey}
+                    onSelect={setSelectedKey}
+                    className="grid-cols-3 sm:grid-cols-4 lg:grid-cols-4"
+                  />
 
                   {mediaPage.totalPages > 1 ? (
-                    <div className="mt-4 flex items-center justify-between">
+                    <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-3">
                       <Button
                         type="button"
                         variant="outline"
@@ -253,7 +259,9 @@ export function MediaPicker({ trigger, onSelect }: MediaPickerProps) {
                         {MEDIA_LABELS.prevPage}
                       </Button>
                       <span className="text-[12px] font-medium tabular-nums text-muted-foreground">
-                        {mediaPage.currentPage} / {mediaPage.totalPages}
+                        {toPersianDigits(String(mediaPage.total))} {MEDIA_LABELS.resultsSuffix} ·{" "}
+                        {MEDIA_LABELS.pageInfoSuffix} {toPersianDigits(String(mediaPage.currentPage))}{" "}
+                        {MEDIA_LABELS.pageOf} {toPersianDigits(String(mediaPage.totalPages))}
                       </span>
                       <Button
                         type="button"

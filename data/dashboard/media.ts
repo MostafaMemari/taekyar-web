@@ -35,6 +35,7 @@ export const MEDIA_LABELS = {
   prevPage: "صفحه قبل",
   nextPage: "صفحه بعد",
   pageInfoSuffix: "صفحه",
+  pageOf: "از",
   resultsSuffix: "فایل",
   pickerSearchLabel: "جستجوی رسانه",
   pickerSearchPlaceholder: "جستجو در نام فایل…",
