@@ -8,214 +8,41 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-# Project Engineering Rules
+# Taekyar
 
-## Core Principles
+Persian (fa, RTL) corporate site + blog with an admin dashboard. Next.js 16 (App Router), React 19, Tailwind v4, Prisma 7 + PostgreSQL, shadcn/radix UI. Path alias `@/*` → repo root.
 
-- Always inspect the existing codebase before making changes.
-- Follow existing project patterns and conventions.
-- Prefer simple, readable, maintainable solutions over clever abstractions.
-- Reuse existing components, hooks, utilities, and installed packages whenever possible.
-- Do not introduce new dependencies unless there is a clear and justified reason.
-- Preserve existing functionality and UI unless the task explicitly requires changing them.
-- Do not over-engineer.
-- Do not create abstractions without a practical benefit.
+## Commands
 
-## React Component Architecture
+- Dev: `npm run dev` · Build: `npm run build` · Lint: `npm run lint` (runs bare `eslint` with flat config)
+- Typecheck: `npx tsc --noEmit` (no npm script; must pass clean)
+- Only test (captcha flow): `node captcha-flow-test.mts`
+- Prisma CLI does NOT auto-load `.env`. Prefix DB commands with `set -a && source .env && set +a` (bash), e.g. for `npx prisma migrate dev`. Seed is the exception: `npx prisma db seed` runs `node --env-file=.env prisma/seed.ts` via `prisma.config.ts`.
+- Run `npx prisma generate` after schema changes or fresh install (no postinstall hook).
+- Copy `.env.example` → `.env` (gitignored).
 
-- Every component must have one clear responsibility.
-- Keep components small, focused, readable, and composable.
-- Avoid large monolithic components.
-- Do not put multiple unrelated sections, behaviors, or responsibilities inside one component.
-- Extract meaningful sections into focused components when needed.
-- Prefer composition over large prop-driven components.
-- Reuse existing components before creating new ones.
-- Do not create unnecessary micro-components for trivial markup.
-- If a component becomes difficult to understand or modify, refactor it.
+## Architecture
 
-### Component Responsibilities
+- `proxy.ts` (Next 16's middleware) gates `/dashboard/*` and `/login` on the session cookie; sessions in `lib/session.ts`, auth actions in `lib/admin/auth-actions.ts`.
+- Mutations are Server Actions in `lib/admin/*-actions.ts` and `lib/comment-actions.ts`. The only API route is `app/api/captcha/image`.
+- Blog content (posts/categories/tags/comments) is DB-backed via `lib/blog/*` and `lib/prisma.ts` (PrismaPg driver adapter). Static site copy, labels, and nav live in `data/` (feature subfolders: `data/blog/`, `data/dashboard/`, …).
+- Captcha images are rendered server-side with `@napi-rs/canvas` (kept in `serverExternalPackages`) using `lib/captcha-fonts/Vazirmatn-Regular.ttf`; answers use Persian digits (۰-۹). Captcha/rate-limit/IP-hash logic lives in `lib/comment-*.ts`; `COMMENT_IP_PEPPER` is optional with a built-in default.
+- Media uploads go to Cloudflare R2 via `aws4fetch` (`lib/r2.ts`). `R2_PUBLIC_URL` is read into `next.config.ts` image config at startup — changing it requires a dev server restart.
+- Layouts: `app/(public)` is the public site; root layout sets `lang="fa" dir="rtl"`.
 
-A UI component should primarily handle presentation and composition.
+## Conventions
 
-Avoid putting all of these responsibilities inside one component:
-
-- Large static datasets
-- Business logic
-- Data fetching
-- Complex state management
-- Multiple unrelated UI sections
-- Large SVG definitions
-- Configuration objects
-- Utility/helper functions
-- Unrelated side effects
-
-When responsibilities grow, separate them into appropriate components, hooks, data files, or utilities.
-
-## Hooks
-
-- Each custom hook must have one clear responsibility.
-- Avoid large "god hooks".
-- Do not mix unrelated concerns inside one hook.
-- Do not mix UI state, API calls, business logic, and unrelated effects in one hook.
-- Avoid unnecessary `useEffect`.
-- Never use `useEffect` for derived state.
-- Prefer derived values over synchronization effects when possible.
-- Reusable hooks belong in the appropriate `hooks/` location.
-- Do not place reusable hooks inside component folders.
-- A hook may live near a feature only when it is genuinely feature-specific.
-- Reuse existing hooks before creating a new one.
-
-## Separation of Concerns
-
-Keep these concerns separated when appropriate:
-
-- UI/presentation
-- Data
-- Business logic
-- Data fetching
-- State management
-- Utilities
-- Configuration
-- Types
-
-Do not mix large amounts of data or logic directly into JSX components.
-
-## Static Data and Configuration
-
-Static data must not unnecessarily live inside UI components.
-
-Examples:
-
-- Navigation items
-- Social links
-- FAQ items
-- Blog data
-- Categories
-- Trust badges
-- CTA content
-- Configuration objects
-- Reusable arrays
-- Static labels used by multiple components
-
-Use appropriate files such as:
-
-- `data.ts`
-- `constants.ts`
-- `config.ts`
-
-### Data Ownership
-
-- Feature-specific data belongs to that feature.
-- Shared/global data belongs in a shared data/constants location.
-- Do not place static data files inside generic component folders unless the data is truly local to that component.
-- Do not duplicate the same static data across multiple components.
-
-## Project Folder Structure
-
-Before creating or moving a file:
-
-1. Inspect the current project structure.
-2. Determine what kind of file it is.
-3. Determine whether it is shared or feature-specific.
-4. Check whether an appropriate existing location already exists.
-5. Place it in the most appropriate existing location.
-6. Update all imports after moving it.
-
-### General Structure
-
-- `components/` → UI components
-- `hooks/` → reusable custom hooks
-- `lib/` → utilities and shared helpers
-- `data/` → shared/static data when appropriate
-- `constants/` → shared constants/configuration when appropriate
-- Feature folders → feature-specific UI, data, hooks, types, and utilities
-
-Do not put unrelated file types together just because they are used by the same page.
-
-Examples:
-
-- `use-active-heading.ts` → hooks, not components
-- `use-toast.ts` → hooks/utilities according to the project's architecture, not generic UI
-- Blog-specific data → blog feature/data structure
-- Large SVG/icon definitions → dedicated icon/component files when appropriate
-
-## Feature Organization
-
-Prefer feature-based organization when a feature has enough complexity to justify it.
-
-A feature may contain:
-
-- Components
-- Data
-- Hooks
-- Types
-- Utilities
-
-Keep related code together, but maintain clear separation of responsibilities.
-
-Do not create unnecessary deep nesting.
-
-## TypeScript
-
-- Avoid `any`.
-- Do not hide type errors with unsafe casts.
-- Prefer explicit and reusable types.
-- Keep API responses properly typed.
-- Reuse shared types where appropriate.
-- Avoid unnecessary type complexity.
-- Keep types close to their ownership unless they are genuinely shared.
-
-## Next.js
-
-- Respect Server Component and Client Component boundaries.
-- Do not add `"use client"` without a clear reason.
-- Follow existing Next.js project patterns.
-- Use framework-native solutions whenever practical.
-- Do not assume behavior from older Next.js versions.
-- Before using unfamiliar Next.js APIs, inspect the installed Next.js documentation under `node_modules/next/dist/docs/`.
-- Follow current deprecation notices and framework conventions.
-
-## UI and Design System
-
-- Follow the existing Taekyar design system and visual language.
-- Reuse existing UI components and installed packages.
-- Do not create duplicate UI primitives.
-- Maintain consistent spacing, typography, colors, borders, radiuses, shadows, and interaction states.
-- Preserve Persian RTL behavior.
-- Keep responsive behavior consistent with the existing project.
-- Prefer simple, polished UI over excessive visual effects.
-
-## SVG and Large Static Definitions
-
-- Do not place large SVG definitions directly inside large page/section components.
-- Extract reusable SVGs/icons into appropriate files or components.
-- Keep page and section components focused on composition.
-- Do not combine UI, data, logic, and large icon definitions in one file.
+- Inspect existing code first; follow its patterns. Reuse components, hooks, and utilities before creating new ones. No new dependencies without clear justification. Do not over-engineer.
+- One clear responsibility per component and hook. Extract sections instead of building monolithic components; prefer composition over prop-driven sprawl.
+- Components should not contain large static datasets, business logic, data fetching, complex state, large SVGs, or config objects — move those to `data/`, `lib/`, or dedicated files.
+- Reusable hooks go in `hooks/` (e.g. `use-reading-progress.ts`), never inside component folders; feature-specific hooks may live near their feature.
+- Avoid `useEffect` for derived state; prefer derived values. Avoid `any` and unsafe casts; type API responses and keep types near ownership.
+- Static data belongs in `data.ts`/`constants.ts`/`config.ts` files, not inline in JSX. Feature-specific data stays with the feature; shared data goes in the shared location. Never duplicate the same static data across components.
+- Do not add `"use client"` without a real need — default to Server Components. Do not assume behavior from older Next.js versions; consult `node_modules/next/dist/docs/` for unfamiliar APIs.
+- Follow the Taekyar design system: consistent spacing, typography, colors, radiuses, shadows, and interaction states. Reuse `components/ui` primitives (shadcn radix-nova, rtl: true). Preserve Persian RTL behavior everywhere.
+- Extract reusable/large SVGs into their own files or components; never inline large icon definitions in page/section components.
+- Move files only with all imports updated; check for an appropriate existing location first.
 
 # Strict Code Comment Policy
 
-## Default Rule
-
-**DO NOT ADD COMMENTS UNLESS EXPLICITLY REQUESTED.**
-
-The default behavior for this project is:
-
-**NO COMMENTS.**
-
-This applies to:
-
-- `// comments`
-- `/* comments */`
-- `/** JSDoc comments */`
-- JSX comments such as `{/* ... */}`
-- Descriptive block comments
-- Explanatory comments
-- Comments describing obvious UI or logic
-
-### Forbidden Examples
-
-Do NOT write comments like:
-
-```ts
-/** Page scroll progress as a 0..1 fraction. */
-```
+**DO NOT ADD COMMENTS UNLESS EXPLICITLY REQUESTED.** No `//`, `/* */`, `/** JSDoc */`, or JSX `{/* ... */}` comments — not even explanatory ones. Zero comments is the default.
