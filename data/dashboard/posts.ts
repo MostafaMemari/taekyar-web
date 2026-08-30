@@ -39,7 +39,6 @@ export const POST_FORM_LABELS = {
   tagsEmpty: "برچسبی ساخته نشده؛ از بخش برچسب‌ها اضافه کنید.",
   dateLabel: "تاریخ نمایش",
   datePlaceholder: "۲۵ مرداد ۱۴۰۵",
-  detailsTabLabel: "اطلاعات مقاله",
   readTimeLabel: "زمان مطالعه (دقیقه)",
   contentLabel: "محتوا",
   contentHint: "کل مقاله را در یک ویرایشگر بنویسید؛ مثل وردپرس.",

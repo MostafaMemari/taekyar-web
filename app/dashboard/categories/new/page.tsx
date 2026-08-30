@@ -15,7 +15,7 @@ export default function NewCategoryPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-5">
+    <div className="space-y-5">
       <div>
         <h1 className="text-xl font-black text-foreground sm:text-2xl">{TAXONOMY_LABELS.kinds.category.newTitle}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{TAXONOMY_LABELS.kinds.category.newDescription}</p>
