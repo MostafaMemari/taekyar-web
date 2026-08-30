@@ -37,7 +37,9 @@ export async function uploadImage(file: File): Promise<string> {
 
   const bucket = getRequiredEnv("R2_BUCKET_NAME");
   const extension = ALLOWED_IMAGE_TYPES[file.type];
-  const key = `uploads/${crypto.randomUUID()}.${extension}`;
+  const now = new Date();
+  const month = String(now.getUTCMonth() + 1).padStart(2, "0");
+  const key = `uploads/${now.getUTCFullYear()}/${month}/${crypto.randomUUID()}.${extension}`;
 
   const client = createR2Client();
   const response = await client.fetch(`${getEndpoint()}/${bucket}/${key}`, {
