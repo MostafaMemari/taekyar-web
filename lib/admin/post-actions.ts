@@ -1,11 +1,16 @@
 "use server";
 
+import { Prisma } from "@prisma/client";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import type { PostFormState, PostInput } from "@/lib/admin-types";
 import { prisma } from "@/lib/prisma";
 import { normalizePostInput, requireSession, revalidatePostPaths } from "./shared";
+
+function isSlugConflict(error: unknown): boolean {
+  return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
+}
 
 export async function createPost(_previousState: PostFormState, input: PostInput): Promise<PostFormState> {
   await requireSession();
@@ -21,8 +26,10 @@ export async function createPost(_previousState: PostFormState, input: PostInput
         tags: { connect: tagIds.map((id) => ({ id })) },
       },
     });
-  } catch {
-    return { status: "error", message: POST_FORM_LABELS.slugTaken };
+  } catch (error) {
+    if (isSlugConflict(error)) return { status: "error", message: POST_FORM_LABELS.slugTaken };
+    console.error("createPost failed:", error);
+    return { status: "error", message: POST_FORM_LABELS.error };
   }
 
   revalidatePostPaths(data.slug);
@@ -39,6 +46,14 @@ export async function updatePost(
   const data = normalizePostInput(rawInput);
   if (!data) return { status: "error", message: POST_FORM_LABELS.error };
 
+  const duplicate = await prisma.post.findUnique({
+    where: { slug: data.slug },
+    select: { slug: true },
+  });
+  if (duplicate && duplicate.slug !== currentSlug) {
+    return { status: "error", message: POST_FORM_LABELS.slugTaken };
+  }
+
   try {
     const { tagIds, ...postData } = data;
     await prisma.post.update({
@@ -48,8 +63,10 @@ export async function updatePost(
         tags: { set: tagIds.map((id) => ({ id })) },
       },
     });
-  } catch {
-    return { status: "error", message: POST_FORM_LABELS.slugTaken };
+  } catch (error) {
+    if (isSlugConflict(error)) return { status: "error", message: POST_FORM_LABELS.slugTaken };
+    console.error("updatePost failed:", error);
+    return { status: "error", message: POST_FORM_LABELS.error };
   }
 
   revalidatePostPaths(currentSlug);
