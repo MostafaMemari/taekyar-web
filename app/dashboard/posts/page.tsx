@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, FileText, Inbox, Pencil, Search } from "lucide-react";
 
 import { DeletePostButton } from "@/components/dashboard/posts/delete-post-button";
@@ -10,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
+import { r2PublicUrl } from "@/lib/r2-url";
 import { toFaDigits } from "@/lib/utils";
 
 interface PostsPageProps {
@@ -130,6 +132,7 @@ interface PostsTableProps {
     id: number;
     slug: string;
     title: string;
+    coverImage: string | null;
     category: { name: string };
     date: string;
     _count: { comments: number };
@@ -166,19 +169,41 @@ function PostsTable({ posts }: PostsTableProps) {
               className="border-b border-border/40 last:border-0 hover:bg-muted/30 motion-reduce:transition-none"
             >
               <TableCell className="max-w-[22rem] px-4 py-3.5">
-                <Link
-                  href={`/dashboard/posts/${post.slug}/edit`}
-                  className="block truncate text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 rounded-sm"
-                >
-                  {post.title}
-                </Link>
-                <span
-                  dir="ltr"
-                  className="mt-0.5 flex items-center gap-1 truncate text-[11px] text-muted-foreground"
-                >
-                  <FileText className="size-3 shrink-0" aria-hidden="true" />
-                  /blog/{post.slug}
-                </span>
+                <div className="flex items-center gap-3">
+                  {post.coverImage ? (
+                    <Image
+                      src={r2PublicUrl(post.coverImage)}
+                      alt=""
+                      aria-hidden="true"
+                      width={40}
+                      height={40}
+                      unoptimized
+                      className="size-10 shrink-0 rounded-lg object-cover ring-1 ring-border/60"
+                    />
+                  ) : (
+                    <span
+                      className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-[11px] font-black text-muted-foreground ring-1 ring-border/60"
+                      aria-hidden="true"
+                    >
+                      {post.title.trim().charAt(0) || "—"}
+                    </span>
+                  )}
+                  <div className="min-w-0">
+                    <Link
+                      href={`/dashboard/posts/${post.slug}/edit`}
+                      className="block truncate text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 rounded-sm"
+                    >
+                      {post.title}
+                    </Link>
+                    <span
+                      dir="ltr"
+                      className="mt-0.5 flex items-center gap-1 truncate text-[11px] text-muted-foreground"
+                    >
+                      <FileText className="size-3 shrink-0" aria-hidden="true" />
+                      /blog/{post.slug}
+                    </span>
+                  </div>
+                </div>
               </TableCell>
               <TableCell className="whitespace-nowrap px-4 py-3.5">
                 <span className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground">

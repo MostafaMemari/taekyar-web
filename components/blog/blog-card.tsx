@@ -1,14 +1,34 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Clock } from "lucide-react";
 
 import { BLOG_INDEX_LABELS, CATEGORY_STYLES } from "@/data/blog/index-page";
 import { Badge } from "@/components/ui/badge";
 import type { BlogPost } from "@/lib/blog";
+import { r2PublicUrl } from "@/lib/r2-url";
 import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
 function CardCover({ post }: { post: BlogPost }) {
   const { color, Icon } = CATEGORY_STYLES[post.category];
+
+  if (post.coverImage) {
+    return (
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted">
+        <Image
+          src={r2PublicUrl(post.coverImage)}
+          alt=""
+          fill
+          unoptimized
+          className="object-cover transition-transform duration-500 group-hover/card:scale-[1.04]"
+        />
+        <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
+        <Badge className="absolute start-3 top-3 border-none bg-white/90 text-[11px] font-bold tracking-tight text-[#171717] shadow-sm backdrop-blur-sm sm:text-xs">
+          {post.category}
+        </Badge>
+      </div>
+    );
+  }
 
   return (
     <div className="relative aspect-[16/10] w-full overflow-hidden">

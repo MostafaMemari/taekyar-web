@@ -56,8 +56,8 @@ export function TaxonomyArchive({
                 src={r2PublicUrl(imageUrl)}
                 alt={title}
                 fill
+                unoptimized
                 className="object-cover"
-                sizes="(max-width: 768px) 100vw, 1200px"
               />
             </div>
           ) : null}

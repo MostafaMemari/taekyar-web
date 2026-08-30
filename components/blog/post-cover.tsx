@@ -22,9 +22,9 @@ export function PostCover({ post }: { post: BlogPost }) {
             src={r2PublicUrl(post.coverImage)}
             alt={post.coverImageAlt || post.title}
             fill
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 800px"
             priority
+            unoptimized
+            className="object-cover"
           />
           <BeltDivider width="full" className="absolute inset-x-0 bottom-0 h-[4px] border-0 opacity-90" />
         </div>
