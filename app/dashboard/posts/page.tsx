@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, FileText, Inbox, Pencil, Search } from "lucide-react";
+import { ArrowLeft, FileText, Inbox, Pencil, Search, Trash2 } from "lucide-react";
 
-import { DeletePostButton } from "@/components/dashboard/posts/delete-post-button";
+import { TrashPostButton } from "@/components/dashboard/posts/trash-post-button";
 import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -25,8 +26,8 @@ export default async function DashboardPostsPage({ searchParams }: PostsPageProp
   const { q, page } = await searchParams;
   const query = (q ?? "").trim();
   const where = query
-    ? { OR: [{ title: { contains: query } }, { slug: { contains: query } }] }
-    : {};
+    ? { deletedAt: null, OR: [{ title: { contains: query } }, { slug: { contains: query } }] }
+    : { deletedAt: null };
 
   const total = await prisma.post.count({ where });
   const totalPages = Math.max(1, Math.ceil(total / POSTS_PER_PAGE));
@@ -41,9 +42,7 @@ export default async function DashboardPostsPage({ searchParams }: PostsPageProp
     },
     skip: (currentPage - 1) * POSTS_PER_PAGE,
     take: POSTS_PER_PAGE,
-  });
-
-  const buildHref = (targetPage: number) => {
+  });  const buildHref = (targetPage: number) => {
     const params = new URLSearchParams();
     if (query) params.set("q", query);
     if (targetPage > 1) params.set("page", String(targetPage));
@@ -61,12 +60,24 @@ export default async function DashboardPostsPage({ searchParams }: PostsPageProp
           </p>
         </div>
 
-        <Button asChild className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15">
-          <Link href="/dashboard/posts/new">
-            {POSTS_TABLE_LABELS.newPost}
-            <ArrowLeft className="size-4" aria-hidden="true" />
-          </Link>
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            asChild
+            variant="outline"
+            className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold text-muted-foreground"
+          >
+            <Link href="/dashboard/posts/trash">
+              <Trash2 className="size-4" aria-hidden="true" />
+              {POSTS_TABLE_LABELS.trash}
+            </Link>
+          </Button>
+          <Button asChild className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15">
+            <Link href="/dashboard/posts/new">
+              {POSTS_TABLE_LABELS.newPost}
+              <ArrowLeft className="size-4" aria-hidden="true" />
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <Card className="p-0">
@@ -134,6 +145,7 @@ interface PostsTableProps {
     slug: string;
     title: string;
     coverImage: string | null;
+    status: "DRAFT" | "PUBLISHED";
     category: { name: string };
     date: string;
     _count: { comments: number };
@@ -190,19 +202,30 @@ function PostsTable({ posts }: PostsTableProps) {
                     </span>
                   )}
                   <div className="min-w-0">
-                    <Link
-                      href={postHref(post.slug)}
-                      target="_blank"
-                      className="block truncate text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 rounded-sm"
-                    >
-                      {post.title}
-                    </Link>
-                    <span
-                      dir="ltr"
-                      className="mt-0.5 flex items-center gap-1 truncate text-[11px] text-muted-foreground"
-                    >
-                      <FileText className="size-3 shrink-0" aria-hidden="true" />
-                      /blog/{post.slug}
+                    {post.status === "PUBLISHED" ? (
+                      <Link
+                        href={postHref(post.slug)}
+                        target="_blank"
+                        className="block truncate text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 rounded-sm"
+                      >
+                        {post.title}
+                      </Link>
+                    ) : (
+                      <span className="block truncate text-[13px] font-bold leading-5">{post.title}</span>
+                    )}
+                    <span className="mt-1 flex items-center gap-1.5">
+                      {post.status === "DRAFT" ? (
+                        <Badge variant="outline" className="h-4.5 border-amber-300/70 bg-amber-50 px-1.5 text-[10px] font-bold text-amber-800">
+                          {POSTS_TABLE_LABELS.statusDraft}
+                        </Badge>
+                      ) : null}
+                      <span
+                        dir="ltr"
+                        className="flex min-w-0 items-center gap-1 truncate text-[11px] text-muted-foreground"
+                      >
+                        <FileText className="size-3 shrink-0" aria-hidden="true" />
+                        /blog/{post.slug}
+                      </span>
                     </span>
                   </div>
                 </div>
@@ -234,7 +257,7 @@ function PostsTable({ posts }: PostsTableProps) {
                       <Pencil className="size-4" aria-hidden="true" />
                     </Link>
                   </Button>
-                  <DeletePostButton slug={post.slug} />
+                  <TrashPostButton slug={post.slug} />
                 </div>
               </TableCell>
             </TableRow>

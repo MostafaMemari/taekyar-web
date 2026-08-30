@@ -5,8 +5,8 @@ import type { PostComment } from "@/data/blog/comments";
 export const getPostComments = cache(
   async (slug: string): Promise<PostComment[]> => {
     try {
-      const post = await prisma.post.findUnique({
-        where: { slug },
+      const post = await prisma.post.findFirst({
+        where: { slug, status: "PUBLISHED", deletedAt: null },
         select: { id: true },
       });
       if (!post) return [];

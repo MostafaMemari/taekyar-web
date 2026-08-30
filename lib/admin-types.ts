@@ -1,5 +1,7 @@
 export type CommentStatus = "PENDING" | "APPROVED" | "REJECTED";
 
+export type PostPublishStatus = "DRAFT" | "PUBLISHED";
+
 export interface TaxonomyInput {
   name: string;
   slug: string;
@@ -22,6 +24,7 @@ export interface PostInput {
   coverImageAlt: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
+  status: PostPublishStatus;
 }
 
 export interface PostFormState {

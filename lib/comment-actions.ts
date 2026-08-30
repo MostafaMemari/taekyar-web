@@ -73,8 +73,8 @@ export async function submitComment(
     return { ok: false, reason: "validation" };
   }
 
-  const post = await prisma.post.findUnique({
-    where: { slug },
+  const post = await prisma.post.findFirst({
+    where: { slug, status: "PUBLISHED", deletedAt: null },
     select: { id: true },
   });
   if (!post) return { ok: false, reason: "not_found" };

@@ -23,6 +23,7 @@ export default async function NewPostPage() {
     coverImageAlt: null,
     metaTitle: null,
     metaDescription: null,
+    status: "PUBLISHED",
   };
 
   return (

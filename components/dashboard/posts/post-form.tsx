@@ -58,6 +58,8 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const submitter = (event.nativeEvent as SubmitEvent).submitter;
+    const status = submitter?.getAttribute("value") === "draft" ? "DRAFT" : "PUBLISHED";
 
     const input: PostInput = {
       title: fields.title,
@@ -72,6 +74,7 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
       coverImageAlt: coverImage.alt.trim() || null,
       metaTitle: fields.metaTitle,
       metaDescription: fields.metaDescription,
+      status,
     };
 
     setErrorMessage(null);
@@ -121,6 +124,16 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
             : mode === "edit"
               ? POST_FORM_LABELS.submitUpdate
               : POST_FORM_LABELS.submitCreate}
+        </Button>
+        <Button
+          type="submit"
+          name="intent"
+          value="draft"
+          disabled={isPending}
+          variant="outline"
+          className="h-11 gap-2 rounded-xl px-6 text-[13px] font-bold"
+        >
+          {mode === "edit" ? POST_FORM_LABELS.submitDraftUpdate : POST_FORM_LABELS.submitDraftCreate}
         </Button>
         <span className="text-xs text-muted-foreground">ذخیره پس از اعتبارسنجی انجام می‌شود</span>
       </div>

@@ -12,7 +12,7 @@ import { toFaDigits } from "@/lib/utils";
 export default async function DashboardOverviewPage() {
   const [postsCount, approvedCount, pendingCount, rejectedCount, pendingComments, recentPosts] =
     await Promise.all([
-      prisma.post.count(),
+      prisma.post.count({ where: { deletedAt: null } }),
       prisma.comment.count({ where: { status: "APPROVED" } }),
       prisma.comment.count({ where: { status: "PENDING" } }),
       prisma.comment.count({ where: { status: "REJECTED" } }),
@@ -23,6 +23,7 @@ export default async function DashboardOverviewPage() {
         include: { post: { select: { title: true, slug: true } } },
       }),
       prisma.post.findMany({
+        where: { deletedAt: null },
         orderBy: { createdAt: "desc" },
         take: 4,
         select: { slug: true, title: true, date: true },

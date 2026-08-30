@@ -1,7 +1,7 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
-import type { PostInput, TaxonomyInput } from "@/lib/admin-types";
+import type { PostInput, PostPublishStatus, TaxonomyInput } from "@/lib/admin-types";
 import { postHref } from "@/lib/routes";
 import { sanitizePostHtml } from "@/lib/post-content";
 
@@ -16,6 +16,7 @@ export function revalidatePostPaths(slug: string) {
   revalidatePath("/blog");
   revalidatePath(postHref(slug));
   revalidatePath("/dashboard/posts");
+  revalidatePath("/dashboard/posts/trash");
   revalidatePath("/dashboard/comments");
   revalidateTag("blog", "max");
   revalidateTag("posts", "max");
@@ -63,7 +64,7 @@ export function normalizeTaxonomyInput(input: TaxonomyInput): TaxonomyInput | nu
   };
 }
 
-export function normalizePostInput(input: PostInput): PostInput | null {
+export function normalizePostInput(input: PostInput): (PostInput & { status: PostPublishStatus }) | null {
   const title = String(input.title ?? "").trim();
   const slug = String(input.slug ?? "").trim().toLowerCase();
   const excerpt = String(input.excerpt ?? "").trim();
@@ -73,6 +74,7 @@ export function normalizePostInput(input: PostInput): PostInput | null {
     : [];
   const date = String(input.date ?? "").trim();
   const readTimeMinutes = Number(input.readTimeMinutes);
+  const status: PostPublishStatus = input.status === "DRAFT" ? "DRAFT" : "PUBLISHED";
 
   if (!title || !slug || !excerpt || !date) return null;
   if (!Number.isInteger(categoryId) || categoryId <= 0) return null;
@@ -94,5 +96,6 @@ export function normalizePostInput(input: PostInput): PostInput | null {
     coverImageAlt: normalizeOptionalText(input.coverImageAlt),
     metaTitle: normalizeOptionalText(input.metaTitle),
     metaDescription: normalizeOptionalText(input.metaDescription),
+    status,
   };
 }

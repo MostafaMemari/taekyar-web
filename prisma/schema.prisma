@@ -12,6 +12,11 @@ enum CommentStatus {
   REJECTED
 }
 
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
 model Admin {
   id           Int      @id @default(autoincrement())
   username     String   @unique
@@ -34,6 +39,8 @@ model Post {
   coverImageAlt   String?
   metaTitle       String?
   metaDescription String?
+  status          PostStatus @default(PUBLISHED)
+  deletedAt       DateTime?
   createdAt       DateTime @default(now())
   comments        Comment[]
 }

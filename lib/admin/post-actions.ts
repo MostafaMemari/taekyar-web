@@ -1,7 +1,7 @@
 "use server";
 
 import { Prisma } from "@prisma/client";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import type { PostFormState, PostInput } from "@/lib/admin-types";
@@ -46,6 +46,12 @@ export async function updatePost(
   const data = normalizePostInput(rawInput);
   if (!data) return { status: "error", message: POST_FORM_LABELS.error };
 
+  const current = await prisma.post.findUnique({
+    where: { slug: currentSlug },
+    select: { deletedAt: true },
+  });
+  if (!current || current.deletedAt) return { status: "error", message: POST_FORM_LABELS.error };
+
   const duplicate = await prisma.post.findUnique({
     where: { slug: data.slug },
     select: { slug: true },
@@ -74,7 +80,43 @@ export async function updatePost(
   redirect("/dashboard/posts");
 }
 
-export async function deletePost(slug: string): Promise<{ ok: boolean }> {
+export async function trashPost(slug: string): Promise<{ ok: boolean }> {
+  await requireSession();
+
+  try {
+    const result = await prisma.post.updateMany({
+      where: { slug, deletedAt: null },
+      data: { deletedAt: new Date() },
+    });
+    if (result.count === 0) return { ok: false };
+  } catch {
+    return { ok: false };
+  }
+
+  revalidatePostPaths(slug);
+  revalidatePath("/dashboard");
+  return { ok: true };
+}
+
+export async function restorePost(slug: string): Promise<{ ok: boolean }> {
+  await requireSession();
+
+  try {
+    const result = await prisma.post.updateMany({
+      where: { slug, deletedAt: { not: null } },
+      data: { deletedAt: null },
+    });
+    if (result.count === 0) return { ok: false };
+  } catch {
+    return { ok: false };
+  }
+
+  revalidatePostPaths(slug);
+  revalidatePath("/dashboard");
+  return { ok: true };
+}
+
+export async function deletePostPermanently(slug: string): Promise<{ ok: boolean }> {
   await requireSession();
 
   try {
@@ -83,11 +125,7 @@ export async function deletePost(slug: string): Promise<{ ok: boolean }> {
     return { ok: false };
   }
 
-  revalidatePath("/");
-  revalidatePath("/blog");
-  revalidatePath("/dashboard/posts");
+  revalidatePostPaths(slug);
   revalidatePath("/dashboard");
-  revalidateTag("blog", "max");
-  revalidateTag("posts", "max");
   return { ok: true };
 }
