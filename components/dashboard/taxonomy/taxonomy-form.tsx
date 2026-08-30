@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Link2 } from "lucide-react";
 
 import { ImageUpload } from "@/components/dashboard/shared/image-upload";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -9,11 +9,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { saveTaxonomy } from "@/lib/admin-actions";
 import type { TaxonomyInput } from "@/lib/admin-types";
+
+export interface CategoryParentOption {
+  id: number;
+  name: string;
+  path: string;
+  depth: number;
+}
 
 interface TaxonomyFormProps {
   kind: "category" | "tag";
@@ -21,9 +29,24 @@ interface TaxonomyFormProps {
   initial: TaxonomyInput;
   initialImageUrl: string | null;
   currentId?: number;
+  parentOptions?: CategoryParentOption[];
 }
 
-export function TaxonomyForm({ kind, mode, initial, initialImageUrl, currentId }: TaxonomyFormProps) {
+const ROOT_PARENT_VALUE = "root";
+
+function buildCategoryPath(parentPath: string | null, slug: string): string {
+  const normalizedSlug = slug.trim() || TAXONOMY_LABELS.slugPlaceholder;
+  return parentPath ? `${parentPath}/${normalizedSlug}` : normalizedSlug;
+}
+
+export function TaxonomyForm({
+  kind,
+  mode,
+  initial,
+  initialImageUrl,
+  currentId,
+  parentOptions = [],
+}: TaxonomyFormProps) {
   const [fields, setFields] = useState({
     name: initial.name,
     slug: initial.slug,
@@ -32,8 +55,16 @@ export function TaxonomyForm({ kind, mode, initial, initialImageUrl, currentId }
     metaDescription: initial.metaDescription ?? "",
   });
   const [image, setImage] = useState<string | null>(initial.image);
+  const [parentId, setParentId] = useState<string>(
+    initial.parentId !== null && initial.parentId !== undefined ? String(initial.parentId) : ROOT_PARENT_VALUE,
+  );
   const [isPending, startTransition] = useTransition();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const isCategory = kind === "category";
+  const selectedParent = parentOptions.find((option) => String(option.id) === parentId);
+  const categoryPath =
+    isCategory && selectedParent ? buildCategoryPath(selectedParent.path, fields.slug) : null;
 
   function setField<K extends keyof typeof fields>(key: K, value: string) {
     setFields((previous) => ({ ...previous, [key]: value }));
@@ -45,6 +76,7 @@ export function TaxonomyForm({ kind, mode, initial, initialImageUrl, currentId }
     const input: TaxonomyInput = {
       name: fields.name,
       slug: fields.slug.trim(),
+      parentId: isCategory && parentId !== ROOT_PARENT_VALUE ? Number(parentId) : null,
       image,
       description: fields.description,
       metaTitle: fields.metaTitle,
@@ -98,6 +130,38 @@ export function TaxonomyForm({ kind, mode, initial, initialImageUrl, currentId }
               />
             </div>
           </div>
+
+          {isCategory ? (
+            <div className="space-y-1.5">
+              <Label htmlFor="taxonomy-parent" className="text-[13px] font-bold">
+                {TAXONOMY_LABELS.parentLabel}
+              </Label>
+              <Select value={parentId} onValueChange={setParentId}>
+                <SelectTrigger id="taxonomy-parent" className="h-10 w-full rounded-xl">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={ROOT_PARENT_VALUE}>{TAXONOMY_LABELS.parentRootOption}</SelectItem>
+                  {parentOptions.map((option) => (
+                    <SelectItem key={option.id} value={String(option.id)}>
+                      {"— ".repeat(option.depth)}
+                      {option.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : null}
+
+          {categoryPath ? (
+            <div className="flex items-center gap-2 rounded-xl bg-muted/50 px-3 py-2.5 ring-1 ring-border/60">
+              <Link2 className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+              <span className="text-[11px] font-bold text-muted-foreground">{TAXONOMY_LABELS.urlPreviewLabel}:</span>
+              <span dir="ltr" className="truncate font-mono text-[12px] text-foreground">
+                /blog/category/{categoryPath}
+              </span>
+            </div>
+          ) : null}
 
           <Separator className="bg-border/60" />
 

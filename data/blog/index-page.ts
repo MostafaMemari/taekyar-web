@@ -1,15 +1,23 @@
-import { Newspaper, Salad, Target } from "lucide-react";
+import { Compass, Newspaper, Salad, Target } from "lucide-react";
 
 import type { BlogCategoryName } from "@/data/blog/categories";
 
-export const CATEGORY_STYLES: Record<
-  BlogCategoryName,
-  { color: string; Icon: typeof Target }
-> = {
+export interface CategoryStyle {
+  color: string;
+  Icon: typeof Target;
+}
+
+export const CATEGORY_STYLES: Record<BlogCategoryName, CategoryStyle> = {
   "تکنیک‌ها": { color: "#1f5fa8", Icon: Target },
   "اخبار و مسابقات": { color: "#c21807", Icon: Newspaper },
   "تغذیه و تناسب اندام": { color: "#2e8b57", Icon: Salad },
 };
+
+const DEFAULT_CATEGORY_STYLE: CategoryStyle = { color: "#1f5fa8", Icon: Compass };
+
+export function getCategoryStyle(category: string): CategoryStyle {
+  return CATEGORY_STYLES[category as BlogCategoryName] ?? DEFAULT_CATEGORY_STYLE;
+}
 
 export const BLOG_INDEX_INTRO = {
   eyebrow: "وبلاگ تک‌یار",

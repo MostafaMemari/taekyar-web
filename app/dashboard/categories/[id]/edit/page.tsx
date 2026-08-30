@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { TaxonomyForm } from "@/components/dashboard/taxonomy/taxonomy-form";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import type { TaxonomyInput } from "@/lib/admin-types";
+import { buildCategoryTree, flattenCategoryTree } from "@/lib/blog/categories";
 import { prisma } from "@/lib/prisma";
 import { r2PublicUrl } from "@/lib/r2-url";
 
@@ -25,9 +26,22 @@ export default async function EditCategoryPage({ params }: EditCategoryPageProps
   const category = await prisma.category.findUnique({ where: { id: Number(id) } });
   if (!category) notFound();
 
+  const categories = await prisma.category.findMany({
+    orderBy: { name: "asc" },
+    select: { id: true, name: true, path: true, parentId: true },
+  });
+  const parentOptions = flattenCategoryTree(
+    buildCategoryTree(
+      categories.filter(
+        (item) => item.id !== category.id && !item.path.startsWith(`${category.path}/`),
+      ),
+    ),
+  ).map(({ item, depth }) => ({ id: item.id, name: item.name, path: item.path, depth }));
+
   const initial: TaxonomyInput = {
     name: category.name,
     slug: category.slug,
+    parentId: category.parentId,
     image: category.image,
     description: category.description,
     metaTitle: category.metaTitle,
@@ -48,6 +62,7 @@ export default async function EditCategoryPage({ params }: EditCategoryPageProps
           initial={initial}
           initialImageUrl={category.image ? r2PublicUrl(category.image) : null}
           currentId={category.id}
+          parentOptions={parentOptions}
         />
       </div>
     </div>

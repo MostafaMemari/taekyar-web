@@ -54,9 +54,18 @@ export function normalizeTaxonomyInput(input: TaxonomyInput): TaxonomyInput | nu
   const name = String(input.name ?? "").trim();
   const slug = String(input.slug ?? "").trim().toLowerCase();
   if (!name || !slug) return null;
+
+  let parentId: number | null = null;
+  if (input.parentId !== null && input.parentId !== undefined) {
+    const parsed = Number(input.parentId);
+    if (!Number.isInteger(parsed) || parsed <= 0) return null;
+    parentId = parsed;
+  }
+
   return {
     name,
     slug,
+    parentId,
     image: normalizeOptionalText(input.image),
     description: normalizeOptionalText(input.description),
     metaTitle: normalizeOptionalText(input.metaTitle),

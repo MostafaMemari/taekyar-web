@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Clock } from "lucide-react";
 
-import { BLOG_INDEX_LABELS, CATEGORY_STYLES } from "@/data/blog/index-page";
+import { BLOG_INDEX_LABELS, getCategoryStyle } from "@/data/blog/index-page";
 import { Badge } from "@/components/ui/badge";
 import type { BlogPost } from "@/lib/blog";
 import { r2PublicUrl } from "@/lib/r2-url";
@@ -11,7 +11,7 @@ import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
 function CardCover({ post }: { post: BlogPost }) {
-  const { color, Icon } = CATEGORY_STYLES[post.category];
+  const { color, Icon } = getCategoryStyle(post.category);
 
   if (post.coverImage) {
     return (

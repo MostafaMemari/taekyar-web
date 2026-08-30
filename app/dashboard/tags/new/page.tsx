@@ -8,6 +8,7 @@ export default function NewTagPage() {
   const initial: TaxonomyInput = {
     name: "",
     slug: "",
+    parentId: null,
     image: null,
     description: null,
     metaTitle: null,

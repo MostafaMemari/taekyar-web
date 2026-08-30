@@ -4,6 +4,7 @@ import type { PostInput } from "@/lib/admin-types";
 import { PostForm } from "@/components/dashboard/posts/post-form";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { getCategories, getPostBySlugForAdmin, getTags } from "@/lib/blog";
+import { toCategorySelectOptions } from "@/lib/blog/categories";
 import { r2PublicUrl } from "@/lib/r2-url";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +27,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     getTags(),
   ]);
   if (!post) notFound();
+  const categoryOptions = toCategorySelectOptions(categories);
 
   const initial: PostInput = {
     title: post.title,
@@ -56,7 +58,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
           initial={initial}
           initialCoverUrl={post.coverImage ? r2PublicUrl(post.coverImage) : null}
           currentSlug={post.slug}
-          categories={categories}
+          categories={categoryOptions}
           tags={tags}
         />
       </div>

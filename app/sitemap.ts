@@ -4,6 +4,8 @@ import { getBlogPosts, getCategories, getTags } from "@/lib/blog";
 import { categoryHref, postHref, tagHref } from "@/lib/routes";
 import { SITE_URL } from "@/lib/site";
 
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [posts, categories, tags] = await Promise.all([getBlogPosts(), getCategories(), getTags()]);
 
@@ -23,7 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
   const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
-    url: `${SITE_URL}${categoryHref(category.slug)}`,
+    url: `${SITE_URL}${categoryHref(category.path)}`,
     lastModified: category.updatedAt,
     changeFrequency: "weekly",
     priority: 0.6,

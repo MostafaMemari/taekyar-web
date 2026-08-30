@@ -2,6 +2,7 @@ import type { PostInput } from "@/lib/admin-types";
 import { PostForm } from "@/components/dashboard/posts/post-form";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { getCategories, getTags } from "@/lib/blog";
+import { toCategorySelectOptions } from "@/lib/blog/categories";
 import { formatFaDate } from "@/lib/utils";
 
 export const metadata = {
@@ -10,6 +11,7 @@ export const metadata = {
 
 export default async function NewPostPage() {
   const [categories, tags] = await Promise.all([getCategories(), getTags()]);
+  const categoryOptions = toCategorySelectOptions(categories);
 
   const initial: PostInput = {
     title: "",
@@ -38,7 +40,7 @@ export default async function NewPostPage() {
         <PostForm
           mode="create"
           initial={initial}
-          categories={categories}
+          categories={categoryOptions}
           tags={tags}
         />
       </div>

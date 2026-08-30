@@ -40,7 +40,7 @@ async function seedContent() {
   const categoryIdByName = new Map<string, number>();
   for (const name of blogCategories) {
     const category = await prisma.category.create({
-      data: { name, slug: name },
+      data: { name, slug: name, path: name },
     });
     categoryIdByName.set(name, category.id);
   }

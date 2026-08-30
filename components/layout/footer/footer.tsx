@@ -3,7 +3,9 @@ import Link from "next/link";
 import { Send } from "lucide-react";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
-import { getCategories } from "@/lib/blog";
+import { getCategoryTree } from "@/lib/blog";
+import { flattenPublicCategoryTree, type PublicCategoryNode } from "@/lib/blog/categories";
+import { categoryHref } from "@/lib/routes";
 import { navLinks, type NavLink } from "@/data/layout/navigation";
 import { FOOTER_BLURB, FOOTER_COPYRIGHT } from "@/data/layout/footer";
 import { SOCIALS } from "@/data/socials";
@@ -43,12 +45,30 @@ function LinkColumn({
   );
 }
 
+function CategoryLinks({ nodes }: { nodes: PublicCategoryNode[] }) {
+  const items = flattenPublicCategoryTree(nodes);
+
+  return (
+    <nav aria-label="دسته‌بندی‌های وبلاگ" className="space-y-3">
+      <p className="text-sm font-bold text-foreground">موضوعات وبلاگ</p>
+      <ul className="space-y-2.5">
+        {items.map(({ item, depth }) => (
+          <li key={item.id} style={depth > 0 ? { marginInlineStart: `${depth * 14}px` } : undefined}>
+            <Link
+              href={categoryHref(item.path)}
+              className={depth > 0 ? "text-[13px] text-muted-foreground/80 transition-colors hover:text-foreground" : "text-sm text-muted-foreground transition-colors hover:text-foreground"}
+            >
+              {item.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
 export async function Footer() {
-  const categories = await getCategories();
-  const categoryLinks = categories.map((category) => ({
-    label: category.name,
-    href: `/blog/category/${encodeURIComponent(category.slug)}`,
-  }));
+  const categoryTree = await getCategoryTree();
 
   return (
     <footer className="bg-belt-black">
@@ -70,11 +90,7 @@ export async function Footer() {
 
           <LinkColumn title="دسترسی سریع" links={navLinks} ariaLabel="دسترسی سریع" />
 
-          <LinkColumn
-            title="موضوعات وبلاگ"
-            links={categoryLinks}
-            ariaLabel="دسته‌بندی‌های وبلاگ"
-          />
+          <CategoryLinks nodes={categoryTree} />
 
           <div className="col-span-2 space-y-3 text-center lg:col-span-1 lg:text-start">
             <p className="text-sm font-bold text-foreground">تک‌یار را دنبال کنید</p>

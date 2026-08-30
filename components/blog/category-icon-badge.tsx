@@ -1,18 +1,14 @@
-import { Compass } from "lucide-react";
-
-import { CATEGORY_STYLES } from "@/data/blog/index-page";
-import type { BlogCategoryName } from "@/data/blog/categories";
+import { getCategoryStyle } from "@/data/blog/index-page";
 import { cn } from "@/lib/utils";
 
 interface CategoryIconBadgeProps {
-  category: BlogCategoryName;
+  category: string;
   className?: string;
   iconClassName?: string;
 }
 
 export function CategoryIconBadge({ category, className, iconClassName }: CategoryIconBadgeProps) {
-  const style = CATEGORY_STYLES[category] ?? { color: "#1f5fa8", Icon: Compass };
-  const { color, Icon } = style;
+  const { color, Icon } = getCategoryStyle(category);
 
   return (
     <span

@@ -28,6 +28,7 @@ export default async function EditTagPage({ params }: EditTagPageProps) {
   const initial: TaxonomyInput = {
     name: tag.name,
     slug: tag.slug,
+    parentId: null,
     image: tag.image,
     description: tag.description,
     metaTitle: tag.metaTitle,

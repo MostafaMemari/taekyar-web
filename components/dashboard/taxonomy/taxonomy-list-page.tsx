@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { POSTS_TABLE_LABELS, TAXONOMY_LABELS } from "@/data/dashboard/ui";
+import { filterCategoryRowsWithAncestors } from "@/lib/blog/categories";
 import { prisma } from "@/lib/prisma";
 import { toFaDigits } from "@/lib/utils";
 
@@ -27,25 +28,42 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
   const basePath = `/dashboard/${kind === "category" ? "categories" : "tags"}`;
   const copy = TAXONOMY_LABELS.kinds[kind];
 
-  const total =
-    kind === "category"
-      ? await prisma.category.count({ where })
-      : await prisma.tag.count({ where });
-  const totalPages = Math.max(1, Math.ceil(total / TAXONOMY_PER_PAGE));
-  const currentPage = Math.min(Math.max(Number(page) || 1, 1), totalPages);
+  let totalPages = 1;
+  let currentPage = 1;
 
-  const args = {
-    where,
-    orderBy: { name: "asc" as const },
-    include: { _count: { select: { posts: true } } },
-    skip: (currentPage - 1) * TAXONOMY_PER_PAGE,
-    take: TAXONOMY_PER_PAGE,
-  };
-
-  const rows =
+  const categoryRows =
     kind === "category"
-      ? await prisma.category.findMany(args)
-      : await prisma.tag.findMany(args);
+      ? filterCategoryRowsWithAncestors(
+          await prisma.category.findMany({
+            orderBy: { name: "asc" },
+            include: { _count: { select: { posts: true } } },
+          }),
+          query,
+        )
+      : [];
+
+  const tagResult =
+    kind === "tag"
+      ? await (async () => {
+          const total = await prisma.tag.count({ where });
+          const pageCount = Math.max(1, Math.ceil(total / TAXONOMY_PER_PAGE));
+          const pageIndex = Math.min(Math.max(Number(page) || 1, 1), pageCount);
+          const rows = await prisma.tag.findMany({
+            where,
+            orderBy: { name: "asc" },
+            include: { _count: { select: { posts: true } } },
+            skip: (pageIndex - 1) * TAXONOMY_PER_PAGE,
+            take: TAXONOMY_PER_PAGE,
+          });
+          return { rows, pageCount, pageIndex };
+        })()
+      : null;
+
+  totalPages = tagResult?.pageCount ?? 1;
+  currentPage = tagResult?.pageIndex ?? 1;
+  const tagRows = tagResult?.rows ?? [];
+
+  const rows = kind === "category" ? categoryRows : tagRows;
 
   function buildHref(targetPage: number) {
     const params = new URLSearchParams();
@@ -114,8 +132,10 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
               </Button>
             )}
           </CardContent>
+        ) : kind === "category" ? (
+          <TaxonomyTable kind="category" rows={categoryRows} />
         ) : (
-          <TaxonomyTable kind={kind} rows={rows} />
+          <TaxonomyTable kind="tag" rows={tagRows} />
         )}
       </Card>
 

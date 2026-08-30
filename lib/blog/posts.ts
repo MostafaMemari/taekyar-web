@@ -95,10 +95,17 @@ export const getPostBySlugForAdmin = cache(
 );
 
 export const getPostsByCategory = cache(
-  async (categoryId: number): Promise<BlogPost[]> => {
+  async (category: { id: number; path: string }): Promise<BlogPost[]> => {
     try {
+      const descendants = await prisma.category.findMany({
+        where: { path: { startsWith: `${category.path}/` } },
+        select: { id: true },
+      });
       const posts = await prisma.post.findMany({
-        where: { ...PUBLIC_POST_WHERE, categoryId },
+        where: {
+          ...PUBLIC_POST_WHERE,
+          categoryId: { in: [category.id, ...descendants.map((descendant) => descendant.id)] },
+        },
         orderBy: { createdAt: "desc" },
         include: POST_INCLUDE,
       });

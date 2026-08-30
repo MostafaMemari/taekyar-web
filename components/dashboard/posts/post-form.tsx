@@ -21,7 +21,7 @@ interface PostFormProps {
   initial: PostInput;
   initialCoverUrl?: string | null;
   currentSlug?: string;
-  categories: Array<{ id: number; name: string }>;
+  categories: Array<{ id: number; name: string; depth: number }>;
   tags: Array<{ id: number; name: string }>;
 }
 

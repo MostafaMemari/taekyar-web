@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
 import { getCategories } from "@/lib/blog";
+import { categoryHref } from "@/lib/routes";
 import type { BlogCategoryName } from "@/data/blog/categories";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +36,9 @@ export async function CategoryFilter({
 }: {
   activeCategory: BlogCategoryName | null;
 }) {
-  const categories = await getCategories();
+  const categories = (await getCategories()).filter(
+    (category) => category.parentId === null,
+  );
 
   return (
     <nav
@@ -49,7 +52,7 @@ export async function CategoryFilter({
         {categories.map((category) => (
           <FilterChip
             key={category.id}
-            href={`/blog/category/${encodeURIComponent(category.slug)}`}
+            href={categoryHref(category.path)}
             active={activeCategory === category.name}
           >
             {category.name}

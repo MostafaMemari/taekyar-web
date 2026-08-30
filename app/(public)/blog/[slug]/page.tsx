@@ -16,9 +16,8 @@ import { ContactBanner } from "@/components/shared/contact-banner";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { getPostComments, getBlogPosts, getPostBySlug } from "@/lib/blog";
+import { getPostComments, getBlogPosts, getPostBySlug, getCategoryAncestorsByPath } from "@/lib/blog";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
-import type { BlogCategoryName } from "@/data/blog/categories";
 import { getHeadings, type TocItem } from "@/lib/post-content";
 import { getRelatedPosts } from "@/lib/blog-related";
 import { buildPageMetadata } from "@/lib/seo";
@@ -48,18 +47,18 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
 interface PostRailProps {
   slug: string;
-  category: BlogCategoryName;
+  categoryPath: string;
   tocItems: TocItem[];
 }
 
-function PostRail({ slug, category, tocItems }: PostRailProps) {
+function PostRail({ slug, categoryPath, tocItems }: PostRailProps) {
   return (
     <div className="space-y-3.5 sm:space-y-4 lg:sticky lg:top-[88px]">
       <div className="hidden lg:block">
         <TableOfContents items={tocItems} />
       </div>
       <SidebarGuides currentSlug={slug} />
-      <SidebarCategories activeCategory={category} />
+      <SidebarCategories activeCategory={categoryPath} />
       <SidebarAppCta />
     </div>
   );
@@ -73,9 +72,10 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const content = post.content;
   const headings = getHeadings(content);
-  const [allPosts, comments] = await Promise.all([
+  const [allPosts, comments, categoryAncestors] = await Promise.all([
     getBlogPosts(),
     getPostComments(post.slug),
+    getCategoryAncestorsByPath(post.categoryPath),
   ]);
   const relatedPosts = getRelatedPosts(allPosts, post.slug, post.category, RELATED_POSTS_COUNT);
 
@@ -85,7 +85,11 @@ export default async function PostPage({ params }: PostPageProps) {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "وبلاگ", path: "/blog" },
-          { name: post.category, path: categoryHref(post.categorySlug) },
+          ...categoryAncestors.map((ancestor) => ({
+            name: ancestor.name,
+            path: categoryHref(ancestor.path),
+          })),
+          { name: post.category, path: categoryHref(post.categoryPath) },
           { name: post.title, path: postHref(post.slug) },
         ])}
       />
@@ -121,7 +125,7 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
 
             <aside aria-label="ابزارهای مقاله" className="min-w-0 lg:col-start-2 lg:row-start-2">
-              <PostRail slug={post.slug} category={post.category} tocItems={headings} />
+              <PostRail slug={post.slug} categoryPath={post.categoryPath} tocItems={headings} />
             </aside>
           </div>
         </Reveal>

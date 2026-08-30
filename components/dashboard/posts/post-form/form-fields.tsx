@@ -13,7 +13,7 @@ import type { FieldDraft } from "./types";
 interface FormFieldsProps {
   fields: FieldDraft;
   onFieldChange: <K extends keyof FieldDraft>(key: K, value: FieldDraft[K]) => void;
-  categories: Array<{ id: number; name: string }>;
+  categories: Array<{ id: number; name: string; depth: number }>;
   tags: Array<{ id: number; name: string }>;
   selectedTagIds: number[];
   onToggleTag: (id: number) => void;
@@ -76,6 +76,7 @@ export function FormFields({
                 <SelectContent>
                   {categories.map((category) => (
                     <SelectItem key={category.id} value={String(category.id)}>
+                      {"— ".repeat(category.depth)}
                       {category.name}
                     </SelectItem>
                   ))}

@@ -1,12 +1,12 @@
 import Image from "next/image";
 
-import { CATEGORY_STYLES } from "@/data/blog/index-page";
+import { getCategoryStyle } from "@/data/blog/index-page";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import type { BlogPost } from "@/lib/blog";
 import { r2PublicUrl } from "@/lib/r2-url";
 
 export function PostCover({ post }: { post: BlogPost }) {
-  const { color, Icon } = CATEGORY_STYLES[post.category];
+  const { color, Icon } = getCategoryStyle(post.category);
 
   if (post.coverImage) {
     return (

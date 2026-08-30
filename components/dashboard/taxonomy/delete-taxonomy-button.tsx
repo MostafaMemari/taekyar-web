@@ -31,6 +31,10 @@ export function DeleteTaxonomyButton({ kind, id }: DeleteTaxonomyButtonProps) {
           const result = await deleteTaxonomy(kind, id);
           if (result.ok) {
             toast({ tone: "success", title: copy.deleted });
+          } else if (result.reason === "hasChildren") {
+            toast({ tone: "error", title: TAXONOMY_LABELS.deleteBlockedChildren });
+          } else if (result.reason === "hasPosts") {
+            toast({ tone: "error", title: TAXONOMY_LABELS.deleteBlockedPosts });
           } else {
             toast({ tone: "error", title: TAXONOMY_LABELS.deleteError });
           }

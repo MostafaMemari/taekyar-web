@@ -5,6 +5,7 @@ export type PostPublishStatus = "DRAFT" | "PUBLISHED";
 export interface TaxonomyInput {
   name: string;
   slug: string;
+  parentId: number | null;
   image: string | null;
   description: string | null;
   metaTitle: string | null;

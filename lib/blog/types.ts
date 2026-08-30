@@ -1,13 +1,11 @@
-import type { BlogCategoryName } from "@/data/blog/categories";
-
 export interface BlogPost {
   id: number;
   slug: string;
   title: string;
   excerpt: string;
   categoryId: number;
-  category: BlogCategoryName;
-  categorySlug: string;
+  category: string;
+  categoryPath: string;
   categoryImage: string | null;
   tags: Array<{ id: number; name: string; slug: string }>;
   date: string;
@@ -38,7 +36,7 @@ export interface BlogPostRow {
   metaDescription: string | null;
   createdAt: Date;
   updatedAt: Date;
-  category: { id: number; name: string; slug: string; image: string | null };
+  category: { id: number; name: string; slug: string; path: string; image: string | null };
   tags: Array<{ id: number; name: string; slug: string }>;
 }
 
@@ -49,8 +47,8 @@ export function toBlogPost(post: BlogPostRow): BlogPost {
     title: post.title,
     excerpt: post.excerpt,
     categoryId: post.category.id,
-    category: post.category.name as BlogCategoryName,
-    categorySlug: post.category.slug,
+    category: post.category.name,
+    categoryPath: post.category.path,
     categoryImage: post.category.image,
     tags: post.tags,
     date: post.date,
