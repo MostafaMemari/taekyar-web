@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { uploadImageAction } from "@/lib/admin-actions";
+import { MEDIA_MAX_BYTES } from "@/lib/media";
 import { cn } from "@/lib/utils";
 
 interface ImageUploadProps {
@@ -32,17 +33,25 @@ export function ImageUpload({ id, initialKey, initialUrl, onChange }: ImageUploa
 
   function handleFile(file: File) {
     setError(null);
+    if (file.size > MEDIA_MAX_BYTES) {
+      setError(TAXONOMY_LABELS.fileTooLarge);
+      return;
+    }
     startTransition(async () => {
-      const result = await uploadImageAction(file);
-      if (result.ok && result.key && result.url) {
-        setImage({ key: result.key, url: result.url });
-        onChange(result.key);
-        return;
-      }
+      try {
+        const result = await uploadImageAction(file);
+        if (result.ok && result.key && result.url) {
+          setImage({ key: result.key, url: result.url });
+          onChange(result.key);
+          return;
+        }
 
-      if (result.error === "UNSUPPORTED_TYPE") setError(TAXONOMY_LABELS.unsupportedType);
-      else if (result.error === "FILE_TOO_LARGE") setError(TAXONOMY_LABELS.fileTooLarge);
-      else setError(TAXONOMY_LABELS.uploadError);
+        if (result.error === "UNSUPPORTED_TYPE") setError(TAXONOMY_LABELS.unsupportedType);
+        else if (result.error === "FILE_TOO_LARGE") setError(TAXONOMY_LABELS.fileTooLarge);
+        else setError(TAXONOMY_LABELS.uploadError);
+      } catch {
+        setError(TAXONOMY_LABELS.uploadError);
+      }
     });
   }
 
@@ -121,7 +130,7 @@ export function ImageUpload({ id, initialKey, initialUrl, onChange }: ImageUploa
             </Button>
 
             <span className="text-xs font-medium text-muted-foreground">
-              JPG، PNG یا WebP — تا ۵ مگابایت
+              JPG، PNG یا WebP — تا ۱ مگابایت
             </span>
           </div>
         </CardContent>

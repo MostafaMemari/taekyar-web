@@ -36,7 +36,7 @@ export const TAXONOMY_LABELS = {
   slugLabel: "نشانی (اسلاگ)",
   slugPlaceholder: "category-slug",
   imageLabel: "تصویر",
-  imageHint: "JPG، PNG یا WebP — حداکثر ۵ مگابایت",
+  imageHint: "JPG، PNG یا WebP — حداکثر ۱ مگابایت",
   imageAlt: "پیش‌نمایش تصویر",
   upload: "انتخاب تصویر",
   uploading: "در حال آپلود…",

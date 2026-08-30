@@ -1,6 +1,6 @@
 import { AwsClient } from "aws4fetch";
 
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+import { MEDIA_MAX_BYTES } from "@/lib/media";
 
 const ALLOWED_IMAGE_TYPES: Record<string, string> = {
   "image/jpeg": "jpg",
@@ -33,7 +33,7 @@ export function isAllowedImageType(type: string): boolean {
 
 export async function uploadImage(file: File): Promise<string> {
   if (!isAllowedImageType(file.type)) throw new Error("UNSUPPORTED_TYPE");
-  if (file.size > MAX_IMAGE_BYTES) throw new Error("FILE_TOO_LARGE");
+  if (file.size > MEDIA_MAX_BYTES) throw new Error("FILE_TOO_LARGE");
 
   const bucket = getRequiredEnv("R2_BUCKET_NAME");
   const extension = ALLOWED_IMAGE_TYPES[file.type];
