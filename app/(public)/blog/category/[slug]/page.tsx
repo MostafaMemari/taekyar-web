@@ -7,6 +7,7 @@ import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
 import { breadcrumbJsonLd } from "@/lib/blog/structured-data";
 import { getCategoryBySlug, getPostsByCategory } from "@/lib/blog";
 import { buildPageMetadata } from "@/lib/seo";
+import { categoryHref } from "@/lib/routes";
 
 export const revalidate = 60;
 
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       category.metaDescription ??
       category.description ??
       `مقالات دسته‌بندی «${category.name}» در وبلاگ تک‌یار.`,
-    path: `/blog/category/${category.slug}`,
+    path: categoryHref(category.slug),
     imageUrl: category.image,
   });
 }
@@ -43,7 +44,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "وبلاگ", path: "/blog" },
-          { name: category.name, path: `/blog/category/${category.slug}` },
+          { name: category.name, path: categoryHref(category.slug) },
         ])}
       />
       <TaxonomyArchive

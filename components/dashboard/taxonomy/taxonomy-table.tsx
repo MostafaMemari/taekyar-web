@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { r2PublicUrl } from "@/lib/r2-url";
+import { categoryHref, tagHref } from "@/lib/routes";
 import { toFaDigits } from "@/lib/utils";
 
 interface TaxonomyRow {
@@ -19,6 +20,7 @@ interface TaxonomyRow {
 
 export function TaxonomyTable({ kind, rows }: { kind: "category" | "tag"; rows: TaxonomyRow[] }) {
   const basePath = `/dashboard/${kind === "category" ? "categories" : "tags"}`;
+  const publicHref = kind === "category" ? categoryHref : tagHref;
 
   return (
     <div className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm shadow-black/[0.03]">
@@ -66,7 +68,8 @@ export function TaxonomyTable({ kind, rows }: { kind: "category" | "tag"; rows: 
                       </span>
                     )}
                     <Link
-                      href={`${basePath}/${row.id}/edit`}
+                      href={publicHref(row.slug)}
+                      target="_blank"
                       className="text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 rounded-sm"
                     >
                       {row.name}
@@ -78,7 +81,7 @@ export function TaxonomyTable({ kind, rows }: { kind: "category" | "tag"; rows: 
                   className="px-4 py-3.5 text-start text-[13px] font-medium text-muted-foreground"
                 >
                   <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-mono ring-1 ring-border/60">
-                    /blog/{kind}/{row.slug}
+                    {publicHref(row.slug)}
                   </span>
                 </TableCell>
                 <TableCell className="px-4 py-3.5">

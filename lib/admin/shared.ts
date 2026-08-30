@@ -2,6 +2,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import type { PostInput, TaxonomyInput } from "@/lib/admin-types";
+import { postHref } from "@/lib/routes";
 import { sanitizePostHtml } from "@/lib/post-content";
 
 export async function requireSession() {
@@ -13,7 +14,7 @@ export async function requireSession() {
 export function revalidatePostPaths(slug: string) {
   revalidatePath("/");
   revalidatePath("/blog");
-  revalidatePath(`/blog/${slug}`);
+  revalidatePath(postHref(slug));
   revalidatePath("/dashboard/posts");
   revalidatePath("/dashboard/comments");
   revalidateTag("blog", "max");

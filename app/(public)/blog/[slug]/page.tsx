@@ -22,6 +22,7 @@ import type { BlogCategoryName } from "@/data/blog/categories";
 import { getHeadings, type TocItem } from "@/lib/post-content";
 import { getRelatedPosts } from "@/lib/blog-related";
 import { buildPageMetadata } from "@/lib/seo";
+import { categoryHref, postHref } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 interface PostPageProps {
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   return buildPageMetadata({
     title: post.metaTitle ?? post.title,
     description: post.metaDescription ?? post.excerpt,
-    path: `/blog/${post.slug}`,
+    path: postHref(post.slug),
     imageUrl: post.coverImage ?? post.categoryImage,
     publishedTime: post.createdAt,
   });
@@ -84,8 +85,8 @@ export default async function PostPage({ params }: PostPageProps) {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "وبلاگ", path: "/blog" },
-          { name: post.category, path: `/blog/category/${encodeURIComponent(post.categorySlug)}` },
-          { name: post.title, path: `/blog/${post.slug}` },
+          { name: post.category, path: categoryHref(post.categorySlug) },
+          { name: post.title, path: postHref(post.slug) },
         ])}
       />
       <Section className="pb-0 sm:pb-0 lg:pb-0">

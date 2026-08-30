@@ -6,6 +6,7 @@ import { BLOG_INDEX_LABELS, CATEGORY_STYLES } from "@/data/blog/index-page";
 import { Badge } from "@/components/ui/badge";
 import type { BlogPost } from "@/lib/blog";
 import { r2PublicUrl } from "@/lib/r2-url";
+import { postHref } from "@/lib/routes";
 import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
@@ -48,7 +49,7 @@ function CardCover({ post }: { post: BlogPost }) {
 }
 
 export function BlogCard({ post }: { post: BlogPost }) {
-  const href = `/blog/${post.slug}`;
+  const href = postHref(post.slug);
 
   return (
     <article

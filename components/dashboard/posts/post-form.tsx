@@ -6,14 +6,16 @@ import { AlertCircle } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { POST_FORM_LABELS } from "@/data/dashboard/ui";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { POST_FORM_LABELS, TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { createPost, updatePost } from "@/lib/admin-actions";
 import type { PostInput } from "@/lib/admin-types";
 import { parsePostHtml } from "@/lib/post-content";
 import { RichContentEditor } from "./rich-content-editor";
 import { CoverImageField, type CoverImageValue } from "./post-form/cover-image-field";
-import { FormFields } from "./post-form/form-fields";
+import { PostDetailsFields, PostSeoFields, PostTagsFields } from "./post-form/form-fields";
 import type { FieldDraft } from "./post-form/types";
 
 interface PostFormProps {
@@ -89,15 +91,39 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      <FormFields
-        fields={fields}
-        onFieldChange={setField}
-        categories={categories}
-        tags={tags}
-        selectedTagIds={selectedTagIds}
-        onToggleTag={toggleTag}
-      />
-      <CoverImageField value={coverImage} onChange={setCoverImage} />
+      <Card>
+        <CardContent className="pt-4">
+          <Tabs defaultValue="details">
+            <TabsList className="w-full sm:w-fit">
+              <TabsTrigger value="details">{POST_FORM_LABELS.detailsTabLabel}</TabsTrigger>
+              <TabsTrigger value="cover">{POST_FORM_LABELS.coverImageLabel}</TabsTrigger>
+              <TabsTrigger value="tags">{POST_FORM_LABELS.tagsLabel}</TabsTrigger>
+              <TabsTrigger value="seo">{TAXONOMY_LABELS.seoTitle}</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="details" className="pt-2">
+              <PostDetailsFields
+                fields={fields}
+                onFieldChange={setField}
+                categories={categories}
+              />
+            </TabsContent>
+
+            <TabsContent value="cover" className="pt-2">
+              <CoverImageField value={coverImage} onChange={setCoverImage} />
+            </TabsContent>
+
+            <TabsContent value="tags" className="pt-2">
+              <PostTagsFields tags={tags} selectedTagIds={selectedTagIds} onToggleTag={toggleTag} />
+            </TabsContent>
+
+            <TabsContent value="seo" className="pt-2">
+              <PostSeoFields fields={fields} onFieldChange={setField} />
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+
       <RichContentEditor initialContent={content} onChange={setContent} />
 
       {errorMessage ? (

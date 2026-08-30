@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { getBlogPosts, getCategories, getTags } from "@/lib/blog";
+import { categoryHref, postHref, tagHref } from "@/lib/routes";
 import { SITE_URL } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -13,20 +14,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `${SITE_URL}/blog/${post.slug}`,
+    url: `${SITE_URL}${postHref(post.slug)}`,
     lastModified: post.createdAt,
     changeFrequency: "monthly",
     priority: 0.7,
   }));
 
   const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
-    url: `${SITE_URL}/blog/category/${category.slug}`,
+    url: `${SITE_URL}${categoryHref(category.slug)}`,
     changeFrequency: "weekly",
     priority: 0.6,
   }));
 
   const tagRoutes: MetadataRoute.Sitemap = tags.map((tag) => ({
-    url: `${SITE_URL}/blog/tag/${tag.slug}`,
+    url: `${SITE_URL}${tagHref(tag.slug)}`,
     changeFrequency: "weekly",
     priority: 0.4,
   }));

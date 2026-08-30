@@ -33,6 +33,7 @@ export const TAXONOMY_LABELS = {
   },
   nameLabel: "نام",
   namePlaceholder: "نام",
+  detailsTabLabel: "اطلاعات",
   slugLabel: "نشانی (اسلاگ)",
   slugPlaceholder: "category-slug",
   imageLabel: "تصویر",

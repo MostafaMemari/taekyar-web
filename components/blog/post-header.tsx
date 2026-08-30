@@ -4,6 +4,7 @@ import { ArrowRight, CalendarDays, Clock } from "lucide-react";
 import { CATEGORY_STYLES } from "@/data/blog/index-page";
 import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
+import { categoryHref } from "@/lib/routes";
 import { toFaDigits } from "@/lib/utils";
 
 export function PostTopbar() {
@@ -31,7 +32,7 @@ function PostMeta({ post }: { post: BlogPost }) {
   return (
     <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2 sm:gap-x-3 sm:gap-y-2.5">
       <Link
-        href={`/blog/category/${encodeURIComponent(post.categorySlug)}`}
+        href={categoryHref(post.categorySlug)}
         className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-bold transition-opacity hover:opacity-80 sm:px-3 sm:py-1.5 sm:text-xs"
         style={{ backgroundColor: `${color}14`, color }}
       >

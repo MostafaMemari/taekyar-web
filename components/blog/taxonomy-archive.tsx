@@ -43,24 +43,25 @@ export function TaxonomyArchive({
               {title}
             </h1>
             <BeltDivider variant="pill" width="contained" className="mt-3.5 h-1 w-16 sm:w-20" />
+
+            {imageUrl ? (
+              <div className="relative mx-auto mt-6 aspect-[16/7] w-full max-w-sm overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06]">
+                <Image
+                  src={r2PublicUrl(imageUrl)}
+                  alt={title}
+                  fill
+                  unoptimized
+                  className="object-cover"
+                />
+              </div>
+            ) : null}
+
             {description ? (
               <p className="mt-3.5 max-w-xl text-pretty text-[14px] leading-7 text-muted-foreground sm:text-[15px] sm:leading-7">
                 {description}
               </p>
             ) : null}
           </div>
-
-          {imageUrl ? (
-            <div className="relative mt-8 aspect-[16/6] overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06]">
-              <Image
-                src={r2PublicUrl(imageUrl)}
-                alt={title}
-                fill
-                unoptimized
-                className="object-cover"
-              />
-            </div>
-          ) : null}
 
           <div className="mt-6">
             <Link

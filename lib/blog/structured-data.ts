@@ -1,4 +1,5 @@
 import type { BlogPost } from "./types";
+import { postHref } from "@/lib/routes";
 import { r2PublicUrl } from "@/lib/r2-url";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -38,7 +39,7 @@ export function articleJsonLd(post: BlogPost) {
     datePublished: post.createdAt.toISOString(),
     author: { "@type": "Organization", name: SITE_NAME },
     publisher: { "@type": "Organization", name: SITE_NAME },
-    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
+    mainEntityOfPage: absoluteUrl(postHref(post.slug)),
     articleSection: post.category,
     keywords,
   };

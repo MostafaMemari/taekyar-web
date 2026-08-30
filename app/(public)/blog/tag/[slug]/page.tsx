@@ -7,6 +7,7 @@ import { TAG_PAGE_LABELS } from "@/data/blog/tag-page";
 import { breadcrumbJsonLd } from "@/lib/blog/structured-data";
 import { getPostsByTag, getTagBySlug } from "@/lib/blog";
 import { buildPageMetadata } from "@/lib/seo";
+import { tagHref } from "@/lib/routes";
 import { SITE_NAME } from "@/lib/site";
 
 export const revalidate = 60;
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: TagPageProps): Promise<Metada
     title: tag.metaTitle ?? tag.name,
     description:
       tag.metaDescription ?? tag.description ?? `مقالات و آموزش‌های مرتبط با «${tag.name}» در وبلاگ ${SITE_NAME}.`,
-    path: `/blog/tag/${tag.slug}`,
+    path: tagHref(tag.slug),
     imageUrl: tag.image,
   });
 }
@@ -42,7 +43,7 @@ export default async function TagPage({ params }: TagPageProps) {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "وبلاگ", path: "/blog" },
-          { name: tag.name, path: `/blog/tag/${tag.slug}` },
+          { name: tag.name, path: tagHref(tag.slug) },
         ])}
       />
       <TaxonomyArchive

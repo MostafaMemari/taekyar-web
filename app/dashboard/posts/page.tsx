@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
+import { postHref } from "@/lib/routes";
 import { r2PublicUrl } from "@/lib/r2-url";
 import { toFaDigits } from "@/lib/utils";
 
@@ -190,7 +191,8 @@ function PostsTable({ posts }: PostsTableProps) {
                   )}
                   <div className="min-w-0">
                     <Link
-                      href={`/dashboard/posts/${post.slug}/edit`}
+                      href={postHref(post.slug)}
+                      target="_blank"
                       className="block truncate text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 rounded-sm"
                     >
                       {post.title}

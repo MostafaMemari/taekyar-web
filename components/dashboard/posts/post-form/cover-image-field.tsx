@@ -5,7 +5,6 @@ import { ImagePlus, X } from "lucide-react";
 
 import { MediaPicker, type MediaPickerSelection } from "@/components/dashboard/media/media-picker";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
@@ -32,13 +31,10 @@ export function CoverImageField({ value, onChange }: CoverImageFieldProps) {
   }
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-[14px] font-black">{POST_FORM_LABELS.coverImageLabel}</CardTitle>
-        <p className="text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.coverImageDescription}</p>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {value.key && value.url ? (
+    <div className="space-y-4">
+      <p className="text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.coverImageDescription}</p>
+
+      {value.key && value.url ? (
           <div className="relative overflow-hidden rounded-xl bg-card ring-1 ring-border/60">
             <Image
               src={value.url}
@@ -63,10 +59,8 @@ export function CoverImageField({ value, onChange }: CoverImageFieldProps) {
               <ImagePlus className="size-6" aria-hidden="true" />
             </span>
             <p className="mt-3 text-[13px] font-bold">{POST_FORM_LABELS.coverImageSelect}</p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.coverImageDescription}</p>
           </div>
         )}
-
         {value.key ? (
           <div className="space-y-1.5">
             <Label htmlFor="cover-image-alt" className="text-[13px] font-bold">
@@ -98,7 +92,6 @@ export function CoverImageField({ value, onChange }: CoverImageFieldProps) {
           dialogTitle={POST_FORM_LABELS.coverImageDialogTitle}
           insertLabel={POST_FORM_LABELS.coverImageInsert}
         />
-      </CardContent>
-    </Card>
+    </div>
   );
 }
