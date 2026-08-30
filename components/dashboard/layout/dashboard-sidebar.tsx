@@ -23,9 +23,7 @@ export function DashboardSidebar({ username }: { username: string }) {
 
       <div className="px-5 pb-4 pt-5">
         <Wordmark />
-        <p className="mt-1.5 ps-0.5 text-[11px] font-medium tracking-widest text-muted-foreground">
-          {DASHBOARD_LABELS.panel}
-        </p>
+        <p className="mt-1.5 ps-0.5 text-[11px] font-medium tracking-widest text-muted-foreground">{DASHBOARD_LABELS.panel}</p>
       </div>
 
       <div className="px-5">
@@ -33,13 +31,10 @@ export function DashboardSidebar({ username }: { username: string }) {
       </div>
 
       <div className="px-3 py-3">
-        <p className="px-2 pb-2 text-[10px] font-bold tracking-[0.12em] text-muted-foreground/70">
-          مدیریت محتوا
-        </p>
+        <p className="px-2 pb-2 text-[10px] font-bold tracking-[0.12em] text-muted-foreground/70">مدیریت محتوا</p>
         <nav aria-label={DASHBOARD_LABELS.sectionLabel} className="flex flex-col gap-1">
           {DASHBOARD_NAV.map(({ href, label, Icon }) => {
-            const active =
-              href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
+            const active = href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
 
             return (
               <Link
@@ -82,7 +77,7 @@ export function DashboardSidebar({ username }: { username: string }) {
                 {initial}
               </span>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-[13px] font-bold leading-4">{username}</p>
+                <p className="truncate text-muted-foreground text-[13px] font-bold leading-4">{username}</p>
                 <p className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
                   <Shield className="size-3 shrink-0" aria-hidden="true" />
                   مدیر
