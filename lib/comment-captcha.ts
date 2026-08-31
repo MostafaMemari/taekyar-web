@@ -368,7 +368,10 @@ export function verifyCaptchaAnswer(params: {
   if (!params.sessionToken) return "expired";
 
   const live = liveChallengesFor(params.sessionToken, params.ipHash, now);
-  if (live.length === 0) return "expired";
+  if (live.length === 0) {
+    console.warn(`[captcha-debug] store-miss hadSession=${Boolean(params.sessionToken)}`);
+    return "expired";
+  }
 
   const normalized = normalizeDigits(params.answer.trim());
   const wellFormed =
