@@ -11,25 +11,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { BLOG_PAGINATION } from "@/data/blog/index-page";
-import { cn, toFaDigits } from "@/lib/utils";
-
-type PageItem = number | "dots";
-
-function pageItems(current: number, total: number): PageItem[] {
-  if (total <= 7) return Array.from({ length: total }, (_, index) => index + 1);
-
-  const wanted = new Set([1, 2, current - 1, current, current + 1, total - 1, total].filter((page) => page >= 1 && page <= total));
-  const sorted = [...wanted].sort((first, second) => first - second);
-
-  const items: PageItem[] = [];
-  let previous = 0;
-  for (const page of sorted) {
-    if (page - previous > 1) items.push("dots");
-    items.push(page);
-    previous = page;
-  }
-  return items;
-}
+import { cn, getPageItems, toFaDigits } from "@/lib/utils";
 
 const edgeChipClass =
   "h-9 min-w-9 gap-1 rounded-full border-transparent bg-card px-3 text-[13px] font-medium text-muted-foreground hover:border-primary/30 hover:bg-card hover:text-primary";
@@ -75,7 +57,7 @@ export function BlogPagination({ currentPage, totalPages, hrefFor }: BlogPaginat
           )}
         </PaginationItem>
 
-        {pageItems(currentPage, totalPages).map((item, index) =>
+        {getPageItems(currentPage, totalPages).map((item, index) =>
           item === "dots" ? (
             <PaginationItem key={`dots-${index}`}>
               <PaginationEllipsis className="text-muted-foreground" />

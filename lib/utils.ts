@@ -9,6 +9,26 @@ export function toFaDigits(n: number) {
   return String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)])
 }
 
+export type PageItem = number | "dots";
+
+export function getPageItems(current: number, total: number): PageItem[] {
+  if (total <= 7) return Array.from({ length: total }, (_, index) => index + 1);
+
+  const wanted = new Set(
+    [1, 2, current - 1, current, current + 1, total - 1, total].filter((page) => page >= 1 && page <= total),
+  );
+  const sorted = [...wanted].sort((first, second) => first - second);
+
+  const items: PageItem[] = [];
+  let previous = 0;
+  for (const page of sorted) {
+    if (page - previous > 1) items.push("dots");
+    items.push(page);
+    previous = page;
+  }
+  return items;
+}
+
 const faDateFormatter = new Intl.DateTimeFormat("fa-IR", {
   day: "numeric",
   month: "long",

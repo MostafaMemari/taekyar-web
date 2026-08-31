@@ -4,11 +4,13 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
+  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { toFaDigits } from "@/lib/utils";
+import { cn, getPageItems, toFaDigits } from "@/lib/utils";
 
 export interface PaginationNavLabels {
   prevPage: string;
@@ -26,48 +28,78 @@ interface PaginationNavProps {
   labels: PaginationNavLabels;
 }
 
+const edgeButtonClass = "gap-1.5 px-3 text-[13px] font-bold text-muted-foreground";
+
 export function PaginationNav({ currentPage, totalPages, total, buildHref, labels }: PaginationNavProps) {
   return (
     <Pagination
       aria-label={labels.title}
-      className="justify-between rounded-xl border border-border/60 bg-card px-2 py-2 shadow-sm shadow-black/[0.03]"
+      className="flex-col gap-2 rounded-xl border border-border/60 bg-card px-2 py-2 shadow-sm shadow-black/[0.03]"
     >
-      <PaginationContent className="w-full items-center justify-between">
+      <PaginationContent className="flex-wrap justify-center">
         <PaginationItem>
           {currentPage > 1 ? (
-            <PaginationPrevious asChild className="gap-1.5 px-3 text-[13px] font-bold text-muted-foreground">
+            <PaginationPrevious asChild className={edgeButtonClass}>
               <Link href={buildHref(currentPage - 1)} rel="prev">
                 <ArrowRight className="size-4" aria-hidden="true" />
-                {labels.prevPage}
+                <span className="hidden sm:inline">{labels.prevPage}</span>
               </Link>
             </PaginationPrevious>
           ) : (
-            <span className="min-h-8 px-3" aria-hidden="true" />
+            <PaginationPrevious aria-disabled="true" className={cn(edgeButtonClass, "pointer-events-none opacity-50")}>
+              <ArrowRight className="size-4" aria-hidden="true" />
+              <span className="hidden sm:inline">{labels.prevPage}</span>
+            </PaginationPrevious>
           )}
         </PaginationItem>
 
-        <PaginationItem>
-          <span className="rounded-full bg-muted px-3 py-1 text-[13px] font-medium tabular-nums text-muted-foreground ring-1 ring-border/60">
-            {toFaDigits(currentPage)} / {toFaDigits(totalPages)} {labels.pageInfoSuffix}
-            {total !== undefined && labels.resultsSuffix ? (
-              <> · {toFaDigits(total)} {labels.resultsSuffix}</>
-            ) : null}
-          </span>
-        </PaginationItem>
+        {getPageItems(currentPage, totalPages).map((item, index) =>
+          item === "dots" ? (
+            <PaginationItem key={`dots-${index}`}>
+              <PaginationEllipsis className="size-8 text-muted-foreground" />
+            </PaginationItem>
+          ) : (
+            <PaginationItem key={item}>
+              <PaginationLink
+                asChild
+                isActive={item === currentPage}
+                aria-label={`${labels.pageInfoSuffix} ${toFaDigits(item)}`}
+                className={cn(
+                  "min-w-8 px-2 text-[13px] font-bold tabular-nums",
+                  item === currentPage
+                    ? "text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                <Link href={buildHref(item)}>{toFaDigits(item)}</Link>
+              </PaginationLink>
+            </PaginationItem>
+          ),
+        )}
 
         <PaginationItem>
           {currentPage < totalPages ? (
-            <PaginationNext asChild className="gap-1.5 px-3 text-[13px] font-bold text-muted-foreground">
+            <PaginationNext asChild className={edgeButtonClass}>
               <Link href={buildHref(currentPage + 1)} rel="next">
-                {labels.nextPage}
+                <span className="hidden sm:inline">{labels.nextPage}</span>
                 <ArrowLeft className="size-4" aria-hidden="true" />
               </Link>
             </PaginationNext>
           ) : (
-            <span className="min-h-8 px-3" aria-hidden="true" />
+            <PaginationNext aria-disabled="true" className={cn(edgeButtonClass, "pointer-events-none opacity-50")}>
+              <span className="hidden sm:inline">{labels.nextPage}</span>
+              <ArrowLeft className="size-4" aria-hidden="true" />
+            </PaginationNext>
           )}
         </PaginationItem>
       </PaginationContent>
+
+      <span className="text-center text-[13px] font-medium tabular-nums text-muted-foreground">
+        {toFaDigits(currentPage)} / {toFaDigits(totalPages)} {labels.pageInfoSuffix}
+        {total !== undefined && labels.resultsSuffix ? (
+          <> · {toFaDigits(total)} {labels.resultsSuffix}</>
+        ) : null}
+      </span>
     </Pagination>
   );
 }

@@ -20,11 +20,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MEDIA_LABELS, POST_FORM_LABELS } from "@/data/dashboard/ui";
 import type { MediaPage } from "@/lib/media-list";
-import { toPersianDigits } from "@/lib/utils";
+import { cn, getPageItems, toPersianDigits } from "@/lib/utils";
 
 export interface MediaPickerSelection {
   key: string;
@@ -263,42 +263,65 @@ export function MediaPicker({
                   />
 
                   {mediaPage.totalPages > 1 ? (
-                    <Pagination aria-label={MEDIA_LABELS.paginationNavLabel} className="mt-4 justify-between border-t border-border/60 pt-3">
-                      <PaginationContent className="w-full items-center justify-between">
+                    <Pagination aria-label={MEDIA_LABELS.paginationNavLabel} className="mt-4 flex-col gap-2 border-t border-border/60 pt-3">
+                      <PaginationContent className="flex-wrap justify-center">
                         <PaginationItem>
                           <Button
                             type="button"
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
                             disabled={mediaPage.currentPage <= 1}
                             onClick={() => handleSelectPage(mediaPage.currentPage - 1)}
-                            className="h-8 gap-1.5 rounded-lg px-3 text-[12px] font-bold"
+                            className="h-8 gap-1.5 rounded-lg px-3 text-[12px] font-bold text-muted-foreground"
                           >
                             <ArrowRight className="size-3.5" aria-hidden="true" />
-                            {MEDIA_LABELS.prevPage}
+                            <span className="hidden sm:inline">{MEDIA_LABELS.prevPage}</span>
                           </Button>
                         </PaginationItem>
-                        <PaginationItem>
-                          <span className="text-[12px] font-medium tabular-nums text-muted-foreground">
-                            {toPersianDigits(String(mediaPage.total))} {MEDIA_LABELS.resultsSuffix} ·{" "}
-                            {MEDIA_LABELS.pageInfoSuffix} {toPersianDigits(String(mediaPage.currentPage))}{" "}
-                            {MEDIA_LABELS.pageOf} {toPersianDigits(String(mediaPage.totalPages))}
-                          </span>
-                        </PaginationItem>
+                        {getPageItems(mediaPage.currentPage, mediaPage.totalPages).map((item, index) =>
+                          item === "dots" ? (
+                            <PaginationItem key={`dots-${index}`}>
+                              <PaginationEllipsis className="size-8 text-muted-foreground" />
+                            </PaginationItem>
+                          ) : (
+                            <PaginationItem key={item}>
+                              <Button
+                                type="button"
+                                variant={item === mediaPage.currentPage ? "default" : "ghost"}
+                                onClick={() => handleSelectPage(item)}
+                                aria-current={item === mediaPage.currentPage ? "page" : undefined}
+                                aria-label={`${MEDIA_LABELS.pageInfoSuffix} ${toPersianDigits(String(item))}`}
+                                className={cn(
+                                  "h-8 min-w-8 rounded-lg px-2 text-[12px] font-bold tabular-nums",
+                                  item === mediaPage.currentPage
+                                    ? "text-primary-foreground"
+                                    : "text-muted-foreground hover:text-foreground",
+                                )}
+                              >
+                                {toPersianDigits(String(item))}
+                              </Button>
+                            </PaginationItem>
+                          ),
+                        )}
                         <PaginationItem>
                           <Button
                             type="button"
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
                             disabled={mediaPage.currentPage >= mediaPage.totalPages}
                             onClick={() => handleSelectPage(mediaPage.currentPage + 1)}
-                            className="h-8 gap-1.5 rounded-lg px-3 text-[12px] font-bold"
+                            className="h-8 gap-1.5 rounded-lg px-3 text-[12px] font-bold text-muted-foreground"
                           >
-                            {MEDIA_LABELS.nextPage}
+                            <span className="hidden sm:inline">{MEDIA_LABELS.nextPage}</span>
                             <ArrowLeft className="size-3.5" aria-hidden="true" />
                           </Button>
                         </PaginationItem>
                       </PaginationContent>
+                      <span className="text-center text-[12px] font-medium tabular-nums text-muted-foreground">
+                        {toPersianDigits(String(mediaPage.total))} {MEDIA_LABELS.resultsSuffix} ·{" "}
+                        {MEDIA_LABELS.pageInfoSuffix} {toPersianDigits(String(mediaPage.currentPage))}{" "}
+                        {MEDIA_LABELS.pageOf} {toPersianDigits(String(mediaPage.totalPages))}
+                      </span>
                     </Pagination>
                   ) : null}
                 </>
