@@ -77,7 +77,7 @@ export function PostSidebarFields({
           <div
             role="radiogroup"
             aria-label={POST_FORM_LABELS.categoryLabel}
-            className="max-h-64 space-y-0.5 overflow-y-auto rounded-xl border border-border/60 bg-muted/25 p-1.5"
+            className="space-y-0.5 rounded-xl border border-border/60 bg-muted/25 p-1.5"
           >
             <CategoryRadio
               label={POST_FORM_LABELS.noCategory}
@@ -113,7 +113,7 @@ export function PostSidebarFields({
             <div
               role="group"
               aria-label={POST_FORM_LABELS.tagsLabel}
-              className="flex max-h-52 flex-wrap gap-2 overflow-y-auto"
+              className="flex flex-wrap gap-2"
             >
               {tags.map((tag) => {
                 const selected = selectedTagIds.includes(tag.id);

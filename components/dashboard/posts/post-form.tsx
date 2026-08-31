@@ -102,7 +102,7 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
 
         <aside
           aria-label={POST_FORM_LABELS.sidebarAriaLabel}
-          className="min-w-0 space-y-5 lg:sticky lg:top-8 lg:col-span-1 lg:max-h-[calc(100dvh-4rem)] lg:self-start lg:overflow-y-auto"
+          className="min-w-0 space-y-5 lg:col-span-1 lg:self-start"
         >
           <CoverImageField
             value={coverImage}
