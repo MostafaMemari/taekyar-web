@@ -1,4 +1,4 @@
-import { Check, X } from "lucide-react";
+import { Check } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
@@ -20,9 +20,9 @@ function CategoryCheckbox({ label, depth, checked, onToggle }: CategoryCheckboxP
       onClick={onToggle}
       style={{ paddingInlineStart: `calc(0.625rem + ${depth * 1.15}rem)` }}
       className={cn(
-        "flex w-full items-center gap-2.5 rounded-lg py-2 pe-2.5 text-start text-[13px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none",
+        "flex w-full items-center gap-2.5 rounded-lg border border-transparent py-2 pe-2.5 text-start text-[13px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none",
         checked
-          ? "bg-card font-bold text-foreground shadow-sm ring-1 ring-primary/40"
+          ? "border-primary/40 bg-card font-bold text-foreground"
           : "text-muted-foreground hover:bg-card/70 hover:text-foreground",
       )}
     >
@@ -37,27 +37,6 @@ function CategoryCheckbox({ label, depth, checked, onToggle }: CategoryCheckboxP
       </span>
       <span className="truncate">{label}</span>
     </button>
-  );
-}
-
-interface SelectedCategoryChipProps {
-  label: string;
-  onRemove: () => void;
-}
-
-function SelectedCategoryChip({ label, onRemove }: SelectedCategoryChipProps) {
-  return (
-    <span className="inline-flex max-w-full min-h-7 items-center gap-1 rounded-full border border-primary/30 bg-primary/[0.06] ps-3 pe-1 text-[12px] font-bold text-foreground">
-      <span className="truncate">{label}</span>
-      <button
-        type="button"
-        onClick={onRemove}
-        aria-label={`${POST_FORM_LABELS.categoryRemoveAriaLabel} ${label}`}
-        className="flex size-5 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none"
-      >
-        <X className="size-3" aria-hidden="true" />
-      </button>
-    </span>
   );
 }
 
@@ -78,8 +57,6 @@ export function PostSidebarFields({
   selectedTagIds,
   onToggleTag,
 }: PostSidebarFieldsProps) {
-  const selectedCategories = categories.filter((category) => selectedCategoryIds.includes(category.id));
-
   return (
     <>
       <Card>
@@ -87,23 +64,7 @@ export function PostSidebarFields({
           <CardTitle className="text-[14px] font-black">{POST_FORM_LABELS.categoryLabel}</CardTitle>
           <p className="text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.categoryHint}</p>
         </CardHeader>
-        <CardContent className="space-y-3">
-          {selectedCategories.length > 0 ? (
-            <div
-              role="list"
-              aria-label={POST_FORM_LABELS.categorySelectedLabel}
-              className="flex flex-wrap gap-1.5"
-            >
-              {selectedCategories.map((category) => (
-                <span role="listitem" key={category.id}>
-                  <SelectedCategoryChip
-                    label={category.name}
-                    onRemove={() => onToggleCategory(category.id)}
-                  />
-                </span>
-              ))}
-            </div>
-          ) : null}
+        <CardContent>
           <div
             role="group"
             aria-label={POST_FORM_LABELS.categoryLabel}

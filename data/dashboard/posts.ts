@@ -52,8 +52,6 @@ export const POST_FORM_LABELS = {
   mainInfoHint: "عنوان و نشانی الزامی است؛ خلاصه و زمان مطالعه اختیاری‌اند.",
   categoryLabel: "دسته‌بندی",
   categoryHint: "می‌توانید هر تعداد دسته‌بندی (حتی والد و فرزند هم‌زمان) انتخاب کنید؛ زیرمجموعه‌ها تودرتو نمایش داده می‌شوند.",
-  categorySelectedLabel: "دسته‌بندی‌های انتخاب‌شده",
-  categoryRemoveAriaLabel: "حذف دسته‌بندی",
   sidebarAriaLabel: "تصویر شاخص، دسته‌بندی و برچسب‌های مقاله",
   tagsLabel: "برچسب‌ها",
   tagsHint: "چند برچسب را می‌توانید انتخاب کنید.",
