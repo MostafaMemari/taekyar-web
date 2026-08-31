@@ -14,7 +14,7 @@ export function PostGrid({ posts }: { posts: BlogPost[] }) {
         <span className="flex size-12 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
           <SearchX className="size-6" />
         </span>
-        <h3 className="mt-4 text-base font-bold text-foreground">مقاله‌ای یافت نشد</h3>
+        <h2 className="mt-4 text-base font-bold text-foreground">مقاله‌ای یافت نشد</h2>
         <p className="mt-2 max-w-sm text-sm leading-7 text-muted-foreground">{BLOG_INDEX_LABELS.emptyState}</p>
         <Link
           href="/blog"

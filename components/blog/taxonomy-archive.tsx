@@ -9,6 +9,11 @@ import { Section } from "@/components/shared/section";
 import type { BlogPost } from "@/lib/blog";
 import { r2PublicUrl } from "@/lib/r2-url";
 
+export interface TaxonomyBreadcrumb {
+  name: string;
+  path: string;
+}
+
 interface TaxonomyArchiveProps {
   eyebrow: string;
   title: string;
@@ -16,8 +21,7 @@ interface TaxonomyArchiveProps {
   imageUrl?: string | null;
   posts: BlogPost[];
   seoContent?: string | null;
-  backHref: string;
-  backLabel: string;
+  breadcrumbs: TaxonomyBreadcrumb[];
 }
 
 export function TaxonomyArchive({
@@ -27,14 +31,37 @@ export function TaxonomyArchive({
   imageUrl,
   posts,
   seoContent,
-  backHref,
-  backLabel,
+  breadcrumbs,
 }: TaxonomyArchiveProps) {
   return (
     <>
       <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10">
         <Reveal>
-          <div className="max-w-2xl">
+          <nav aria-label="breadcrumb" className="flex flex-wrap items-center gap-1.5 text-[12px] font-medium text-muted-foreground">
+            {breadcrumbs.map((crumb, index) => {
+              const last = index === breadcrumbs.length - 1;
+
+              return (
+                <span key={crumb.path} className="flex items-center gap-1.5">
+                  {index > 0 ? (
+                    <span aria-hidden="true" className="text-muted-foreground/40">/</span>
+                  ) : null}
+                  {last ? (
+                    <span aria-current="page" className="font-bold text-foreground">{crumb.name}</span>
+                  ) : (
+                    <Link
+                      href={crumb.path}
+                      className="rounded-sm transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                    >
+                      {crumb.name}
+                    </Link>
+                  )}
+                </span>
+              );
+            })}
+          </nav>
+
+          <div className="mt-4 max-w-2xl">
             <span className="inline-flex items-center gap-2 text-[11px] font-bold tracking-widest text-primary sm:text-xs">
               <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
               {eyebrow}
@@ -45,7 +72,7 @@ export function TaxonomyArchive({
             <BeltDivider variant="pill" width="contained" className="mt-3.5 h-1 w-16 sm:w-20" />
 
             {imageUrl ? (
-              <div className="relative mx-auto mt-6 aspect-[16/7] w-full max-w-sm overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06]">
+              <div className="relative mx-auto mt-6 aspect-[16/7] w-full max-w-xs overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06] sm:max-w-sm">
                 <Image
                   src={r2PublicUrl(imageUrl)}
                   alt={title}
@@ -57,19 +84,10 @@ export function TaxonomyArchive({
             ) : null}
 
             {description ? (
-              <p className="mt-3.5 max-w-xl text-pretty text-[14px] leading-7 text-muted-foreground sm:text-[15px] sm:leading-7">
+              <p className="mt-6 text-pretty text-[14px] leading-7 text-muted-foreground sm:text-[15px] sm:leading-7">
                 {description}
               </p>
             ) : null}
-          </div>
-
-          <div className="mt-6">
-            <Link
-              href={backHref}
-              className="inline-flex min-h-9 items-center text-[13px] font-semibold text-muted-foreground transition-colors hover:text-primary"
-            >
-              {backLabel}
-            </Link>
           </div>
         </Reveal>
       </Section>

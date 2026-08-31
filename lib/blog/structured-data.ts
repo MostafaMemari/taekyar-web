@@ -26,6 +26,37 @@ export function breadcrumbJsonLd(entries: BreadcrumbEntry[]) {
   };
 }
 
+interface ArchiveJsonLdInput {
+  name: string;
+  path: string;
+  description?: string | null;
+  imageUrl?: string | null;
+  posts: BlogPost[];
+}
+
+export function archiveJsonLd({ name, path, description, imageUrl, posts }: ArchiveJsonLdInput) {
+  const image = imageUrl ? r2PublicUrl(imageUrl) : undefined;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name,
+    url: absoluteUrl(path),
+    ...(description ? { description } : {}),
+    ...(image ? { image } : {}),
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: posts.length,
+      itemListElement: posts.map((post, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: absoluteUrl(postHref(post.slug)),
+        name: post.title,
+      })),
+    },
+  };
+}
+
 export function articleJsonLd(post: BlogPost) {
   const image = post.coverImage ?? post.categoryImage;
   const keywords = post.tags.map((tag) => tag.name).join("، ");
