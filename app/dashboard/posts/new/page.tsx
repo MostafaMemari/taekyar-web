@@ -16,7 +16,7 @@ export default async function NewPostPage() {
     title: "",
     slug: "",
     excerpt: null,
-    categoryId: null,
+    categoryIds: [],
     tagIds: [],
     readTimeMinutes: 5,
     content: null,

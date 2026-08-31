@@ -23,7 +23,7 @@ export const getBlogPosts = cache(async (): Promise<BlogPost[]> => {
 });
 
 export const getBlogPostsCount = cache(async (category: BlogCategoryName | null): Promise<number> => {
-  const where = category ? { ...PUBLIC_POST_WHERE, category: { name: category } } : PUBLIC_POST_WHERE;
+  const where = category ? { ...PUBLIC_POST_WHERE, categories: { some: { name: category } } } : PUBLIC_POST_WHERE;
   try {
     return await prisma.post.count({ where });
   } catch {
@@ -41,7 +41,7 @@ export const getPaginatedBlogPosts = cache(
     page: number;
     perPage: number;
   }): Promise<{ posts: BlogPost[]; totalCount: number }> => {
-    const where = category ? { ...PUBLIC_POST_WHERE, category: { name: category } } : PUBLIC_POST_WHERE;
+    const where = category ? { ...PUBLIC_POST_WHERE, categories: { some: { name: category } } } : PUBLIC_POST_WHERE;
     try {
       const [totalCount, posts] = await Promise.all([
         prisma.post.count({ where }),
@@ -104,7 +104,7 @@ export const getPostsByCategory = cache(
       const posts = await prisma.post.findMany({
         where: {
           ...PUBLIC_POST_WHERE,
-          categoryId: { in: [category.id, ...descendants.map((descendant) => descendant.id)] },
+          categories: { some: { id: { in: [category.id, ...descendants.map((descendant) => descendant.id)] } } },
         },
         orderBy: { createdAt: "desc" },
         include: POST_INCLUDE,

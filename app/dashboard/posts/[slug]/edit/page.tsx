@@ -33,7 +33,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     title: post.title,
     slug: post.slug,
     excerpt: post.excerpt,
-    categoryId: post.categoryId,
+    categoryIds: post.categories.map((category) => category.id),
     tagIds: post.tags.map((tag) => tag.id),
     readTimeMinutes: post.readTimeMinutes,
     content: post.content,

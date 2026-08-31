@@ -30,11 +30,11 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
     title: initial.title,
     slug: initial.slug,
     excerpt: initial.excerpt ?? "",
-    categoryId: initial.categoryId === null ? "" : String(initial.categoryId),
     readTimeMinutes: initial.readTimeMinutes === null ? "" : String(initial.readTimeMinutes),
     metaTitle: initial.metaTitle ?? "",
     metaDescription: initial.metaDescription ?? "",
   });
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(initial.categoryIds);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(initial.tagIds);
   const [coverImage, setCoverImage] = useState<CoverImageValue>({
     key: initial.coverImage ?? null,
@@ -47,6 +47,12 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
 
   function setField<K extends keyof FieldDraft>(key: K, value: FieldDraft[K]) {
     setFields((previous) => ({ ...previous, [key]: value }));
+  }
+
+  function toggleCategory(id: number) {
+    setSelectedCategoryIds((previous) =>
+      previous.includes(id) ? previous.filter((categoryId) => categoryId !== id) : [...previous, id],
+    );
   }
 
   function toggleTag(id: number) {
@@ -64,7 +70,7 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
       title: fields.title,
       slug: fields.slug.trim(),
       excerpt: fields.excerpt.trim() || null,
-      categoryId: fields.categoryId === "" || fields.categoryId === "none" ? null : Number(fields.categoryId),
+      categoryIds: selectedCategoryIds,
       tagIds: selectedTagIds,
       readTimeMinutes: fields.readTimeMinutes.trim() === "" ? null : Number(fields.readTimeMinutes),
       content,
@@ -111,13 +117,12 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
             altError={fieldErrors.coverImageAlt}
           />
           <PostSidebarFields
-            fields={fields}
-            onFieldChange={setField}
             categories={categories}
+            selectedCategoryIds={selectedCategoryIds}
+            onToggleCategory={toggleCategory}
             tags={tags}
             selectedTagIds={selectedTagIds}
             onToggleTag={toggleTag}
-            fieldErrors={fieldErrors}
           />
         </aside>
       </div>

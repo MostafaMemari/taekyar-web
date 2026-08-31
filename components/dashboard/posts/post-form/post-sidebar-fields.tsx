@@ -1,29 +1,24 @@
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 
-import { FieldError } from "@/components/shared/form-controls";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
-import type { PostFieldErrors } from "@/lib/admin-types";
 import { cn } from "@/lib/utils";
-import type { FieldDraft } from "./types";
 
-const NO_CATEGORY_VALUE = "none";
-
-interface CategoryRadioProps {
+interface CategoryCheckboxProps {
   label: string;
   depth: number;
   checked: boolean;
-  onSelect: () => void;
+  onToggle: () => void;
 }
 
-function CategoryRadio({ label, depth, checked, onSelect }: CategoryRadioProps) {
+function CategoryCheckbox({ label, depth, checked, onToggle }: CategoryCheckboxProps) {
   return (
     <button
       type="button"
-      role="radio"
+      role="checkbox"
       aria-checked={checked}
-      onClick={onSelect}
-      style={{ paddingInlineStart: `${depth * 1.15}rem` }}
+      onClick={onToggle}
+      style={{ paddingInlineStart: `calc(0.625rem + ${depth * 1.15}rem)` }}
       className={cn(
         "flex w-full items-center gap-2.5 rounded-lg py-2 pe-2.5 text-start text-[13px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none",
         checked
@@ -34,37 +29,56 @@ function CategoryRadio({ label, depth, checked, onSelect }: CategoryRadioProps) 
       <span
         aria-hidden="true"
         className={cn(
-          "flex size-4 shrink-0 items-center justify-center rounded-full border",
+          "flex size-4 shrink-0 items-center justify-center rounded-[5px] border",
           checked ? "border-primary bg-primary text-white" : "border-border bg-card",
         )}
       >
-        {checked ? <Check className="size-3" /> : null}
+        {checked ? <Check className="size-3" strokeWidth={3} /> : null}
       </span>
       <span className="truncate">{label}</span>
     </button>
   );
 }
 
+interface SelectedCategoryChipProps {
+  label: string;
+  onRemove: () => void;
+}
+
+function SelectedCategoryChip({ label, onRemove }: SelectedCategoryChipProps) {
+  return (
+    <span className="inline-flex max-w-full min-h-7 items-center gap-1 rounded-full border border-primary/30 bg-primary/[0.06] ps-3 pe-1 text-[12px] font-bold text-foreground">
+      <span className="truncate">{label}</span>
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label={`${POST_FORM_LABELS.categoryRemoveAriaLabel} ${label}`}
+        className="flex size-5 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none"
+      >
+        <X className="size-3" aria-hidden="true" />
+      </button>
+    </span>
+  );
+}
+
 interface PostSidebarFieldsProps {
-  fields: FieldDraft;
-  onFieldChange: <K extends keyof FieldDraft>(key: K, value: FieldDraft[K]) => void;
   categories: Array<{ id: number; name: string; depth: number }>;
+  selectedCategoryIds: number[];
+  onToggleCategory: (id: number) => void;
   tags: Array<{ id: number; name: string }>;
   selectedTagIds: number[];
   onToggleTag: (id: number) => void;
-  fieldErrors: PostFieldErrors;
 }
 
 export function PostSidebarFields({
-  fields,
-  onFieldChange,
   categories,
+  selectedCategoryIds,
+  onToggleCategory,
   tags,
   selectedTagIds,
   onToggleTag,
-  fieldErrors,
 }: PostSidebarFieldsProps) {
-  const selectedCategory = fields.categoryId === "" || fields.categoryId === NO_CATEGORY_VALUE ? "" : fields.categoryId;
+  const selectedCategories = categories.filter((category) => selectedCategoryIds.includes(category.id));
 
   return (
     <>
@@ -73,29 +87,38 @@ export function PostSidebarFields({
           <CardTitle className="text-[14px] font-black">{POST_FORM_LABELS.categoryLabel}</CardTitle>
           <p className="text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.categoryHint}</p>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-3">
+          {selectedCategories.length > 0 ? (
+            <div
+              role="list"
+              aria-label={POST_FORM_LABELS.categorySelectedLabel}
+              className="flex flex-wrap gap-1.5"
+            >
+              {selectedCategories.map((category) => (
+                <span role="listitem" key={category.id}>
+                  <SelectedCategoryChip
+                    label={category.name}
+                    onRemove={() => onToggleCategory(category.id)}
+                  />
+                </span>
+              ))}
+            </div>
+          ) : null}
           <div
-            role="radiogroup"
+            role="group"
             aria-label={POST_FORM_LABELS.categoryLabel}
             className="space-y-0.5 rounded-xl border border-border/60 bg-muted/25 p-1.5"
           >
-            <CategoryRadio
-              label={POST_FORM_LABELS.noCategory}
-              depth={0}
-              checked={selectedCategory === ""}
-              onSelect={() => onFieldChange("categoryId", NO_CATEGORY_VALUE)}
-            />
             {categories.map((category) => (
-              <CategoryRadio
+              <CategoryCheckbox
                 key={category.id}
                 label={category.name}
                 depth={category.depth}
-                checked={selectedCategory === String(category.id)}
-                onSelect={() => onFieldChange("categoryId", String(category.id))}
+                checked={selectedCategoryIds.includes(category.id)}
+                onToggle={() => onToggleCategory(category.id)}
               />
             ))}
           </div>
-          <FieldError errorId="post-category-error" message={fieldErrors.categoryId} />
         </CardContent>
       </Card>
 

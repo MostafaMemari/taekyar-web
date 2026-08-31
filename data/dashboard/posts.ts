@@ -51,8 +51,9 @@ export const POST_FORM_LABELS = {
   excerptPlaceholder: "چکیده‌ای کوتاه برای نمایش در فهرست مقالات",
   mainInfoHint: "عنوان و نشانی الزامی است؛ خلاصه و زمان مطالعه اختیاری‌اند.",
   categoryLabel: "دسته‌بندی",
-  categoryHint: "انتخاب دسته‌بندی اختیاری است؛ زیرمجموعه‌ها تودرتو نمایش داده می‌شوند.",
-  noCategory: "بدون دسته‌بندی",
+  categoryHint: "می‌توانید هر تعداد دسته‌بندی (حتی والد و فرزند هم‌زمان) انتخاب کنید؛ زیرمجموعه‌ها تودرتو نمایش داده می‌شوند.",
+  categorySelectedLabel: "دسته‌بندی‌های انتخاب‌شده",
+  categoryRemoveAriaLabel: "حذف دسته‌بندی",
   sidebarAriaLabel: "تصویر شاخص، دسته‌بندی و برچسب‌های مقاله",
   tagsLabel: "برچسب‌ها",
   tagsHint: "چند برچسب را می‌توانید انتخاب کنید.",
@@ -97,7 +98,6 @@ export const POST_FORM_LABELS = {
   titleRequired: "عنوان مقاله را وارد کنید.",
   slugRequired: "نشانی (اسلاگ) را وارد کنید.",
   slugTaken: "این نشانی قبلاً استفاده شده است؛ نشانی دیگری انتخاب کنید.",
-  categoryInvalid: "دسته‌بندی انتخابی معتبر نیست.",
   readTimeInvalid: "زمان مطالعه باید عددی بزرگ‌تر از صفر باشد.",
 } as const;
 

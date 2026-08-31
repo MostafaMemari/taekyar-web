@@ -28,19 +28,19 @@ export function PostTopbar() {
 }
 
 function PostMeta({ post }: { post: BlogPost }) {
-  const { color, Icon } = getCategoryStyle(post.category);
-
   const items: React.ReactNode[] = [];
 
-  if (post.category && post.categoryPath) {
+  for (const category of post.categories) {
+    const { color, Icon } = getCategoryStyle(category.name);
     items.push(
       <Link
-        href={categoryHref(post.categoryPath)}
+        key={category.id}
+        href={categoryHref(category.path)}
         className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-bold transition-opacity hover:opacity-80 sm:px-3 sm:py-1.5 sm:text-xs"
         style={{ backgroundColor: `${color}14`, color }}
       >
         <Icon className="size-3.5" />
-        {post.category}
+        {category.name}
       </Link>,
     );
   }

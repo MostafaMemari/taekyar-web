@@ -78,7 +78,7 @@ export interface NormalizedPost {
   title: string;
   slug: string;
   excerpt: string | null;
-  categoryId: number | null;
+  categoryIds: number[];
   tagIds: number[];
   readTimeMinutes: number | null;
   content: string | null;
@@ -101,13 +101,15 @@ export function normalizePostInput(input: PostInput): PostValidationResult {
   if (!title) errors.title = POST_FORM_LABELS.titleRequired;
   if (!slug) errors.slug = POST_FORM_LABELS.slugRequired;
 
-  const categoryIdRaw = Number(input.categoryId);
-  const categoryId =
-    input.categoryId === null || input.categoryId === undefined || String(input.categoryId).trim() === ""
-      ? null
-      : Number.isInteger(categoryIdRaw) && categoryIdRaw > 0
-        ? categoryIdRaw
-        : ((errors.categoryId = POST_FORM_LABELS.categoryInvalid), null);
+  const categoryIds = Array.isArray(input.categoryIds)
+    ? Array.from(
+        new Set(
+          input.categoryIds
+            .map((id) => Number(id))
+            .filter((id) => Number.isInteger(id) && id > 0),
+        ),
+      )
+    : [];
 
   const tagIds = Array.isArray(input.tagIds)
     ? input.tagIds.map((id) => Number(id)).filter((id) => Number.isInteger(id) && id > 0)
@@ -135,7 +137,7 @@ export function normalizePostInput(input: PostInput): PostValidationResult {
       title,
       slug,
       excerpt: excerpt.length > 0 ? excerpt : null,
-      categoryId,
+      categoryIds,
       tagIds,
       readTimeMinutes,
       content: rawContent.length > 0 ? sanitizePostHtml(rawContent) : null,

@@ -38,7 +38,7 @@ export default async function DashboardPostsPage({ searchParams }: PostsPageProp
     orderBy: { createdAt: "desc" },
     include: {
       _count: { select: { comments: true } },
-      category: { select: { name: true } },
+      categories: { orderBy: { id: "asc" }, select: { name: true } },
     },
     skip: (currentPage - 1) * POSTS_PER_PAGE,
     take: POSTS_PER_PAGE,
@@ -146,7 +146,7 @@ interface PostsTableProps {
     title: string;
     coverImage: string | null;
     status: "DRAFT" | "PUBLISHED";
-    category: { name: string } | null;
+    categories: Array<{ name: string }>;
     createdAt: Date;
     updatedAt: Date;
     _count: { comments: number };
@@ -231,10 +231,10 @@ function PostsTable({ posts }: PostsTableProps) {
                   </div>
                 </div>
               </TableCell>
-              <TableCell className="whitespace-nowrap px-4 py-3.5">
+              <TableCell className="px-4 py-3.5">
                 <span className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground">
                   <span className="size-1.5 rounded-full bg-belt-blue" aria-hidden="true" />
-                  {post.category?.name ?? "—"}
+                  {post.categories.map((category) => category.name).join("، ") || "—"}
                 </span>
               </TableCell>
               <TableCell className="whitespace-nowrap px-4 py-3.5">

@@ -25,12 +25,13 @@ export async function createPost(_previousState: PostFormState, input: PostInput
   const { data } = result;
   const publishDate = data.status === "PUBLISHED" ? formatFaDateText(new Date()) : null;
   try {
-    const { tagIds, content, ...postData } = data;
+    const { tagIds, categoryIds, content, ...postData } = data;
     await prisma.post.create({
       data: {
         ...postData,
         content: content ?? Prisma.DbNull,
         date: publishDate,
+        categories: { connect: categoryIds.map((id) => ({ id })) },
         tags: { connect: tagIds.map((id) => ({ id })) },
       },
     });
@@ -75,13 +76,14 @@ export async function updatePost(
   const publishDate = firstPublication ? formatFaDateText(new Date()) : current.date;
 
   try {
-    const { tagIds, content, ...postData } = data;
+    const { tagIds, categoryIds, content, ...postData } = data;
     await prisma.post.update({
       where: { slug: currentSlug },
       data: {
         ...postData,
         content: content === null ? Prisma.DbNull : content,
         date: publishDate,
+        categories: { set: categoryIds.map((id) => ({ id })) },
         tags: { set: tagIds.map((id) => ({ id })) },
       },
     });

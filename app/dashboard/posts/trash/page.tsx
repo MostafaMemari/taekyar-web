@@ -20,7 +20,7 @@ export default async function TrashPostsPage() {
     where: { deletedAt: { not: null } },
     orderBy: { deletedAt: "desc" },
     include: {
-      category: { select: { name: true } },
+      categories: { orderBy: { id: "asc" }, select: { name: true } },
       _count: { select: { comments: true } },
     },
   });
@@ -71,7 +71,7 @@ interface TrashTableProps {
     title: string;
     coverImage: string | null;
     deletedAt: Date | null;
-    category: { name: string } | null;
+    categories: Array<{ name: string }>;
     _count: { comments: number };
   }>;
 }
@@ -137,10 +137,10 @@ function TrashTable({ posts }: TrashTableProps) {
                   </div>
                 </div>
               </TableCell>
-              <TableCell className="whitespace-nowrap px-4 py-3.5">
+              <TableCell className="px-4 py-3.5">
                 <span className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground">
                   <span className="size-1.5 rounded-full bg-belt-blue" aria-hidden="true" />
-                  {post.category?.name ?? "—"}
+                  {post.categories.map((category) => category.name).join("، ") || "—"}
                 </span>
               </TableCell>
               <TableCell className="whitespace-nowrap px-4 py-3.5 text-[13px] text-muted-foreground">

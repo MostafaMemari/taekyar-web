@@ -1,9 +1,17 @@
+export interface PostCategoryRef {
+  id: number;
+  name: string;
+  slug: string;
+  path: string;
+  image: string | null;
+}
+
 export interface BlogPost {
   id: number;
   slug: string;
   title: string;
   excerpt: string | null;
-  categoryId: number | null;
+  categories: PostCategoryRef[];
   category: string | null;
   categoryPath: string | null;
   categoryImage: string | null;
@@ -36,20 +44,22 @@ export interface BlogPostRow {
   metaDescription: string | null;
   createdAt: Date;
   updatedAt: Date;
-  category: { id: number; name: string; slug: string; path: string; image: string | null } | null;
+  categories: PostCategoryRef[];
   tags: Array<{ id: number; name: string; slug: string }>;
 }
 
 export function toBlogPost(post: BlogPostRow): BlogPost {
+  const categories = [...post.categories].sort((a, b) => a.id - b.id);
+  const primaryCategory = categories[0] ?? null;
   return {
     id: post.id,
     slug: post.slug,
     title: post.title,
     excerpt: post.excerpt,
-    categoryId: post.category?.id ?? null,
-    category: post.category?.name ?? null,
-    categoryPath: post.category?.path ?? null,
-    categoryImage: post.category?.image ?? null,
+    categories,
+    category: primaryCategory?.name ?? null,
+    categoryPath: primaryCategory?.path ?? null,
+    categoryImage: primaryCategory?.image ?? null,
     tags: post.tags,
     date: post.date,
     readTimeMinutes: post.readTimeMinutes,
@@ -62,7 +72,7 @@ export function toBlogPost(post: BlogPostRow): BlogPost {
   };
 }
 
-export const POST_INCLUDE = { category: true, tags: true } as const;
+export const POST_INCLUDE = { categories: true, tags: true } as const;
 
 export function toPostRows(posts: Array<BlogPostRow & { content?: unknown }>): BlogPost[] {
   return posts.map(toBlogPost);

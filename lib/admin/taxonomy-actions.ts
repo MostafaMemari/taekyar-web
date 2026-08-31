@@ -110,7 +110,7 @@ export async function deleteTaxonomy(
     if (kind === "category") {
       const [childCount, postCount] = await Promise.all([
         prisma.category.count({ where: { parentId: id } }),
-        prisma.post.count({ where: { categoryId: id } }),
+        prisma.post.count({ where: { categories: { some: { id } } } }),
       ]);
       if (childCount > 0) return { ok: false, reason: "hasChildren" };
       if (postCount > 0) return { ok: false, reason: "hasPosts" };
