@@ -6,6 +6,7 @@ import { ExternalLink, LogOut, Shield } from "lucide-react";
 
 import { Wordmark } from "@/components/layout/header/wordmark";
 import { BeltDivider } from "@/components/shared/belt-divider";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { DASHBOARD_LABELS, DASHBOARD_NAV } from "@/data/dashboard/ui";
 import { logout } from "@/lib/admin-actions";
@@ -66,46 +67,46 @@ export function DashboardSidebar({ username }: { username: string }) {
       </div>
 
       <div className="mt-auto">
-        <div className="px-5">
+        <div className="px-3">
           <Separator className="bg-border/60" />
         </div>
 
-        <div className="p-3">
-          <div className="rounded-xl border border-border/60 bg-muted/30 p-3">
-            <div className="flex items-center gap-3">
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-foreground text-[13px] font-black text-background ring-1 ring-border">
-                {initial}
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-muted-foreground text-[13px] font-bold leading-4">{username}</p>
-                <p className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
-                  <Shield className="size-3 shrink-0" aria-hidden="true" />
-                  مدیر
-                </p>
-              </div>
-            </div>
-
-            <Separator className="my-3 bg-border/60" />
-
-            <div className="grid gap-1">
-              <Link
-                href="/"
-                className="flex min-h-9 items-center gap-2.5 rounded-lg px-2.5 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-card hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none"
-              >
-                <ExternalLink className="size-4 shrink-0" aria-hidden="true" />
-                {DASHBOARD_LABELS.viewSite}
+        <div className="flex items-center gap-2.5 p-3">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground text-[12px] font-black text-background">
+            {initial}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[13px] font-bold leading-4 text-foreground">{username}</p>
+            <p className="flex items-center gap-1 text-[11px] font-medium leading-3.5 text-muted-foreground">
+              <Shield className="size-3 shrink-0" aria-hidden="true" />
+              {DASHBOARD_LABELS.role}
+            </p>
+          </div>
+          <div className="flex shrink-0 items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              asChild
+              aria-label={DASHBOARD_LABELS.viewSite}
+              title={DASHBOARD_LABELS.viewSite}
+              className="size-8 rounded-lg text-muted-foreground hover:text-foreground"
+            >
+              <Link href="/">
+                <ExternalLink className="size-4" aria-hidden="true" />
               </Link>
-
-              <form action={logout}>
-                <button
-                  type="submit"
-                  className="flex min-h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-[13px] font-medium text-destructive transition-colors hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none"
-                >
-                  <LogOut className="size-4 shrink-0" aria-hidden="true" />
-                  {DASHBOARD_LABELS.logout}
-                </button>
-              </form>
-            </div>
+            </Button>
+            <form action={logout}>
+              <Button
+                type="submit"
+                variant="ghost"
+                size="icon-sm"
+                aria-label={DASHBOARD_LABELS.logout}
+                title={DASHBOARD_LABELS.logout}
+                className="size-8 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+              >
+                <LogOut className="size-4" aria-hidden="true" />
+              </Button>
+            </form>
           </div>
         </div>
       </div>
