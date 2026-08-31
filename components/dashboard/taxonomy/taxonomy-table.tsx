@@ -130,6 +130,7 @@ function RowIdentity({ name, image, href }: { name: string; image: string | null
           aria-hidden="true"
           width={40}
           height={40}
+          unoptimized
           className="size-10 shrink-0 rounded-lg object-cover ring-1 ring-border/60"
         />
       ) : (
