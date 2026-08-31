@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+import { PATHNAME_HEADER } from "@/lib/routes";
 import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/session";
 
 export function proxy(request: NextRequest) {
@@ -15,9 +16,16 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  return NextResponse.next();
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set(PATHNAME_HEADER, pathname);
+
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: ["/", "/about", "/contact", "/blog", "/blog/:path*", "/dashboard/:path*", "/login"],
 };

@@ -1,4 +1,5 @@
 export * from "./admin/auth-actions";
+export * from "./admin/admin-bar-actions";
 export * from "./admin/post-actions";
 export * from "./admin/comment-actions";
 export * from "./admin/taxonomy-actions";
