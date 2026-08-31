@@ -166,18 +166,6 @@ export function TaxonomyForm({
               ) : null}
             </CardContent>
           </Card>
-        </div>
-
-        <aside
-          aria-label={TAXONOMY_LABELS.sidebarAriaLabel}
-          className="min-w-0 space-y-5 lg:sticky lg:top-8 lg:col-span-1 lg:max-h-[calc(100dvh-4rem)] lg:self-start lg:overflow-y-auto"
-        >
-          <ImageUpload
-            id="taxonomy-image"
-            initialKey={initial.image}
-            initialUrl={initialImageUrl}
-            onChange={setImage}
-          />
 
           <Card>
             <CardHeader className="pb-3">
@@ -228,6 +216,18 @@ export function TaxonomyForm({
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        <aside
+          aria-label={TAXONOMY_LABELS.sidebarAriaLabel}
+          className="min-w-0 space-y-5 lg:sticky lg:top-8 lg:col-span-1 lg:max-h-[calc(100dvh-4rem)] lg:self-start lg:overflow-y-auto"
+        >
+          <ImageUpload
+            id="taxonomy-image"
+            initialKey={initial.image}
+            initialUrl={initialImageUrl}
+            onChange={setImage}
+          />
         </aside>
       </div>
 

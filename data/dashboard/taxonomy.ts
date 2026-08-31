@@ -41,7 +41,7 @@ export const TAXONOMY_LABELS = {
   parentCycle: "نمی‌توان دسته‌بندی را زیرمجموعه خودش قرار داد.",
   urlPreviewLabel: "نشانی نهایی",
   mainInfoHint: "نام و نشانی (اسلاگ) الزامی است؛ بقیه موارد اختیاری‌اند.",
-  sidebarAriaLabel: "تصویر و تنظیمات سئو",
+  sidebarAriaLabel: "تصویر و تنظیمات تکمیلی",
   deleteBlockedChildren: "این دسته‌بندی زیر‌دسته دارد؛ ابتدا آن‌ها را حذف یا جابه‌جا کنید.",
   deleteBlockedPosts: "این دسته‌بندی مقاله دارد؛ ابتدا مقالات آن را جابه‌جا کنید.",
   prevPage: "صفحه قبل",
