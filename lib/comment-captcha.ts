@@ -369,7 +369,7 @@ export function verifyCaptchaAnswer(params: {
 
   const live = liveChallengesFor(params.sessionToken, params.ipHash, now);
   if (live.length === 0) {
-    console.warn(`[captcha-debug] store-miss hadSession=${Boolean(params.sessionToken)}`);
+    console.warn(`[captcha-debug] store-miss pid=${process.pid} hadSession=${Boolean(params.sessionToken)}`);
     return "expired";
   }
 
