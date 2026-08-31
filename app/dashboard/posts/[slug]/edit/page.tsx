@@ -35,7 +35,6 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     excerpt: post.excerpt,
     categoryId: post.categoryId,
     tagIds: post.tags.map((tag) => tag.id),
-    date: post.date,
     readTimeMinutes: post.readTimeMinutes,
     content: post.content,
     coverImage: post.coverImage,

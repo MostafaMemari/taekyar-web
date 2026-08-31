@@ -3,7 +3,6 @@ export interface FieldDraft {
   slug: string;
   excerpt: string;
   categoryId: string;
-  date: string;
   readTimeMinutes: string;
   metaTitle: string;
   metaDescription: string;

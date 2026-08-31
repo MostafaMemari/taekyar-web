@@ -80,7 +80,6 @@ export interface NormalizedPost {
   excerpt: string | null;
   categoryId: number | null;
   tagIds: number[];
-  date: string | null;
   readTimeMinutes: number | null;
   content: string | null;
   coverImage: string | null;
@@ -127,7 +126,6 @@ export function normalizePostInput(input: PostInput): PostValidationResult {
 
   if (Object.keys(errors).length > 0) return { ok: false, fieldErrors: errors };
 
-  const date = String(input.date ?? "").trim();
   const excerpt = String(input.excerpt ?? "").trim();
   const rawContent = String(input.content ?? "").trim();
 
@@ -139,7 +137,6 @@ export function normalizePostInput(input: PostInput): PostValidationResult {
       excerpt: excerpt.length > 0 ? excerpt : null,
       categoryId,
       tagIds,
-      date: date.length > 0 ? date : null,
       readTimeMinutes,
       content: rawContent.length > 0 ? sanitizePostHtml(rawContent) : null,
       coverImage: normalizeOptionalText(input.coverImage),

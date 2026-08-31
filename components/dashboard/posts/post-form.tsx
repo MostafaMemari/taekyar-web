@@ -11,7 +11,9 @@ import type { PostFieldErrors, PostInput } from "@/lib/admin-types";
 import { parsePostHtml } from "@/lib/post-content";
 import { RichContentEditor } from "./rich-content-editor";
 import { CoverImageField, type CoverImageValue } from "./post-form/cover-image-field";
-import { FormFields } from "./post-form/form-fields";
+import { MainInfoFields } from "./post-form/form-fields";
+import { PostSidebarFields } from "./post-form/post-sidebar-fields";
+import { SeoFields } from "./post-form/seo-fields";
 import type { FieldDraft } from "./post-form/types";
 
 interface PostFormProps {
@@ -29,7 +31,6 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
     slug: initial.slug,
     excerpt: initial.excerpt ?? "",
     categoryId: initial.categoryId === null ? "" : String(initial.categoryId),
-    date: initial.date ?? "",
     readTimeMinutes: initial.readTimeMinutes === null ? "" : String(initial.readTimeMinutes),
     metaTitle: initial.metaTitle ?? "",
     metaDescription: initial.metaDescription ?? "",
@@ -65,7 +66,6 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
       excerpt: fields.excerpt.trim() || null,
       categoryId: fields.categoryId === "" || fields.categoryId === "none" ? null : Number(fields.categoryId),
       tagIds: selectedTagIds,
-      date: fields.date.trim() || null,
       readTimeMinutes: fields.readTimeMinutes.trim() === "" ? null : Number(fields.readTimeMinutes),
       content,
       coverImage: coverImage.key,
@@ -93,22 +93,34 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      <FormFields
-        fields={fields}
-        onFieldChange={setField}
-        categories={categories}
-        tags={tags}
-        selectedTagIds={selectedTagIds}
-        onToggleTag={toggleTag}
-        fieldErrors={fieldErrors}
-      />
-      <CoverImageField
-        value={coverImage}
-        onChange={setCoverImage}
-        error={fieldErrors.coverImage}
-        altError={fieldErrors.coverImageAlt}
-      />
-      <RichContentEditor initialContent={content} onChange={setContent} error={fieldErrors.content} />
+      <div className="grid items-start gap-5 lg:grid-cols-3">
+        <div className="min-w-0 space-y-5 lg:col-span-2">
+          <MainInfoFields fields={fields} onFieldChange={setField} fieldErrors={fieldErrors} />
+          <RichContentEditor initialContent={content} onChange={setContent} error={fieldErrors.content} />
+          <SeoFields fields={fields} onFieldChange={setField} fieldErrors={fieldErrors} />
+        </div>
+
+        <aside
+          aria-label={POST_FORM_LABELS.sidebarAriaLabel}
+          className="min-w-0 space-y-5 lg:sticky lg:top-8 lg:col-span-1 lg:max-h-[calc(100dvh-4rem)] lg:self-start lg:overflow-y-auto"
+        >
+          <CoverImageField
+            value={coverImage}
+            onChange={setCoverImage}
+            error={fieldErrors.coverImage}
+            altError={fieldErrors.coverImageAlt}
+          />
+          <PostSidebarFields
+            fields={fields}
+            onFieldChange={setField}
+            categories={categories}
+            tags={tags}
+            selectedTagIds={selectedTagIds}
+            onToggleTag={toggleTag}
+            fieldErrors={fieldErrors}
+          />
+        </aside>
+      </div>
 
       <Separator className="bg-border/60" />
 
@@ -116,7 +128,7 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
         <Button
           type="submit"
           disabled={isPending}
-          className="h-11 gap-2 rounded-xl px-8 text-[13px] font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none"
+          className="h-11 gap-2 rounded-xl px-8 text-[13px] font-bold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none"
         >
           {isPending
             ? POST_FORM_LABELS.saving
@@ -130,7 +142,7 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
           value="draft"
           disabled={isPending}
           variant="outline"
-          className="h-11 gap-2 rounded-xl px-6 text-[13px] font-bold"
+          className="h-11 gap-2 rounded-xl border-border bg-card px-6 text-[13px] font-bold text-foreground hover:bg-muted hover:text-foreground"
         >
           {mode === "edit" ? POST_FORM_LABELS.submitDraftUpdate : POST_FORM_LABELS.submitDraftCreate}
         </Button>

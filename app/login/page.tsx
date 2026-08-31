@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="theme-light relative flex min-h-screen items-center justify-center bg-background px-4 py-8 sm:p-6">
+    <div className="theme-light relative flex min-h-screen items-center justify-center bg-background px-4 py-8 text-foreground sm:p-6">
       <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0 opacity-[0.035]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 flex h-[4px]">
         <span className="flex-1 bg-belt-white" />

@@ -17,7 +17,7 @@ export default function PublicLayout({
       </Suspense>
       <ReadingProgress />
       <Header />
-      <main className="theme-light flex-1 bg-background">{children}</main>
+      <main className="theme-light flex-1 bg-background text-foreground">{children}</main>
       <Footer />
       <Toaster />
     </>

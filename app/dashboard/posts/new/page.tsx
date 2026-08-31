@@ -3,7 +3,6 @@ import { PostForm } from "@/components/dashboard/posts/post-form";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { getCategories, getTags } from "@/lib/blog";
 import { toCategorySelectOptions } from "@/lib/blog/categories";
-import { formatFaDate } from "@/lib/utils";
 
 export const metadata = {
   title: POST_FORM_LABELS.newTitle,
@@ -19,7 +18,6 @@ export default async function NewPostPage() {
     excerpt: null,
     categoryId: null,
     tagIds: [],
-    date: formatFaDate(new Date()),
     readTimeMinutes: 5,
     content: null,
     coverImage: null,

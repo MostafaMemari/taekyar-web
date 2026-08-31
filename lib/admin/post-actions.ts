@@ -12,6 +12,10 @@ function isSlugConflict(error: unknown): boolean {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
 }
 
+function formatFaDateText(value: Date): string {
+  return new Intl.DateTimeFormat("fa-IR", { day: "numeric", month: "long", year: "numeric" }).format(value);
+}
+
 export async function createPost(_previousState: PostFormState, input: PostInput): Promise<PostFormState> {
   await requireSession();
 
@@ -19,12 +23,14 @@ export async function createPost(_previousState: PostFormState, input: PostInput
   if (!result.ok) return { status: "error", fieldErrors: result.fieldErrors };
 
   const { data } = result;
+  const publishDate = data.status === "PUBLISHED" ? formatFaDateText(new Date()) : null;
   try {
     const { tagIds, content, ...postData } = data;
     await prisma.post.create({
       data: {
         ...postData,
         content: content ?? Prisma.DbNull,
+        date: publishDate,
         tags: { connect: tagIds.map((id) => ({ id })) },
       },
     });
@@ -53,7 +59,7 @@ export async function updatePost(
 
   const current = await prisma.post.findUnique({
     where: { slug: currentSlug },
-    select: { deletedAt: true },
+    select: { deletedAt: true, status: true, date: true },
   });
   if (!current || current.deletedAt) return { status: "error", message: POST_FORM_LABELS.error };
 
@@ -65,6 +71,9 @@ export async function updatePost(
     return { status: "error", fieldErrors: { slug: POST_FORM_LABELS.slugTaken } };
   }
 
+  const firstPublication = data.status === "PUBLISHED" && !current.date;
+  const publishDate = firstPublication ? formatFaDateText(new Date()) : current.date;
+
   try {
     const { tagIds, content, ...postData } = data;
     await prisma.post.update({
@@ -72,6 +81,7 @@ export async function updatePost(
       data: {
         ...postData,
         content: content === null ? Prisma.DbNull : content,
+        date: publishDate,
         tags: { set: tagIds.map((id) => ({ id })) },
       },
     });

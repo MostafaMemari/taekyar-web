@@ -64,7 +64,7 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
           <Menu className="!size-[22px]" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="theme-light w-[19rem] gap-0 border-none p-0">
+      <SheetContent side="right" className="theme-light w-[19rem] gap-0 border-none p-0 text-foreground">
         <SheetHeader className="border-b border-black/[0.07] px-5 py-4">
           <SheetTitle className="text-start">
             <Wordmark onNavigate={close} />

@@ -18,7 +18,6 @@ export interface PostInput {
   excerpt: string | null;
   categoryId: number | null;
   tagIds: number[];
-  date: string | null;
   readTimeMinutes: number | null;
   content: string | null;
   coverImage: string | null;
@@ -33,7 +32,6 @@ export type PostFieldKey =
   | "slug"
   | "excerpt"
   | "categoryId"
-  | "date"
   | "readTimeMinutes"
   | "content"
   | "coverImage"
