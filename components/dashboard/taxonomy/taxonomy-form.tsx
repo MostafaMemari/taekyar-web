@@ -94,140 +94,147 @@ export function TaxonomyForm({
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-[14px] font-black">اطلاعات اصلی</CardTitle>
-          <p className="text-xs leading-5 text-muted-foreground">نام، نشانی و تصویر — نمایش در وبلاگ و کارت‌ها</p>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1.5">
-              <Label htmlFor="taxonomy-name" className="text-[13px] font-bold">
-                {TAXONOMY_LABELS.nameLabel}
-              </Label>
-              <Input
-                id="taxonomy-name"
-                required
-                value={fields.name}
-                placeholder={TAXONOMY_LABELS.namePlaceholder}
-                className="h-10 rounded-xl"
-                onChange={(event) => setField("name", event.target.value)}
-              />
-            </div>
+      <div className="grid items-start gap-5 lg:grid-cols-3">
+        <div className="min-w-0 space-y-5 lg:col-span-2">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-[14px] font-black">اطلاعات اصلی</CardTitle>
+              <p className="text-xs leading-5 text-muted-foreground">{TAXONOMY_LABELS.mainInfoHint}</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="taxonomy-name" className="text-[13px] font-bold">
+                    {TAXONOMY_LABELS.nameLabel}
+                  </Label>
+                  <Input
+                    id="taxonomy-name"
+                    required
+                    value={fields.name}
+                    placeholder={TAXONOMY_LABELS.namePlaceholder}
+                    className="h-10 rounded-xl"
+                    onChange={(event) => setField("name", event.target.value)}
+                  />
+                </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="taxonomy-slug" className="text-[13px] font-bold">
-                {TAXONOMY_LABELS.slugLabel}
-              </Label>
-              <Input
-                id="taxonomy-slug"
-                dir="ltr"
-                required
-                value={fields.slug}
-                placeholder={TAXONOMY_LABELS.slugPlaceholder}
-                className="h-10 rounded-xl text-start font-mono text-sm"
-                onChange={(event) => setField("slug", event.target.value)}
-              />
-            </div>
-          </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="taxonomy-slug" className="text-[13px] font-bold">
+                    {TAXONOMY_LABELS.slugLabel}
+                  </Label>
+                  <Input
+                    id="taxonomy-slug"
+                    dir="ltr"
+                    required
+                    value={fields.slug}
+                    placeholder={TAXONOMY_LABELS.slugPlaceholder}
+                    className="h-10 rounded-xl text-start font-mono text-sm"
+                    onChange={(event) => setField("slug", event.target.value)}
+                  />
+                </div>
+              </div>
 
-          {isCategory ? (
-            <div className="space-y-1.5">
-              <Label htmlFor="taxonomy-parent" className="text-[13px] font-bold">
-                {TAXONOMY_LABELS.parentLabel}
-              </Label>
-              <Select value={parentId} onValueChange={setParentId}>
-                <SelectTrigger id="taxonomy-parent" className="h-10 w-full rounded-xl">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={ROOT_PARENT_VALUE}>{TAXONOMY_LABELS.parentRootOption}</SelectItem>
-                  {parentOptions.map((option) => (
-                    <SelectItem key={option.id} value={String(option.id)}>
-                      {"— ".repeat(option.depth)}
-                      {option.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          ) : null}
+              {isCategory ? (
+                <div className="space-y-1.5">
+                  <Label htmlFor="taxonomy-parent" className="text-[13px] font-bold">
+                    {TAXONOMY_LABELS.parentLabel}
+                  </Label>
+                  <Select value={parentId} onValueChange={setParentId}>
+                    <SelectTrigger id="taxonomy-parent" className="h-10 w-full rounded-xl">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={ROOT_PARENT_VALUE}>{TAXONOMY_LABELS.parentRootOption}</SelectItem>
+                      {parentOptions.map((option) => (
+                        <SelectItem key={option.id} value={String(option.id)}>
+                          {"— ".repeat(option.depth)}
+                          {option.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : null}
 
-          {categoryPath ? (
-            <div className="flex items-center gap-2 rounded-xl bg-muted/50 px-3 py-2.5 ring-1 ring-border/60">
-              <Link2 className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-              <span className="text-[11px] font-bold text-muted-foreground">{TAXONOMY_LABELS.urlPreviewLabel}:</span>
-              <span dir="ltr" className="truncate font-mono text-[12px] text-foreground">
-                /blog/category/{categoryPath}
-              </span>
-            </div>
-          ) : null}
+              {categoryPath ? (
+                <div className="flex items-center gap-2 rounded-xl bg-muted/50 px-3 py-2.5 ring-1 ring-border/60">
+                  <Link2 className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                  <span className="text-[11px] font-bold text-muted-foreground">{TAXONOMY_LABELS.urlPreviewLabel}:</span>
+                  <span dir="ltr" className="truncate font-mono text-[12px] text-foreground">
+                    /blog/category/{categoryPath}
+                  </span>
+                </div>
+              ) : null}
+            </CardContent>
+          </Card>
+        </div>
 
-          <Separator className="bg-border/60" />
-
+        <aside
+          aria-label={TAXONOMY_LABELS.sidebarAriaLabel}
+          className="min-w-0 space-y-5 lg:sticky lg:top-8 lg:col-span-1 lg:max-h-[calc(100dvh-4rem)] lg:self-start lg:overflow-y-auto"
+        >
           <ImageUpload
             id="taxonomy-image"
             initialKey={initial.image}
             initialUrl={initialImageUrl}
             onChange={setImage}
           />
-        </CardContent>
-      </Card>
 
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-[14px] font-black">{TAXONOMY_LABELS.seoTitle}</CardTitle>
-          <p className="text-xs leading-5 text-muted-foreground">{TAXONOMY_LABELS.seoHint}</p>
-        </CardHeader>
-        <Separator className="bg-border/60" />
-        <CardContent className="space-y-4 pt-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="taxonomy-description" className="text-[13px] font-bold">
-              {TAXONOMY_LABELS.descriptionLabel}
-            </Label>
-            <Textarea
-              id="taxonomy-description"
-              rows={4}
-              value={fields.description}
-              placeholder={TAXONOMY_LABELS.descriptionPlaceholder}
-              className="min-h-[104px] resize-y rounded-xl"
-              onChange={(event) => setField("description", event.target.value)}
-            />
-          </div>
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-[14px] font-black">{TAXONOMY_LABELS.seoTitle}</CardTitle>
+              <p className="text-xs leading-5 text-muted-foreground">{TAXONOMY_LABELS.seoHint}</p>
+            </CardHeader>
+            <Separator className="bg-border/60" />
+            <CardContent className="space-y-4 pt-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="taxonomy-description" className="text-[13px] font-bold">
+                  {TAXONOMY_LABELS.descriptionLabel}
+                </Label>
+                <Textarea
+                  id="taxonomy-description"
+                  rows={4}
+                  value={fields.description}
+                  placeholder={TAXONOMY_LABELS.descriptionPlaceholder}
+                  className="min-h-[104px] resize-y rounded-xl"
+                  onChange={(event) => setField("description", event.target.value)}
+                />
+              </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="taxonomy-meta-title" className="text-[13px] font-bold">
-              {TAXONOMY_LABELS.metaTitleLabel}
-            </Label>
-            <Input
-              id="taxonomy-meta-title"
-              value={fields.metaTitle}
-              placeholder={TAXONOMY_LABELS.metaTitlePlaceholder}
-              className="h-10 rounded-xl"
-              onChange={(event) => setField("metaTitle", event.target.value)}
-            />
-          </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="taxonomy-meta-title" className="text-[13px] font-bold">
+                  {TAXONOMY_LABELS.metaTitleLabel}
+                </Label>
+                <Input
+                  id="taxonomy-meta-title"
+                  value={fields.metaTitle}
+                  placeholder={TAXONOMY_LABELS.metaTitlePlaceholder}
+                  className="h-10 rounded-xl"
+                  onChange={(event) => setField("metaTitle", event.target.value)}
+                />
+              </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="taxonomy-meta-description" className="text-[13px] font-bold">
-              {TAXONOMY_LABELS.metaDescriptionLabel}
-            </Label>
-            <Textarea
-              id="taxonomy-meta-description"
-              rows={3}
-              value={fields.metaDescription}
-              placeholder={TAXONOMY_LABELS.metaDescriptionPlaceholder}
-              className="min-h-[84px] resize-y rounded-xl"
-              onChange={(event) => setField("metaDescription", event.target.value)}
-            />
-          </div>
-        </CardContent>
-      </Card>
+              <div className="space-y-1.5">
+                <Label htmlFor="taxonomy-meta-description" className="text-[13px] font-bold">
+                  {TAXONOMY_LABELS.metaDescriptionLabel}
+                </Label>
+                <Textarea
+                  id="taxonomy-meta-description"
+                  rows={3}
+                  value={fields.metaDescription}
+                  placeholder={TAXONOMY_LABELS.metaDescriptionPlaceholder}
+                  className="min-h-[84px] resize-y rounded-xl"
+                  onChange={(event) => setField("metaDescription", event.target.value)}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </aside>
+      </div>
 
       {errorMessage ? (
         <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
           <AlertCircle className="size-4" aria-hidden="true" />
-          <AlertTitle className="text-[13px] font-bold">خطا در ذخیره</AlertTitle>
+          <AlertTitle className="text-[13px] font-bold">{TAXONOMY_LABELS.errorTitle}</AlertTitle>
           <AlertDescription className="text-[13px] leading-5">{errorMessage}</AlertDescription>
         </Alert>
       ) : null}
@@ -238,7 +245,7 @@ export function TaxonomyForm({
         <Button
           type="submit"
           disabled={isPending}
-          className="h-11 gap-2 rounded-xl px-8 text-[13px] font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none"
+          className="h-11 gap-2 rounded-xl px-8 text-[13px] font-bold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none"
         >
           {isPending
             ? TAXONOMY_LABELS.saving
@@ -246,7 +253,7 @@ export function TaxonomyForm({
               ? TAXONOMY_LABELS.submitUpdate
               : TAXONOMY_LABELS.submitCreate}
         </Button>
-        <span className="text-xs text-muted-foreground">ذخیره و انتشار آنی</span>
+        <span className="text-xs text-muted-foreground">{TAXONOMY_LABELS.submitHint}</span>
       </div>
     </form>
   );
