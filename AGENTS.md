@@ -10,25 +10,29 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Taekyar
 
-Persian (fa, RTL) corporate site + blog with an admin dashboard. Next.js 16 (App Router), React 19, Tailwind v4, Prisma 7 + PostgreSQL, shadcn/radix UI. Path alias `@/*` → repo root.
+Persian (fa, RTL) corporate site + blog with an admin dashboard. Next.js 16 (App Router), React 19, Tailwind v4, Prisma 7 + PostgreSQL, Redis (ioredis), shadcn/radix UI. Path alias `@/*` → repo root.
 
 ## Commands
 
-- Dev: `npm run dev` · Build: `npm run build` · Lint: `npm run lint` (runs bare `eslint` with flat config)
+- Dev: `npm run dev` · Build: `npm run build` · Lint: `npm run lint` (bare `eslint` with flat config)
 - Typecheck: `npx tsc --noEmit` (no npm script; must pass clean)
-- Only test (captcha flow): `node captcha-flow-test.mts`
-- Prisma CLI does NOT auto-load `.env`. Prefix DB commands with `set -a && source .env && set +a` (bash), e.g. for `npx prisma migrate dev`. Seed is the exception: `npx prisma db seed` runs `node --env-file=.env prisma/seed.ts` via `prisma.config.ts`.
-- Run `npx prisma generate` after schema changes or fresh install (no postinstall hook).
-- Copy `.env.example` → `.env` (gitignored).
+- Only test (captcha flow): `node --env-file=.env captcha-flow-test.mts` — needs a running Redis (`REDIS_URL`); without env it fails on the first Redis call
+- Prisma CLI does NOT auto-load `.env` (fails with `PrismaConfigEnvError`). Prefix every `prisma` command with `set -a && source .env && set +a`, e.g. `npx prisma migrate dev` or `npx prisma db seed`.
+- `npm run build` runs `prisma generate && prisma migrate deploy && prisma db seed && next build` → requires a reachable Postgres AND the env prefix above, or build fails.
+- `postinstall` runs `prisma generate` (fresh install is covered); re-run it after schema changes.
+- Copy `.env.example` → `.env` (gitignored). Required: `DATABASE_URL`, `SESSION_SECRET`, `REDIS_URL`. `ADMIN_USERNAME`/`ADMIN_PASSWORD` seed the admin login; `R2_*` needed for media uploads; `COMMENT_IP_PEPPER` optional (IP hashing has a built-in default).
+- Seed only upserts the admin user (content seeding is commented out) and skips silently if `ADMIN_USERNAME`/`ADMIN_PASSWORD` are unset.
 
 ## Architecture
 
-- `proxy.ts` (Next 16's middleware) gates `/dashboard/*` and `/login` on the session cookie; sessions in `lib/session.ts`, auth actions in `lib/admin/auth-actions.ts`.
-- Mutations are Server Actions in `lib/admin/*-actions.ts` and `lib/comment-actions.ts`. The only API route is `app/api/captcha/image`.
-- Blog content (posts/categories/tags/comments) is DB-backed via `lib/blog/*` and `lib/prisma.ts` (PrismaPg driver adapter). Static site copy, labels, and nav live in `data/` (feature subfolders: `data/blog/`, `data/dashboard/`, …).
-- Captcha images are rendered server-side with `@napi-rs/canvas` (kept in `serverExternalPackages`) using `lib/captcha-fonts/Vazirmatn-Regular.ttf`; answers use Persian digits (۰-۹). Captcha/rate-limit/IP-hash logic lives in `lib/comment-*.ts`; `COMMENT_IP_PEPPER` is optional with a built-in default.
-- Media uploads go to Cloudflare R2 via `aws4fetch` (`lib/r2.ts`). `R2_PUBLIC_URL` is read into `next.config.ts` image config at startup — changing it requires a dev server restart.
-- Layouts: `app/(public)` is the public site; root layout sets `lang="fa" dir="rtl"`.
+- `proxy.ts` (Next 16's middleware) gates `/dashboard/*` and `/login` on the session cookie (`taekyar_session`, HMAC-signed with `SESSION_SECRET`, scrypt password hashing in `lib/session.ts`); login Server Actions in `lib/admin/auth-actions.ts`.
+- Mutations are Server Actions: `lib/admin/*-actions.ts` (posts, taxonomy, comments, media, images, auth; barrel `lib/admin-actions.ts`) and `lib/comment-actions.ts` (public comments). The only API route is `app/api/captcha/image`.
+- Blog content (posts/categories/tags/comments) is DB-backed via `lib/blog/*` over `lib/prisma.ts` (PrismaPg driver adapter). `Post.content` is Tiptap HTML (or legacy block JSON, converted and sanitized by `lib/post-content.ts`). Categories are hierarchical (`path`, nested route `blog/category/[...path]`); posts soft-delete via `deletedAt` → `dashboard/posts/trash`; comments are threaded with PENDING/APPROVED/REJECTED moderation.
+- Captcha: `svg-captcha` renders SVG server-side (in `serverExternalPackages`, font `lib/captcha-fonts/Vazirmatn-Regular.ttf`); challenge digits are Persian (۰-۹). Challenges are single-use, stored in Redis keyed by the `tc_captcha` cookie and bound to a hashed client IP; attempt/generation rate limiting is Redis-backed too (`lib/captcha.ts`, `lib/captcha-rate-limit.ts`, `lib/comment-security.ts`).
+- Redis is required for captcha + comment rate limiting. If `REDIS_URL` is unset, `lib/redis.ts` returns a stub whose calls all reject — those flows fail at runtime (not at startup).
+- Media uploads go to Cloudflare R2 via `aws4fetch` (`lib/r2.ts`): images only (jpg/png/webp), keys `uploads/YYYY/MM/<uuid>.<ext>`. `R2_PUBLIC_URL` is read into `next.config.ts` image config at startup — changing it requires a dev server restart.
+- Contact form is client-side only (validation + `mailto:` builder in `lib/contact-submission.ts`) — no DB model or API route.
+- Layouts: `app/(public)` is the public site, `app/dashboard` the admin; root layout sets `lang="fa" dir="rtl"`. Static site copy, labels, and nav live in `data/` (feature subfolders: `data/blog/`, `data/dashboard/`, …).
 
 ## Conventions
 
