@@ -71,7 +71,7 @@ interface TrashTableProps {
     title: string;
     coverImage: string | null;
     deletedAt: Date | null;
-    category: { name: string };
+    category: { name: string } | null;
     _count: { comments: number };
   }>;
 }
@@ -140,7 +140,7 @@ function TrashTable({ posts }: TrashTableProps) {
               <TableCell className="whitespace-nowrap px-4 py-3.5">
                 <span className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground">
                   <span className="size-1.5 rounded-full bg-belt-blue" aria-hidden="true" />
-                  {post.category.name}
+                  {post.category?.name ?? "—"}
                 </span>
               </TableCell>
               <TableCell className="whitespace-nowrap px-4 py-3.5 text-[13px] text-muted-foreground">

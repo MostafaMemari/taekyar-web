@@ -15,12 +15,12 @@ export interface TaxonomyInput {
 export interface PostInput {
   title: string;
   slug: string;
-  excerpt: string;
-  categoryId: number;
+  excerpt: string | null;
+  categoryId: number | null;
   tagIds: number[];
-  date: string;
-  readTimeMinutes: number;
-  content: string;
+  date: string | null;
+  readTimeMinutes: number | null;
+  content: string | null;
   coverImage: string | null;
   coverImageAlt: string | null;
   metaTitle: string | null;
@@ -28,9 +28,25 @@ export interface PostInput {
   status: PostPublishStatus;
 }
 
+export type PostFieldKey =
+  | "title"
+  | "slug"
+  | "excerpt"
+  | "categoryId"
+  | "date"
+  | "readTimeMinutes"
+  | "content"
+  | "coverImage"
+  | "coverImageAlt"
+  | "metaTitle"
+  | "metaDescription";
+
+export type PostFieldErrors = Partial<Record<PostFieldKey, string>>;
+
 export interface PostFormState {
   status: "idle" | "error";
   message?: string;
+  fieldErrors?: PostFieldErrors;
 }
 
 export interface LoginState {

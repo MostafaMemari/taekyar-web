@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 
+import { FieldError } from "@/components/shared/form-controls";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,8 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { POST_FORM_LABELS, TAXONOMY_LABELS } from "@/data/dashboard/ui";
+import type { PostFieldErrors } from "@/lib/admin-types";
 import { cn } from "@/lib/utils";
 import type { FieldDraft } from "./types";
+
+const NO_CATEGORY_VALUE = "none";
 
 interface FormFieldsProps {
   fields: FieldDraft;
@@ -17,6 +21,7 @@ interface FormFieldsProps {
   tags: Array<{ id: number; name: string }>;
   selectedTagIds: number[];
   onToggleTag: (id: number) => void;
+  fieldErrors: PostFieldErrors;
 }
 
 export function FormFields({
@@ -26,13 +31,14 @@ export function FormFields({
   tags,
   selectedTagIds,
   onToggleTag,
+  fieldErrors,
 }: FormFieldsProps) {
   return (
     <div className="space-y-5">
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-[14px] font-black">اطلاعات اصلی</CardTitle>
-          <p className="text-xs leading-5 text-muted-foreground">عنوان، نشانی و خلاصه مقاله — هسته اطلاعات نمایشی در وبلاگ</p>
+          <p className="text-xs leading-5 text-muted-foreground">عنوان و نشانی الزامی است؛ بقیه اختیاری.</p>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-1.5">
@@ -45,8 +51,11 @@ export function FormFields({
               value={fields.title}
               placeholder={POST_FORM_LABELS.titlePlaceholder}
               className="h-10 rounded-xl"
+              aria-invalid={Boolean(fieldErrors.title)}
+              aria-describedby={fieldErrors.title ? "post-title-error" : undefined}
               onChange={(event) => onFieldChange("title", event.target.value)}
             />
+            <FieldError errorId="post-title-error" message={fieldErrors.title} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -61,8 +70,11 @@ export function FormFields({
                 value={fields.slug}
                 placeholder={POST_FORM_LABELS.slugPlaceholder}
                 className="h-10 rounded-xl text-start font-mono text-sm"
+                aria-invalid={Boolean(fieldErrors.slug)}
+                aria-describedby={fieldErrors.slug ? "post-slug-error" : undefined}
                 onChange={(event) => onFieldChange("slug", event.target.value)}
               />
+              <FieldError errorId="post-slug-error" message={fieldErrors.slug} />
             </div>
 
             <div className="space-y-1.5">
@@ -70,10 +82,16 @@ export function FormFields({
                 {POST_FORM_LABELS.categoryLabel}
               </Label>
               <Select value={fields.categoryId} onValueChange={(value) => onFieldChange("categoryId", value)}>
-                <SelectTrigger id="post-category" className="h-10 w-full rounded-xl">
-                  <SelectValue placeholder="انتخاب دسته‌بندی" />
+                <SelectTrigger
+                  id="post-category"
+                  className="h-10 w-full rounded-xl"
+                  aria-invalid={Boolean(fieldErrors.categoryId)}
+                  aria-describedby={fieldErrors.categoryId ? "post-category-error" : undefined}
+                >
+                  <SelectValue placeholder="انتخاب دسته‌بندی (اختیاری)" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value={NO_CATEGORY_VALUE}>بدون دسته‌بندی</SelectItem>
                   {categories.map((category) => (
                     <SelectItem key={category.id} value={String(category.id)}>
                       {"— ".repeat(category.depth)}
@@ -82,6 +100,7 @@ export function FormFields({
                   ))}
                 </SelectContent>
               </Select>
+              <FieldError errorId="post-category-error" message={fieldErrors.categoryId} />
             </div>
           </div>
 
@@ -92,12 +111,14 @@ export function FormFields({
             <Textarea
               id="post-excerpt"
               rows={3}
-              required
               value={fields.excerpt}
               placeholder={POST_FORM_LABELS.excerptPlaceholder}
               className="min-h-[84px] resize-y rounded-xl"
+              aria-invalid={Boolean(fieldErrors.excerpt)}
+              aria-describedby={fieldErrors.excerpt ? "post-excerpt-error" : undefined}
               onChange={(event) => onFieldChange("excerpt", event.target.value)}
             />
+            <FieldError errorId="post-excerpt-error" message={fieldErrors.excerpt} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -107,12 +128,14 @@ export function FormFields({
               </Label>
               <Input
                 id="post-date"
-                required
                 value={fields.date}
                 placeholder={POST_FORM_LABELS.datePlaceholder}
                 className="h-10 rounded-xl"
+                aria-invalid={Boolean(fieldErrors.date)}
+                aria-describedby={fieldErrors.date ? "post-date-error" : undefined}
                 onChange={(event) => onFieldChange("date", event.target.value)}
               />
+              <FieldError errorId="post-date-error" message={fieldErrors.date} />
             </div>
 
             <div className="space-y-1.5">
@@ -124,11 +147,14 @@ export function FormFields({
                 type="number"
                 dir="ltr"
                 min={1}
-                required
                 value={fields.readTimeMinutes}
+                placeholder="۵"
                 className="h-10 rounded-xl text-start font-mono"
+                aria-invalid={Boolean(fieldErrors.readTimeMinutes)}
+                aria-describedby={fieldErrors.readTimeMinutes ? "post-read-time-error" : undefined}
                 onChange={(event) => onFieldChange("readTimeMinutes", event.target.value)}
               />
+              <FieldError errorId="post-read-time-error" message={fieldErrors.readTimeMinutes} />
             </div>
           </div>
         </CardContent>
@@ -188,8 +214,11 @@ export function FormFields({
               value={fields.metaTitle}
               placeholder={TAXONOMY_LABELS.metaTitlePlaceholder}
               className="h-10 rounded-xl"
+              aria-invalid={Boolean(fieldErrors.metaTitle)}
+              aria-describedby={fieldErrors.metaTitle ? "post-meta-title-error" : undefined}
               onChange={(event) => onFieldChange("metaTitle", event.target.value)}
             />
+            <FieldError errorId="post-meta-title-error" message={fieldErrors.metaTitle} />
           </div>
 
           <div className="space-y-1.5">
@@ -202,8 +231,11 @@ export function FormFields({
               value={fields.metaDescription}
               placeholder={TAXONOMY_LABELS.metaDescriptionPlaceholder}
               className="min-h-[84px] resize-y rounded-xl"
+              aria-invalid={Boolean(fieldErrors.metaDescription)}
+              aria-describedby={fieldErrors.metaDescription ? "post-meta-description-error" : undefined}
               onChange={(event) => onFieldChange("metaDescription", event.target.value)}
             />
+            <FieldError errorId="post-meta-description-error" message={fieldErrors.metaDescription} />
           </div>
         </CardContent>
       </Card>

@@ -15,8 +15,8 @@ export const CATEGORY_STYLES: Record<BlogCategoryName, CategoryStyle> = {
 
 const DEFAULT_CATEGORY_STYLE: CategoryStyle = { color: "#1f5fa8", Icon: Compass };
 
-export function getCategoryStyle(category: string): CategoryStyle {
-  return CATEGORY_STYLES[category as BlogCategoryName] ?? DEFAULT_CATEGORY_STYLE;
+export function getCategoryStyle(category: string | null): CategoryStyle {
+  return (category ? CATEGORY_STYLES[category as BlogCategoryName] : undefined) ?? DEFAULT_CATEGORY_STYLE;
 }
 
 export const BLOG_INDEX_INTRO = {

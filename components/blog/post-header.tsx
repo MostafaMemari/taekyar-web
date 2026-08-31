@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Fragment } from "react";
 import { ArrowRight, CalendarDays, Clock } from "lucide-react";
 
 import { getCategoryStyle } from "@/data/blog/index-page";
@@ -29,8 +30,10 @@ export function PostTopbar() {
 function PostMeta({ post }: { post: BlogPost }) {
   const { color, Icon } = getCategoryStyle(post.category);
 
-  return (
-    <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2 sm:gap-x-3 sm:gap-y-2.5">
+  const items: React.ReactNode[] = [];
+
+  if (post.category && post.categoryPath) {
+    items.push(
       <Link
         href={categoryHref(post.categoryPath)}
         className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-bold transition-opacity hover:opacity-80 sm:px-3 sm:py-1.5 sm:text-xs"
@@ -38,31 +41,50 @@ function PostMeta({ post }: { post: BlogPost }) {
       >
         <Icon className="size-3.5" />
         {post.category}
-      </Link>
+      </Link>,
+    );
+  }
 
-      <span className="inline-flex items-center gap-1.5 sm:gap-2">
-        <span
-          aria-hidden="true"
-          className="flex size-6 shrink-0 items-center justify-center rounded-full bg-belt-black text-[10px] font-black text-white ring-2 ring-white/10 sm:size-7 sm:text-[11px]"
-        >
-          ت
-        </span>
-        <span className="text-[11px] font-bold text-foreground sm:text-xs">{POST_LABELS.author}</span>
+  items.push(
+    <span className="inline-flex items-center gap-1.5 sm:gap-2">
+      <span
+        aria-hidden="true"
+        className="flex size-6 shrink-0 items-center justify-center rounded-full bg-belt-black text-[10px] font-black text-white ring-2 ring-white/10 sm:size-7 sm:text-[11px]"
+      >
+        ت
       </span>
+      <span className="text-[11px] font-bold text-foreground sm:text-xs">{POST_LABELS.author}</span>
+    </span>,
+  );
 
-      <span aria-hidden="true" className="hidden size-1 rounded-full bg-muted-foreground/40 sm:inline-block" />
-
+  if (post.date) {
+    items.push(
       <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground sm:gap-1.5 sm:text-xs">
         <CalendarDays className="size-3 sm:size-3.5" />
         {post.date}
-      </span>
+      </span>,
+    );
+  }
 
-      <span aria-hidden="true" className="hidden size-1 rounded-full bg-muted-foreground/40 sm:inline-block" />
-
+  if (post.readTimeMinutes) {
+    items.push(
       <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground sm:gap-1.5 sm:text-xs">
         <Clock className="size-3 sm:size-3.5" />
         {toFaDigits(post.readTimeMinutes)} {POST_LABELS.readTimeSuffix}
-      </span>
+      </span>,
+    );
+  }
+
+  return (
+    <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2 sm:gap-x-3 sm:gap-y-2.5">
+      {items.map((item, index) => (
+        <Fragment key={index}>
+          {index > 0 ? (
+            <span aria-hidden="true" className="hidden size-1 rounded-full bg-muted-foreground/40 sm:inline-block" />
+          ) : null}
+          {item}
+        </Fragment>
+      ))}
     </div>
   );
 }
@@ -76,9 +98,11 @@ export function PostHeader({ post }: { post: BlogPost }) {
         {post.title}
       </h1>
 
-      <p className="mt-3 max-w-xl text-pretty text-[14.5px] leading-7 text-muted-foreground sm:mt-4 sm:text-[15.5px] sm:leading-8 lg:mt-5 lg:text-base lg:leading-9">
-        {post.excerpt}
-      </p>
+      {post.excerpt ? (
+        <p className="mt-3 max-w-xl text-pretty text-[14.5px] leading-7 text-muted-foreground sm:mt-4 sm:text-[15.5px] sm:leading-8 lg:mt-5 lg:text-base lg:leading-9">
+          {post.excerpt}
+        </p>
+      ) : null}
     </header>
   );
 }

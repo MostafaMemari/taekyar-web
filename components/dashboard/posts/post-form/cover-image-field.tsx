@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ImagePlus, X } from "lucide-react";
 
 import { MediaPicker, type MediaPickerSelection } from "@/components/dashboard/media/media-picker";
+import { FieldError } from "@/components/shared/form-controls";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -20,9 +21,11 @@ export interface CoverImageValue {
 interface CoverImageFieldProps {
   value: CoverImageValue;
   onChange: (value: CoverImageValue) => void;
+  error?: string;
+  altError?: string;
 }
 
-export function CoverImageField({ value, onChange }: CoverImageFieldProps) {
+export function CoverImageField({ value, onChange, error, altError }: CoverImageFieldProps) {
   function handleSelect({ key, src, alt }: MediaPickerSelection) {
     onChange({ key, url: src, alt });
   }
@@ -38,6 +41,7 @@ export function CoverImageField({ value, onChange }: CoverImageFieldProps) {
         <p className="text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.coverImageDescription}</p>
       </CardHeader>
       <CardContent className="space-y-4">
+        <FieldError errorId="cover-image-error" message={error} />
         {value.key && value.url ? (
           <div className="relative overflow-hidden rounded-xl bg-card ring-1 ring-border/60">
             <Image
@@ -77,8 +81,11 @@ export function CoverImageField({ value, onChange }: CoverImageFieldProps) {
               value={value.alt}
               placeholder={POST_FORM_LABELS.imageAltPlaceholder}
               className="h-10 rounded-xl"
+              aria-invalid={Boolean(altError)}
+              aria-describedby={altError ? "cover-image-alt-error" : undefined}
               onChange={(event) => onChange({ ...value, alt: event.target.value })}
             />
+            <FieldError errorId="cover-image-alt-error" message={altError} />
           </div>
         ) : null}
 

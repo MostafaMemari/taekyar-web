@@ -6,6 +6,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import { ImagePlus } from "lucide-react";
 
 import { MediaPicker, type MediaPickerSelection } from "@/components/dashboard/media/media-picker";
+import { FieldError } from "@/components/shared/form-controls";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { BlogImage, CoachTip, ImportantNote } from "./extensions";
 import { EditorToolbar, ToolbarButton } from "./toolbar";
@@ -13,9 +14,10 @@ import { EditorToolbar, ToolbarButton } from "./toolbar";
 interface RichContentEditorProps {
   initialContent: string;
   onChange: (html: string) => void;
+  error?: string;
 }
 
-export function RichContentEditor({ initialContent, onChange }: RichContentEditorProps) {
+export function RichContentEditor({ initialContent, onChange, error }: RichContentEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -56,6 +58,8 @@ export function RichContentEditor({ initialContent, onChange }: RichContentEdito
       {editor ? <EditorToolbar editor={editor} imagePicker={imagePicker} /> : null}
 
       <EditorContent editor={editor} dir="rtl" />
+
+      {error ? <div className="px-4 pb-3 sm:px-5"><FieldError errorId="post-content-error" message={error} /></div> : null}
     </div>
   );
 }

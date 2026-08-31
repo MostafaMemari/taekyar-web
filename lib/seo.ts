@@ -5,7 +5,7 @@ import { r2PublicUrl } from "@/lib/r2-url";
 
 interface PageSeoInput {
   title: string;
-  description: string;
+  description?: string;
   path: string;
   imageUrl?: string | null;
   publishedTime?: Date;

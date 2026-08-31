@@ -91,6 +91,11 @@ export const POST_FORM_LABELS = {
   submitDraftUpdate: "ذخیره به‌عنوان پیش‌نویس",
   saving: "در حال ذخیره…",
   error: "ذخیره انجام نشد؛ دوباره تلاش کنید.",
+  errorToastTitle: "خطا در ذخیره مقاله",
+  titleRequired: "عنوان مقاله را وارد کنید.",
+  slugRequired: "نشانی (اسلاگ) را وارد کنید.",
   slugTaken: "این نشانی قبلاً استفاده شده است؛ نشانی دیگری انتخاب کنید.",
+  categoryInvalid: "دسته‌بندی انتخابی معتبر نیست.",
+  readTimeInvalid: "زمان مطالعه باید عددی بزرگ‌تر از صفر باشد.",
 } as const;
 

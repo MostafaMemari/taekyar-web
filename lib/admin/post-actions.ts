@@ -15,19 +15,23 @@ function isSlugConflict(error: unknown): boolean {
 export async function createPost(_previousState: PostFormState, input: PostInput): Promise<PostFormState> {
   await requireSession();
 
-  const data = normalizePostInput(input);
-  if (!data) return { status: "error", message: POST_FORM_LABELS.error };
+  const result = normalizePostInput(input);
+  if (!result.ok) return { status: "error", fieldErrors: result.fieldErrors };
 
+  const { data } = result;
   try {
-    const { tagIds, ...postData } = data;
+    const { tagIds, content, ...postData } = data;
     await prisma.post.create({
       data: {
         ...postData,
+        content: content ?? Prisma.DbNull,
         tags: { connect: tagIds.map((id) => ({ id })) },
       },
     });
   } catch (error) {
-    if (isSlugConflict(error)) return { status: "error", message: POST_FORM_LABELS.slugTaken };
+    if (isSlugConflict(error)) {
+      return { status: "error", fieldErrors: { slug: POST_FORM_LABELS.slugTaken } };
+    }
     console.error("createPost failed:", error);
     return { status: "error", message: POST_FORM_LABELS.error };
   }
@@ -43,8 +47,9 @@ export async function updatePost(
   await requireSession();
 
   const { currentSlug, ...rawInput } = input;
-  const data = normalizePostInput(rawInput);
-  if (!data) return { status: "error", message: POST_FORM_LABELS.error };
+  const result = normalizePostInput(rawInput);
+  if (!result.ok) return { status: "error", fieldErrors: result.fieldErrors };
+  const { data } = result;
 
   const current = await prisma.post.findUnique({
     where: { slug: currentSlug },
@@ -57,20 +62,23 @@ export async function updatePost(
     select: { slug: true },
   });
   if (duplicate && duplicate.slug !== currentSlug) {
-    return { status: "error", message: POST_FORM_LABELS.slugTaken };
+    return { status: "error", fieldErrors: { slug: POST_FORM_LABELS.slugTaken } };
   }
 
   try {
-    const { tagIds, ...postData } = data;
+    const { tagIds, content, ...postData } = data;
     await prisma.post.update({
       where: { slug: currentSlug },
       data: {
         ...postData,
+        content: content === null ? Prisma.DbNull : content,
         tags: { set: tagIds.map((id) => ({ id })) },
       },
     });
   } catch (error) {
-    if (isSlugConflict(error)) return { status: "error", message: POST_FORM_LABELS.slugTaken };
+    if (isSlugConflict(error)) {
+      return { status: "error", fieldErrors: { slug: POST_FORM_LABELS.slugTaken } };
+    }
     console.error("updatePost failed:", error);
     return { status: "error", message: POST_FORM_LABELS.error };
   }

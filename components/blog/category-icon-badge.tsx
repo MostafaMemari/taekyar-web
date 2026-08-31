@@ -2,7 +2,7 @@ import { getCategoryStyle } from "@/data/blog/index-page";
 import { cn } from "@/lib/utils";
 
 interface CategoryIconBadgeProps {
-  category: string;
+  category: string | null;
   className?: string;
   iconClassName?: string;
 }

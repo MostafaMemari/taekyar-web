@@ -2,14 +2,14 @@ export interface BlogPost {
   id: number;
   slug: string;
   title: string;
-  excerpt: string;
-  categoryId: number;
-  category: string;
-  categoryPath: string;
+  excerpt: string | null;
+  categoryId: number | null;
+  category: string | null;
+  categoryPath: string | null;
   categoryImage: string | null;
   tags: Array<{ id: number; name: string; slug: string }>;
-  date: string;
-  readTimeMinutes: number;
+  date: string | null;
+  readTimeMinutes: number | null;
   coverImage: string | null;
   coverImageAlt: string | null;
   metaTitle: string | null;
@@ -26,9 +26,9 @@ export interface BlogPostRow {
   id: number;
   slug: string;
   title: string;
-  excerpt: string;
-  date: string;
-  readTimeMinutes: number;
+  excerpt: string | null;
+  date: string | null;
+  readTimeMinutes: number | null;
   content?: unknown;
   coverImage: string | null;
   coverImageAlt: string | null;
@@ -36,7 +36,7 @@ export interface BlogPostRow {
   metaDescription: string | null;
   createdAt: Date;
   updatedAt: Date;
-  category: { id: number; name: string; slug: string; path: string; image: string | null };
+  category: { id: number; name: string; slug: string; path: string; image: string | null } | null;
   tags: Array<{ id: number; name: string; slug: string }>;
 }
 
@@ -46,10 +46,10 @@ export function toBlogPost(post: BlogPostRow): BlogPost {
     slug: post.slug,
     title: post.title,
     excerpt: post.excerpt,
-    categoryId: post.category.id,
-    category: post.category.name,
-    categoryPath: post.category.path,
-    categoryImage: post.category.image,
+    categoryId: post.category?.id ?? null,
+    category: post.category?.name ?? null,
+    categoryPath: post.category?.path ?? null,
+    categoryImage: post.category?.image ?? null,
     tags: post.tags,
     date: post.date,
     readTimeMinutes: post.readTimeMinutes,

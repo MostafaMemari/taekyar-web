@@ -1,7 +1,8 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { getSession } from "@/lib/auth";
-import type { PostInput, PostPublishStatus, TaxonomyInput } from "@/lib/admin-types";
+import type { PostFieldErrors, PostInput, PostPublishStatus, TaxonomyInput } from "@/lib/admin-types";
 import { postHref } from "@/lib/routes";
 import { sanitizePostHtml } from "@/lib/post-content";
 
@@ -73,38 +74,79 @@ export function normalizeTaxonomyInput(input: TaxonomyInput): TaxonomyInput | nu
   };
 }
 
-export function normalizePostInput(input: PostInput): (PostInput & { status: PostPublishStatus }) | null {
+export interface NormalizedPost {
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  categoryId: number | null;
+  tagIds: number[];
+  date: string | null;
+  readTimeMinutes: number | null;
+  content: string | null;
+  coverImage: string | null;
+  coverImageAlt: string | null;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  status: PostPublishStatus;
+}
+
+export type PostValidationResult =
+  | { ok: true; data: NormalizedPost }
+  | { ok: false; fieldErrors: PostFieldErrors };
+
+export function normalizePostInput(input: PostInput): PostValidationResult {
+  const errors: PostFieldErrors = {};
+
   const title = String(input.title ?? "").trim();
   const slug = String(input.slug ?? "").trim().toLowerCase();
-  const excerpt = String(input.excerpt ?? "").trim();
-  const categoryId = Number(input.categoryId);
+  if (!title) errors.title = POST_FORM_LABELS.titleRequired;
+  if (!slug) errors.slug = POST_FORM_LABELS.slugRequired;
+
+  const categoryIdRaw = Number(input.categoryId);
+  const categoryId =
+    input.categoryId === null || input.categoryId === undefined || String(input.categoryId).trim() === ""
+      ? null
+      : Number.isInteger(categoryIdRaw) && categoryIdRaw > 0
+        ? categoryIdRaw
+        : ((errors.categoryId = POST_FORM_LABELS.categoryInvalid), null);
+
   const tagIds = Array.isArray(input.tagIds)
     ? input.tagIds.map((id) => Number(id)).filter((id) => Number.isInteger(id) && id > 0)
     : [];
+
+  const readTimeRaw = String(input.readTimeMinutes ?? "").trim();
+  let readTimeMinutes: number | null = null;
+  if (readTimeRaw !== "") {
+    const parsed = Number(readTimeRaw);
+    if (Number.isInteger(parsed) && parsed > 0) {
+      readTimeMinutes = parsed;
+    } else {
+      errors.readTimeMinutes = POST_FORM_LABELS.readTimeInvalid;
+    }
+  }
+
+  if (Object.keys(errors).length > 0) return { ok: false, fieldErrors: errors };
+
   const date = String(input.date ?? "").trim();
-  const readTimeMinutes = Number(input.readTimeMinutes);
-  const status: PostPublishStatus = input.status === "DRAFT" ? "DRAFT" : "PUBLISHED";
-
-  if (!title || !slug || !excerpt || !date) return null;
-  if (!Number.isInteger(categoryId) || categoryId <= 0) return null;
-  if (!Number.isFinite(readTimeMinutes) || readTimeMinutes <= 0) return null;
-
-  const content = sanitizePostHtml(String(input.content ?? "").trim());
-  if (!content) return null;
+  const excerpt = String(input.excerpt ?? "").trim();
+  const rawContent = String(input.content ?? "").trim();
 
   return {
-    title,
-    slug,
-    excerpt,
-    categoryId,
-    tagIds,
-    date,
-    readTimeMinutes,
-    content,
-    coverImage: normalizeOptionalText(input.coverImage),
-    coverImageAlt: normalizeOptionalText(input.coverImageAlt),
-    metaTitle: normalizeOptionalText(input.metaTitle),
-    metaDescription: normalizeOptionalText(input.metaDescription),
-    status,
+    ok: true,
+    data: {
+      title,
+      slug,
+      excerpt: excerpt.length > 0 ? excerpt : null,
+      categoryId,
+      tagIds,
+      date: date.length > 0 ? date : null,
+      readTimeMinutes,
+      content: rawContent.length > 0 ? sanitizePostHtml(rawContent) : null,
+      coverImage: normalizeOptionalText(input.coverImage),
+      coverImageAlt: normalizeOptionalText(input.coverImageAlt),
+      metaTitle: normalizeOptionalText(input.metaTitle),
+      metaDescription: normalizeOptionalText(input.metaDescription),
+      status: input.status === "DRAFT" ? "DRAFT" : "PUBLISHED",
+    },
   };
 }

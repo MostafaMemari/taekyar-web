@@ -26,24 +26,24 @@ model Admin {
 }
 
 model Post {
-  id              Int      @id @default(autoincrement())
-  slug            String   @unique
+  id              Int         @id @default(autoincrement())
+  slug            String      @unique
   title           String
-  excerpt         String
-  categoryId      Int
-  category        Category @relation(fields: [categoryId], references: [id])
+  excerpt         String?
+  categoryId      Int?
+  category        Category?   @relation(fields: [categoryId], references: [id])
   tags            Tag[]
-  date            String
-  readTimeMinutes Int
-  content         Json
+  date            String?
+  readTimeMinutes Int?
+  content         Json?
   coverImage      String?
   coverImageAlt   String?
   metaTitle       String?
   metaDescription String?
-  status          PostStatus @default(PUBLISHED)
+  status          PostStatus  @default(PUBLISHED)
   deletedAt       DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now()) @updatedAt
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @default(now()) @updatedAt
   comments        Comment[]
 }
 

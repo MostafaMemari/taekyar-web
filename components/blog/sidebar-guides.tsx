@@ -5,6 +5,7 @@ import { POST_LABELS, TRAINING_GUIDE_SLUGS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
 import { CategoryIconBadge } from "@/components/blog/category-icon-badge";
 import { getBlogPosts } from "@/lib/blog";
+import { toFaDigits } from "@/lib/utils";
 import { Dumbbell } from "lucide-react";
 
 interface SidebarGuidesProps {
@@ -33,13 +34,12 @@ export async function SidebarGuides({ currentSlug }: SidebarGuidesProps) {
                   category={post.category}
                   className="mt-0.5 size-8 rounded-lg"
                   iconClassName="size-4"
-                />
-                <span className="min-w-0 flex-1">
+                />                <span className="min-w-0 flex-1">
                   <span className="block truncate text-[13px] font-bold leading-6 text-foreground transition-colors group-hover:text-primary">
                     {post.title}
                   </span>
                   <span className="mt-0.5 block text-[11px] font-medium text-muted-foreground">
-                    {post.readTimeMinutes} {POST_LABELS.readTimeSuffix}
+                    {post.readTimeMinutes ? `${toFaDigits(post.readTimeMinutes)} ${POST_LABELS.readTimeSuffix}` : ""}
                   </span>
                 </span>
                 <ArrowLeft

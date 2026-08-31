@@ -29,19 +29,20 @@ export function breadcrumbJsonLd(entries: BreadcrumbEntry[]) {
 export function articleJsonLd(post: BlogPost) {
   const image = post.coverImage ?? post.categoryImage;
   const keywords = post.tags.map((tag) => tag.name).join("، ");
+  const description = post.metaDescription ?? post.excerpt;
 
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
-    description: post.metaDescription ?? post.excerpt,
+    ...(description ? { description } : {}),
     ...(image ? { image: r2PublicUrl(image) } : {}),
     datePublished: post.createdAt.toISOString(),
     dateModified: post.updatedAt.toISOString(),
     author: { "@type": "Organization", name: SITE_NAME },
     publisher: { "@type": "Organization", name: SITE_NAME },
     mainEntityOfPage: absoluteUrl(postHref(post.slug)),
-    articleSection: post.category,
-    keywords,
+    ...(post.category ? { articleSection: post.category } : {}),
+    ...(keywords ? { keywords } : {}),
   };
 }

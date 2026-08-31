@@ -8,7 +8,7 @@ import type { BlogPost } from "@/lib/blog";
 import { r2PublicUrl } from "@/lib/r2-url";
 import { postHref } from "@/lib/routes";
 import { SURFACE_CARD } from "@/lib/styles";
-import { cn } from "@/lib/utils";
+import { cn, toFaDigits } from "@/lib/utils";
 
 function CardCover({ post }: { post: BlogPost }) {
   const { color, Icon } = getCategoryStyle(post.category);
@@ -24,9 +24,11 @@ function CardCover({ post }: { post: BlogPost }) {
           className="object-cover transition-transform duration-500 group-hover/card:scale-[1.04]"
         />
         <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
-        <Badge className="absolute start-3 top-3 border-none bg-white/90 text-[11px] font-bold tracking-tight text-[#171717] shadow-sm backdrop-blur-sm sm:text-xs">
-          {post.category}
-        </Badge>
+        {post.category ? (
+          <Badge className="absolute start-3 top-3 border-none bg-white/90 text-[11px] font-bold tracking-tight text-[#171717] shadow-sm backdrop-blur-sm sm:text-xs">
+            {post.category}
+          </Badge>
+        ) : null}
       </div>
     );
   }
@@ -41,9 +43,11 @@ function CardCover({ post }: { post: BlogPost }) {
         strokeWidth={1.4}
       />
       <span aria-hidden="true" className="pointer-events-none absolute inset-3 rounded-xl ring-1 ring-white/15" />
-      <Badge className="absolute start-3 top-3 border-none bg-white/90 text-[11px] font-bold tracking-tight text-[#171717] shadow-sm backdrop-blur-sm sm:text-xs">
-        {post.category}
-      </Badge>
+      {post.category ? (
+        <Badge className="absolute start-3 top-3 border-none bg-white/90 text-[11px] font-bold tracking-tight text-[#171717] shadow-sm backdrop-blur-sm sm:text-xs">
+          {post.category}
+        </Badge>
+      ) : null}
     </div>
   );
 }
@@ -72,18 +76,26 @@ export function BlogCard({ post }: { post: BlogPost }) {
           </Link>
         </h3>
 
-        <p className="mt-1.5 flex flex-nowrap items-center gap-x-2 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
-          <span>{post.date}</span>
-          <span aria-hidden="true" className="size-1 shrink-0 rounded-full bg-muted-foreground/30" />
-          <span className="inline-flex items-center gap-1">
-            <Clock className="size-3 shrink-0" />
-            {post.readTimeMinutes} {BLOG_INDEX_LABELS.readTimeSuffix}
-          </span>
-        </p>
+        {post.date || post.readTimeMinutes ? (
+          <p className="mt-1.5 flex flex-nowrap items-center gap-x-2 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+            {post.date ? <span>{post.date}</span> : null}
+            {post.date && post.readTimeMinutes ? (
+              <span aria-hidden="true" className="size-1 shrink-0 rounded-full bg-muted-foreground/30" />
+            ) : null}
+            {post.readTimeMinutes ? (
+              <span className="inline-flex items-center gap-1">
+                <Clock className="size-3 shrink-0" />
+                {toFaDigits(post.readTimeMinutes)} {BLOG_INDEX_LABELS.readTimeSuffix}
+              </span>
+            ) : null}
+          </p>
+        ) : null}
 
-        <p className="mt-2.5 line-clamp-2 text-pretty text-[13px] leading-6 text-muted-foreground sm:text-sm sm:leading-7">
-          {post.excerpt}
-        </p>
+        {post.excerpt ? (
+          <p className="mt-2.5 line-clamp-2 text-pretty text-[13px] leading-6 text-muted-foreground sm:text-sm sm:leading-7">
+            {post.excerpt}
+          </p>
+        ) : null}
 
         <Link
           href={href}

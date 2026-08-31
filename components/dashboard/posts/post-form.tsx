@@ -2,14 +2,12 @@
 
 import { useState, useTransition } from "react";
 
-import { AlertCircle } from "lucide-react";
-
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { createPost, updatePost } from "@/lib/admin-actions";
-import type { PostInput } from "@/lib/admin-types";
+import type { PostFieldErrors, PostInput } from "@/lib/admin-types";
 import { parsePostHtml } from "@/lib/post-content";
 import { RichContentEditor } from "./rich-content-editor";
 import { CoverImageField, type CoverImageValue } from "./post-form/cover-image-field";
@@ -29,10 +27,10 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
   const [fields, setFields] = useState<FieldDraft>({
     title: initial.title,
     slug: initial.slug,
-    excerpt: initial.excerpt,
-    categoryId: String(initial.categoryId),
-    date: initial.date,
-    readTimeMinutes: String(initial.readTimeMinutes),
+    excerpt: initial.excerpt ?? "",
+    categoryId: initial.categoryId === null ? "" : String(initial.categoryId),
+    date: initial.date ?? "",
+    readTimeMinutes: initial.readTimeMinutes === null ? "" : String(initial.readTimeMinutes),
     metaTitle: initial.metaTitle ?? "",
     metaDescription: initial.metaDescription ?? "",
   });
@@ -44,7 +42,7 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
   });
   const [content, setContent] = useState<string>(parsePostHtml(initial.content));
   const [isPending, startTransition] = useTransition();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<PostFieldErrors>({});
 
   function setField<K extends keyof FieldDraft>(key: K, value: FieldDraft[K]) {
     setFields((previous) => ({ ...previous, [key]: value }));
@@ -64,20 +62,20 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
     const input: PostInput = {
       title: fields.title,
       slug: fields.slug.trim(),
-      excerpt: fields.excerpt,
-      categoryId: Number(fields.categoryId),
+      excerpt: fields.excerpt.trim() || null,
+      categoryId: fields.categoryId === "" || fields.categoryId === "none" ? null : Number(fields.categoryId),
       tagIds: selectedTagIds,
-      date: fields.date,
-      readTimeMinutes: Number(fields.readTimeMinutes),
+      date: fields.date.trim() || null,
+      readTimeMinutes: fields.readTimeMinutes.trim() === "" ? null : Number(fields.readTimeMinutes),
       content,
       coverImage: coverImage.key,
       coverImageAlt: coverImage.alt.trim() || null,
-      metaTitle: fields.metaTitle,
-      metaDescription: fields.metaDescription,
+      metaTitle: fields.metaTitle.trim() || null,
+      metaDescription: fields.metaDescription.trim() || null,
       status,
     };
 
-    setErrorMessage(null);
+    setFieldErrors({});
     startTransition(async () => {
       const result =
         mode === "edit"
@@ -85,7 +83,10 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
           : await createPost({ status: "idle" }, input);
 
       if (result.status === "error") {
-        setErrorMessage(result.message ?? POST_FORM_LABELS.error);
+        setFieldErrors(result.fieldErrors ?? {});
+        if (result.message) {
+          toast({ tone: "error", title: POST_FORM_LABELS.errorToastTitle, description: result.message });
+        }
       }
     });
   }
@@ -99,17 +100,15 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
         tags={tags}
         selectedTagIds={selectedTagIds}
         onToggleTag={toggleTag}
+        fieldErrors={fieldErrors}
       />
-      <CoverImageField value={coverImage} onChange={setCoverImage} />
-      <RichContentEditor initialContent={content} onChange={setContent} />
-
-      {errorMessage ? (
-        <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
-          <AlertCircle className="size-4" aria-hidden="true" />
-          <AlertTitle className="text-[13px] font-bold">خطا در ذخیره</AlertTitle>
-          <AlertDescription className="text-[13px] leading-5">{errorMessage}</AlertDescription>
-        </Alert>
-      ) : null}
+      <CoverImageField
+        value={coverImage}
+        onChange={setCoverImage}
+        error={fieldErrors.coverImage}
+        altError={fieldErrors.coverImageAlt}
+      />
+      <RichContentEditor initialContent={content} onChange={setContent} error={fieldErrors.content} />
 
       <Separator className="bg-border/60" />
 
@@ -135,7 +134,6 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
         >
           {mode === "edit" ? POST_FORM_LABELS.submitDraftUpdate : POST_FORM_LABELS.submitDraftCreate}
         </Button>
-        <span className="text-xs text-muted-foreground">ذخیره پس از اعتبارسنجی انجام می‌شود</span>
       </div>
     </form>
   );

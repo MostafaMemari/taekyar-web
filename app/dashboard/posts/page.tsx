@@ -146,7 +146,7 @@ interface PostsTableProps {
     title: string;
     coverImage: string | null;
     status: "DRAFT" | "PUBLISHED";
-    category: { name: string };
+    category: { name: string } | null;
     createdAt: Date;
     updatedAt: Date;
     _count: { comments: number };
@@ -234,7 +234,7 @@ function PostsTable({ posts }: PostsTableProps) {
               <TableCell className="whitespace-nowrap px-4 py-3.5">
                 <span className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground">
                   <span className="size-1.5 rounded-full bg-belt-blue" aria-hidden="true" />
-                  {post.category.name}
+                  {post.category?.name ?? "—"}
                 </span>
               </TableCell>
               <TableCell className="whitespace-nowrap px-4 py-3.5">

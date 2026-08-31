@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
   return buildPageMetadata({
     title: post.metaTitle ?? post.title,
-    description: post.metaDescription ?? post.excerpt,
+    description: post.metaDescription ?? post.excerpt ?? undefined,
     path: postHref(post.slug),
     imageUrl: post.coverImage ?? post.categoryImage,
     publishedTime: post.createdAt,
@@ -75,9 +75,19 @@ export default async function PostPage({ params }: PostPageProps) {
   const [allPosts, comments, categoryAncestors] = await Promise.all([
     getBlogPosts(),
     getPostComments(post.slug),
-    getCategoryAncestorsByPath(post.categoryPath),
+    getCategoryAncestorsByPath(post.categoryPath ?? ""),
   ]);
   const relatedPosts = getRelatedPosts(allPosts, post.slug, post.category, RELATED_POSTS_COUNT);
+  const categoryTrail =
+    post.category && post.categoryPath
+      ? [
+          ...categoryAncestors.map((ancestor) => ({
+            name: ancestor.name,
+            path: categoryHref(ancestor.path),
+          })),
+          { name: post.category, path: categoryHref(post.categoryPath) },
+        ]
+      : [];
 
   return (
     <>
@@ -85,11 +95,7 @@ export default async function PostPage({ params }: PostPageProps) {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "وبلاگ", path: "/blog" },
-          ...categoryAncestors.map((ancestor) => ({
-            name: ancestor.name,
-            path: categoryHref(ancestor.path),
-          })),
-          { name: post.category, path: categoryHref(post.categoryPath) },
+          ...categoryTrail,
           { name: post.title, path: postHref(post.slug) },
         ])}
       />
@@ -125,7 +131,7 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
 
             <aside aria-label="ابزارهای مقاله" className="min-w-0 lg:col-start-2 lg:row-start-2">
-              <PostRail slug={post.slug} categoryPath={post.categoryPath} tocItems={headings} />
+              <PostRail slug={post.slug} categoryPath={post.categoryPath ?? ""} tocItems={headings} />
             </aside>
           </div>
         </Reveal>
