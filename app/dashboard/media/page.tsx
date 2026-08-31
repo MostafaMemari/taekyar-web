@@ -1,8 +1,9 @@
-import { AlertCircle, ImagePlus, Inbox, Search } from "lucide-react";
+import { AlertCircle, ImagePlus, Search } from "lucide-react";
 import Link from "next/link";
 
 import { MediaBrowser } from "@/components/dashboard/media/media-browser";
 import { MediaUploadButton } from "@/components/dashboard/media/media-upload-button";
+import { DashboardEmptyState } from "@/components/dashboard/shared/dashboard-empty-state";
 import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -82,22 +83,20 @@ export default async function DashboardMediaPage({ searchParams }: MediaPageProp
             </Alert>
           </CardContent>
         ) : items.length === 0 ? (
-          <CardContent className="flex flex-col items-center justify-center px-6 py-12 text-center">
-            <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
-              {query ? <Inbox className="size-6" aria-hidden="true" /> : <ImagePlus className="size-6" aria-hidden="true" />}
-            </span>
-            <p className="mt-3 text-[14px] font-bold">{MEDIA_LABELS.empty}</p>
-            <p className="mt-1 max-w-sm text-xs leading-5 text-muted-foreground">
-              {query ? MEDIA_LABELS.emptyWithQuery : MEDIA_LABELS.emptyWithoutQuery}
-            </p>
-            {query ? (
-              <Button variant="outline" asChild className="mt-4 h-9 rounded-xl px-4 text-[13px] font-bold">
-                <Link href="/dashboard/media">{MEDIA_LABELS.clearSearch}</Link>
-              </Button>
-            ) : (
-              <MediaUploadButton />
-            )}
-          </CardContent>
+          <DashboardEmptyState
+            title={MEDIA_LABELS.empty}
+            hint={query ? MEDIA_LABELS.emptyWithQuery : MEDIA_LABELS.emptyWithoutQuery}
+            icon={query ? undefined : <ImagePlus className="size-6" aria-hidden="true" />}
+            action={
+              query ? (
+                <Button variant="outline" asChild className="h-9 rounded-xl px-4 text-[13px] font-bold">
+                  <Link href="/dashboard/media">{MEDIA_LABELS.clearSearch}</Link>
+                </Button>
+              ) : (
+                <MediaUploadButton />
+              )
+            }
+          />
         ) : (
           <CardContent className="p-3 sm:p-4">
             <MediaBrowser items={items} />

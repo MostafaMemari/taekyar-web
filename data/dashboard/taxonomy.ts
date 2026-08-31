@@ -32,6 +32,7 @@ export const TAXONOMY_LABELS = {
     },
   },
   nameLabel: "نام",
+  actionLabel: "عملیات",
   namePlaceholder: "نام",
   slugLabel: "نشانی (اسلاگ)",
   slugPlaceholder: "category-slug",

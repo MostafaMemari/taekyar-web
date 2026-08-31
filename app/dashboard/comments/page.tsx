@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ExternalLink, Inbox } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 import { CommentActions } from "@/components/dashboard/comments/comment-actions";
+import { DashboardEmptyState } from "@/components/dashboard/shared/dashboard-empty-state";
 import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -124,15 +125,10 @@ export default async function DashboardCommentsPage({ searchParams }: CommentsPa
 
       {comments.length === 0 ? (
         <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center justify-center px-6 py-12 text-center">
-            <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
-              <Inbox className="size-6" aria-hidden="true" />
-            </span>
-            <p className="mt-3 text-[14px] font-bold">{COMMENTS_ADMIN_LABELS.empty}</p>
-            <p className="mt-1 max-w-sm text-xs leading-5 text-muted-foreground">
-              دیدگاهی با این فیلتر یافت نشد — فیلتر را تغییر دهید یا منتظر دیدگاه جدید باشید.
-            </p>
-          </CardContent>
+          <DashboardEmptyState
+            title={COMMENTS_ADMIN_LABELS.empty}
+            hint="دیدگاهی با این فیلتر یافت نشد — فیلتر را تغییر دهید یا منتظر دیدگاه جدید باشید."
+          />
         </Card>
       ) : (
         <ul className="space-y-3.5">

@@ -2,9 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { CornerDownRight, Pencil } from "lucide-react";
 
+import {
+  DashboardTable,
+  DashboardTableCell,
+  DashboardTableRow,
+} from "@/components/dashboard/shared/dashboard-table";
 import { DeleteTaxonomyButton } from "@/components/dashboard/taxonomy/delete-taxonomy-button";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { buildCategoryTree, flattenCategoryTree } from "@/lib/blog/categories";
 import { r2PublicUrl } from "@/lib/r2-url";
@@ -42,13 +46,18 @@ function CategoryTable({ rows }: { rows: CategoryTableRow[] }) {
   const flattened = flattenCategoryTree(buildCategoryTree(rows));
 
   return (
-    <TaxonomyTableShell postsSuffix={TAXONOMY_LABELS.kinds.category.postsSuffix}>
+    <DashboardTable
+      minWidth="min-w-[640px]"
+      headers={[
+        TAXONOMY_LABELS.nameLabel,
+        TAXONOMY_LABELS.slugLabel,
+        TAXONOMY_LABELS.kinds.category.postsSuffix,
+        TAXONOMY_LABELS.actionLabel,
+      ]}
+    >
       {flattened.map(({ item: row, depth }) => (
-        <TableRow
-          key={row.id}
-          className="border-b border-border/40 last:border-0 hover:bg-muted/30 motion-reduce:transition-none"
-        >
-          <TableCell className="px-4 py-3.5">
+        <DashboardTableRow key={row.id}>
+          <DashboardTableCell>
             <div
               className="flex items-center gap-2"
               style={depth > 0 ? { paddingInlineStart: `${depth * 20}px` } : undefined}
@@ -58,24 +67,21 @@ function CategoryTable({ rows }: { rows: CategoryTableRow[] }) {
               ) : null}
               <RowIdentity name={row.name} image={row.image} href={categoryHref(row.path)} />
             </div>
-          </TableCell>
-          <TableCell
-            dir="ltr"
-            className="px-4 py-3.5 text-start text-[13px] font-medium text-muted-foreground"
-          >
+          </DashboardTableCell>
+          <DashboardTableCell dir="ltr" className="text-start text-[13px] font-medium text-muted-foreground">
             <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-mono ring-1 ring-border/60">
               {categoryHref(row.path)}
             </span>
-          </TableCell>
-          <TableCell className="px-4 py-3.5">
+          </DashboardTableCell>
+          <DashboardTableCell>
             <PostsCount count={row._count.posts} />
-          </TableCell>
-          <TableCell className="px-4 py-3">
+          </DashboardTableCell>
+          <DashboardTableCell className="py-3">
             <RowActions basePath={basePath} id={row.id} kind="category" />
-          </TableCell>
-        </TableRow>
+          </DashboardTableCell>
+        </DashboardTableRow>
       ))}
-    </TaxonomyTableShell>
+    </DashboardTable>
   );
 }
 
@@ -83,66 +89,34 @@ function TagTable({ rows }: { rows: TagTableRow[] }) {
   const basePath = "/dashboard/tags";
 
   return (
-    <TaxonomyTableShell postsSuffix={TAXONOMY_LABELS.kinds.tag.postsSuffix}>
+    <DashboardTable
+      minWidth="min-w-[640px]"
+      headers={[
+        TAXONOMY_LABELS.nameLabel,
+        TAXONOMY_LABELS.slugLabel,
+        TAXONOMY_LABELS.kinds.tag.postsSuffix,
+        TAXONOMY_LABELS.actionLabel,
+      ]}
+    >
       {rows.map((row) => (
-        <TableRow
-          key={row.id}
-          className="border-b border-border/40 last:border-0 hover:bg-muted/30 motion-reduce:transition-none"
-        >
-          <TableCell className="px-4 py-3.5">
+        <DashboardTableRow key={row.id}>
+          <DashboardTableCell>
             <RowIdentity name={row.name} image={row.image} href={tagHref(row.slug)} />
-          </TableCell>
-          <TableCell
-            dir="ltr"
-            className="px-4 py-3.5 text-start text-[13px] font-medium text-muted-foreground"
-          >
+          </DashboardTableCell>
+          <DashboardTableCell dir="ltr" className="text-start text-[13px] font-medium text-muted-foreground">
             <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-mono ring-1 ring-border/60">
               {tagHref(row.slug)}
             </span>
-          </TableCell>
-          <TableCell className="px-4 py-3.5">
+          </DashboardTableCell>
+          <DashboardTableCell>
             <PostsCount count={row._count.posts} />
-          </TableCell>
-          <TableCell className="px-4 py-3">
+          </DashboardTableCell>
+          <DashboardTableCell className="py-3">
             <RowActions basePath={basePath} id={row.id} kind="tag" />
-          </TableCell>
-        </TableRow>
+          </DashboardTableCell>
+        </DashboardTableRow>
       ))}
-    </TaxonomyTableShell>
-  );
-}
-
-function TaxonomyTableShell({
-  postsSuffix,
-  children,
-}: {
-  postsSuffix: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm shadow-black/[0.03]">
-      <div className="overflow-x-auto">
-        <Table className="min-w-[640px]">
-          <TableHeader className="bg-muted/30">
-            <TableRow className="border-b border-border/60 hover:bg-transparent">
-              <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
-                {TAXONOMY_LABELS.nameLabel}
-              </TableHead>
-              <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
-                {TAXONOMY_LABELS.slugLabel}
-              </TableHead>
-              <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
-                {postsSuffix}
-              </TableHead>
-              <TableHead className="h-10 px-4 text-start text-[12px] font-bold tracking-wide text-muted-foreground">
-                عملیات
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>{children}</TableBody>
-        </Table>
-      </div>
-    </div>
+    </DashboardTable>
   );
 }
 
@@ -169,7 +143,7 @@ function RowIdentity({ name, image, href }: { name: string; image: string | null
       <Link
         href={href}
         target="_blank"
-        className="text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 rounded-sm"
+        className="rounded-sm text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
       >
         {name}
       </Link>

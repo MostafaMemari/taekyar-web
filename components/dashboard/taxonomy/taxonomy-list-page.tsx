@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { ArrowLeft, Inbox, Search } from "lucide-react";
+import { ArrowLeft, Search } from "lucide-react";
 
+import { DashboardEmptyState } from "@/components/dashboard/shared/dashboard-empty-state";
 import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
@@ -93,7 +94,7 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
 
       <Card className="p-0">
         <div className="p-3 sm:p-4">
-          <form role="search" action={basePath} className="relative">
+          <form role="search" aria-label={copy.searchPlaceholder} action={basePath} className="relative">
             <Search
               aria-hidden="true"
               className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/50"
@@ -111,27 +112,28 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
         <Separator className="bg-border/60" />
 
         {rows.length === 0 ? (
-          <CardContent className="flex flex-col items-center justify-center px-6 py-12 text-center">
-            <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
-              <Inbox className="size-6" aria-hidden="true" />
-            </span>
-            <p className="mt-3 text-[14px] font-bold">{copy.empty}</p>
-            <p className="mt-1 max-w-sm text-xs leading-5 text-muted-foreground">
-              {query ? "جستجوی دیگری را امتحان کنید یا فیلتر را پاک کنید." : "اولین مورد را بسازید تا فهرست اینجا نمایش داده شود."}
-            </p>
-            {query ? (
-              <Button variant="outline" asChild className="mt-4 h-9 rounded-xl px-4 text-[13px] font-bold">
-                <Link href={basePath}>پاک کردن جستجو</Link>
-              </Button>
-            ) : (
-              <Button asChild className="mt-4 h-9 rounded-xl px-4 text-[13px] font-bold">
-                <Link href={`${basePath}/new`}>
-                  {copy.new}
-                  <ArrowLeft className="size-4" aria-hidden="true" />
-                </Link>
-              </Button>
-            )}
-          </CardContent>
+          <DashboardEmptyState
+            title={copy.empty}
+            hint={
+              query
+                ? "جستجوی دیگری را امتحان کنید یا فیلتر را پاک کنید."
+                : "اولین مورد را بسازید تا فهرست اینجا نمایش داده شود."
+            }
+            action={
+              query ? (
+                <Button variant="outline" asChild className="h-9 rounded-xl px-4 text-[13px] font-bold">
+                  <Link href={basePath}>پاک کردن جستجو</Link>
+                </Button>
+              ) : (
+                <Button asChild className="h-9 rounded-xl px-4 text-[13px] font-bold">
+                  <Link href={`${basePath}/new`}>
+                    {copy.new}
+                    <ArrowLeft className="size-4" aria-hidden="true" />
+                  </Link>
+                </Button>
+              )
+            }
+          />
         ) : kind === "category" ? (
           <TaxonomyTable kind="category" rows={categoryRows} />
         ) : (
