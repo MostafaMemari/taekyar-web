@@ -5,8 +5,8 @@ import {
   captchaSessionMaxAge,
   createCaptchaChallenge,
   createCaptchaSessionToken,
-} from "@/lib/comment-captcha";
-import { isGenerationRateLimited } from "@/lib/comment-rate-limit";
+} from "@/lib/captcha";
+import { isGenerationRateLimited } from "@/lib/captcha-rate-limit";
 import { getClientIp, hashClientIp } from "@/lib/comment-security";
 
 export const runtime = "nodejs";
@@ -14,11 +14,11 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const fetchCache = "force-no-store";
 
-export function GET(request: Request): NextResponse {
+export async function GET(request: Request): Promise<NextResponse> {
   const ip = getClientIp(request.headers);
   const ipHash = ip ? hashClientIp(ip) : null;
 
-  if (ipHash && isGenerationRateLimited(ipHash)) {
+  if (ipHash && (await isGenerationRateLimited(ipHash))) {
     return new NextResponse(null, {
       status: 429,
       headers: {
@@ -33,12 +33,12 @@ export function GET(request: Request): NextResponse {
   const existingToken = readCookie(request.headers.get("cookie"), CAPTCHA_SESSION_COOKIE);
   const sessionToken = existingToken ?? createCaptchaSessionToken();
 
-  const { image } = createCaptchaChallenge({ sessionToken, ipHash });
+  const { svg } = await createCaptchaChallenge({ sessionToken, ipHash });
 
-  const response = new NextResponse(new Uint8Array(image.buffer), {
+  const response = new NextResponse(svg, {
     headers: {
-      "Content-Type": image.contentType,
-      "Content-Length": String(image.buffer.byteLength),
+      "Content-Type": "image/svg+xml; charset=utf-8",
+      "Content-Length": String(Buffer.byteLength(svg, "utf8")),
       "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0, s-maxage=0, proxy-revalidate",
       Pragma: "no-cache",
       Expires: "0",

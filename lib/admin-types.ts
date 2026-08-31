@@ -47,7 +47,9 @@ export interface PostFormState {
   fieldErrors?: PostFieldErrors;
 }
 
+export type LoginError = "invalid" | "captcha_wrong" | "captcha_expired";
+
 export interface LoginState {
-  error?: string;
+  error?: LoginError;
 }
 

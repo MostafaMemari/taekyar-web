@@ -16,9 +16,18 @@ export function LoginForm() {
   const [state, formAction, isPending] = useActionState(login, {});
   const captcha = useCommentCaptcha();
 
+  const captchaError =
+    state.error === "captcha_wrong"
+      ? LOGIN_LABELS.captchaWrong
+      : state.error === "captcha_expired"
+        ? LOGIN_LABELS.captchaExpired
+        : undefined;
+
+  const refreshCaptcha = captcha.refresh;
+
   useEffect(() => {
-    if (state.error) captcha.refresh();
-  }, [state, captcha.refresh]);
+    if (state.error) refreshCaptcha();
+  }, [state, refreshCaptcha]);
 
   return (
     <form action={formAction} noValidate className="mt-6 space-y-4">
@@ -35,7 +44,7 @@ export function LoginForm() {
           required
           placeholder={LOGIN_LABELS.usernamePlaceholder}
           className="h-11 rounded-xl bg-card font-sans text-sm text-card-foreground placeholder:text-muted-foreground"
-          aria-invalid={Boolean(state.error)}
+          aria-invalid={state.error === "invalid"}
         />
       </div>
 
@@ -52,7 +61,7 @@ export function LoginForm() {
           required
           placeholder={LOGIN_LABELS.passwordPlaceholder}
           className="h-11 rounded-xl bg-card font-sans text-card-foreground placeholder:text-muted-foreground"
-          aria-invalid={Boolean(state.error)}
+          aria-invalid={state.error === "invalid"}
         />
       </div>
 
@@ -65,16 +74,15 @@ export function LoginForm() {
         onRefresh={captcha.refresh}
         onImageLoad={captcha.onImageLoad}
         onImageError={captcha.onImageError}
+        error={captchaError}
       />
       <input type="hidden" name="captchaAnswer" value={captcha.answer} />
 
-      {state.error ? (
+      {state.error && !captchaError ? (
         <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
           <AlertCircle className="size-4" aria-hidden="true" />
           <AlertTitle className="text-[13px] font-bold">ورود ناموفق</AlertTitle>
-          <AlertDescription className="text-[13px] leading-5">
-            {state.error === "captcha" ? LOGIN_LABELS.captchaInvalid : LOGIN_LABELS.invalid}
-          </AlertDescription>
+          <AlertDescription className="text-[13px] leading-5">{LOGIN_LABELS.invalid}</AlertDescription>
         </Alert>
       ) : null}
 

@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["@napi-rs/canvas"],
+  serverExternalPackages: ["svg-captcha"],
   experimental: {
     optimizePackageImports: ["lucide-react", "radix-ui"],
   },

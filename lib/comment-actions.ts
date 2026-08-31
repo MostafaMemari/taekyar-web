@@ -10,8 +10,8 @@ import {
   hashClientIp,
   sanitizeCommentText,
 } from "@/lib/comment-security";
-import { CAPTCHA_SESSION_COOKIE, verifyCaptchaAnswer } from "@/lib/comment-captcha";
-import { isAttemptRateLimited } from "@/lib/comment-rate-limit";
+import { CAPTCHA_SESSION_COOKIE, verifyCaptchaAnswer } from "@/lib/captcha";
+import { isAttemptRateLimited } from "@/lib/captcha-rate-limit";
 
 export type CommentRejectReason =
   | "validation"
@@ -48,12 +48,12 @@ export async function submitComment(
     return { ok: false, reason: "validation" };
   }
 
-  if (ipHash && isAttemptRateLimited(ipHash)) {
+  if (ipHash && (await isAttemptRateLimited(ipHash))) {
     return { ok: false, reason: "rate_limited" };
   }
 
   const sessionToken = (await cookies()).get(CAPTCHA_SESSION_COOKIE)?.value ?? null;
-  const captchaResult = verifyCaptchaAnswer({
+  const captchaResult = await verifyCaptchaAnswer({
     sessionToken,
     answer: options.captchaAnswer,
     ipHash,

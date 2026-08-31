@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { RotateCcw } from "lucide-react";
 
-import { FieldLabel, getAriaProps } from "@/components/shared/form-controls";
+import { FieldError, FieldLabel, getAriaProps } from "@/components/shared/form-controls";
 import { COMMENT_FORM_LABELS } from "@/data/blog/comments";
 import { toPersianDigits } from "@/lib/utils";
 import type { CaptchaStatus } from "./hooks/use-comment-captcha";
@@ -17,6 +17,7 @@ interface CommentCaptchaProps {
   onRefresh: () => void;
   onImageLoad: () => void;
   onImageError: () => void;
+  error?: string;
 }
 
 export function CommentCaptcha({
@@ -28,6 +29,7 @@ export function CommentCaptcha({
   onRefresh,
   onImageLoad,
   onImageError,
+  error,
 }: CommentCaptchaProps) {
   const isBusy = status === "loading" || status === "refreshing";
   const isUnavailable = status === "unavailable";
@@ -90,7 +92,7 @@ export function CommentCaptcha({
 
         <div className="flex min-w-0 flex-1 basis-full items-center sm:basis-40">
           <input
-            {...getAriaProps(`${idPrefix}-captcha`, undefined, "h-10 text-center font-bold tracking-[0.25em]")}
+            {...getAriaProps(`${idPrefix}-captcha`, error, "h-10 text-center font-bold tracking-[0.25em]")}
             type="text"
             dir="ltr"
             inputMode="numeric"
@@ -98,19 +100,23 @@ export function CommentCaptcha({
             value={value}
             placeholder={COMMENT_FORM_LABELS.captchaPlaceholder}
             aria-label={COMMENT_FORM_LABELS.captchaHint}
-            aria-describedby={`${idPrefix}-captcha-hint`}
+            aria-describedby={error ? `${idPrefix}-captcha-error` : `${idPrefix}-captcha-hint`}
             onChange={(event) => onValueChange(toPersianDigits(event.target.value))}
           />
         </div>
       </div>
 
-      <p id={`${idPrefix}-captcha-hint`} className="mt-1.5 text-xs leading-5 text-muted-foreground">
-        {COMMENT_FORM_LABELS.captchaHint}
-        <span aria-hidden="true" className="mx-1.5">
-          ·
-        </span>
-        <span className="text-muted-foreground/80">{COMMENT_FORM_LABELS.captchaClickHint}</span>
-      </p>
+      {error ? (
+        <FieldError errorId={`${idPrefix}-captcha-error`} message={error} />
+      ) : (
+        <p id={`${idPrefix}-captcha-hint`} className="mt-1.5 text-xs leading-5 text-muted-foreground">
+          {COMMENT_FORM_LABELS.captchaHint}
+          <span aria-hidden="true" className="mx-1.5">
+            ·
+          </span>
+          <span className="text-muted-foreground/80">{COMMENT_FORM_LABELS.captchaClickHint}</span>
+        </p>
+      )}
     </div>
   );
 }

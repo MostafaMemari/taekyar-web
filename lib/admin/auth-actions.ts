@@ -2,7 +2,7 @@
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { CAPTCHA_SESSION_COOKIE, verifyCaptchaAnswer } from "@/lib/comment-captcha";
+import { CAPTCHA_SESSION_COOKIE, verifyCaptchaAnswer } from "@/lib/captcha";
 import { getClientIp, hashClientIp } from "@/lib/comment-security";
 import { endSession, startSession } from "@/lib/auth";
 import type { LoginState } from "@/lib/admin-types";
@@ -18,8 +18,9 @@ export async function login(_previousState: LoginState, formData: FormData): Pro
   const ipHash = ip ? hashClientIp(ip) : null;
   const sessionToken = (await cookies()).get(CAPTCHA_SESSION_COOKIE)?.value ?? null;
 
-  if (verifyCaptchaAnswer({ sessionToken, answer: captchaAnswer, ipHash }) !== "ok") {
-    return { error: "captcha" };
+  const captchaResult = await verifyCaptchaAnswer({ sessionToken, answer: captchaAnswer, ipHash });
+  if (captchaResult !== "ok") {
+    return { error: captchaResult === "wrong" ? "captcha_wrong" : "captcha_expired" };
   }
 
   if (!username || !password) return {};
