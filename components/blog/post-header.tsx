@@ -6,7 +6,7 @@ import { getCategoryStyle } from "@/data/blog/index-page";
 import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
 import { categoryHref } from "@/lib/routes";
-import { toFaDigits } from "@/lib/utils";
+import { formatFaDate, toFaDigits } from "@/lib/utils";
 
 export function PostTopbar() {
   return (
@@ -61,7 +61,7 @@ function PostMeta({ post }: { post: BlogPost }) {
     items.push(
       <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground sm:gap-1.5 sm:text-xs">
         <CalendarDays className="size-3 sm:size-3.5" />
-        {post.date}
+        {formatFaDate(post.date)}
       </span>,
     );
   }

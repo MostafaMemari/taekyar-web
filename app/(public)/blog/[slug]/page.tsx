@@ -30,9 +30,17 @@ interface PostPageProps {
 
 export const revalidate = 60;
 
+function decodeParam(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = await getPostBySlug(decodeParam(slug));
 
   if (!post) return { title: "مقاله یافت نشد" };
 
@@ -42,7 +50,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     path: postHref(post.slug),
     imageUrl: post.coverImage ?? post.categoryImage,
     imageAlt: post.coverImageAlt ?? post.title,
-    publishedTime: post.createdAt,
+    publishedTime: post.date ?? post.createdAt,
   });
 }
 
@@ -67,7 +75,7 @@ function PostRail({ slug, categoryPath, tocItems }: PostRailProps) {
 
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = await getPostBySlug(decodeParam(slug));
 
   if (!post) notFound();
 

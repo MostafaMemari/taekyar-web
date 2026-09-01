@@ -8,7 +8,7 @@ import type { BlogPost } from "@/lib/blog";
 import { r2PublicUrl } from "@/lib/r2-url";
 import { postHref } from "@/lib/routes";
 import { SURFACE_CARD } from "@/lib/styles";
-import { cn, toFaDigits } from "@/lib/utils";
+import { cn, formatFaDate, toFaDigits } from "@/lib/utils";
 
 function CardCover({ post }: { post: BlogPost }) {
   const { color, Icon } = getCategoryStyle(post.category);
@@ -78,7 +78,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
 
         {post.date || post.readTimeMinutes ? (
           <p className="mt-1.5 flex flex-nowrap items-center gap-x-2 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
-            {post.date ? <span>{post.date}</span> : null}
+            {post.date ? <span>{formatFaDate(post.date)}</span> : null}
             {post.date && post.readTimeMinutes ? (
               <span aria-hidden="true" className="size-1 shrink-0 rounded-full bg-muted-foreground/30" />
             ) : null}

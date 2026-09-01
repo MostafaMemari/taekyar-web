@@ -12,10 +12,6 @@ function isSlugConflict(error: unknown): boolean {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
 }
 
-function formatFaDateText(value: Date): string {
-  return new Intl.DateTimeFormat("fa-IR", { day: "numeric", month: "long", year: "numeric" }).format(value);
-}
-
 export async function createPost(_previousState: PostFormState, input: PostInput): Promise<PostFormState> {
   await requireSession();
 
@@ -23,7 +19,7 @@ export async function createPost(_previousState: PostFormState, input: PostInput
   if (!result.ok) return { status: "error", fieldErrors: result.fieldErrors };
 
   const { data } = result;
-  const publishDate = data.status === "PUBLISHED" ? formatFaDateText(new Date()) : null;
+  const publishDate = data.status === "PUBLISHED" ? new Date() : null;
   try {
     const { tagIds, categoryIds, content, ...postData } = data;
     await prisma.post.create({
@@ -73,7 +69,7 @@ export async function updatePost(
   }
 
   const firstPublication = data.status === "PUBLISHED" && !current.date;
-  const publishDate = firstPublication ? formatFaDateText(new Date()) : current.date;
+  const publishDate = firstPublication ? new Date() : current.date;
 
   try {
     const { tagIds, categoryIds, content, ...postData } = data;

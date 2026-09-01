@@ -32,7 +32,7 @@ model Post {
   excerpt         String?
   categories      Category[]
   tags            Tag[]
-  date            String?
+  date            DateTime?
   readTimeMinutes Int?
   content         Json?
   coverImage      String?

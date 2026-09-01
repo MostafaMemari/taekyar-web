@@ -13,16 +13,24 @@ interface EditPostPageProps {
   params: Promise<{ slug: string }>;
 }
 
+function decodeParam(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
 export async function generateMetadata({ params }: EditPostPageProps) {
   const { slug } = await params;
-  const post = await getPostBySlugForAdmin(slug);
+  const post = await getPostBySlugForAdmin(decodeParam(slug));
   return { title: post ? `${POST_FORM_LABELS.editTitle} — ${post.title}` : POST_FORM_LABELS.editTitle };
 }
 
 export default async function EditPostPage({ params }: EditPostPageProps) {
   const { slug } = await params;
   const [post, categories, tags] = await Promise.all([
-    getPostBySlugForAdmin(slug),
+    getPostBySlugForAdmin(decodeParam(slug)),
     getCategories(),
     getTags(),
   ]);

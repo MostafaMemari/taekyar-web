@@ -16,7 +16,7 @@ export interface BlogPost {
   categoryPath: string | null;
   categoryImage: string | null;
   tags: Array<{ id: number; name: string; slug: string }>;
-  date: string | null;
+  date: Date | null;
   readTimeMinutes: number | null;
   coverImage: string | null;
   coverImageAlt: string | null;
@@ -35,7 +35,7 @@ export interface BlogPostRow {
   slug: string;
   title: string;
   excerpt: string | null;
-  date: string | null;
+  date: Date | null;
   readTimeMinutes: number | null;
   content?: unknown;
   coverImage: string | null;
