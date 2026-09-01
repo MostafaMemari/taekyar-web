@@ -1,12 +1,14 @@
 import {
   SITEMAP_PAGES,
+  SITEMAP_URLS_PER_FILE,
   buildSitemapSectionIds,
   getBlogSitemapEntries,
   getCategorySitemapEntries,
+  getPageSitemapEntries,
   getSitemapSectionCounts,
   getTagSitemapEntries,
 } from "@/lib/blog";
-import { categoryHref, postHref, tagHref } from "@/lib/routes";
+import { categoryHref, pageHref, postHref, tagHref } from "@/lib/routes";
 import { SITE_URL } from "@/lib/site";
 import { urlSetXml, type SitemapXmlUrl } from "@/lib/sitemap-xml";
 
@@ -33,11 +35,30 @@ export async function GET(
 
   let entries: SitemapXmlUrl[];
   if (name === "pages") {
-    entries = SITEMAP_PAGES.map(({ path, changeFrequency, priority }) => ({
-      loc: `${SITE_URL}${path}`,
-      changeFrequency,
-      priority,
-    }));
+    const staticCount = SITEMAP_PAGES.length;
+    const dbSkip = Math.max(0, (chunk - 1) * SITEMAP_URLS_PER_FILE - staticCount);
+    const dbTake = chunk === 1 ? SITEMAP_URLS_PER_FILE - staticCount : SITEMAP_URLS_PER_FILE;
+    const [staticEntries, dbEntries] = await Promise.all([
+      chunk === 1
+        ? Promise.resolve(
+            SITEMAP_PAGES.map(({ path, changeFrequency, priority }) => ({
+              loc: `${SITE_URL}${path}`,
+              changeFrequency,
+              priority,
+            })),
+          )
+        : Promise.resolve([] as SitemapXmlUrl[]),
+      getPageSitemapEntries({ skip: dbSkip, take: dbTake }),
+    ]);
+    entries = [
+      ...staticEntries,
+      ...dbEntries.map((page) => ({
+        loc: `${SITE_URL}${pageHref(page.slug)}`,
+        lastmod: page.updatedAt,
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      })),
+    ];
   } else if (name === "blog") {
     entries = (await getBlogSitemapEntries(chunk)).map((post) => ({
       loc: `${SITE_URL}${postHref(post.slug)}`,

@@ -9,6 +9,7 @@ export interface SitemapSectionCounts {
   blog: number;
   categories: number;
   tags: number;
+  pages: number;
 }
 
 export interface SitemapIndexEntry {
@@ -17,8 +18,9 @@ export interface SitemapIndexEntry {
 }
 
 export function buildSitemapSectionIds(counts: SitemapSectionCounts): string[] {
-  const ids: string[] = ["pages"];
+  const ids: string[] = [];
   const sections: [name: string, count: number][] = [
+    ["pages", SITEMAP_PAGES.length + counts.pages],
     ["blog", counts.blog],
     ["categories", counts.categories],
     ["tags", counts.tags],
@@ -34,29 +36,32 @@ export function buildSitemapSectionIds(counts: SitemapSectionCounts): string[] {
 
 export const getSitemapSectionCounts = cache(async (): Promise<SitemapSectionCounts> => {
   try {
-    const [blog, categories, tags] = await Promise.all([
+    const [blog, categories, tags, pages] = await Promise.all([
       prisma.post.count({ where: PUBLIC_POST_WHERE }),
       prisma.category.count(),
       prisma.tag.count(),
+      prisma.page.count({ where: { status: "PUBLISHED" } }),
     ]);
-    return { blog, categories, tags };
+    return { blog, categories, tags, pages };
   } catch {
-    return { blog: 0, categories: 0, tags: 0 };
+    return { blog: 0, categories: 0, tags: 0, pages: 0 };
   }
 });
 
 export const getSitemapIndexEntries = cache(async (): Promise<SitemapIndexEntry[]> => {
   try {
-    const [counts, blog, categories, tags] = await Promise.all([
+    const [counts, blog, categories, tags, pages] = await Promise.all([
       getSitemapSectionCounts(),
       prisma.post.aggregate({ _max: { updatedAt: true }, where: PUBLIC_POST_WHERE }),
       prisma.category.aggregate({ _max: { updatedAt: true } }),
       prisma.tag.aggregate({ _max: { updatedAt: true } }),
+      prisma.page.aggregate({ _max: { updatedAt: true }, where: { status: "PUBLISHED" } }),
     ]);
     const lastmods: Record<string, Date | null> = {
       blog: blog._max.updatedAt,
       categories: categories._max.updatedAt,
       tags: tags._max.updatedAt,
+      "static-pages": pages._max.updatedAt,
     };
     return buildSitemapSectionIds(counts).map((id) => ({ id, lastmod: lastmods[id.split("-")[0]] ?? null }));
   } catch {

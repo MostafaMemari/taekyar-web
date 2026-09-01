@@ -77,6 +77,20 @@ model Tag {
   seo             SeoMetadata?
 }
 
+model Page {
+  id            Int         @id @default(autoincrement())
+  slug          String      @unique
+  title         String
+  content       Json?
+  coverImage    String?
+  coverImageAlt String?
+  status        PostStatus  @default(PUBLISHED)
+  publishedAt   DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
+  seo           SeoMetadata?
+}
+
 model SeoMetadata {
   id             Int       @id @default(autoincrement())
   postId         Int?      @unique
@@ -85,6 +99,8 @@ model SeoMetadata {
   category       Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   tagId          Int?      @unique
   tag            Tag?      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  pageId         Int?      @unique
+  page           Page?     @relation(fields: [pageId], references: [id], onDelete: Cascade)
   seoTitle       String?
   seoDescription String?
   keywords       String?

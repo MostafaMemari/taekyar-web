@@ -3,6 +3,7 @@ export * from "./login";
 export * from "./layout";
 export * from "./overview";
 export * from "./posts";
+export * from "./pages";
 export * from "./comments";
 export * from "./taxonomy";
 export * from "./uploads";

@@ -32,6 +32,34 @@ export interface PostInput extends SeoOverrideInput {
   status: PostPublishStatus;
 }
 
+export interface PageInput extends SeoOverrideInput {
+  title: string;
+  slug: string;
+  content: string | null;
+  coverImage: string | null;
+  coverImageAlt: string | null;
+  status: PostPublishStatus;
+}
+
+export type PageFieldKey =
+  | "title"
+  | "slug"
+  | "coverImage"
+  | "coverImageAlt"
+  | "seoTitle"
+  | "seoDescription"
+  | "keywords"
+  | "canonical"
+  | "robotsTags";
+
+export type PageFieldErrors = Partial<Record<PageFieldKey, string>>;
+
+export interface PageFormState {
+  status: "idle" | "error";
+  message?: string;
+  fieldErrors?: PageFieldErrors;
+}
+
 export type PostFieldKey =
   | "title"
   | "slug"

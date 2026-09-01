@@ -11,6 +11,8 @@ export const categoryEditHref = (id: number): string => `/dashboard/categories/$
 
 export const tagHref = (slug: string): string => `/blog/tag/${encodePathSegments(slug)}`;
 
+export const pageHref = (slug: string): string => `/${encodePathSegments(slug)}`;
+
 export const tagEditHref = (id: number): string => `/dashboard/tags/${id}/edit`;
 
 function encodePathSegments(value: string): string {
