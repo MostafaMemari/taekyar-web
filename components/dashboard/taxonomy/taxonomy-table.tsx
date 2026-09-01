@@ -55,32 +55,36 @@ function CategoryTable({ rows }: { rows: CategoryTableRow[] }) {
         TAXONOMY_LABELS.actionLabel,
       ]}
     >
-      {flattened.map(({ item: row, depth }) => (
-        <DashboardTableRow key={row.id}>
-          <DashboardTableCell>
-            <div
-              className="flex items-center gap-2"
-              style={depth > 0 ? { paddingInlineStart: `${depth * 20}px` } : undefined}
-            >
-              {depth > 0 ? (
-                <CornerDownRight className="size-4 shrink-0 text-muted-foreground/50" aria-hidden="true" />
-              ) : null}
-              <RowIdentity name={row.name} image={row.image} href={categoryHref(row.path)} />
-            </div>
-          </DashboardTableCell>
-          <DashboardTableCell dir="ltr" className="text-start text-[13px] font-medium text-muted-foreground">
-            <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-mono ring-1 ring-border/60">
-              {categoryHref(row.path)}
-            </span>
-          </DashboardTableCell>
-          <DashboardTableCell>
-            <PostsCount count={row._count.posts} />
-          </DashboardTableCell>
-          <DashboardTableCell className="py-3">
-            <RowActions basePath={basePath} id={row.id} kind="category" />
-          </DashboardTableCell>
-        </DashboardTableRow>
-      ))}
+      {flattened.map(({ item: row, depth }) => {
+        const url = categoryHref(row.path);
+
+        return (
+          <DashboardTableRow key={row.id}>
+            <DashboardTableCell>
+              <div
+                className="flex items-center gap-2"
+                style={depth > 0 ? { paddingInlineStart: `${depth * 20}px` } : undefined}
+              >
+                {depth > 0 ? (
+                  <CornerDownRight className="size-4 shrink-0 text-muted-foreground/50" aria-hidden="true" />
+                ) : null}
+                <RowIdentity name={row.name} image={row.image} href={url} />
+              </div>
+            </DashboardTableCell>
+            <DashboardTableCell dir="ltr" className="text-start text-[13px] font-medium text-muted-foreground">
+              <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-mono ring-1 ring-border/60">
+                {decodeURIComponent(url)}
+              </span>
+            </DashboardTableCell>
+            <DashboardTableCell>
+              <PostsCount count={row._count.posts} />
+            </DashboardTableCell>
+            <DashboardTableCell className="py-3">
+              <RowActions basePath={basePath} id={row.id} kind="category" />
+            </DashboardTableCell>
+          </DashboardTableRow>
+        );
+      })}
     </DashboardTable>
   );
 }
@@ -98,24 +102,28 @@ function TagTable({ rows }: { rows: TagTableRow[] }) {
         TAXONOMY_LABELS.actionLabel,
       ]}
     >
-      {rows.map((row) => (
-        <DashboardTableRow key={row.id}>
-          <DashboardTableCell>
-            <RowIdentity name={row.name} image={row.image} href={tagHref(row.slug)} />
-          </DashboardTableCell>
-          <DashboardTableCell dir="ltr" className="text-start text-[13px] font-medium text-muted-foreground">
-            <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-mono ring-1 ring-border/60">
-              {tagHref(row.slug)}
-            </span>
-          </DashboardTableCell>
-          <DashboardTableCell>
-            <PostsCount count={row._count.posts} />
-          </DashboardTableCell>
-          <DashboardTableCell className="py-3">
-            <RowActions basePath={basePath} id={row.id} kind="tag" />
-          </DashboardTableCell>
-        </DashboardTableRow>
-      ))}
+      {rows.map((row) => {
+        const url = tagHref(row.slug);
+
+        return (
+          <DashboardTableRow key={row.id}>
+            <DashboardTableCell>
+              <RowIdentity name={row.name} image={row.image} href={url} />
+            </DashboardTableCell>
+            <DashboardTableCell dir="ltr" className="text-start text-[13px] font-medium text-muted-foreground">
+              <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-mono ring-1 ring-border/60">
+                {decodeURIComponent(url)}
+              </span>
+            </DashboardTableCell>
+            <DashboardTableCell>
+              <PostsCount count={row._count.posts} />
+            </DashboardTableCell>
+            <DashboardTableCell className="py-3">
+              <RowActions basePath={basePath} id={row.id} kind="tag" />
+            </DashboardTableCell>
+          </DashboardTableRow>
+        );
+      })}
     </DashboardTable>
   );
 }
