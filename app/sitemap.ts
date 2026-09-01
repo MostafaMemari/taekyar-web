@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 
 import {
-  SITEMAP_URLS_PER_FILE,
   getBlogSitemapEntries,
   getCategorySitemapEntries,
   getTagSitemapEntries,
