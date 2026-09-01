@@ -31,8 +31,10 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
     slug: initial.slug,
     excerpt: initial.excerpt ?? "",
     readTimeMinutes: initial.readTimeMinutes === null ? "" : String(initial.readTimeMinutes),
-    metaTitle: initial.metaTitle ?? "",
-    metaDescription: initial.metaDescription ?? "",
+    seoTitle: initial.seoTitle ?? "",
+    seoDescription: initial.seoDescription ?? "",
+    keywords: initial.keywords ?? "",
+    canonical: initial.canonical ?? "",
   });
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(initial.categoryIds);
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(initial.tagIds);
@@ -76,8 +78,10 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
       content,
       coverImage: coverImage.key,
       coverImageAlt: coverImage.alt.trim() || null,
-      metaTitle: fields.metaTitle.trim() || null,
-      metaDescription: fields.metaDescription.trim() || null,
+      seoTitle: fields.seoTitle.trim() || null,
+      seoDescription: fields.seoDescription.trim() || null,
+      keywords: fields.keywords.trim() || null,
+      canonical: fields.canonical.trim() || null,
       status,
     };
 

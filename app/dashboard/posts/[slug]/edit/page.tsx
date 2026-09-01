@@ -47,8 +47,10 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     content: post.content,
     coverImage: post.coverImage,
     coverImageAlt: post.coverImageAlt,
-    metaTitle: post.metaTitle,
-    metaDescription: post.metaDescription,
+    seoTitle: post.seo?.seoTitle ?? null,
+    seoDescription: post.seo?.seoDescription ?? null,
+    keywords: post.seo?.keywords ?? null,
+    canonical: post.seo?.canonical ?? null,
     status: post.status,
   };
 

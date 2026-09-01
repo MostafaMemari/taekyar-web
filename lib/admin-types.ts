@@ -2,18 +2,23 @@ export type CommentStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 export type PostPublishStatus = "DRAFT" | "PUBLISHED";
 
-export interface TaxonomyInput {
+export interface SeoOverrideInput {
+  seoTitle: string | null;
+  seoDescription: string | null;
+  keywords: string | null;
+  canonical: string | null;
+}
+
+export interface TaxonomyInput extends SeoOverrideInput {
   name: string;
   slug: string;
   parentId: number | null;
   image: string | null;
   imageAlt: string | null;
   description: string | null;
-  metaTitle: string | null;
-  metaDescription: string | null;
 }
 
-export interface PostInput {
+export interface PostInput extends SeoOverrideInput {
   title: string;
   slug: string;
   excerpt: string | null;
@@ -23,8 +28,6 @@ export interface PostInput {
   content: string | null;
   coverImage: string | null;
   coverImageAlt: string | null;
-  metaTitle: string | null;
-  metaDescription: string | null;
   status: PostPublishStatus;
 }
 
@@ -36,8 +39,10 @@ export type PostFieldKey =
   | "content"
   | "coverImage"
   | "coverImageAlt"
-  | "metaTitle"
-  | "metaDescription";
+  | "seoTitle"
+  | "seoDescription"
+  | "keywords"
+  | "canonical";
 
 export type PostFieldErrors = Partial<Record<PostFieldKey, string>>;
 

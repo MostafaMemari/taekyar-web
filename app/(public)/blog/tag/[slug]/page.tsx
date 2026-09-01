@@ -7,6 +7,7 @@ import { TAG_PAGE_LABELS } from "@/data/blog/tag-page";
 import { archiveJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
 import { getPostsByTag, getTagBySlug } from "@/lib/blog";
 import { buildPageMetadata } from "@/lib/seo";
+import { resolveSeo } from "@/lib/seo-resolve";
 import { tagHref } from "@/lib/routes";
 import { SITE_NAME } from "@/lib/site";
 
@@ -30,10 +31,15 @@ export async function generateMetadata({ params }: TagPageProps): Promise<Metada
 
   if (!tag) return { title: "برچسب یافت نشد" };
 
+  const seo = resolveSeo(tag.seo, {
+    title: tag.name,
+    description: tag.description,
+    defaultDescription: `مقالات و آموزش‌های مرتبط با «${tag.name}» در وبلاگ ${SITE_NAME}.`,
+    canonicalPath: tagHref(tag.slug),
+  });
+
   return buildPageMetadata({
-    title: tag.metaTitle ?? tag.name,
-    description:
-      tag.metaDescription ?? tag.description ?? `مقالات و آموزش‌های مرتبط با «${tag.name}» در وبلاگ ${SITE_NAME}.`,
+    ...seo,
     path: tagHref(tag.slug),
     imageUrl: tag.image,
     imageAlt: tag.imageAlt ?? tag.name,
@@ -58,7 +64,7 @@ export default async function TagPage({ params }: TagPageProps) {
         data={archiveJsonLd({
           name: tag.name,
           path: tagHref(tag.slug),
-          description: tag.description ?? tag.metaDescription,
+          description: tag.description,
           imageUrl: tag.image,
           posts,
         })}
@@ -66,7 +72,7 @@ export default async function TagPage({ params }: TagPageProps) {
       <TaxonomyArchive
         eyebrow={TAG_PAGE_LABELS.eyebrow}
         title={tag.name}
-        description={tag.description ?? tag.metaDescription}
+        description={tag.description}
         imageUrl={tag.image}
         imageAlt={tag.imageAlt}
         posts={posts}

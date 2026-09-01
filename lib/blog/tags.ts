@@ -14,7 +14,7 @@ export const getTags = cache(async () => {
 
 export const getTagBySlug = cache(async (slug: string) => {
   try {
-    return await prisma.tag.findUnique({ where: { slug } });
+    return await prisma.tag.findUnique({ where: { slug }, include: { seo: true } });
   } catch {
     return null;
   }

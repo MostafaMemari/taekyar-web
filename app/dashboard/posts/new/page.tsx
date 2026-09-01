@@ -22,8 +22,10 @@ export default async function NewPostPage() {
     content: null,
     coverImage: null,
     coverImageAlt: null,
-    metaTitle: null,
-    metaDescription: null,
+    seoTitle: null,
+    seoDescription: null,
+    keywords: null,
+    canonical: null,
     status: "PUBLISHED",
   };
 

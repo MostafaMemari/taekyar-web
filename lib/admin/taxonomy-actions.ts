@@ -7,22 +7,59 @@ import type { TaxonomyFormState, TaxonomyInput } from "@/lib/admin-types";
 import { prisma } from "@/lib/prisma";
 import { deleteImage } from "@/lib/r2";
 import { resolveUniqueSlug } from "@/lib/slug-server";
-import { normalizeTaxonomyInput, requireSession, revalidateTaxonomy } from "./shared";
+import type { NormalizedTaxonomy } from "./shared";
+import { normalizeTaxonomyInput, hasSeoData, requireSession, revalidateTaxonomy } from "./shared";
+import type { NormalizedSeo } from "./shared";
 
-function toTagData(data: TaxonomyInput) {
-  return {
-    name: data.name,
-    slug: data.slug,
-    image: data.image,
-    imageAlt: data.imageAlt,
-    description: data.description,
-    metaTitle: data.metaTitle,
-    metaDescription: data.metaDescription,
-  };
+interface TaxonomyEntityData {
+  name: string;
+  slug: string;
+  parentId?: number | null;
+  image: string | null;
+  imageAlt: string | null;
+  description: string | null;
 }
 
-async function saveCategory(id: number | null, data: TaxonomyInput): Promise<string | null> {
-  const parentId = data.parentId;
+function splitTaxonomyData(
+  kind: "category" | "tag",
+  data: NormalizedTaxonomy,
+): { entity: TaxonomyEntityData; seo: NormalizedSeo } {
+  const { seo, ...entity } = data;
+  if (kind === "tag") {
+    return {
+      entity: {
+        name: entity.name,
+        slug: entity.slug,
+        image: entity.image,
+        imageAlt: entity.imageAlt,
+        description: entity.description,
+      },
+      seo,
+    };
+  }
+  return { entity, seo };
+}
+
+function seoWriteOps(link: { postId?: number; categoryId?: number; tagId?: number }, seo: NormalizedSeo) {
+  if (hasSeoData(seo)) {
+    const where = link.postId
+      ? { postId: link.postId }
+      : link.categoryId
+        ? { categoryId: link.categoryId }
+        : { tagId: link.tagId! };
+    return prisma.seoMetadata.upsert({ where, create: { ...link, ...seo }, update: { ...seo } });
+  }
+  const where = link.postId
+    ? { postId: link.postId }
+    : link.categoryId
+      ? { categoryId: link.categoryId }
+      : { tagId: link.tagId! };
+  return prisma.seoMetadata.deleteMany({ where });
+}
+
+async function saveCategory(id: number | null, data: NormalizedTaxonomy): Promise<string | null> {
+  const { entity, seo } = splitTaxonomyData("category", data);
+  const parentId = entity.parentId;
   let parent: { id: number; path: string } | null = null;
   if (parentId !== null) {
     parent = await prisma.category.findUnique({
@@ -33,8 +70,11 @@ async function saveCategory(id: number | null, data: TaxonomyInput): Promise<str
   }
 
   if (id === null) {
-    const path = parent ? `${parent.path}/${data.slug}` : data.slug;
-    await prisma.category.create({ data: { ...data, path } });
+    const path = parent ? `${parent.path}/${entity.slug}` : entity.slug;
+    const category = await prisma.category.create({ data: { ...entity, path } });
+    if (hasSeoData(seo)) {
+      await prisma.seoMetadata.create({ data: { categoryId: category.id, ...seo } });
+    }
     return null;
   }
 
@@ -45,10 +85,13 @@ async function saveCategory(id: number | null, data: TaxonomyInput): Promise<str
     return TAXONOMY_LABELS.parentCycle;
   }
 
-  const newPath = parent ? `${parent.path}/${data.slug}` : data.slug;
+  const newPath = parent ? `${parent.path}/${entity.slug}` : entity.slug;
 
   if (newPath === existing.path) {
-    await prisma.category.update({ where: { id }, data });
+    await prisma.$transaction([
+      prisma.category.update({ where: { id }, data: entity }),
+      seoWriteOps({ categoryId: id }, seo),
+    ]);
     return null;
   }
 
@@ -58,7 +101,8 @@ async function saveCategory(id: number | null, data: TaxonomyInput): Promise<str
   });
 
   await prisma.$transaction([
-    prisma.category.update({ where: { id }, data: { ...data, path: newPath } }),
+    prisma.category.update({ where: { id }, data: { ...entity, path: newPath } }),
+    seoWriteOps({ categoryId: id }, seo),
     ...descendants.map((descendant) =>
       prisma.category.update({
         where: { id: descendant.id },
@@ -105,9 +149,17 @@ export async function saveTaxonomy(
       const categoryError = await saveCategory(id, dataWithSlug);
       if (categoryError) return { status: "error", message: categoryError };
     } else if (id === null) {
-      await prisma.tag.create({ data: toTagData(dataWithSlug) });
+      const { entity, seo } = splitTaxonomyData("tag", dataWithSlug);
+      const tag = await prisma.tag.create({ data: entity });
+      if (hasSeoData(seo)) {
+        await prisma.seoMetadata.create({ data: { tagId: tag.id, ...seo } });
+      }
     } else {
-      await prisma.tag.update({ where: { id }, data: toTagData(dataWithSlug) });
+      const { entity, seo } = splitTaxonomyData("tag", dataWithSlug);
+      await prisma.$transaction([
+        prisma.tag.update({ where: { id }, data: entity }),
+        seoWriteOps({ tagId: id }, seo),
+      ]);
     }
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {

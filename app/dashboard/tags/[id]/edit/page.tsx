@@ -12,7 +12,7 @@ interface EditTagPageProps {
 
 export async function generateMetadata({ params }: EditTagPageProps) {
   const { id } = await params;
-  const tag = await prisma.tag.findUnique({ where: { id: Number(id) } });
+  const tag = await prisma.tag.findUnique({ where: { id: Number(id) }, include: { seo: true } });
   return {
     title: tag
       ? `${TAXONOMY_LABELS.kinds.tag.editTitle} — ${tag.name}`
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: EditTagPageProps) {
 
 export default async function EditTagPage({ params }: EditTagPageProps) {
   const { id } = await params;
-  const tag = await prisma.tag.findUnique({ where: { id: Number(id) } });
+  const tag = await prisma.tag.findUnique({ where: { id: Number(id) }, include: { seo: true } });
   if (!tag) notFound();
 
   const initial: TaxonomyInput = {
@@ -32,8 +32,10 @@ export default async function EditTagPage({ params }: EditTagPageProps) {
     image: tag.image,
     imageAlt: tag.imageAlt,
     description: tag.description,
-    metaTitle: tag.metaTitle,
-    metaDescription: tag.metaDescription,
+    seoTitle: tag.seo?.seoTitle ?? null,
+    seoDescription: tag.seo?.seoDescription ?? null,
+    keywords: tag.seo?.keywords ?? null,
+    canonical: tag.seo?.canonical ?? null,
   };
 
   return (

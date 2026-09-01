@@ -13,7 +13,7 @@ interface EditCategoryPageProps {
 
 export async function generateMetadata({ params }: EditCategoryPageProps) {
   const { id } = await params;
-  const category = await prisma.category.findUnique({ where: { id: Number(id) } });
+  const category = await prisma.category.findUnique({ where: { id: Number(id) }, include: { seo: true } });
   return {
     title: category
       ? `${TAXONOMY_LABELS.kinds.category.editTitle} — ${category.name}`
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: EditCategoryPageProps) {
 
 export default async function EditCategoryPage({ params }: EditCategoryPageProps) {
   const { id } = await params;
-  const category = await prisma.category.findUnique({ where: { id: Number(id) } });
+  const category = await prisma.category.findUnique({ where: { id: Number(id) }, include: { seo: true } });
   if (!category) notFound();
 
   const categories = await prisma.category.findMany({
@@ -45,8 +45,10 @@ export default async function EditCategoryPage({ params }: EditCategoryPageProps
     image: category.image,
     imageAlt: category.imageAlt,
     description: category.description,
-    metaTitle: category.metaTitle,
-    metaDescription: category.metaDescription,
+    seoTitle: category.seo?.seoTitle ?? null,
+    seoDescription: category.seo?.seoDescription ?? null,
+    keywords: category.seo?.keywords ?? null,
+    canonical: category.seo?.canonical ?? null,
   };
 
   return (

@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Link2 } from "lucide-react";
 
 import { CoverImageField, type CoverImageValue } from "@/components/dashboard/shared/cover-image-field";
+import { SeoFieldsGroup } from "@/components/dashboard/shared/seo-fields-group";
 import { FieldError } from "@/components/shared/form-controls";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,8 +53,10 @@ export function TaxonomyForm({
     name: initial.name,
     slug: initial.slug,
     description: initial.description ?? "",
-    metaTitle: initial.metaTitle ?? "",
-    metaDescription: initial.metaDescription ?? "",
+    seoTitle: initial.seoTitle ?? "",
+    seoDescription: initial.seoDescription ?? "",
+    keywords: initial.keywords ?? "",
+    canonical: initial.canonical ?? "",
   });
   const [coverImage, setCoverImage] = useState<CoverImageValue>({
     key: initial.image ?? null,
@@ -85,8 +88,10 @@ export function TaxonomyForm({
       image: coverImage.key,
       imageAlt: coverImage.alt.trim() || null,
       description: fields.description,
-      metaTitle: fields.metaTitle,
-      metaDescription: fields.metaDescription,
+      seoTitle: fields.seoTitle.trim() || null,
+      seoDescription: fields.seoDescription.trim() || null,
+      keywords: fields.keywords.trim() || null,
+      canonical: fields.canonical.trim() || null,
     };
 
     setFieldErrors({});
@@ -184,8 +189,7 @@ export function TaxonomyForm({
 
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-[14px] font-black">{TAXONOMY_LABELS.seoTitle}</CardTitle>
-              <p className="text-xs leading-5 text-muted-foreground">{TAXONOMY_LABELS.seoHint}</p>
+              <CardTitle className="text-[14px] font-black">{TAXONOMY_LABELS.descriptionLabel}</CardTitle>
             </CardHeader>
             <Separator className="bg-border/60" />
             <CardContent className="space-y-4 pt-4">
@@ -202,35 +206,21 @@ export function TaxonomyForm({
                   onChange={(event) => setField("description", event.target.value)}
                 />
               </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="taxonomy-meta-title" className="text-[13px] font-bold">
-                  {TAXONOMY_LABELS.metaTitleLabel}
-                </Label>
-                <Input
-                  id="taxonomy-meta-title"
-                  value={fields.metaTitle}
-                  placeholder={TAXONOMY_LABELS.metaTitlePlaceholder}
-                  className="h-10 rounded-xl"
-                  onChange={(event) => setField("metaTitle", event.target.value)}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="taxonomy-meta-description" className="text-[13px] font-bold">
-                  {TAXONOMY_LABELS.metaDescriptionLabel}
-                </Label>
-                <Textarea
-                  id="taxonomy-meta-description"
-                  rows={3}
-                  value={fields.metaDescription}
-                  placeholder={TAXONOMY_LABELS.metaDescriptionPlaceholder}
-                  className="min-h-[84px] resize-y rounded-xl"
-                  onChange={(event) => setField("metaDescription", event.target.value)}
-                />
-              </div>
             </CardContent>
           </Card>
+
+          <SeoFieldsGroup
+            idPrefix="taxonomy"
+            values={{
+              seoTitle: fields.seoTitle,
+              seoDescription: fields.seoDescription,
+              keywords: fields.keywords,
+              canonical: fields.canonical,
+            }}
+            onChange={(key, value) =>
+              setField(key === "title" ? "seoTitle" : key === "description" ? "seoDescription" : key, value)
+            }
+          />
         </div>
 
         <aside

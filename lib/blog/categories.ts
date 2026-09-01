@@ -1,7 +1,9 @@
 import { cache } from "react";
-import type { Category } from "@prisma/client";
+import type { Category, Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
+
+export type CategoryWithSeo = Prisma.CategoryGetPayload<{ include: { seo: true } }>;
 
 export const getCategories = cache(async () => {
   try {
@@ -193,8 +195,8 @@ export const getCategoryAncestorsByPath = cache(async (path: string): Promise<Ca
 });
 
 export type ResolvedCategoryPath =
-  | { status: "found"; category: Category; ancestors: Category[] }
-  | { status: "redirect"; category: Category }
+  | { status: "found"; category: CategoryWithSeo; ancestors: Category[] }
+  | { status: "redirect"; category: CategoryWithSeo }
   | { status: "missing" };
 
 export const resolveCategoryPath = cache(async (segments: string[]): Promise<ResolvedCategoryPath> => {
@@ -202,7 +204,7 @@ export const resolveCategoryPath = cache(async (segments: string[]): Promise<Res
   if (!path) return { status: "missing" };
 
   try {
-    const category = await prisma.category.findUnique({ where: { path } });
+    const category = await prisma.category.findUnique({ where: { path }, include: { seo: true } });
     if (category) {
       const ancestors = await getCategoryAncestorsByPath(category.path);
       return { status: "found", category, ancestors };
@@ -210,6 +212,7 @@ export const resolveCategoryPath = cache(async (segments: string[]): Promise<Res
 
     const bySlug = await prisma.category.findUnique({
       where: { slug: segments[segments.length - 1] },
+      include: { seo: true },
     });
     if (bySlug) return { status: "redirect", category: bySlug };
 

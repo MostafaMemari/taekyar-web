@@ -59,8 +59,8 @@ export function archiveJsonLd({ name, path, description, imageUrl, posts }: Arch
 
 export function articleJsonLd(post: BlogPost) {
   const image = post.coverImage ?? post.categoryImage;
-  const keywords = post.tags.map((tag) => tag.name).join("، ");
-  const description = post.metaDescription ?? post.excerpt;
+  const keywords = post.seo?.keywords?.trim() || post.tags.map((tag) => tag.name).join("، ");
+  const description = post.seo?.seoDescription?.trim() || post.excerpt;
 
   return {
     "@context": "https://schema.org",

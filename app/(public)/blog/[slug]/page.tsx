@@ -21,6 +21,7 @@ import { articleJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
 import { getHeadings, type TocItem } from "@/lib/post-content";
 import { getRelatedPosts } from "@/lib/blog-related";
 import { buildPageMetadata } from "@/lib/seo";
+import { resolveSeo } from "@/lib/seo-resolve";
 import { categoryHref, postHref } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
@@ -44,9 +45,14 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
   if (!post) return { title: "مقاله یافت نشد" };
 
+  const seo = resolveSeo(post.seo, {
+    title: post.title,
+    description: post.excerpt,
+    canonicalPath: postHref(post.slug),
+  });
+
   return buildPageMetadata({
-    title: post.metaTitle ?? post.title,
-    description: post.metaDescription ?? post.excerpt ?? undefined,
+    ...seo,
     path: postHref(post.slug),
     imageUrl: post.coverImage ?? post.categoryImage,
     imageAlt: post.coverImageAlt ?? post.title,

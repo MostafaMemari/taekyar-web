@@ -25,8 +25,10 @@ export default async function NewCategoryPage() {
     image: null,
     imageAlt: null,
     description: null,
-    metaTitle: null,
-    metaDescription: null,
+    seoTitle: null,
+    seoDescription: null,
+    keywords: null,
+    canonical: null,
   };
 
   return (

@@ -7,6 +7,7 @@ import { CATEGORY_PAGE_LABELS } from "@/data/blog/category-page";
 import { archiveJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
 import { getPostsByCategory, resolveCategoryPath } from "@/lib/blog";
 import { buildPageMetadata } from "@/lib/seo";
+import { resolveSeo } from "@/lib/seo-resolve";
 import { categoryHref } from "@/lib/routes";
 
 export const revalidate = 60;
@@ -32,12 +33,15 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   if (resolved.status !== "found") return { title: "دسته‌بندی یافت نشد" };
   const { category } = resolved;
 
+  const seo = resolveSeo(category.seo, {
+    title: category.name,
+    description: category.description,
+    defaultDescription: `مقالات دسته‌بندی «${category.name}» در وبلاگ تک‌یار.`,
+    canonicalPath: categoryHref(category.path),
+  });
+
   return buildPageMetadata({
-    title: category.metaTitle ?? category.name,
-    description:
-      category.metaDescription ??
-      category.description ??
-      `مقالات دسته‌بندی «${category.name}» در وبلاگ تک‌یار.`,
+    ...seo,
     path: categoryHref(category.path),
     imageUrl: category.image,
     imageAlt: category.imageAlt ?? category.name,
@@ -66,7 +70,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         data={archiveJsonLd({
           name: category.name,
           path: categoryHref(category.path),
-          description: category.description ?? category.metaDescription,
+          description: category.description,
           imageUrl: category.image,
           posts,
         })}
@@ -74,7 +78,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <TaxonomyArchive
         eyebrow={CATEGORY_PAGE_LABELS.eyebrow}
         title={category.name}
-        description={category.description ?? category.metaDescription}
+        description={category.description}
         imageUrl={category.image}
         imageAlt={category.imageAlt}
         posts={posts}

@@ -12,8 +12,10 @@ export default function NewTagPage() {
     image: null,
     imageAlt: null,
     description: null,
-    metaTitle: null,
-    metaDescription: null,
+    seoTitle: null,
+    seoDescription: null,
+    keywords: null,
+    canonical: null,
   };
 
   return (

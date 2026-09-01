@@ -57,6 +57,31 @@ export function normalizeOptionalText(value: unknown): string | null {
   return text.length > 0 ? text : null;
 }
 
+export interface NormalizedSeo {
+  seoTitle: string | null;
+  seoDescription: string | null;
+  keywords: string | null;
+  canonical: string | null;
+}
+
+export function hasSeoData(seo: NormalizedSeo): boolean {
+  return seo.seoTitle !== null || seo.seoDescription !== null || seo.keywords !== null || seo.canonical !== null;
+}
+
+export function normalizeSeoInput(input: {
+  seoTitle?: unknown;
+  seoDescription?: unknown;
+  keywords?: unknown;
+  canonical?: unknown;
+}): NormalizedSeo {
+  return {
+    seoTitle: normalizeOptionalText(input.seoTitle),
+    seoDescription: normalizeOptionalText(input.seoDescription),
+    keywords: normalizeOptionalText(input.keywords),
+    canonical: normalizeOptionalText(input.canonical),
+  };
+}
+
 export interface NormalizedTaxonomy {
   name: string;
   slug: string;
@@ -64,8 +89,7 @@ export interface NormalizedTaxonomy {
   image: string | null;
   imageAlt: string | null;
   description: string | null;
-  metaTitle: string | null;
-  metaDescription: string | null;
+  seo: NormalizedSeo;
 }
 
 export type TaxonomyValidationResult =
@@ -113,8 +137,7 @@ export function normalizeTaxonomyInput(input: TaxonomyInput): TaxonomyValidation
       image: normalizeOptionalText(input.image),
       imageAlt: normalizeOptionalText(input.imageAlt),
       description: normalizeOptionalText(input.description),
-      metaTitle: normalizeOptionalText(input.metaTitle),
-      metaDescription: normalizeOptionalText(input.metaDescription),
+      seo: normalizeSeoInput(input),
     },
   };
 }
@@ -129,8 +152,7 @@ export interface NormalizedPost {
   content: string | null;
   coverImage: string | null;
   coverImageAlt: string | null;
-  metaTitle: string | null;
-  metaDescription: string | null;
+  seo: NormalizedSeo;
   status: PostPublishStatus;
 }
 
@@ -193,8 +215,7 @@ export function normalizePostInput(input: PostInput): PostValidationResult {
       content: rawContent.length > 0 ? sanitizePostHtml(rawContent) : null,
       coverImage: normalizeOptionalText(input.coverImage),
       coverImageAlt: normalizeOptionalText(input.coverImageAlt),
-      metaTitle: normalizeOptionalText(input.metaTitle),
-      metaDescription: normalizeOptionalText(input.metaDescription),
+      seo: normalizeSeoInput(input),
       status: input.status === "DRAFT" ? "DRAFT" : "PUBLISHED",
     },
   };

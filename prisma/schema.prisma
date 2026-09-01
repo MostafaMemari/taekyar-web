@@ -37,13 +37,12 @@ model Post {
   content         Json?
   coverImage      String?
   coverImageAlt   String?
-  metaTitle       String?
-  metaDescription String?
   status          PostStatus  @default(PUBLISHED)
   deletedAt       DateTime?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @default(now()) @updatedAt
   comments        Comment[]
+  seo             SeoMetadata?
 }
 
 model Category {
@@ -57,11 +56,10 @@ model Category {
   image           String?
   imageAlt        String?
   description     String?
-  metaTitle       String?
-  metaDescription String?
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @default(now()) @updatedAt
   posts           Post[]
+  seo             SeoMetadata?
 
   @@index([parentId])
 }
@@ -73,11 +71,26 @@ model Tag {
   image           String?
   imageAlt        String?
   description     String?
-  metaTitle       String?
-  metaDescription String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now()) @updatedAt
   posts           Post[]
+  seo             SeoMetadata?
+}
+
+model SeoMetadata {
+  id             Int       @id @default(autoincrement())
+  postId         Int?      @unique
+  post           Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  categoryId     Int?      @unique
+  category       Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  tagId          Int?      @unique
+  tag            Tag?      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  seoTitle       String?
+  seoDescription String?
+  keywords       String?
+  canonical      String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @default(now()) @updatedAt
 }
 
 model Comment {

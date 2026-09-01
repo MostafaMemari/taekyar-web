@@ -1,3 +1,5 @@
+import type { SeoOverrides } from "@/lib/seo";
+
 export interface PostCategoryRef {
   id: number;
   name: string;
@@ -20,8 +22,7 @@ export interface BlogPost {
   readTimeMinutes: number | null;
   coverImage: string | null;
   coverImageAlt: string | null;
-  metaTitle: string | null;
-  metaDescription: string | null;
+  seo: SeoOverrides | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -40,8 +41,7 @@ export interface BlogPostRow {
   content?: unknown;
   coverImage: string | null;
   coverImageAlt: string | null;
-  metaTitle: string | null;
-  metaDescription: string | null;
+  seo: SeoOverrides | null;
   createdAt: Date;
   updatedAt: Date;
   categories: PostCategoryRef[];
@@ -65,14 +65,13 @@ export function toBlogPost(post: BlogPostRow): BlogPost {
     readTimeMinutes: post.readTimeMinutes,
     coverImage: post.coverImage,
     coverImageAlt: post.coverImageAlt,
-    metaTitle: post.metaTitle,
-    metaDescription: post.metaDescription,
+    seo: post.seo,
     createdAt: post.createdAt,
     updatedAt: post.updatedAt,
   };
 }
 
-export const POST_INCLUDE = { categories: true, tags: true } as const;
+export const POST_INCLUDE = { categories: true, tags: true, seo: true } as const;
 
 export function toPostRows(posts: Array<BlogPostRow & { content?: unknown }>): BlogPost[] {
   return posts.map(toBlogPost);

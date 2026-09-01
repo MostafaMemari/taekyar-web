@@ -6,11 +6,22 @@ import { redirect } from "next/navigation";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import type { PostFormState, PostInput } from "@/lib/admin-types";
 import { prisma } from "@/lib/prisma";
-import { normalizePostInput, requireSession, revalidatePostPaths } from "./shared";
+import { hasSeoData, normalizePostInput, requireSession, revalidatePostPaths } from "./shared";
+import type { NormalizedSeo } from "./shared";
 import { resolveUniqueSlug } from "@/lib/slug-server";
 
 function isSlugConflict(error: unknown): boolean {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";
+}
+
+function seoWriteOps(postId: number, seo: NormalizedSeo) {
+  return hasSeoData(seo)
+    ? prisma.seoMetadata.upsert({
+        where: { postId },
+        create: { postId, ...seo },
+        update: { ...seo },
+      })
+    : prisma.seoMetadata.deleteMany({ where: { postId } });
 }
 
 export async function createPost(_previousState: PostFormState, input: PostInput): Promise<PostFormState> {
@@ -25,8 +36,8 @@ export async function createPost(_previousState: PostFormState, input: PostInput
 
   const publishDate = data.status === "PUBLISHED" ? new Date() : null;
   try {
-    const { tagIds, categoryIds, content, ...postData } = data;
-    await prisma.post.create({
+    const { tagIds, categoryIds, content, seo, ...postData } = data;
+    const post = await prisma.post.create({
       data: {
         ...postData,
         slug,
@@ -36,6 +47,9 @@ export async function createPost(_previousState: PostFormState, input: PostInput
         tags: { connect: tagIds.map((id) => ({ id })) },
       },
     });
+    if (hasSeoData(seo)) {
+      await prisma.seoMetadata.create({ data: { postId: post.id, ...seo } });
+    }
   } catch (error) {
     if (isSlugConflict(error)) {
       return { status: "error", fieldErrors: { slug: POST_FORM_LABELS.slugTaken } };
@@ -72,18 +86,21 @@ export async function updatePost(
   const publishDate = firstPublication ? new Date() : current.date;
 
   try {
-    const { tagIds, categoryIds, content, ...postData } = data;
-    await prisma.post.update({
-      where: { slug: currentSlug },
-      data: {
-        ...postData,
-        slug,
-        content: content === null ? Prisma.DbNull : content,
-        date: publishDate,
-        categories: { set: categoryIds.map((id) => ({ id })) },
-        tags: { set: tagIds.map((id) => ({ id })) },
-      },
-    });
+    const { tagIds, categoryIds, content, seo, ...postData } = data;
+    await prisma.$transaction([
+      prisma.post.update({
+        where: { slug: currentSlug },
+        data: {
+          ...postData,
+          slug,
+          content: content === null ? Prisma.DbNull : content,
+          date: publishDate,
+          categories: { set: categoryIds.map((id) => ({ id })) },
+          tags: { set: tagIds.map((id) => ({ id })) },
+        },
+      }),
+      seoWriteOps(current.id, seo),
+    ]);
   } catch (error) {
     if (isSlugConflict(error)) {
       return { status: "error", fieldErrors: { slug: POST_FORM_LABELS.slugTaken } };

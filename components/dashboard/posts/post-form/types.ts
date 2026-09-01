@@ -3,6 +3,8 @@ export interface FieldDraft {
   slug: string;
   excerpt: string;
   readTimeMinutes: string;
-  metaTitle: string;
-  metaDescription: string;
+  seoTitle: string;
+  seoDescription: string;
+  keywords: string;
+  canonical: string;
 }
