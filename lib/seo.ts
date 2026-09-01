@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { getSiteSettings } from "@/lib/site-settings";
 import { r2PublicUrl } from "@/lib/r2-url";
+import { composeRobotsTags, parseRobotsUiState } from "@/lib/seo-robots";
 
 export interface SeoOverrides {
   seoTitle?: string | null;
@@ -34,51 +35,30 @@ export interface RobotsDirectives {
   "max-video-preview"?: number | string;
 }
 
-const BOOLEAN_ROBOTS_KEYS = new Set([
-  "noarchive",
-  "nosnippet",
-  "noimageindex",
-  "nocache",
-  "notranslate",
-  "indexifembedded",
-  "nositelinkssearchbox",
-]);
-
-const IMAGE_PREVIEW_VALUES = new Set(["none", "standard", "large"]);
-
 export function parseRobotsTags(value: string | null | undefined): RobotsDirectives | null {
   if (!value) return null;
 
+  const state = parseRobotsUiState(value);
+  const tags = composeRobotsTags(state);
+  if (!tags) return null;
+
   const directives: RobotsDirectives = {};
-  for (const raw of value.split(/[،,]/)) {
-    const entry = raw.trim().toLowerCase();
-    if (!entry) continue;
-
-    const separatorIndex = entry.indexOf(":");
-    const key = separatorIndex === -1 ? entry : entry.slice(0, separatorIndex).trim();
-    const rawValue = separatorIndex === -1 ? undefined : entry.slice(separatorIndex + 1).trim();
-
-    if (key === "index") {
-      directives.index = true;
-    } else if (key === "noindex") {
-      directives.index = false;
-    } else if (key === "follow") {
-      directives.follow = true;
-    } else if (key === "nofollow") {
-      directives.follow = false;
-    } else if (key === "max-image-preview") {
-      if (rawValue && IMAGE_PREVIEW_VALUES.has(rawValue)) {
-        directives["max-image-preview"] = rawValue as RobotsDirectives["max-image-preview"];
+  for (const entry of tags.split(",")) {
+    const [key, rawValue] = entry.split(":");
+    if (key === "index") directives.index = true;
+    else if (key === "noindex") directives.index = false;
+    else if (key === "follow") directives.follow = true;
+    else if (key === "nofollow") directives.follow = false;
+    else if (key === "max-image-preview") {
+      if (rawValue === "none" || rawValue === "standard" || rawValue === "large") {
+        directives["max-image-preview"] = rawValue;
       }
     } else if (key === "max-snippet") {
       const parsed = Number(rawValue);
-      if (rawValue !== undefined && Number.isInteger(parsed) && parsed >= 0) {
-        directives["max-snippet"] = parsed;
-      }
+      if (Number.isInteger(parsed)) directives["max-snippet"] = parsed;
     } else if (key === "max-video-preview") {
-      if (rawValue) directives["max-video-preview"] = rawValue;
-    } else if (BOOLEAN_ROBOTS_KEYS.has(key)) {
-      directives[key as Exclude<keyof RobotsDirectives, "max-image-preview" | "max-snippet" | "max-video-preview">] = true;
+      const parsed = Number(rawValue);
+      if (Number.isInteger(parsed)) directives["max-video-preview"] = parsed;
     }
   }
 

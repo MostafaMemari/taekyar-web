@@ -22,7 +22,7 @@ export function SeoFields({ fields, onFieldChange, fieldErrors }: SeoFieldsProps
       }}
       onChange={(key, value) =>
         onFieldChange(
-          key === "title" ? "seoTitle" : key === "description" ? "seoDescription" : key === "robots" ? "robotsTags" : key,
+          key === "title" ? "seoTitle" : key === "description" ? "seoDescription" : key,
           value,
         )
       }      errors={{

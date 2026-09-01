@@ -226,9 +226,7 @@ export function TaxonomyForm({
                   ? "seoTitle"
                   : key === "description"
                     ? "seoDescription"
-                    : key === "robots"
-                      ? "robotsTags"
-                      : key,
+                    : key,
                 value,
               )
             }
