@@ -5,7 +5,6 @@ import { ImagePlus, X } from "lucide-react";
 
 import { MediaPicker, type MediaPickerSelection } from "@/components/dashboard/media/media-picker";
 import { FieldError } from "@/components/shared/form-controls";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -72,14 +71,37 @@ export function CoverImageField({ value, onChange, labels, error, altError }: Co
       <CardContent className="space-y-4">
         <FieldError errorId="cover-image-error" message={error} />
         {value.key && value.url ? (
-          <div className="relative overflow-hidden rounded-xl bg-card ring-1 ring-border/60">
-            <Image
-              src={value.url}
-              alt={value.alt || t.fallbackAlt}
-              width={640}
-              height={360}
-              className="aspect-[16/9] w-full object-cover"
-              unoptimized
+          <div className="relative">
+            <MediaPicker
+              trigger={
+                <button
+                  type="button"
+                  title={t.change}
+                  aria-label={t.change}
+                  className="group relative block w-full cursor-pointer overflow-hidden rounded-xl bg-card ring-1 ring-border/60 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 hover:ring-primary/40 hover:shadow-md motion-reduce:transition-none"
+                >
+                  <Image
+                    src={value.url}
+                    alt={value.alt || t.fallbackAlt}
+                    width={640}
+                    height={360}
+                    className="aspect-[16/9] w-full object-cover transition-opacity group-hover:opacity-90 motion-reduce:transition-none"
+                    unoptimized
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 flex items-center justify-center bg-foreground/0 transition-colors group-hover:bg-foreground/15 motion-reduce:transition-none"
+                  >
+                    <span className="rounded-full bg-black/60 px-3 py-1.5 text-[12px] font-bold text-white opacity-0 transition-opacity group-hover:opacity-100 motion-reduce:transition-none">
+                      {t.change}
+                    </span>
+                  </span>
+                </button>
+              }
+              onSelect={handleSelect}
+              fields={{ alt: true, caption: false }}
+              dialogTitle={t.dialogTitle}
+              insertLabel={t.insert}
             />
             <button
               type="button"
@@ -91,13 +113,24 @@ export function CoverImageField({ value, onChange, labels, error, altError }: Co
             </button>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center rounded-xl bg-muted/20 px-6 py-8 text-center ring-1 ring-border/60">
-            <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
-              <ImagePlus className="size-6" aria-hidden="true" />
-            </span>
-            <p className="mt-3 text-[13px] font-bold">{t.select}</p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">{t.description}</p>
-          </div>
+          <MediaPicker
+            trigger={
+              <button
+                type="button"
+                className="flex w-full cursor-pointer flex-col items-center justify-center rounded-xl bg-muted/20 px-6 py-8 text-center ring-1 ring-border/60 transition-all hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none"
+              >
+                <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
+                  <ImagePlus className="size-6" aria-hidden="true" />
+                </span>
+                <p className="mt-3 text-[13px] font-bold">{t.select}</p>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">{t.description}</p>
+              </button>
+            }
+            onSelect={handleSelect}
+            fields={{ alt: true, caption: false }}
+            dialogTitle={t.dialogTitle}
+            insertLabel={t.insert}
+          />
         )}
 
         {value.key ? (
@@ -117,23 +150,6 @@ export function CoverImageField({ value, onChange, labels, error, altError }: Co
             <FieldError errorId="cover-image-alt-error" message={altError} />
           </div>
         ) : null}
-
-        <MediaPicker
-          trigger={
-            <Button
-              type="button"
-              variant={value.key ? "outline" : "default"}
-              className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-sm"
-            >
-              <ImagePlus className="size-4" aria-hidden="true" />
-              {value.key ? t.change : t.select}
-            </Button>
-          }
-          onSelect={handleSelect}
-          fields={{ alt: true, caption: false }}
-          dialogTitle={t.dialogTitle}
-          insertLabel={t.insert}
-        />
       </CardContent>
     </Card>
   );
