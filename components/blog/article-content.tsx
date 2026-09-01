@@ -3,6 +3,7 @@ import Link from "next/link";
 import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
 import { injectHeadingIds } from "@/lib/post-content";
+import { tagHref } from "@/lib/routes";
 import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,7 @@ export function PostTags({ tags }: { tags: BlogPost["tags"] }) {
       {tags.map((tag) => (
         <Link
           key={tag.id}
-          href={`/blog/tag/${encodeURIComponent(tag.slug)}`}
+          href={tagHref(tag.slug)}
           className="rounded-full bg-muted px-3 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           {tag.name}

@@ -45,7 +45,6 @@ export function MainInfoFields({ fields, onFieldChange, fieldErrors }: MainInfoF
           <Input
             id="post-slug"
             dir="ltr"
-            required
             value={fields.slug}
             placeholder={POST_FORM_LABELS.slugPlaceholder}
             className="h-10 rounded-xl text-start font-mono text-sm"
@@ -54,6 +53,7 @@ export function MainInfoFields({ fields, onFieldChange, fieldErrors }: MainInfoF
             onChange={(event) => onFieldChange("slug", event.target.value)}
           />
           <FieldError errorId="post-slug-error" message={fieldErrors.slug} />
+          <p className="text-[11px] leading-5 text-muted-foreground">{POST_FORM_LABELS.slugHint}</p>
         </div>
 
         <div className="space-y-1.5">

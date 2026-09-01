@@ -47,6 +47,16 @@ export interface PostFormState {
   fieldErrors?: PostFieldErrors;
 }
 
+export type TaxonomyFieldKey = "name" | "slug";
+
+export type TaxonomyFieldErrors = Partial<Record<TaxonomyFieldKey, string>>;
+
+export interface TaxonomyFormState {
+  status: "idle" | "error";
+  message?: string;
+  fieldErrors?: TaxonomyFieldErrors;
+}
+
 export interface SiteSettingsInput {
   siteName: string;
   siteTitle: string;

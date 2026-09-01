@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Link2 } from "lucide-react";
 
 import { CoverImageField, type CoverImageValue } from "@/components/dashboard/shared/cover-image-field";
+import { FieldError } from "@/components/shared/form-controls";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { saveTaxonomy } from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
-import type { TaxonomyInput } from "@/lib/admin-types";
+import type { TaxonomyFieldErrors, TaxonomyInput } from "@/lib/admin-types";
 
 export interface CategoryParentOption {
   id: number;
@@ -63,6 +64,7 @@ export function TaxonomyForm({
     initial.parentId !== null && initial.parentId !== undefined ? String(initial.parentId) : ROOT_PARENT_VALUE,
   );
   const [isPending, startTransition] = useTransition();
+  const [fieldErrors, setFieldErrors] = useState<TaxonomyFieldErrors>({});
 
   const isCategory = kind === "category";
   const selectedParent = parentOptions.find((option) => String(option.id) === parentId);
@@ -87,10 +89,14 @@ export function TaxonomyForm({
       metaDescription: fields.metaDescription,
     };
 
+    setFieldErrors({});
     startTransition(async () => {
       const result = await saveTaxonomy(kind, mode === "edit" ? currentId ?? null : null, input);
       if (result.status === "error") {
-        toast({ tone: "error", title: TAXONOMY_LABELS.errorTitle, description: result.message });
+        setFieldErrors(result.fieldErrors ?? {});
+        if (result.message) {
+          toast({ tone: "error", title: TAXONOMY_LABELS.errorTitle, description: result.message });
+        }
       }
     });
   }
@@ -116,8 +122,11 @@ export function TaxonomyForm({
                     value={fields.name}
                     placeholder={TAXONOMY_LABELS.namePlaceholder}
                     className="h-10 rounded-xl"
+                    aria-invalid={Boolean(fieldErrors.name)}
+                    aria-describedby={fieldErrors.name ? "taxonomy-name-error" : undefined}
                     onChange={(event) => setField("name", event.target.value)}
                   />
+                  <FieldError errorId="taxonomy-name-error" message={fieldErrors.name} />
                 </div>
 
                 <div className="space-y-1.5">
@@ -127,12 +136,15 @@ export function TaxonomyForm({
                   <Input
                     id="taxonomy-slug"
                     dir="ltr"
-                    required
                     value={fields.slug}
                     placeholder={TAXONOMY_LABELS.slugPlaceholder}
                     className="h-10 rounded-xl text-start font-mono text-sm"
+                    aria-invalid={Boolean(fieldErrors.slug)}
+                    aria-describedby={fieldErrors.slug ? "taxonomy-slug-error" : undefined}
                     onChange={(event) => setField("slug", event.target.value)}
                   />
+                  <FieldError errorId="taxonomy-slug-error" message={fieldErrors.slug} />
+                  <p className="text-[11px] leading-5 text-muted-foreground">{TAXONOMY_LABELS.slugHint}</p>
                 </div>
               </div>
 
