@@ -26,6 +26,7 @@ export default async function NewPostPage() {
     seoDescription: null,
     keywords: null,
     canonical: null,
+    robotsTags: null,
     status: "PUBLISHED",
   };
 

@@ -29,6 +29,7 @@ export default async function NewCategoryPage() {
     seoDescription: null,
     keywords: null,
     canonical: null,
+    robotsTags: null,
   };
 
   return (

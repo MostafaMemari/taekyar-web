@@ -51,6 +51,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     seoDescription: post.seo?.seoDescription ?? null,
     keywords: post.seo?.keywords ?? null,
     canonical: post.seo?.canonical ?? null,
+    robotsTags: post.seo?.robotsTags ?? null,
     status: post.status,
   };
 

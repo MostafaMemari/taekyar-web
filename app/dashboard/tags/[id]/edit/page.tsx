@@ -36,6 +36,7 @@ export default async function EditTagPage({ params }: EditTagPageProps) {
     seoDescription: tag.seo?.seoDescription ?? null,
     keywords: tag.seo?.keywords ?? null,
     canonical: tag.seo?.canonical ?? null,
+    robotsTags: tag.seo?.robotsTags ?? null,
   };
 
   return (

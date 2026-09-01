@@ -18,14 +18,14 @@ export function SeoFields({ fields, onFieldChange, fieldErrors }: SeoFieldsProps
         seoDescription: fields.seoDescription,
         keywords: fields.keywords,
         canonical: fields.canonical,
+        robotsTags: fields.robotsTags,
       }}
       onChange={(key, value) =>
         onFieldChange(
-          key === "title" ? "seoTitle" : key === "description" ? "seoDescription" : key,
+          key === "title" ? "seoTitle" : key === "description" ? "seoDescription" : key === "robots" ? "robotsTags" : key,
           value,
         )
-      }
-      errors={{
+      }      errors={{
         seoTitle: fieldErrors.seoTitle,
         seoDescription: fieldErrors.seoDescription,
         keywords: fieldErrors.keywords,

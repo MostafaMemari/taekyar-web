@@ -49,6 +49,7 @@ export default async function EditCategoryPage({ params }: EditCategoryPageProps
     seoDescription: category.seo?.seoDescription ?? null,
     keywords: category.seo?.keywords ?? null,
     canonical: category.seo?.canonical ?? null,
+    robotsTags: category.seo?.robotsTags ?? null,
   };
 
   return (

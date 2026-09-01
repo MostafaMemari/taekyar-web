@@ -16,6 +16,7 @@ export default function NewTagPage() {
     seoDescription: null,
     keywords: null,
     canonical: null,
+    robotsTags: null,
   };
 
   return (

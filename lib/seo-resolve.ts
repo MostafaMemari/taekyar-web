@@ -1,4 +1,5 @@
 import type { ResolvedSeo, SeoOverrides } from "@/lib/seo";
+import { parseRobotsTags } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site";
 
 interface SeoFallbacks {
@@ -33,5 +34,6 @@ export function resolveSeo(
     description: seoDescription || description?.trim() || defaultDescription?.trim() || null,
     keywords: keywords || null,
     canonical: toAbsoluteUrl(canonical || canonicalPath),
+    robots: parseRobotsTags(overrides?.robotsTags),
   };
 }

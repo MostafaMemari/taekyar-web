@@ -57,6 +57,7 @@ export function TaxonomyForm({
     seoDescription: initial.seoDescription ?? "",
     keywords: initial.keywords ?? "",
     canonical: initial.canonical ?? "",
+    robotsTags: initial.robotsTags ?? "",
   });
   const [coverImage, setCoverImage] = useState<CoverImageValue>({
     key: initial.image ?? null,
@@ -92,6 +93,7 @@ export function TaxonomyForm({
       seoDescription: fields.seoDescription.trim() || null,
       keywords: fields.keywords.trim() || null,
       canonical: fields.canonical.trim() || null,
+      robotsTags: fields.robotsTags.trim() || null,
     };
 
     setFieldErrors({});
@@ -216,9 +218,19 @@ export function TaxonomyForm({
               seoDescription: fields.seoDescription,
               keywords: fields.keywords,
               canonical: fields.canonical,
+              robotsTags: fields.robotsTags,
             }}
             onChange={(key, value) =>
-              setField(key === "title" ? "seoTitle" : key === "description" ? "seoDescription" : key, value)
+              setField(
+                key === "title"
+                  ? "seoTitle"
+                  : key === "description"
+                    ? "seoDescription"
+                    : key === "robots"
+                      ? "robotsTags"
+                      : key,
+                value,
+              )
             }
           />
         </div>

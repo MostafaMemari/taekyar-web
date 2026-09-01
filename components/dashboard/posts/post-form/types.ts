@@ -7,4 +7,5 @@ export interface FieldDraft {
   seoDescription: string;
   keywords: string;
   canonical: string;
+  robotsTags: string;
 }

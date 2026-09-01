@@ -7,6 +7,7 @@ export interface SeoOverrideInput {
   seoDescription: string | null;
   keywords: string | null;
   canonical: string | null;
+  robotsTags: string | null;
 }
 
 export interface TaxonomyInput extends SeoOverrideInput {

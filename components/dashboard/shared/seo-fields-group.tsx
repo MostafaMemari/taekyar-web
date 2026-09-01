@@ -17,6 +17,9 @@ interface SeoFieldConfig {
   keywordsPlaceholder: string;
   canonicalLabel: string;
   canonicalPlaceholder: string;
+  robotsLabel: string;
+  robotsPlaceholder: string;
+  robotsHint: string;
 }
 
 const SEO_FIELD_IDS = {
@@ -24,6 +27,7 @@ const SEO_FIELD_IDS = {
   description: "seo-description",
   keywords: "seo-keywords",
   canonical: "seo-canonical",
+  robots: "seo-robots",
 } as const;
 
 interface SeoFieldsGroupProps {
@@ -33,9 +37,10 @@ interface SeoFieldsGroupProps {
     seoDescription: string;
     keywords: string;
     canonical: string;
+    robotsTags: string;
   };
   onChange: (key: keyof typeof SEO_FIELD_IDS, value: string) => void;
-  errors?: Partial<Record<"seoTitle" | "seoDescription" | "keywords" | "canonical", string>>;
+  errors?: Partial<Record<"seoTitle" | "seoDescription" | "keywords" | "canonical" | "robotsTags", string>>;
   labels?: Partial<SeoFieldConfig>;
 }
 
@@ -119,6 +124,25 @@ export function SeoFieldsGroup({ idPrefix, values, onChange, errors = {}, labels
           />
           <FieldError errorId={`${id("canonical")}-error`} message={errors.canonical} />
         </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor={id("robots")} className="text-[13px] font-bold">
+            {l.robotsLabel}
+          </Label>
+          <Input
+            id={id("robots")}
+            dir="ltr"
+            value={values.robotsTags}
+            placeholder={l.robotsPlaceholder}
+            className="h-10 rounded-xl text-start font-mono text-sm"
+            aria-invalid={Boolean(errors.robotsTags)}
+            aria-describedby={errors.robotsTags ? `${id("robots")}-error` : `${id("robots")}-hint`}
+          />
+          <FieldError errorId={`${id("robots")}-error`} message={errors.robotsTags} />
+          <p id={`${id("robots")}-hint`} className="text-[11px] leading-5 text-muted-foreground">
+            {l.robotsHint}
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
@@ -135,4 +159,7 @@ const defaultLabels: SeoFieldConfig = {
   keywordsPlaceholder: TAXONOMY_LABELS.seoKeywordsPlaceholder,
   canonicalLabel: TAXONOMY_LABELS.seoCanonicalLabel,
   canonicalPlaceholder: TAXONOMY_LABELS.seoCanonicalPlaceholder,
+  robotsLabel: TAXONOMY_LABELS.seoRobotsLabel,
+  robotsPlaceholder: TAXONOMY_LABELS.seoRobotsPlaceholder,
+  robotsHint: TAXONOMY_LABELS.seoRobotsHint,
 };
