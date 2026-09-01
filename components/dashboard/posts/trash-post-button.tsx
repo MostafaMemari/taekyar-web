@@ -1,37 +1,38 @@
 "use client";
 
-import { useTransition } from "react";
 import { Trash2 } from "lucide-react";
 
+import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
 import { trashPost } from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
 
 export function TrashPostButton({ slug }: { slug: string }) {
-  const [isPending, startTransition] = useTransition();
-
   return (
-    <Button
-      variant="ghost"
-      size="icon-sm"
-      disabled={isPending}
-      aria-label={POSTS_TABLE_LABELS.delete}
-      className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-      onClick={() => {
-        if (!window.confirm(POSTS_TABLE_LABELS.deleteConfirm)) return;
-
-        startTransition(async () => {
-          const result = await trashPost(slug);
-          if (result.ok) {
-            toast({ tone: "success", title: POSTS_TABLE_LABELS.deleted });
-          } else {
-            toast({ tone: "error", title: POSTS_TABLE_LABELS.deleteError });
-          }
-        });
+    <ConfirmDialog
+      destructive
+      title={POSTS_TABLE_LABELS.deleteTitle}
+      description={POSTS_TABLE_LABELS.deleteConfirm}
+      confirmLabel={POSTS_TABLE_LABELS.delete}
+      onConfirm={async () => {
+        const result = await trashPost(slug);
+        if (result.ok) {
+          toast({ tone: "success", title: POSTS_TABLE_LABELS.deleted });
+        } else {
+          toast({ tone: "error", title: POSTS_TABLE_LABELS.deleteError });
+        }
       }}
-    >
-      <Trash2 className="size-4" />
-    </Button>
+      trigger={
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label={POSTS_TABLE_LABELS.delete}
+          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+        >
+          <Trash2 className="size-4" />
+        </Button>
+      }
+    />
   );
 }

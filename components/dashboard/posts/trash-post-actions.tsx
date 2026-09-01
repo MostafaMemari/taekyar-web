@@ -1,12 +1,13 @@
 "use client";
 
-import { useTransition } from "react";
 import { RotateCcw, Trash2 } from "lucide-react";
 
+import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
 import { deletePostPermanently, restorePost } from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
+import { useTransition } from "react";
 
 export function RestorePostButton({ slug }: { slug: string }) {
   const [isPending, startTransition] = useTransition();
@@ -36,30 +37,31 @@ export function RestorePostButton({ slug }: { slug: string }) {
 }
 
 export function PermanentDeleteButton({ slug }: { slug: string }) {
-  const [isPending, startTransition] = useTransition();
-
   return (
-    <Button
-      variant="ghost"
-      size="icon-sm"
-      disabled={isPending}
-      aria-label={POSTS_TABLE_LABELS.permanentDelete}
+    <ConfirmDialog
+      destructive
       title={POSTS_TABLE_LABELS.permanentDelete}
-      className="size-8 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-      onClick={() => {
-        if (!window.confirm(POSTS_TABLE_LABELS.permanentDeleteConfirm)) return;
-
-        startTransition(async () => {
-          const result = await deletePostPermanently(slug);
-          if (result.ok) {
-            toast({ tone: "success", title: POSTS_TABLE_LABELS.permanentlyDeleted });
-          } else {
-            toast({ tone: "error", title: POSTS_TABLE_LABELS.deleteError });
-          }
-        });
+      description={POSTS_TABLE_LABELS.permanentDeleteConfirm}
+      confirmLabel={POSTS_TABLE_LABELS.permanentDelete}
+      onConfirm={async () => {
+        const result = await deletePostPermanently(slug);
+        if (result.ok) {
+          toast({ tone: "success", title: POSTS_TABLE_LABELS.permanentlyDeleted });
+        } else {
+          toast({ tone: "error", title: POSTS_TABLE_LABELS.deleteError });
+        }
       }}
-    >
-      <Trash2 className="size-4" />
-    </Button>
+      trigger={
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label={POSTS_TABLE_LABELS.permanentDelete}
+      title={POSTS_TABLE_LABELS.permanentDeleteTitle}
+          className="size-8 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+        >
+          <Trash2 className="size-4" />
+        </Button>
+      }
+    />
   );
 }

@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { Check, Trash2, X } from "lucide-react";
 
+import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { COMMENTS_ADMIN_LABELS } from "@/data/dashboard/ui";
 import { deleteComment, setCommentStatus } from "@/lib/admin-actions";
@@ -56,19 +57,30 @@ export function CommentActions({ id, status }: CommentActionsProps) {
         </Button>
       ) : null}
 
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        disabled={isPending}
-        aria-label={COMMENTS_ADMIN_LABELS.delete}
-        className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-        onClick={() => {
-          if (!window.confirm(COMMENTS_ADMIN_LABELS.confirmDelete)) return;
-          run(() => deleteComment(id), COMMENTS_ADMIN_LABELS.deleted);
+      <ConfirmDialog
+        destructive
+        title={COMMENTS_ADMIN_LABELS.deleteTitle}
+        description={COMMENTS_ADMIN_LABELS.confirmDelete}
+        confirmLabel={COMMENTS_ADMIN_LABELS.delete}
+        onConfirm={async () => {
+          const result = await deleteComment(id);
+          if (result.ok) {
+            toast({ tone: "success", title: COMMENTS_ADMIN_LABELS.deleted });
+          } else {
+            toast({ tone: "error", title: COMMENTS_ADMIN_LABELS.error });
+          }
         }}
-      >
-        <Trash2 className="size-4" />
-      </Button>
+        trigger={
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            aria-label={COMMENTS_ADMIN_LABELS.delete}
+            className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+          >
+            <Trash2 className="size-4" />
+          </Button>
+        }
+      />
     </div>
   );
 }

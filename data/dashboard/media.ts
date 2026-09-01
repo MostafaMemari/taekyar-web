@@ -27,6 +27,7 @@ export const MEDIA_LABELS = {
   copyError: "کپی انجام نشد.",
   openInNewTab: "مشاهده در تب جدید",
   delete: "حذف فایل",
+  deleteTitle: "حذف فایل",
   confirmDelete: "این فایل برای همیشه از فضای ابری حذف شود؟",
   deleted: "فایل حذف شد.",
   deleteError: "حذف انجام نشد.",

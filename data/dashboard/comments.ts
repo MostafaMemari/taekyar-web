@@ -15,6 +15,7 @@ export const COMMENTS_ADMIN_LABELS = {
   deleted: "دیدگاه حذف شد.",
   error: "انجام نشد.",
   confirmDelete: "این دیدگاه حذف شود؟",
+  deleteTitle: "حذف دیدگاه",
   repliesLabel: "پاسخ‌ها",
   prevPage: "صفحه قبل",
   nextPage: "صفحه بعد",
