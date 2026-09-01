@@ -10,7 +10,6 @@ import type {
   TaxonomyInput,
 } from "@/lib/admin-types";
 import { resolveSlug } from "@/lib/slug";
-import { postHref } from "@/lib/routes";
 import { sanitizePostHtml } from "@/lib/post-content";
 
 export async function requireSession() {
@@ -22,7 +21,7 @@ export async function requireSession() {
 export function revalidatePostPaths(slug: string) {
   revalidatePath("/");
   revalidatePath("/blog");
-  revalidatePath(postHref(slug));
+  revalidatePath(`/blog/${slug}`);
   revalidatePath("/dashboard/posts");
   revalidatePath("/dashboard/posts/trash");
   revalidatePath("/dashboard/comments");

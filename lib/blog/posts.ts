@@ -7,7 +7,7 @@ import { parsePostHtml } from "@/lib/post-content";
 import { POST_INCLUDE, toPostRows, toBlogPost } from "./types";
 import type { BlogPost, PostWithContent } from "./types";
 
-const PUBLIC_POST_WHERE = { status: "PUBLISHED", deletedAt: null } as const;
+export const PUBLIC_POST_WHERE = { status: "PUBLISHED", deletedAt: null } as const;
 
 export const getBlogPosts = cache(async (): Promise<BlogPost[]> => {
   try {
