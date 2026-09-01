@@ -70,7 +70,6 @@ export default async function TagPage({ params }: TagPageProps) {
         imageUrl={tag.image}
         imageAlt={tag.imageAlt}
         posts={posts}
-        seoContent={tag.description}
         breadcrumbs={breadcrumbs}
       />
     </>

@@ -19,7 +19,6 @@ interface TaxonomyArchiveProps {
   imageUrl?: string | null;
   imageAlt?: string | null;
   posts: BlogPost[];
-  seoContent?: string | null;
   breadcrumbs: TaxonomyBreadcrumb[];
 }
 
@@ -30,7 +29,6 @@ export function TaxonomyArchive({
   imageUrl,
   imageAlt,
   posts,
-  seoContent,
   breadcrumbs,
 }: TaxonomyArchiveProps) {
   return (

@@ -78,7 +78,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         imageUrl={category.image}
         imageAlt={category.imageAlt}
         posts={posts}
-        seoContent={category.description}
         breadcrumbs={breadcrumbs}
       />
     </>
