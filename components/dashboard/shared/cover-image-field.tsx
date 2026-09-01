@@ -18,14 +18,43 @@ export interface CoverImageValue {
   alt: string;
 }
 
+export interface CoverImageLabels {
+  title: string;
+  description: string;
+  select: string;
+  change: string;
+  remove: string;
+  dialogTitle: string;
+  insert: string;
+  altLabel: string;
+  altPlaceholder: string;
+  fallbackAlt: string;
+}
+
+const DEFAULT_LABELS: CoverImageLabels = {
+  title: POST_FORM_LABELS.coverImageLabel,
+  description: POST_FORM_LABELS.coverImageDescription,
+  select: POST_FORM_LABELS.coverImageSelect,
+  change: POST_FORM_LABELS.coverImageChange,
+  remove: POST_FORM_LABELS.coverImageRemove,
+  dialogTitle: POST_FORM_LABELS.coverImageDialogTitle,
+  insert: POST_FORM_LABELS.coverImageInsert,
+  altLabel: POST_FORM_LABELS.imageAltLabel,
+  altPlaceholder: POST_FORM_LABELS.imageAltPlaceholder,
+  fallbackAlt: POST_FORM_LABELS.coverImageLabel,
+};
+
 interface CoverImageFieldProps {
   value: CoverImageValue;
   onChange: (value: CoverImageValue) => void;
+  labels?: Partial<CoverImageLabels>;
   error?: string;
   altError?: string;
 }
 
-export function CoverImageField({ value, onChange, error, altError }: CoverImageFieldProps) {
+export function CoverImageField({ value, onChange, labels, error, altError }: CoverImageFieldProps) {
+  const t = { ...DEFAULT_LABELS, ...labels };
+
   function handleSelect({ key, src, alt }: MediaPickerSelection) {
     onChange({ key, url: src, alt });
   }
@@ -37,8 +66,8 @@ export function CoverImageField({ value, onChange, error, altError }: CoverImage
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-[14px] font-black">{POST_FORM_LABELS.coverImageLabel}</CardTitle>
-        <p className="text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.coverImageDescription}</p>
+        <CardTitle className="text-[14px] font-black">{t.title}</CardTitle>
+        <p className="text-xs leading-5 text-muted-foreground">{t.description}</p>
       </CardHeader>
       <CardContent className="space-y-4">
         <FieldError errorId="cover-image-error" message={error} />
@@ -46,7 +75,7 @@ export function CoverImageField({ value, onChange, error, altError }: CoverImage
           <div className="relative overflow-hidden rounded-xl bg-card ring-1 ring-border/60">
             <Image
               src={value.url}
-              alt={value.alt || POST_FORM_LABELS.coverImageLabel}
+              alt={value.alt || t.fallbackAlt}
               width={640}
               height={360}
               className="aspect-[16/9] w-full object-cover"
@@ -55,7 +84,7 @@ export function CoverImageField({ value, onChange, error, altError }: CoverImage
             <button
               type="button"
               onClick={handleRemove}
-              aria-label={POST_FORM_LABELS.coverImageRemove}
+              aria-label={t.remove}
               className={IMAGE_REMOVE_BUTTON}
             >
               <X className="size-4" aria-hidden="true" />
@@ -66,20 +95,20 @@ export function CoverImageField({ value, onChange, error, altError }: CoverImage
             <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground ring-1 ring-border">
               <ImagePlus className="size-6" aria-hidden="true" />
             </span>
-            <p className="mt-3 text-[13px] font-bold">{POST_FORM_LABELS.coverImageSelect}</p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.coverImageDescription}</p>
+            <p className="mt-3 text-[13px] font-bold">{t.select}</p>
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">{t.description}</p>
           </div>
         )}
 
         {value.key ? (
           <div className="space-y-1.5">
             <Label htmlFor="cover-image-alt" className="text-[13px] font-bold">
-              {POST_FORM_LABELS.imageAltLabel}
+              {t.altLabel}
             </Label>
             <Input
               id="cover-image-alt"
               value={value.alt}
-              placeholder={POST_FORM_LABELS.imageAltPlaceholder}
+              placeholder={t.altPlaceholder}
               className="h-10 rounded-xl"
               aria-invalid={Boolean(altError)}
               aria-describedby={altError ? "cover-image-alt-error" : undefined}
@@ -97,13 +126,13 @@ export function CoverImageField({ value, onChange, error, altError }: CoverImage
               className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-sm"
             >
               <ImagePlus className="size-4" aria-hidden="true" />
-              {value.key ? POST_FORM_LABELS.coverImageChange : POST_FORM_LABELS.coverImageSelect}
+              {value.key ? t.change : t.select}
             </Button>
           }
           onSelect={handleSelect}
           fields={{ alt: true, caption: false }}
-          dialogTitle={POST_FORM_LABELS.coverImageDialogTitle}
-          insertLabel={POST_FORM_LABELS.coverImageInsert}
+          dialogTitle={t.dialogTitle}
+          insertLabel={t.insert}
         />
       </CardContent>
     </Card>

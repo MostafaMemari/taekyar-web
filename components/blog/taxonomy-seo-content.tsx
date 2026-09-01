@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-import { TAG_PAGE_LABELS } from "@/data/blog/tag-page";
 import { SURFACE_CARD } from "@/lib/styles";
 import { r2PublicUrl } from "@/lib/r2-url";
 
@@ -16,13 +15,13 @@ export function TaxonomySeoContent({ title, content, imageUrl, imageAlt }: Taxon
     <section className={SURFACE_CARD} aria-labelledby="taxonomy-seo-heading">
       <div className="mx-auto max-w-4xl p-4 sm:p-6 lg:p-10">
         {imageUrl ? (
-          <div className="relative mx-auto aspect-[16/7] w-full max-w-xs overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06] sm:max-w-sm">
+          <div className="relative mx-auto aspect-square w-full max-w-[240px] overflow-hidden rounded-2xl bg-muted/40 shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06] sm:max-w-[280px]">
             <Image
               src={r2PublicUrl(imageUrl)}
               alt={imageAlt || title}
               fill
               unoptimized
-              className="object-cover"
+              className="object-contain p-2"
             />
           </div>
         ) : null}
@@ -31,7 +30,7 @@ export function TaxonomySeoContent({ title, content, imageUrl, imageAlt }: Taxon
           id="taxonomy-seo-heading"
           className={imageUrl ? "mt-6 text-center text-balance text-lg font-black tracking-tight sm:mt-7 sm:text-xl" : "text-balance text-lg font-black tracking-tight sm:text-xl"}
         >
-          {TAG_PAGE_LABELS.seoHeading}: {title}
+          {title}
         </h2>
         <p className="mt-3.5 text-pretty text-[14px] leading-8 text-muted-foreground sm:text-[15px] sm:leading-8">
           {content}

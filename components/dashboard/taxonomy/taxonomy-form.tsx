@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { AlertCircle, Link2 } from "lucide-react";
 
-import { ImageUpload } from "@/components/dashboard/shared/image-upload";
+import { CoverImageField, type CoverImageValue } from "@/components/dashboard/shared/cover-image-field";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,11 +51,14 @@ export function TaxonomyForm({
     name: initial.name,
     slug: initial.slug,
     description: initial.description ?? "",
-    imageAlt: initial.imageAlt ?? "",
     metaTitle: initial.metaTitle ?? "",
     metaDescription: initial.metaDescription ?? "",
   });
-  const [image, setImage] = useState<string | null>(initial.image);
+  const [coverImage, setCoverImage] = useState<CoverImageValue>({
+    key: initial.image ?? null,
+    url: initialImageUrl ?? null,
+    alt: initial.imageAlt ?? "",
+  });
   const [parentId, setParentId] = useState<string>(
     initial.parentId !== null && initial.parentId !== undefined ? String(initial.parentId) : ROOT_PARENT_VALUE,
   );
@@ -78,8 +81,8 @@ export function TaxonomyForm({
       name: fields.name,
       slug: fields.slug.trim(),
       parentId: isCategory && parentId !== ROOT_PARENT_VALUE ? Number(parentId) : null,
-      image,
-      imageAlt: fields.imageAlt,
+      image: coverImage.key,
+      imageAlt: coverImage.alt.trim() || null,
       description: fields.description,
       metaTitle: fields.metaTitle,
       metaDescription: fields.metaDescription,
@@ -224,25 +227,20 @@ export function TaxonomyForm({
           aria-label={TAXONOMY_LABELS.sidebarAriaLabel}
           className="min-w-0 space-y-5 lg:sticky lg:top-8 lg:col-span-1 lg:self-start"
         >
-          <ImageUpload
-            id="taxonomy-image"
-            initialKey={initial.image}
-            initialUrl={initialImageUrl}
-            onChange={setImage}
+          <CoverImageField
+            value={coverImage}
+            onChange={setCoverImage}
+            labels={{
+              title: TAXONOMY_LABELS.imageLabel,
+              description: TAXONOMY_LABELS.imageHint,
+              select: TAXONOMY_LABELS.upload,
+              change: TAXONOMY_LABELS.imageChange,
+              remove: TAXONOMY_LABELS.removeImage,
+              dialogTitle: TAXONOMY_LABELS.mediaDialogTitle,
+              insert: TAXONOMY_LABELS.mediaInsertLabel,
+              fallbackAlt: TAXONOMY_LABELS.imageLabel,
+            }}
           />
-
-          <div className="space-y-1.5">
-            <Label htmlFor="taxonomy-image-alt" className="text-[13px] font-bold">
-              {TAXONOMY_LABELS.imageAltLabel}
-            </Label>
-            <Input
-              id="taxonomy-image-alt"
-              value={fields.imageAlt}
-              placeholder={TAXONOMY_LABELS.imageAltPlaceholder}
-              className="h-10 rounded-xl"
-              onChange={(event) => setField("imageAlt", event.target.value)}
-            />
-          </div>
         </aside>
       </div>
 

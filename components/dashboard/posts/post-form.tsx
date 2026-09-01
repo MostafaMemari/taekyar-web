@@ -10,7 +10,7 @@ import { createPost, updatePost } from "@/lib/admin-actions";
 import type { PostFieldErrors, PostInput } from "@/lib/admin-types";
 import { parsePostHtml } from "@/lib/post-content";
 import { RichContentEditor } from "./rich-content-editor";
-import { CoverImageField, type CoverImageValue } from "./post-form/cover-image-field";
+import { CoverImageField, type CoverImageValue } from "@/components/dashboard/shared/cover-image-field";
 import { MainInfoFields } from "./post-form/form-fields";
 import { PostSidebarFields } from "./post-form/post-sidebar-fields";
 import { SeoFields } from "./post-form/seo-fields";
@@ -115,8 +115,7 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
             onChange={setCoverImage}
             error={fieldErrors.coverImage}
             altError={fieldErrors.coverImageAlt}
-          />
-          <PostSidebarFields
+          />          <PostSidebarFields
             categories={categories}
             selectedCategoryIds={selectedCategoryIds}
             onToggleCategory={toggleCategory}
