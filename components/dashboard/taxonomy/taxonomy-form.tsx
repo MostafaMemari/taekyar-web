@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { AlertCircle, Link2 } from "lucide-react";
+import { Link2 } from "lucide-react";
 
 import { CoverImageField, type CoverImageValue } from "@/components/dashboard/shared/cover-image-field";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { saveTaxonomy } from "@/lib/admin-actions";
+import { toast } from "@/hooks/use-toast";
 import type { TaxonomyInput } from "@/lib/admin-types";
 
 export interface CategoryParentOption {
@@ -63,7 +63,6 @@ export function TaxonomyForm({
     initial.parentId !== null && initial.parentId !== undefined ? String(initial.parentId) : ROOT_PARENT_VALUE,
   );
   const [isPending, startTransition] = useTransition();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const isCategory = kind === "category";
   const selectedParent = parentOptions.find((option) => String(option.id) === parentId);
@@ -88,11 +87,10 @@ export function TaxonomyForm({
       metaDescription: fields.metaDescription,
     };
 
-    setErrorMessage(null);
     startTransition(async () => {
       const result = await saveTaxonomy(kind, mode === "edit" ? currentId ?? null : null, input);
       if (result.status === "error") {
-        setErrorMessage(result.message ?? TAXONOMY_LABELS.error);
+        toast({ tone: "error", title: TAXONOMY_LABELS.errorTitle, description: result.message });
       }
     });
   }
@@ -243,14 +241,6 @@ export function TaxonomyForm({
           />
         </aside>
       </div>
-
-      {errorMessage ? (
-        <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
-          <AlertCircle className="size-4" aria-hidden="true" />
-          <AlertTitle className="text-[13px] font-bold">{TAXONOMY_LABELS.errorTitle}</AlertTitle>
-          <AlertDescription className="text-[13px] leading-5">{errorMessage}</AlertDescription>
-        </Alert>
-      ) : null}
 
       <Separator className="bg-border/60" />
 

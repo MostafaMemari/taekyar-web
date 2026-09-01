@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useActionState } from "react";
-import { AlertCircle } from "lucide-react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +9,7 @@ import { CommentCaptcha } from "@/components/blog/comments/comment-captcha";
 import { useCommentCaptcha } from "@/components/blog/comments/hooks/use-comment-captcha";
 import { LOGIN_LABELS } from "@/data/dashboard/ui";
 import { login } from "@/lib/admin-actions";
+import { toast } from "@/hooks/use-toast";
 
 export function LoginForm() {
   const [state, formAction, isPending] = useActionState(login, {});
@@ -28,6 +27,13 @@ export function LoginForm() {
   useEffect(() => {
     if (state.error) refreshCaptcha();
   }, [state, refreshCaptcha]);
+
+  const loginFailed = Boolean(state.error) && !captchaError;
+  useEffect(() => {
+    if (loginFailed) {
+      toast({ tone: "error", title: "ورود ناموفق", description: LOGIN_LABELS.invalid });
+    }
+  }, [loginFailed]);
 
   return (
     <form action={formAction} noValidate className="mt-6 space-y-4">
@@ -77,14 +83,6 @@ export function LoginForm() {
         error={captchaError}
       />
       <input type="hidden" name="captchaAnswer" value={captcha.answer} />
-
-      {state.error && !captchaError ? (
-        <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
-          <AlertCircle className="size-4" aria-hidden="true" />
-          <AlertTitle className="text-[13px] font-bold">ورود ناموفق</AlertTitle>
-          <AlertDescription className="text-[13px] leading-5">{LOGIN_LABELS.invalid}</AlertDescription>
-        </Alert>
-      ) : null}
 
       <Button
         type="submit"

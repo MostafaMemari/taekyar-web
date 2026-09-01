@@ -29,7 +29,7 @@ export const MEDIA_LABELS = {
   delete: "حذف فایل",
   confirmDelete: "این فایل برای همیشه از فضای ابری حذف شود؟",
   deleted: "فایل حذف شد.",
-  deleteError: "حذف انجام نشد؛ دوباره تلاش کنید.",
+  deleteError: "حذف انجام نشد.",
   loadError: "دریافت فهرست رسانه‌ها انجام نشد.",
   loadErrorHint: "متغیرهای محیطی R2 را بررسی کنید و دوباره تلاش کنید.",
   prevPage: "صفحه قبل",

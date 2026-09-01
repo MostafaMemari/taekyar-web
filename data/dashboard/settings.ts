@@ -36,7 +36,7 @@ export const SETTINGS_LABELS = {
   required: "این فیلد الزامی است.",
   save: "ذخیره تغییرات",
   saving: "در حال ذخیره…",
-  saved: "تنظیمات سایت ذخیره شد.",
-  error: "ذخیره انجام نشد؛ دوباره تلاش کنید.",
+  saved: "تنظیمات ذخیره شد.",
+  error: "ذخیره انجام نشد.",
   errorToastTitle: "خطا در ذخیره تنظیمات",
 } as const;

@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { IMAGE_REMOVE_BUTTON } from "@/lib/styles";
+import { cn } from "@/lib/utils";
 
 export interface CoverImageValue {
   key: string | null;
@@ -107,7 +108,7 @@ export function CoverImageField({ value, onChange, labels, error, altError }: Co
               type="button"
               onClick={handleRemove}
               aria-label={t.remove}
-              className={IMAGE_REMOVE_BUTTON}
+              className={cn(IMAGE_REMOVE_BUTTON, "cursor-pointer")}
             >
               <X className="size-4" aria-hidden="true" />
             </button>

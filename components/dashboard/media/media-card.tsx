@@ -19,7 +19,7 @@ export function MediaCard({ item, isSelected, onSelect }: MediaCardProps) {
       onClick={() => onSelect(item.key)}
       aria-pressed={isSelected}
       className={cn(
-        "block w-full overflow-hidden rounded-xl border bg-card text-start shadow-sm shadow-black/[0.03] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none",
+        "block w-full cursor-pointer overflow-hidden rounded-xl border bg-card text-start shadow-sm shadow-black/[0.03] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none",
         isSelected
           ? "border-primary/60 ring-2 ring-primary/25"
           : "border-border/60 hover:border-primary/30 hover:shadow-md hover:shadow-black/[0.06]",

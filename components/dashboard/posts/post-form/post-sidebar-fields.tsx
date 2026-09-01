@@ -20,7 +20,7 @@ function CategoryCheckbox({ label, depth, checked, onToggle }: CategoryCheckboxP
       onClick={onToggle}
       style={{ paddingInlineStart: `calc(0.625rem + ${depth * 1.15}rem)` }}
       className={cn(
-        "flex w-full items-center gap-2.5 rounded-lg border border-transparent py-2 pe-2.5 text-start text-[13px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none",
+        "flex w-full cursor-pointer items-center gap-2.5 rounded-lg border border-transparent py-2 pe-2.5 text-start text-[13px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none",
         checked
           ? "border-primary/40 bg-card font-bold text-foreground"
           : "text-muted-foreground hover:bg-card/70 hover:text-foreground",
@@ -109,7 +109,7 @@ export function PostSidebarFields({
                     aria-pressed={selected}
                     onClick={() => onToggleTag(tag.id)}
                     className={cn(
-                      "inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3.5 text-[13px] font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none",
+                      "inline-flex min-h-9 cursor-pointer items-center gap-1.5 rounded-full border px-3.5 text-[13px] font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none",
                       selected
                         ? "border-primary bg-primary text-white shadow-sm shadow-primary/20"
                         : "border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground",

@@ -13,7 +13,7 @@ export const COMMENTS_ADMIN_LABELS = {
   approved: "دیدگاه تأیید شد.",
   rejected: "دیدگاه رد شد.",
   deleted: "دیدگاه حذف شد.",
-  error: "انجام نشد؛ دوباره تلاش کنید.",
+  error: "انجام نشد.",
   confirmDelete: "این دیدگاه حذف شود؟",
   repliesLabel: "پاسخ‌ها",
   prevPage: "صفحه قبل",

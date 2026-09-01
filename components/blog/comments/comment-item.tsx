@@ -94,7 +94,7 @@ export function CommentItem({ comment, postSlug }: CommentItemProps) {
             onClick={() => setIsReplying((previous) => !previous)}
             aria-expanded={isReplying}
             aria-controls={`reply-form-${comment.id}`}
-            className="-me-1.5 inline-flex items-center gap-1 whitespace-nowrap rounded-lg px-2 py-1 text-xs font-bold text-muted-foreground transition-colors hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="-me-1.5 inline-flex cursor-pointer items-center gap-1 whitespace-nowrap rounded-lg px-2 py-1 text-xs font-bold text-muted-foreground transition-colors hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <CornerDownLeft className="size-3.5" aria-hidden="true" />
             {isReplying ? COMMENT_REPLY_LABELS.cancel : COMMENT_REPLY_LABELS.replyButton}

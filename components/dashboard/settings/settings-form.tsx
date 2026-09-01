@@ -2,11 +2,10 @@
 
 import Image from "next/image";
 import { useState, useTransition } from "react";
-import { AlertCircle, ImagePlus, X } from "lucide-react";
+import { ImagePlus, X } from "lucide-react";
 
 import { MediaPicker } from "@/components/dashboard/media/media-picker";
 import { FieldError } from "@/components/shared/form-controls";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +14,8 @@ import { SETTINGS_LABELS } from "@/data/dashboard/settings";
 import { saveSiteSettings } from "@/lib/admin-actions";
 import type { SiteSettingsFieldErrors, SiteSettingsInput } from "@/lib/admin-types";
 import { IMAGE_REMOVE_BUTTON } from "@/lib/styles";
+import { cn } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
 type FormFields = {
   [K in keyof SiteSettingsInput]: string;
@@ -91,7 +92,7 @@ function SettingsImageField({
             type="button"
             onClick={handleRemove}
             aria-label={SETTINGS_LABELS.imageRemove}
-            className={IMAGE_REMOVE_BUTTON}
+            className={cn(IMAGE_REMOVE_BUTTON, "cursor-pointer")}
           >
             <X className="size-4" aria-hidden="true" />
           </button>
@@ -159,8 +160,6 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
     url: initialOgImageUrl,
   });
   const [isPending, startTransition] = useTransition();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<SiteSettingsFieldErrors>({});
 
   function setField<K extends keyof FormFields>(key: K, value: string) {
@@ -187,16 +186,14 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
       twitterUrl: fields.twitterUrl.trim() || null,
     };
 
-    setErrorMessage(null);
-    setSuccessMessage(null);
     setFieldErrors({});
     startTransition(async () => {
       const result = await saveSiteSettings(input);
       if (result.status === "error") {
-        setErrorMessage(result.message ?? SETTINGS_LABELS.error);
         setFieldErrors(result.fieldErrors ?? {});
+        toast({ tone: "error", title: SETTINGS_LABELS.errorToastTitle, description: result.message });
       } else if (result.status === "success") {
-        setSuccessMessage(result.message ?? SETTINGS_LABELS.saved);
+        toast({ tone: "success", title: SETTINGS_LABELS.saved });
       }
     });
   }
@@ -382,18 +379,6 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
         </div>
       </div>
 
-      {errorMessage ? (
-        <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5">
-          <AlertCircle className="size-4" aria-hidden="true" />
-          <AlertTitle className="text-[13px] font-bold">{SETTINGS_LABELS.errorToastTitle}</AlertTitle>
-          <AlertDescription className="text-[13px] leading-5">{errorMessage}</AlertDescription>
-        </Alert>
-      ) : null}
-      {successMessage ? (
-        <Alert className="rounded-xl border-primary/20 bg-primary/5">
-          <AlertTitle className="text-[13px] font-bold">{successMessage}</AlertTitle>
-        </Alert>
-      ) : null}
 
       <Button type="submit" disabled={isPending} className="h-11 gap-2 rounded-xl px-8 text-[13px] font-bold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none">
         {isPending ? SETTINGS_LABELS.saving : SETTINGS_LABELS.save}

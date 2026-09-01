@@ -13,7 +13,7 @@ function AdminBarLink({ href, label, Icon }: { href: string; label: string; Icon
   return (
     <Link
       href={href}
-      className="inline-flex min-h-7 items-center gap-1.5 rounded-md px-2 py-1 font-bold text-white/80 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 motion-reduce:transition-none"
+      className="inline-flex min-h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 font-bold text-white/80 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 motion-reduce:transition-none"
     >
       <Icon className="size-3.5 shrink-0" aria-hidden="true" />
       {label}
@@ -47,7 +47,7 @@ export async function AdminBar() {
           <form action={logout}>
             <button
               type="submit"
-              className="inline-flex min-h-7 items-center gap-1.5 rounded-md px-2 py-1 font-bold text-white/80 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 motion-reduce:transition-none"
+              className="inline-flex min-h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 font-bold text-white/80 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 motion-reduce:transition-none"
             >
               <LogOut className="size-3.5 shrink-0" aria-hidden="true" />
               {ADMIN_BAR_LABELS.logout}

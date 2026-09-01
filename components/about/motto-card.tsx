@@ -12,7 +12,7 @@ const SHEET =
   "pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-card shadow-sm shadow-black/[0.05] ring-1 ring-black/[0.05]";
 
 const NAV_BUTTON =
-  "flex size-8 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
+  "flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
 
 export function MottoCard() {
   const { quotes, navLabels } = ABOUT_MOTTO_CARD;

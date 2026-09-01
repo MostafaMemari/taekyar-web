@@ -35,9 +35,9 @@ function Toast({ tone, className, ...props }: React.ComponentProps<typeof ToastP
       className={cn(
         "pointer-events-auto relative w-full overflow-hidden rounded-xl bg-white p-4 ps-5 shadow-lg shadow-black/[0.08] ring-1",
         TONE_RING[tone],
-        "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-6",
+        "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-top-6",
         "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
-        "data-[swipe=end]:animate-out data-[swipe=end]:fade-out-0",
+        "data-[swipe=end]:animate-out data-[swipe=end]:fade-out-0 data-[swipe=end]:slide-out-to-top-6",
         className,
       )}
       {...props}
@@ -91,7 +91,7 @@ function ToastClose({ className, ...props }: React.ComponentProps<typeof ToastPr
       data-slot="toast-close"
       aria-label="بستن اعلان"
       className={cn(
-        "flex size-6 shrink-0 items-center justify-center self-start rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        "flex size-6 shrink-0 cursor-pointer items-center justify-center self-start rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         className,
       )}
       {...props}
@@ -105,7 +105,7 @@ function Toaster() {
   const { toasts, dismiss } = useToast();
 
   return (
-    <ToastPrimitive.Provider swipeDirection="left" label="اعلان">
+    <ToastPrimitive.Provider swipeDirection="up" label="اعلان">
       {toasts.map(({ id, tone, title, description }) => (
         <Toast key={id} tone={tone} onOpenChange={(open) => !open && dismiss(id)}>
           <div className="flex items-start gap-3">
@@ -123,8 +123,8 @@ function Toaster() {
         data-slot="toast-viewport"
         tabIndex={-1}
         className={cn(
-          "fixed bottom-0 inset-x-0 z-[100] m-0 flex list-none flex-col gap-2 p-4 outline-none",
-          "sm:inset-x-auto sm:end-0 sm:max-w-[380px] [--radix-toast-swipe-end-x:-100%]",
+          "fixed inset-x-0 top-0 z-[100] m-0 flex list-none flex-col gap-2 p-4 outline-none",
+          "sm:inset-x-auto sm:start-0 sm:top-0 sm:max-w-[380px] [--radix-toast-swipe-end-y:-100%]",
         )}
       />
     </ToastPrimitive.Provider>
