@@ -8,6 +8,7 @@ interface PageSeoInput {
   description?: string;
   path: string;
   imageUrl?: string | null;
+  imageAlt?: string | null;
   publishedTime?: Date;
 }
 
@@ -16,6 +17,7 @@ export function buildPageMetadata({
   description,
   path,
   imageUrl,
+  imageAlt,
   publishedTime,
 }: PageSeoInput): Metadata {
   const image = imageUrl ? r2PublicUrl(imageUrl) : undefined;
@@ -25,7 +27,7 @@ export function buildPageMetadata({
     locale: "fa_IR",
     title,
     description,
-    images: image ? [{ url: image }] : undefined,
+    images: image ? [{ url: image, ...(imageAlt ? { alt: imageAlt } : {}) }] : undefined,
   };
 
   return {

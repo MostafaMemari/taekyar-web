@@ -40,6 +40,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       `مقالات دسته‌بندی «${category.name}» در وبلاگ تک‌یار.`,
     path: categoryHref(category.path),
     imageUrl: category.image,
+    imageAlt: category.imageAlt ?? category.name,
   });
 }
 
@@ -75,6 +76,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         title={category.name}
         description={category.description ?? category.metaDescription}
         imageUrl={category.image}
+        imageAlt={category.imageAlt}
         posts={posts}
         seoContent={category.description}
         breadcrumbs={breadcrumbs}

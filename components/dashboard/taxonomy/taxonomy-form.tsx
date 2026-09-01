@@ -51,6 +51,7 @@ export function TaxonomyForm({
     name: initial.name,
     slug: initial.slug,
     description: initial.description ?? "",
+    imageAlt: initial.imageAlt ?? "",
     metaTitle: initial.metaTitle ?? "",
     metaDescription: initial.metaDescription ?? "",
   });
@@ -78,6 +79,7 @@ export function TaxonomyForm({
       slug: fields.slug.trim(),
       parentId: isCategory && parentId !== ROOT_PARENT_VALUE ? Number(parentId) : null,
       image,
+      imageAlt: fields.imageAlt,
       description: fields.description,
       metaTitle: fields.metaTitle,
       metaDescription: fields.metaDescription,
@@ -228,6 +230,19 @@ export function TaxonomyForm({
             initialUrl={initialImageUrl}
             onChange={setImage}
           />
+
+          <div className="space-y-1.5">
+            <Label htmlFor="taxonomy-image-alt" className="text-[13px] font-bold">
+              {TAXONOMY_LABELS.imageAltLabel}
+            </Label>
+            <Input
+              id="taxonomy-image-alt"
+              value={fields.imageAlt}
+              placeholder={TAXONOMY_LABELS.imageAltPlaceholder}
+              className="h-10 rounded-xl"
+              onChange={(event) => setField("imageAlt", event.target.value)}
+            />
+          </div>
         </aside>
       </div>
 

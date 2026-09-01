@@ -51,6 +51,8 @@ export const TAXONOMY_LABELS = {
   paginationNavLabel: "صفحه‌بندی",
   imageLabel: "تصویر",
   imageHint: "JPG، PNG یا WebP — حداکثر ۱ مگابایت",
+  imageAltLabel: "توضیح تصویر برای موتورهای جستجو",
+  imageAltPlaceholder: "مثلاً: تصویر دسته‌بندی تکنیک‌های تکواندو",
   imageEmpty: "تصویری انتخاب نشده",
   imageChange: "تغییر تصویر",
   imageAlt: "پیش‌نمایش تصویر",

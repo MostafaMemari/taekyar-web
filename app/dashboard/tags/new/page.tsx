@@ -10,6 +10,7 @@ export default function NewTagPage() {
     slug: "",
     parentId: null,
     image: null,
+    imageAlt: null,
     description: null,
     metaTitle: null,
     metaDescription: null,

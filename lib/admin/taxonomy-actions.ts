@@ -12,6 +12,7 @@ function toTagData(data: TaxonomyInput) {
     name: data.name,
     slug: data.slug,
     image: data.image,
+    imageAlt: data.imageAlt,
     description: data.description,
     metaTitle: data.metaTitle,
     metaDescription: data.metaDescription,

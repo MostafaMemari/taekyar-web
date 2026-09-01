@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: TagPageProps): Promise<Metada
       tag.metaDescription ?? tag.description ?? `مقالات و آموزش‌های مرتبط با «${tag.name}» در وبلاگ ${SITE_NAME}.`,
     path: tagHref(tag.slug),
     imageUrl: tag.image,
+    imageAlt: tag.imageAlt ?? tag.name,
   });
 }
 
@@ -67,6 +68,7 @@ export default async function TagPage({ params }: TagPageProps) {
         title={tag.name}
         description={tag.description ?? tag.metaDescription}
         imageUrl={tag.image}
+        imageAlt={tag.imageAlt}
         posts={posts}
         seoContent={tag.description}
         breadcrumbs={breadcrumbs}

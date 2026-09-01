@@ -41,6 +41,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     description: post.metaDescription ?? post.excerpt ?? undefined,
     path: postHref(post.slug),
     imageUrl: post.coverImage ?? post.categoryImage,
+    imageAlt: post.coverImageAlt ?? post.title,
     publishedTime: post.createdAt,
   });
 }

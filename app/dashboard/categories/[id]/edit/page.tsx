@@ -43,6 +43,7 @@ export default async function EditCategoryPage({ params }: EditCategoryPageProps
     slug: category.slug,
     parentId: category.parentId,
     image: category.image,
+    imageAlt: category.imageAlt,
     description: category.description,
     metaTitle: category.metaTitle,
     metaDescription: category.metaDescription,

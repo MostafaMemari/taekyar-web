@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { PostGrid } from "@/components/blog/post-grid";
@@ -7,7 +6,6 @@ import { BeltDivider } from "@/components/shared/belt-divider";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import type { BlogPost } from "@/lib/blog";
-import { r2PublicUrl } from "@/lib/r2-url";
 
 export interface TaxonomyBreadcrumb {
   name: string;
@@ -19,6 +17,7 @@ interface TaxonomyArchiveProps {
   title: string;
   description?: string | null;
   imageUrl?: string | null;
+  imageAlt?: string | null;
   posts: BlogPost[];
   seoContent?: string | null;
   breadcrumbs: TaxonomyBreadcrumb[];
@@ -29,6 +28,7 @@ export function TaxonomyArchive({
   title,
   description,
   imageUrl,
+  imageAlt,
   posts,
   seoContent,
   breadcrumbs,
@@ -70,24 +70,6 @@ export function TaxonomyArchive({
               {title}
             </h1>
             <BeltDivider variant="pill" width="contained" className="mt-3.5 h-1 w-16 sm:w-20" />
-
-            {imageUrl ? (
-              <div className="relative mx-auto mt-6 aspect-[16/7] w-full max-w-xs overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06] sm:max-w-sm">
-                <Image
-                  src={r2PublicUrl(imageUrl)}
-                  alt={title}
-                  fill
-                  unoptimized
-                  className="object-cover"
-                />
-              </div>
-            ) : null}
-
-            {description ? (
-              <p className="mt-6 text-pretty text-[14px] leading-7 text-muted-foreground sm:text-[15px] sm:leading-7">
-                {description}
-              </p>
-            ) : null}
           </div>
         </Reveal>
       </Section>
@@ -96,9 +78,14 @@ export function TaxonomyArchive({
         <PostGrid posts={posts} />
       </Section>
 
-      {seoContent ? (
+      {description ? (
         <Section containerClassName="pt-8 pb-2 sm:pt-10">
-          <TaxonomySeoContent title={title} content={seoContent} postsCount={posts.length} />
+          <TaxonomySeoContent
+            title={title}
+            content={description}
+            imageUrl={imageUrl}
+            imageAlt={imageAlt}
+          />
         </Section>
       ) : null}
     </>

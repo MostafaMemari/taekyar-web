@@ -55,6 +55,7 @@ model Category {
   parent          Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   children        Category[] @relation("CategoryHierarchy")
   image           String?
+  imageAlt        String?
   description     String?
   metaTitle       String?
   metaDescription String?
@@ -70,6 +71,7 @@ model Tag {
   name            String   @unique
   slug            String   @unique
   image           String?
+  imageAlt        String?
   description     String?
   metaTitle       String?
   metaDescription String?
