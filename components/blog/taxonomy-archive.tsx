@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 
 import { PostGrid } from "@/components/blog/post-grid";
 import { TaxonomySeoContent } from "@/components/blog/taxonomy-seo-content";
@@ -18,6 +19,7 @@ interface TaxonomyArchiveProps {
   description?: string | null;
   imageUrl?: string | null;
   imageAlt?: string | null;
+  placeholderIcon?: LucideIcon;
   posts: BlogPost[];
   breadcrumbs: TaxonomyBreadcrumb[];
 }
@@ -28,6 +30,7 @@ export function TaxonomyArchive({
   description,
   imageUrl,
   imageAlt,
+  placeholderIcon,
   posts,
   breadcrumbs,
 }: TaxonomyArchiveProps) {
@@ -83,6 +86,7 @@ export function TaxonomyArchive({
             content={description}
             imageUrl={imageUrl}
             imageAlt={imageAlt}
+            placeholderIcon={placeholderIcon}
           />
         </Section>
       ) : null}

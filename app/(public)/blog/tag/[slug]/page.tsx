@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Tag } from "lucide-react";
 
 import { TaxonomyArchive } from "@/components/blog/taxonomy-archive";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -75,6 +76,7 @@ export default async function TagPage({ params }: TagPageProps) {
         description={tag.description}
         imageUrl={tag.image}
         imageAlt={tag.imageAlt}
+        placeholderIcon={Tag}
         posts={posts}
         breadcrumbs={breadcrumbs}
       />

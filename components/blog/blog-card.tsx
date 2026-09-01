@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Clock } from "lucide-react";
+import { ArrowLeft, Clock, Newspaper } from "lucide-react";
 
-import { BLOG_INDEX_LABELS, getCategoryStyle } from "@/data/blog/index-page";
+import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
 import { Badge } from "@/components/ui/badge";
+import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import type { BlogPost } from "@/lib/blog";
 import { r2PublicUrl } from "@/lib/r2-url";
 import { postHref } from "@/lib/routes";
@@ -11,38 +12,25 @@ import { SURFACE_CARD } from "@/lib/styles";
 import { cn, formatFaDate, toFaDigits } from "@/lib/utils";
 
 function CardCover({ post }: { post: BlogPost }) {
-  const { color, Icon } = getCategoryStyle(post.category);
-
-  if (post.coverImage) {
-    return (
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted">
-        <Image
-          src={r2PublicUrl(post.coverImage)}
-          alt=""
-          fill
-          unoptimized
-          className="object-cover transition-transform duration-500 group-hover/card:scale-[1.04]"
-        />
-        <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
-        {post.category ? (
-          <Badge className="absolute start-3 top-3 border-none bg-white/90 text-[11px] font-bold tracking-tight text-[#171717] shadow-sm backdrop-blur-sm sm:text-xs">
-            {post.category}
-          </Badge>
-        ) : null}
-      </div>
-    );
-  }
-
   return (
     <div className="relative aspect-[16/10] w-full overflow-hidden">
-      <div className="absolute inset-0" style={{ backgroundColor: color }} />
-      <div aria-hidden="true" className="absolute inset-0 bg-[repeating-linear-gradient(135deg,rgba(255,255,255,0.08)_0_2px,transparent_2px_18px)]" />
-      <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.14),transparent_62%)]" />
-      <Icon
-        className="absolute left-1/2 top-1/2 size-[52px] -translate-x-1/2 -translate-y-1/2 text-white/30 transition-transform duration-500 group-hover/card:scale-[1.06] sm:size-14"
-        strokeWidth={1.4}
-      />
-      <span aria-hidden="true" className="pointer-events-none absolute inset-3 rounded-xl ring-1 ring-white/15" />
+      {post.coverImage ? (
+        <>
+          <Image
+            src={r2PublicUrl(post.coverImage)}
+            alt=""
+            fill
+            unoptimized
+            className="object-cover transition-transform duration-500 group-hover/card:scale-[1.04]"
+          />
+          <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
+        </>
+      ) : (
+        <ImagePlaceholder
+          icon={Newspaper}
+          iconClassName="group-hover/card:scale-[1.08]"
+        />
+      )}
       {post.category ? (
         <Badge className="absolute start-3 top-3 border-none bg-white/90 text-[11px] font-bold tracking-tight text-[#171717] shadow-sm backdrop-blur-sm sm:text-xs">
           {post.category}

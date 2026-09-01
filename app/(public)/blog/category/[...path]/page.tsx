@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
+import { Folder } from "lucide-react";
 
 import { TaxonomyArchive } from "@/components/blog/taxonomy-archive";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -81,6 +82,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         description={category.description}
         imageUrl={category.image}
         imageAlt={category.imageAlt}
+        placeholderIcon={Folder}
         posts={posts}
         breadcrumbs={breadcrumbs}
       />
