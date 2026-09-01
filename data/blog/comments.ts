@@ -13,11 +13,11 @@ export const COMMENTS_LABELS = {
   title: "دیدگاه‌ها",
   countSuffix: "دیدگاه",
   formTitle: "دیدگاه‌ات را بنویس",
-  addCommentButton: "ثبت نظر",
+  addCommentButton: "ثبت دیدگاه",
 } as const;
 
 export const COMMENT_REPLY_LABELS = {
-  replyButton: "پاسخ",
+  replyButton: "پاسخ به دیدگاه",
   threadLabel: "پاسخ‌های این دیدگاه",
   replyToPrefix: "در پاسخ به",
   submit: "ارسال پاسخ",

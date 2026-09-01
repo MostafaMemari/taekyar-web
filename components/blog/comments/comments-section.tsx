@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { PenLine } from "lucide-react";
 
-import { CommentForm } from "@/components/blog/comments/comment-form";
+import { CommentDialog } from "@/components/blog/comments/comment-dialog";
 import { CommentList } from "@/components/blog/comments/comment-list";
 import {
-  COMMENT_REPLY_LABELS,
   COMMENTS_LABELS,
   type PostComment,
 } from "@/data/blog/comments";
@@ -27,7 +25,6 @@ interface CommentsSectionProps {
 }
 
 export function CommentsSection({ comments, postSlug }: CommentsSectionProps) {
-  const [isFormOpen, setIsFormOpen] = useState(false);
   const totalComments = countComments(comments);
 
   return (
@@ -49,38 +46,24 @@ export function CommentsSection({ comments, postSlug }: CommentsSectionProps) {
             <BeltDivider variant="pill" className="mt-3 h-1 w-12 sm:w-16" />
           </div>
 
-          <Button
-            type="button"
-            onClick={() => setIsFormOpen((previous) => !previous)}
-            aria-expanded={isFormOpen}
-            aria-controls="comment-composer"
-            className={cnToggleButton(isFormOpen)}
-          >
-            <PenLine />
-            {isFormOpen ? COMMENT_REPLY_LABELS.cancel : COMMENTS_LABELS.addCommentButton}
-          </Button>
+          <CommentDialog
+            postSlug={postSlug}
+            trigger={
+              <Button
+                type="button"
+                className="h-9 gap-2 rounded-xl px-4 text-sm font-bold shadow-md shadow-primary/20"
+              >
+                <PenLine />
+                {COMMENTS_LABELS.addCommentButton}
+              </Button>
+            }
+          />
         </div>
       </div>
 
       <div className="mt-5 space-y-5 sm:mt-6 sm:space-y-6">
-        {isFormOpen ? (
-          <div
-            id="comment-composer"
-            className="animate-in fade-in-0 slide-in-from-bottom-4 overflow-hidden duration-500 ease-out"
-          >
-            <CommentForm postSlug={postSlug} onCancel={() => setIsFormOpen(false)} />
-          </div>
-        ) : null}
-
         <CommentList comments={comments} postSlug={postSlug} />
       </div>
     </section>
   );
 }
-
-function cnToggleButton(isOpen: boolean): string {
-  return isOpen
-    ? "h-9 gap-2 rounded-xl bg-primary/10 px-4 text-sm font-bold text-primary shadow-none hover:bg-primary/10"
-    : "h-9 gap-2 rounded-xl px-4 text-sm font-bold shadow-md shadow-primary/20";
-}
-
