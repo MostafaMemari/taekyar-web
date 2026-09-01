@@ -38,3 +38,8 @@ export const YoutubeIcon = createBrandIcon(
     <path d="m10 15 5-3-5-3z" />
   </>
 );
+
+export const XIcon = createBrandIcon(
+  "XIcon",
+  <path d="M4 4l16 16M20 4L4 20" />
+);

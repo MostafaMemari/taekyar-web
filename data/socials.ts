@@ -1,7 +1,8 @@
-export type SocialIconName = "instagram" | "telegram" | "youtube";
+export type SocialIconName = "instagram" | "telegram" | "youtube" | "x";
 
-export const SOCIALS: Array<{ label: string; href: string; iconName: SocialIconName }> = [
-  { label: "اینستاگرام", href: "#", iconName: "instagram" },
-  { label: "تلگرام", href: "#", iconName: "telegram" },
-  { label: "یوتیوب", href: "#", iconName: "youtube" },
+export const SOCIAL_PLATFORMS: Array<{ iconName: SocialIconName; label: string }> = [
+  { iconName: "telegram", label: "تلگرام" },
+  { iconName: "instagram", label: "اینستاگرام" },
+  { iconName: "youtube", label: "یوتیوب" },
+  { iconName: "x", label: "ایکس (توییتر)" },
 ];

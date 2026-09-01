@@ -102,6 +102,18 @@ async function seedAdmin() {
 async function main() {
   await seedAdmin();
   // await seedContent();
+
+  await prisma.siteSettings.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      id: 1,
+      siteName: "تک‌یار",
+      siteTitle: "تک‌یار | همراه تمرینی تکواندو",
+      siteDescription:
+        "تک‌یار اپلیکیشن همراه تمرین تکواندوست؛ برنامه تمرین شخصی، آموزش گام‌به‌گام فن‌ها و پیگیری ارتقای کمربند، از کمربند سفید تا مشکی",
+    },
+  });
 }
 
 main()

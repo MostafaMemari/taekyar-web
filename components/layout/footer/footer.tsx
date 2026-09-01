@@ -8,13 +8,14 @@ import { flattenPublicCategoryTree, type PublicCategoryNode } from "@/lib/blog/c
 import { categoryHref } from "@/lib/routes";
 import { navLinks, type NavLink } from "@/data/layout/navigation";
 import { FOOTER_BLURB, FOOTER_COPYRIGHT } from "@/data/layout/footer";
-import { SOCIALS } from "@/data/socials";
-import { InstagramIcon, YoutubeIcon } from "@/components/shared/icons";
+import { getSiteSettings } from "@/lib/site-settings";
+import { InstagramIcon, XIcon, YoutubeIcon } from "@/components/shared/icons";
 
 const SOCIAL_ICONS = {
   instagram: InstagramIcon,
   telegram: Send,
   youtube: YoutubeIcon,
+  x: XIcon,
 } as const;
 
 function LinkColumn({
@@ -68,7 +69,7 @@ function CategoryLinks({ nodes }: { nodes: PublicCategoryNode[] }) {
 }
 
 export async function Footer() {
-  const categoryTree = await getCategoryTree();
+  const [categoryTree, settings] = await Promise.all([getCategoryTree(), getSiteSettings()]);
 
   return (
     <footer className="bg-belt-black">
@@ -77,7 +78,7 @@ export async function Footer() {
         <div className="grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
           <div className="col-span-2 space-y-3 lg:col-span-1">
             <p className="text-lg font-black text-foreground">
-              تک‌یار
+              {settings.siteName}
               <span
                 aria-hidden="true"
                 className="ms-1.5 inline-block size-1.5 rounded-[2px] bg-primary align-middle"
@@ -93,22 +94,28 @@ export async function Footer() {
           <CategoryLinks nodes={categoryTree} />
 
           <div className="col-span-2 space-y-3 text-center lg:col-span-1 lg:text-start">
-            <p className="text-sm font-bold text-foreground">تک‌یار را دنبال کنید</p>
-            <div className="flex items-center justify-center gap-2.5 lg:justify-start">
-              {SOCIALS.map(({ label, href, iconName }) => {
-                const Icon = SOCIAL_ICONS[iconName];
-                return (
-                  <a
-                    key={label}
-                    href={href}
-                    aria-label={label}
-                    className="flex size-10 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-                  >
-                    <Icon className="!size-[18px]" />
-                  </a>
-                );
-              })}
-            </div>
+            {settings.socials.length > 0 ? (
+              <>
+                <p className="text-sm font-bold text-foreground">{settings.siteName} را دنبال کنید</p>
+                <div className="flex items-center justify-center gap-2.5 lg:justify-start">
+                  {settings.socials.map(({ label, href, iconName }) => {
+                    const Icon = SOCIAL_ICONS[iconName];
+                    return (
+                      <a
+                        key={label}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        className="flex size-10 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                      >
+                        <Icon className="!size-[18px]" />
+                      </a>
+                    );
+                  })}
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
 

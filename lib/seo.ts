@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { SITE_NAME } from "@/lib/site";
+import { getSiteSettings } from "@/lib/site-settings";
 import { r2PublicUrl } from "@/lib/r2-url";
 
 interface PageSeoInput {
@@ -12,22 +12,29 @@ interface PageSeoInput {
   publishedTime?: Date;
 }
 
-export function buildPageMetadata({
+export async function buildPageMetadata({
   title,
   description,
   path,
   imageUrl,
   imageAlt,
   publishedTime,
-}: PageSeoInput): Metadata {
-  const image = imageUrl ? r2PublicUrl(imageUrl) : undefined;
+}: PageSeoInput): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const resolvedImageKey = imageUrl ?? settings.ogImage.key;
+  const image = resolvedImageKey ? r2PublicUrl(resolvedImageKey) : undefined;
+  const resolvedImageAlt = image
+    ? imageUrl
+      ? imageAlt ?? undefined
+      : settings.ogImage.alt ?? undefined
+    : undefined;
   const shared = {
     url: path,
-    siteName: SITE_NAME,
+    siteName: settings.siteName,
     locale: "fa_IR",
     title,
     description,
-    images: image ? [{ url: image, ...(imageAlt ? { alt: imageAlt } : {}) }] : undefined,
+    images: image ? [{ url: image, ...(resolvedImageAlt ? { alt: resolvedImageAlt } : {}) }] : undefined,
   };
 
   return {

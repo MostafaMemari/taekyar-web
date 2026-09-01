@@ -20,6 +20,9 @@ import { Wordmark } from "./wordmark";
 interface MobileMenuProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  siteName?: string;
+  logoImage?: string | null;
+  logoImageAlt?: string | null;
 }
 
 function MobileNavLink({
@@ -49,7 +52,7 @@ function MobileNavLink({
   );
 }
 
-export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
+export function MobileMenu({ open, onOpenChange, siteName, logoImage, logoImageAlt }: MobileMenuProps) {
   const close = () => onOpenChange(false);
 
   return (
@@ -67,7 +70,7 @@ export function MobileMenu({ open, onOpenChange }: MobileMenuProps) {
       <SheetContent side="right" className="theme-light w-[19rem] gap-0 border-none p-0 text-foreground">
         <SheetHeader className="border-b border-black/[0.07] px-5 py-4">
           <SheetTitle className="text-start">
-            <Wordmark onNavigate={close} />
+            <Wordmark onNavigate={close} siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
           </SheetTitle>
         </SheetHeader>
 

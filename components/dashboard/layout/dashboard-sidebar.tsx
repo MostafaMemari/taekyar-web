@@ -12,7 +12,14 @@ import { DASHBOARD_LABELS, DASHBOARD_NAV } from "@/data/dashboard/ui";
 import { logout } from "@/lib/admin-actions";
 import { cn } from "@/lib/utils";
 
-export function DashboardSidebar({ username }: { username: string }) {
+interface DashboardSidebarProps {
+  username: string;
+  siteName?: string;
+  logoImage?: string | null;
+  logoImageAlt?: string | null;
+}
+
+export function DashboardSidebar({ username, siteName, logoImage, logoImageAlt }: DashboardSidebarProps) {
   const pathname = usePathname();
   const initial = username.trim().charAt(0).toUpperCase() || "م";
 
@@ -23,7 +30,7 @@ export function DashboardSidebar({ username }: { username: string }) {
       </div>
 
       <div className="px-5 pb-4 pt-5">
-        <Wordmark />
+        <Wordmark siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
         <p className="mt-1.5 ps-0.5 text-[11px] font-medium tracking-widest text-muted-foreground">{DASHBOARD_LABELS.panel}</p>
       </div>
 

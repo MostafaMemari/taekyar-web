@@ -5,12 +5,15 @@ import { Header } from "@/components/layout/header/header";
 import { ScrollReset } from "@/components/layout/scroll-reset";
 import { ReadingProgress } from "@/components/shared/reading-progress";
 import { Toaster } from "@/components/ui/toast";
+import { getSiteSettings } from "@/lib/site-settings";
 
-export default function PublicLayout({
+export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const settings = await getSiteSettings();
+
   return (
     <>
       <Suspense fallback={null}>
@@ -20,7 +23,7 @@ export default function PublicLayout({
       <Suspense fallback={null}>
         <AdminBar />
       </Suspense>
-      <Header />
+      <Header siteName={settings.siteName} logoImage={settings.logo.url} logoImageAlt={settings.logo.alt} />
       <main className="theme-light flex-1 bg-background text-foreground">{children}</main>
       <Footer />
       <Toaster />

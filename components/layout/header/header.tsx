@@ -34,7 +34,13 @@ function DesktopNavLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-export function Header() {
+interface HeaderProps {
+  siteName?: string;
+  logoImage?: string | null;
+  logoImageAlt?: string | null;
+}
+
+export function Header({ siteName, logoImage, logoImageAlt }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrolled = useScrolled();
 
@@ -46,7 +52,7 @@ export function Header() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-8 px-4 sm:h-[68px] sm:px-6 lg:px-8">
-        <Wordmark />
+        <Wordmark siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
 
         <nav
           aria-label="ناوبری اصلی"
@@ -71,7 +77,7 @@ export function Header() {
             دانلود اپلیکیشن
           </Button>
 
-          <MobileMenu open={menuOpen} onOpenChange={setMenuOpen} />
+          <MobileMenu open={menuOpen} onOpenChange={setMenuOpen} siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
         </div>
       </div>
     </header>

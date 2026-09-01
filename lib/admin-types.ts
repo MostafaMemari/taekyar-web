@@ -47,6 +47,38 @@ export interface PostFormState {
   fieldErrors?: PostFieldErrors;
 }
 
+export interface SiteSettingsInput {
+  siteName: string;
+  siteTitle: string;
+  siteDescription: string;
+  defaultSeoTitle: string | null;
+  defaultSeoDescription: string | null;
+  logoImage: string | null;
+  logoImageAlt: string | null;
+  faviconImage: string | null;
+  defaultOgImage: string | null;
+  defaultOgImageAlt: string | null;
+  telegramUrl: string | null;
+  instagramUrl: string | null;
+  youtubeUrl: string | null;
+  twitterUrl: string | null;
+}
+
+export type SiteSettingsFieldKey =
+  | "siteName"
+  | "siteTitle"
+  | "siteDescription"
+  | "defaultSeoTitle"
+  | "defaultSeoDescription"
+  | "logoImageAlt"
+  | "defaultOgImageAlt"
+  | "telegramUrl"
+  | "instagramUrl"
+  | "youtubeUrl"
+  | "twitterUrl";
+
+export type SiteSettingsFieldErrors = Partial<Record<SiteSettingsFieldKey, string>>;
+
 export type LoginError = "invalid" | "captcha_wrong" | "captcha_expired";
 
 export interface LoginState {

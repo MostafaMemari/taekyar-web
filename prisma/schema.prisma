@@ -97,3 +97,23 @@ model Comment {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
 }
+
+model SiteSettings {
+  id                    Int      @id @default(1)
+  siteName              String
+  siteTitle             String
+  siteDescription       String
+  defaultSeoTitle       String?
+  defaultSeoDescription String?
+  logoImage             String?
+  logoImageAlt          String?
+  faviconImage          String?
+  faviconImageAlt       String?
+  defaultOgImage        String?
+  defaultOgImageAlt     String?
+  telegramUrl           String?
+  instagramUrl          String?
+  youtubeUrl            String?
+  twitterUrl            String?
+  updatedAt             DateTime @updatedAt
+}

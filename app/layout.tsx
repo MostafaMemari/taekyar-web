@@ -3,6 +3,7 @@ import { Geist_Mono, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SITE_URL } from "@/lib/site";
+import { getSiteSettings } from "@/lib/site-settings";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
@@ -14,15 +15,34 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: "تک‌یار | همراه تمرینی تکواندو",
-    template: "%s | تک‌یار",
-  },
-  description:
-    "تک‌یار اپلیکیشن همراه تمرین تکواندوست؛ برنامه تمرین شخصی، آموزش گام‌به‌گام فن‌ها و پیگیری ارتقای کمربند، از کمربند سفید تا مشکی",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const title = settings.defaultSeoTitle ?? settings.siteTitle;
+  const description = settings.defaultSeoDescription ?? settings.siteDescription;
+  const ogImage = settings.ogImage.url
+    ? [{ url: settings.ogImage.url, ...(settings.ogImage.alt ? { alt: settings.ogImage.alt } : {}) }]
+    : undefined;
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: title,
+      template: `%s | ${settings.siteName}`,
+    },
+    description,
+    ...(settings.favicon.url ? { icons: { icon: settings.favicon.url } } : {}),
+    openGraph: {
+      siteName: settings.siteName,
+      locale: "fa_IR",
+      type: "website",
+      ...(ogImage ? { images: ogImage } : {}),
+    },
+    twitter: {
+      card: ogImage ? "summary_large_image" : "summary",
+      ...(ogImage ? { images: ogImage } : {}),
+    },
+  };
+}
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

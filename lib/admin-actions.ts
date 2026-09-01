@@ -5,3 +5,4 @@ export * from "./admin/comment-actions";
 export * from "./admin/taxonomy-actions";
 export * from "./admin/image-actions";
 export * from "./admin/media-actions";
+export * from "./admin/settings-actions";
