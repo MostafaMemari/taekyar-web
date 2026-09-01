@@ -116,3 +116,10 @@ export const getTagSitemapEntries = cache(async (chunk: number): Promise<Sitemap
     return [];
   }
 });
+
+export const SITEMAP_PAGES = [
+  { path: "/", changeFrequency: "weekly", priority: 1 },
+  { path: "/blog", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/about", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/contact", changeFrequency: "monthly", priority: 0.8 },
+] as const;

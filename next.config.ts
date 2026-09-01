@@ -5,13 +5,6 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "radix-ui"],
   },
-  async rewrites() {
-    return {
-      beforeFiles: [{ source: "/sitemap.xml", destination: "/sitemap-index" }],
-      afterFiles: [],
-      fallback: [],
-    };
-  },
   images: {
     remotePatterns: process.env.R2_PUBLIC_URL
       ? [
