@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, ChevronLeft, Download, Menu } from "lucide-react";
@@ -20,9 +20,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MOBILE_NAV_FALLBACK } from "@/data/layout/navigation";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { NavLinkItem, isActiveBranch } from "./nav-link-item";
-import { Wordmark } from "./wordmark";
+import { Logo } from "./logo";
 import type { NavItemView } from "./nav-link-item";
 
 interface MobileMenuProps {
@@ -89,12 +90,6 @@ function MobileNavGroup({ item, onNavigate }: { item: NavItemView; onNavigate: (
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className="mt-0.5 space-y-0.5 border-s-2 border-primary/20 ps-2">
-          <MobileNavLink
-            href={item.href}
-            label={item.title}
-            onNavigate={onNavigate}
-            className="text-[14px]"
-          />
           {item.children.map((child) =>
             child.children.length > 0 ? (
               <MobileNavGroup key={child.id} item={child} onNavigate={onNavigate} />
@@ -139,6 +134,13 @@ export function MobileMenu({
 }: MobileMenuProps) {
   const close = () => onOpenChange(false);
   const items = navItems.length > 0 ? navItems : MOBILE_NAV_FALLBACK;
+  const isDesktop = useMediaQuery("(min-width: 48rem)");
+
+  useEffect(() => {
+    if (isDesktop && open) {
+      onOpenChange(false);
+    }
+  }, [isDesktop, open, onOpenChange]);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -155,7 +157,7 @@ export function MobileMenu({
       <SheetContent side="right" className="theme-light w-[19rem] gap-0 border-none p-0 text-foreground">
         <SheetHeader className="border-b border-black/[0.07] px-5 py-4">
           <SheetTitle className="text-start">
-            <Wordmark onNavigate={close} siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
+            <Logo onNavigate={close} siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
           </SheetTitle>
         </SheetHeader>
 

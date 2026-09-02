@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ExternalLink, LogOut, Shield } from "lucide-react";
 
-import { Wordmark } from "@/components/layout/header/wordmark";
+import { Logo } from "@/components/layout/header/logo";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -30,7 +30,7 @@ export function DashboardSidebar({ username, siteName, logoImage, logoImageAlt }
       </div>
 
       <div className="px-5 pb-4 pt-5">
-        <Wordmark siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
+        <Logo siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
         <p className="mt-1.5 ps-0.5 text-[11px] font-medium tracking-widest text-muted-foreground">{DASHBOARD_LABELS.panel}</p>
       </div>
 

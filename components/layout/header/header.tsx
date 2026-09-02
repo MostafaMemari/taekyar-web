@@ -6,7 +6,7 @@ import { useScrolled } from "./use-scrolled";
 import { cn } from "@/lib/utils";
 import { DesktopNavigation } from "./desktop-navigation";
 import { HeaderActions } from "./header-actions";
-import { Wordmark } from "./wordmark";
+import { Logo } from "./logo";
 import type { NavItemView } from "./nav-link-item";
 
 interface HeaderProps {
@@ -38,7 +38,7 @@ export function Header({
     >
       <div className="mx-auto grid h-16 max-w-7xl grid-cols-[2.5rem_minmax(0,1fr)_2.5rem] items-center px-4 sm:h-[68px] md:flex md:gap-8 md:px-6 lg:px-8">
         <div className="max-md:col-start-2 max-md:row-start-1 max-md:justify-self-center">
-          <Wordmark siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
+          <Logo siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
         </div>
 
         <DesktopNavigation items={navItems} />

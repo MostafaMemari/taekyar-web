@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Menu } from "lucide-react";
 
 import { DashboardSidebar } from "@/components/dashboard/layout/dashboard-sidebar";
-import { Wordmark } from "@/components/layout/header/wordmark";
+import { Logo } from "@/components/layout/header/logo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { DASHBOARD_LABELS } from "@/data/dashboard/ui";
@@ -22,7 +22,7 @@ export function DashboardMobileNav({ username, siteName, logoImage, logoImageAlt
   return (
     <header className="sticky top-0 z-30 flex h-[56px] items-center justify-between gap-3 border-b border-border/60 bg-card px-4 lg:hidden">
       <div className="shrink-0">
-        <Wordmark siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
+        <Logo siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
       </div>
 
       <Sheet open={open} onOpenChange={setOpen}>
