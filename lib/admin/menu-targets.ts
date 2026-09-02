@@ -28,7 +28,7 @@ export async function getMenuItemTargets(): Promise<MenuLinkTargets> {
       let parent = category.parentId !== null ? byId.get(category.parentId) : undefined;
       while (parent) {
         depth += 1;
-        parent = parent.parentId !== null ? byId.get(parent.id) : undefined;
+        parent = parent.parentId !== null ? byId.get(parent.parentId) : undefined;
       }
       categoryDepth.set(category.id, depth);
     }
