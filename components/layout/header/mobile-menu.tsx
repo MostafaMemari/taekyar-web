@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, Download, Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ChevronDown, ChevronLeft, Download, Menu } from "lucide-react";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { Button } from "@/components/ui/button";
@@ -12,10 +14,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { navLinks } from "@/data/layout/navigation";
+import { MOBILE_NAV_FALLBACK } from "@/data/layout/navigation";
 import { cn } from "@/lib/utils";
-import { NavLinkItem, useIsActive } from "./nav-link-item";
+import { NavLinkItem, isActivePath } from "./nav-link-item";
 import { Wordmark } from "./wordmark";
+import type { NavItemView } from "./header";
 
 interface MobileMenuProps {
   open: boolean;
@@ -23,37 +26,83 @@ interface MobileMenuProps {
   siteName?: string;
   logoImage?: string | null;
   logoImageAlt?: string | null;
+  navItems: NavItemView[];
+}
+
+function MobileNavGroup({ item, onNavigate }: { item: NavItemView; onNavigate: () => void }) {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const active =
+    isActivePath(item.href, pathname) || item.children.some((child) => isActivePath(child.href, pathname));
+
+  return (
+    <div>
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((previous) => !previous)}
+        className={cn(
+          "flex w-full items-center justify-between rounded-lg px-3 py-3 text-[15px] transition-colors",
+          active ? "bg-primary/[0.07] font-bold text-primary" : "font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
+        )}
+      >
+        {item.title}
+        <ChevronDown className={cn("size-4 transition-transform duration-200", open && "rotate-180")} />
+      </button>
+      {open ? (
+        <div className="mt-0.5 space-y-0.5 border-s-2 border-primary/20 ps-2">
+          <MobileNavLink
+            href={item.href}
+            label={item.title}
+            onNavigate={onNavigate}
+            className="text-[14px]"
+          />
+          {item.children.map((child) => (
+            <MobileNavLink
+              key={child.id}
+              href={child.href}
+              label={child.title}
+              onNavigate={onNavigate}
+              className="text-[14px]"
+            />
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
 }
 
 function MobileNavLink({
   href,
   label,
   onNavigate,
+  className,
 }: {
   href: string;
   label: string;
   onNavigate: () => void;
+  className?: string;
 }) {
-  const active = useIsActive(href);
-
   return (
     <NavLinkItem
       href={href}
       label={label}
       onNavigate={onNavigate}
-      className="flex items-center justify-between rounded-lg px-3 py-3 text-[15px] transition-colors"
+      className={cn(
+        "flex items-center justify-between rounded-lg px-3 py-3 text-[15px] transition-colors",
+        className,
+      )}
       activeClassName="bg-primary/[0.07] font-bold text-primary"
       inactiveClassName="font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
     >
-      <ChevronLeft
-        className={cn("size-4", active ? "text-primary" : "text-muted-foreground/50")}
-      />
+      <ChevronLeft className="size-4 text-muted-foreground/50" />
     </NavLinkItem>
   );
 }
 
-export function MobileMenu({ open, onOpenChange, siteName, logoImage, logoImageAlt }: MobileMenuProps) {
+export function MobileMenu({ open, onOpenChange, siteName, logoImage, logoImageAlt, navItems }: MobileMenuProps) {
   const close = () => onOpenChange(false);
+  const items = navItems.length > 0 ? navItems : MOBILE_NAV_FALLBACK;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -75,9 +124,13 @@ export function MobileMenu({ open, onOpenChange, siteName, logoImage, logoImageA
         </SheetHeader>
 
         <nav aria-label="منوی موبایل" className="flex flex-col gap-0.5 p-3">
-          {navLinks.map(({ href, label }) => (
-            <MobileNavLink key={href} href={href} label={label} onNavigate={close} />
-          ))}
+          {items.map((item) =>
+            item.children.length > 0 ? (
+              <MobileNavGroup key={item.id} item={item} onNavigate={close} />
+            ) : (
+              <MobileNavLink key={item.id} href={item.href} label={item.title} onNavigate={close} />
+            ),
+          )}
         </nav>
 
         <div className="mt-auto space-y-3 p-4 pb-6">

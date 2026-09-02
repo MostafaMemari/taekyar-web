@@ -123,6 +123,51 @@ export type SiteSettingsFieldKey =
 
 export type SiteSettingsFieldErrors = Partial<Record<SiteSettingsFieldKey, string>>;
 
+export type MenuItemTypeDto = "PAGE" | "POST" | "CATEGORY" | "TAG" | "CUSTOM";
+
+export type MenuLocationDto = "HEADER_DESKTOP" | "HEADER_MOBILE" | "FOOTER_QUICK" | "FOOTER_BLOG";
+
+export interface MenuItemInput {
+  title: string;
+  type: MenuItemTypeDto;
+  pageId: number | null;
+  postId: number | null;
+  categoryId: number | null;
+  tagId: number | null;
+  customUrl: string | null;
+  parentId: number | null;
+  location: MenuLocationDto;
+}
+
+export type MenuItemFieldKey = "title" | "target" | "customUrl" | "parentId";
+
+export type MenuItemFieldErrors = Partial<Record<MenuItemFieldKey, string>>;
+
+export interface MenuItemFormState {
+  status: "idle" | "error";
+  message?: string;
+  fieldErrors?: MenuItemFieldErrors;
+}
+
+export interface MenuItemOption {
+  id: number;
+  name: string;
+  depth?: number;
+}
+
+export interface MenuItemRowDto {
+  id: number;
+  title: string;
+  type: MenuItemTypeDto;
+  pageId: number | null;
+  postId: number | null;
+  categoryId: number | null;
+  tagId: number | null;
+  customUrl: string | null;
+  parentId: number | null;
+  order: number;
+}
+
 export type LoginError = "invalid" | "captcha_wrong" | "captcha_expired";
 
 export interface LoginState {

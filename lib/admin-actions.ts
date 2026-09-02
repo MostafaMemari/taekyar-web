@@ -2,6 +2,7 @@ export * from "./admin/auth-actions";
 export * from "./admin/admin-bar-actions";
 export * from "./admin/post-actions";
 export * from "./admin/page-actions";
+export * from "./admin/menu-actions";
 export * from "./admin/comment-actions";
 export * from "./admin/taxonomy-actions";
 export * from "./admin/image-actions";

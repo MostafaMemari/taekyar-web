@@ -18,9 +18,13 @@ function isHomeHref(href: string) {
   return href === "/";
 }
 
+export function isActivePath(href: string, pathname: string): boolean {
+  return isHomeHref(href) ? pathname === "/" : pathname.startsWith(href);
+}
+
 export function useIsActive(href: string) {
   const pathname = usePathname();
-  return isHomeHref(href) ? pathname === "/" : pathname.startsWith(href);
+  return isActivePath(href, pathname);
 }
 
 export function NavLinkItem({

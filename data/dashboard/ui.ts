@@ -8,3 +8,4 @@ export * from "./comments";
 export * from "./taxonomy";
 export * from "./uploads";
 export * from "./media";
+export * from "./menus";

@@ -17,6 +17,46 @@ enum PostStatus {
   PUBLISHED
 }
 
+enum MenuItemType {
+  PAGE
+  POST
+  CATEGORY
+  TAG
+  CUSTOM
+}
+
+enum MenuLocation {
+  HEADER_DESKTOP
+  HEADER_MOBILE
+  FOOTER_QUICK
+  FOOTER_BLOG
+}
+
+model MenuItem {
+  id         Int          @id @default(autoincrement())
+  title      String
+  type       MenuItemType
+  customUrl  String?
+  pageId     Int?
+  page       Page?        @relation(fields: [pageId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  postId     Int?
+  post       Post?        @relation(fields: [postId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  categoryId Int?
+  category   Category?    @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  tagId      Int?
+  tag        Tag?         @relation(fields: [tagId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  parentId   Int?
+  parent     MenuItem?    @relation("MenuHierarchy", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  children   MenuItem[]   @relation("MenuHierarchy")
+  order      Int          @default(0)
+  location   MenuLocation
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now()) @updatedAt
+
+  @@index([parentId])
+  @@index([location, order])
+}
+
 model Admin {
   id           Int      @id @default(autoincrement())
   username     String   @unique
@@ -43,6 +83,7 @@ model Post {
   updatedAt       DateTime    @default(now()) @updatedAt
   comments        Comment[]
   seo             SeoMetadata?
+  menuItems       MenuItem[]
 }
 
 model Category {
@@ -60,6 +101,7 @@ model Category {
   updatedAt       DateTime   @default(now()) @updatedAt
   posts           Post[]
   seo             SeoMetadata?
+  menuItems       MenuItem[]
 
   @@index([parentId])
 }
@@ -75,6 +117,7 @@ model Tag {
   updatedAt       DateTime @default(now()) @updatedAt
   posts           Post[]
   seo             SeoMetadata?
+  menuItems       MenuItem[]
 }
 
 model Page {
@@ -89,6 +132,7 @@ model Page {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now()) @updatedAt
   seo           SeoMetadata?
+  menuItems     MenuItem[]
 }
 
 model SeoMetadata {

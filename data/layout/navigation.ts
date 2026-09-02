@@ -10,3 +10,10 @@ export const navLinks: NavLink[] = [
   { href: "/about", label: "درباره ما" },
   { href: "/contact", label: "تماس با ما" },
 ];
+
+export const MOBILE_NAV_FALLBACK = navLinks.map(({ href, label }) => ({
+  id: -1,
+  title: label,
+  href,
+  children: [],
+}));

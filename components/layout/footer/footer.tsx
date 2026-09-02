@@ -4,12 +4,14 @@ import { Send } from "lucide-react";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { getCategoryTree } from "@/lib/blog";
+import { getMenuTree } from "@/lib/menu";
 import { flattenPublicCategoryTree, type PublicCategoryNode } from "@/lib/blog/categories";
 import { categoryHref } from "@/lib/routes";
-import { navLinks, type NavLink } from "@/data/layout/navigation";
 import { FOOTER_BLURB, FOOTER_COPYRIGHT } from "@/data/layout/footer";
+import { navLinks } from "@/data/layout/navigation";
 import { getSiteSettings } from "@/lib/site-settings";
 import { InstagramIcon, XIcon, YoutubeIcon } from "@/components/shared/icons";
+import type { MenuItemNode } from "@/lib/menu";
 
 const SOCIAL_ICONS = {
   instagram: InstagramIcon,
@@ -18,21 +20,28 @@ const SOCIAL_ICONS = {
   x: XIcon,
 } as const;
 
+const staticQuickLinks: MenuItemNode[] = navLinks.map(({ href, label }, index) => ({
+  id: -(index + 1),
+  title: label,
+  href,
+  children: [],
+}));
+
 function LinkColumn({
   title,
   links,
   ariaLabel,
 }: {
   title: string;
-  links: NavLink[];
+  links: MenuItemNode[];
   ariaLabel: string;
 }) {
   return (
     <nav aria-label={ariaLabel} className="space-y-3">
       <p className="text-sm font-bold text-foreground">{title}</p>
       <ul className="space-y-2.5">
-        {links.map(({ label, href }) => (
-          <li key={label}>
+        {links.map(({ id, title: label, href }) => (
+          <li key={id}>
             <Link
               href={href}
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -68,8 +77,20 @@ function CategoryLinks({ nodes }: { nodes: PublicCategoryNode[] }) {
   );
 }
 
+function FooterMenuColumn({ title, links, ariaLabel, fallback }: { title: string; links: MenuItemNode[]; ariaLabel: string; fallback: React.ReactNode }) {
+  if (links.length > 0) {
+    return <LinkColumn title={title} links={links} ariaLabel={ariaLabel} />;
+  }
+  return fallback;
+}
+
 export async function Footer() {
-  const [categoryTree, settings] = await Promise.all([getCategoryTree(), getSiteSettings()]);
+  const [categoryTree, settings, quickLinks, blogLinks] = await Promise.all([
+    getCategoryTree(),
+    getSiteSettings(),
+    getMenuTree("FOOTER_QUICK"),
+    getMenuTree("FOOTER_BLOG"),
+  ]);
 
   return (
     <footer className="bg-belt-black">
@@ -89,9 +110,19 @@ export async function Footer() {
             </p>
           </div>
 
-          <LinkColumn title="دسترسی سریع" links={navLinks} ariaLabel="دسترسی سریع" />
+          <FooterMenuColumn
+            title="دسترسی سریع"
+            links={quickLinks}
+            ariaLabel="دسترسی سریع"
+            fallback={<LinkColumn title="دسترسی سریع" links={staticQuickLinks} ariaLabel="دسترسی سریع" />}
+          />
 
-          <CategoryLinks nodes={categoryTree} />
+          <FooterMenuColumn
+            title="موضوعات وبلاگ"
+            links={blogLinks}
+            ariaLabel="دسته‌بندی‌های وبلاگ"
+            fallback={<CategoryLinks nodes={categoryTree} />}
+          />
 
           <div className="col-span-2 space-y-3 text-center lg:col-span-1 lg:text-start">
             {settings.socials.length > 0 ? (

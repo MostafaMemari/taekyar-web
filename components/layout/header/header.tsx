@@ -2,19 +2,96 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Download } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ChevronDown, Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { navLinks } from "@/data/layout/navigation";
 import { useScrolled } from "./use-scrolled";
 import { cn } from "@/lib/utils";
 import { MobileMenu } from "./mobile-menu";
-import { NavLinkItem, useIsActive } from "./nav-link-item";
+import { NavLinkItem, isActivePath, useIsActive } from "./nav-link-item";
 import { Wordmark } from "./wordmark";
+import type { NavLink } from "@/data/layout/navigation";
 
-function DesktopNavLink({ href, label }: { href: string; label: string }) {
-  const active = useIsActive(href);
+interface NavItemView {
+  id: number;
+  title: string;
+  href: string;
+  children: NavItemView[];
+}
 
+function DesktopNavLink({ item }: { item: NavItemView }) {
+  const [open, setOpen] = useState(false);
+  const hasChildren = item.children.length > 0;
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      {hasChildren ? (
+        <ParentTrigger item={item} open={open} onToggle={() => setOpen((previous) => !previous)} />
+      ) : (
+        <DesktopNavLinkLeaf href={item.href} label={item.title} />
+      )}
+
+
+      {hasChildren ? (
+        <div
+          className={cn(
+            "absolute start-0 top-full z-50 pt-3 transition-all duration-150",
+            open ? "visible opacity-100" : "invisible opacity-0",
+          )}
+        >
+          <div className="min-w-44 rounded-xl border border-border/60 bg-card p-1.5 shadow-lg shadow-black/[0.08]">
+            {item.children.map((child) => (
+              <NavLinkItem
+                key={child.id}
+                href={child.href}
+                label={child.title}
+                className="block rounded-lg px-3 py-2 text-[13px] transition-colors"
+                activeClassName="bg-primary/[0.07] font-bold text-primary"
+                inactiveClassName="text-muted-foreground hover:bg-muted hover:text-foreground"
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function ParentTrigger({ item, open, onToggle }: { item: NavItemView; open: boolean; onToggle: () => void }) {
+  const pathname = usePathname();
+  const active =
+    isActivePath(item.href, pathname) || item.children.some((child) => isActivePath(child.href, pathname));
+
+  return (
+    <button
+      type="button"
+      aria-expanded={open}
+      aria-haspopup="true"
+      onClick={onToggle}
+      className={cn(
+        "relative -my-1 flex items-center gap-1 rounded-sm py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        active ? "font-bold text-foreground" : "font-medium text-muted-foreground hover:text-foreground",
+      )}
+    >
+      {item.title}
+      <ChevronDown className={cn("size-3.5 transition-transform duration-200", open && "rotate-180")} />
+      <span
+        aria-hidden="true"
+        className={cn(
+          "absolute -bottom-[7px] end-0 h-[2px] rounded-full bg-primary transition-all duration-300",
+          active ? "w-full opacity-100" : "w-0 opacity-0",
+        )}
+      />
+    </button>
+  );
+}
+
+function DesktopNavLinkLeaf({ href, label }: { href: string; label: string }) {
   return (
     <NavLinkItem
       href={href}
@@ -23,14 +100,20 @@ function DesktopNavLink({ href, label }: { href: string; label: string }) {
       activeClassName="font-bold text-foreground"
       inactiveClassName="font-medium text-muted-foreground hover:text-foreground"
     >
-      <span
-        aria-hidden="true"
-        className={cn(
-          "absolute -bottom-[7px] end-0 h-[2px] rounded-full bg-primary transition-all duration-300",
-          active ? "w-full opacity-100" : "w-0 opacity-0"
-        )}
-      />
+      <Underline active={useIsActive(href)} />
     </NavLinkItem>
+  );
+}
+
+function Underline({ active }: { active: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "absolute -bottom-[7px] end-0 h-[2px] rounded-full bg-primary transition-all duration-300",
+        active ? "w-full opacity-100" : "w-0 opacity-0",
+      )}
+    />
   );
 }
 
@@ -38,9 +121,11 @@ interface HeaderProps {
   siteName?: string;
   logoImage?: string | null;
   logoImageAlt?: string | null;
+  navItems: NavItemView[];
+  mobileNavItems: NavItemView[];
 }
 
-export function Header({ siteName, logoImage, logoImageAlt }: HeaderProps) {
+export function Header({ siteName, logoImage, logoImageAlt, navItems, mobileNavItems }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const scrolled = useScrolled();
 
@@ -58,8 +143,8 @@ export function Header({ siteName, logoImage, logoImageAlt }: HeaderProps) {
           aria-label="ناوبری اصلی"
           className="hidden flex-1 items-center gap-7 md:flex"
         >
-          {navLinks.map(({ href, label }) => (
-            <DesktopNavLink key={href} href={href} label={label} />
+          {navItems.map((item) => (
+            <DesktopNavLink key={item.id} item={item} />
           ))}
         </nav>
 
@@ -77,9 +162,11 @@ export function Header({ siteName, logoImage, logoImageAlt }: HeaderProps) {
             دانلود اپلیکیشن
           </Button>
 
-          <MobileMenu open={menuOpen} onOpenChange={setMenuOpen} siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
+          <MobileMenu open={menuOpen} onOpenChange={setMenuOpen} siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} navItems={mobileNavItems} />
         </div>
       </div>
     </header>
   );
 }
+
+export type { NavItemView, NavLink };
