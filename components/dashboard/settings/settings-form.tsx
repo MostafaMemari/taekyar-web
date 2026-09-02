@@ -184,6 +184,7 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
       instagramUrl: fields.instagramUrl.trim() || null,
       youtubeUrl: fields.youtubeUrl.trim() || null,
       twitterUrl: fields.twitterUrl.trim() || null,
+      appDownloadUrl: fields.appDownloadUrl.trim() || null,
     };
 
     setFieldErrors({});
@@ -374,6 +375,30 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
                   <FieldError errorId={`settings-${key}-error`} message={fieldErrors[key]} />
                 </div>
               ))}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-[14px] font-black">{SETTINGS_LABELS.appDownloadTitle}</CardTitle>
+              <p className="text-xs leading-5 text-muted-foreground">{SETTINGS_LABELS.appDownloadHint}</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="settings-appDownloadUrl" className="text-[13px] font-bold">
+                  {SETTINGS_LABELS.appDownloadLabel}
+                </Label>
+                <Input
+                  id="settings-appDownloadUrl"
+                  dir="ltr"
+                  value={fields.appDownloadUrl}
+                  placeholder={SETTINGS_LABELS.urlPlaceholder}
+                  className={`${textFieldClass} text-start font-mono text-sm`}
+                  aria-invalid={Boolean(fieldErrors.appDownloadUrl)}
+                  onChange={(event) => setField("appDownloadUrl", event.target.value)}
+                />
+                <FieldError errorId="settings-appDownloadUrl-error" message={fieldErrors.appDownloadUrl} />
+              </div>
             </CardContent>
           </Card>
         </div>

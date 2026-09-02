@@ -6,7 +6,7 @@ import { ScrollReset } from "@/components/layout/scroll-reset";
 import { ReadingProgress } from "@/components/shared/reading-progress";
 import { Toaster } from "@/components/ui/toast";
 import { getMenuTree } from "@/lib/menu";
-import { MOBILE_NAV_FALLBACK, navLinks } from "@/data/layout/navigation";
+import { MOBILE_NAV_FALLBACK } from "@/data/layout/navigation";
 import { getSiteSettings } from "@/lib/site-settings";
 
 export default async function PublicLayout({
@@ -20,10 +20,6 @@ export default async function PublicLayout({
     getMenuTree("HEADER_MOBILE"),
   ]);
 
-  const desktopNav =
-    desktopItems.length > 0
-      ? desktopItems
-      : navLinks.map(({ href, label }, index) => ({ id: -(index + 1), title: label, href, children: [] }));
   const mobileNav = mobileItems.length > 0 ? mobileItems : MOBILE_NAV_FALLBACK;
 
   return (
@@ -39,7 +35,8 @@ export default async function PublicLayout({
         siteName={settings.siteName}
         logoImage={settings.logo.url}
         logoImageAlt={settings.logo.alt}
-        navItems={desktopNav}
+        appDownloadUrl={settings.appDownloadUrl}
+        navItems={desktopItems}
         mobileNavItems={mobileNav}
       />
       <main className="theme-light flex-1 bg-background text-foreground">{children}</main>

@@ -36,6 +36,7 @@ export default async function DashboardSettingsPage() {
           instagramUrl: settings.socials.find((social) => social.iconName === "instagram")?.href ?? "",
           youtubeUrl: settings.socials.find((social) => social.iconName === "youtube")?.href ?? "",
           twitterUrl: settings.socials.find((social) => social.iconName === "x")?.href ?? "",
+          appDownloadUrl: settings.appDownloadUrl ?? "",
         }}
         initialLogoUrl={settings.logo.url}
         initialFaviconUrl={settings.favicon.url}

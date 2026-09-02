@@ -25,6 +25,7 @@ export interface SiteSettings {
   logo: SiteSettingsImage & { alt: string | null };
   favicon: SiteSettingsImage;
   ogImage: SiteSettingsImage & { alt: string | null };
+  appDownloadUrl: string | null;
   socials: SiteSocialLink[];
 }
 
@@ -55,6 +56,7 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
     logo: { key: null, url: null, alt: null },
     favicon: { key: null, url: null },
     ogImage: { key: null, url: null, alt: null },
+    appDownloadUrl: null,
     socials: [],
   };
 
@@ -82,6 +84,7 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
         url: row.defaultOgImage ? r2PublicUrl(row.defaultOgImage) : null,
         alt: row.defaultOgImageAlt,
       },
+      appDownloadUrl: row.appDownloadUrl?.trim() || null,
       socials: buildSocials(row),
     };
   } catch {

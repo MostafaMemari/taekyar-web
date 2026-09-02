@@ -1,0 +1,11 @@
+-- AlterTable
+ALTER TABLE "MenuItem" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "Page" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "SeoMetadata" ALTER COLUMN "updatedAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "SiteSettings" ADD COLUMN     "appDownloadUrl" TEXT;

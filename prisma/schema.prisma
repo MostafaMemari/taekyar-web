@@ -189,5 +189,6 @@ model SiteSettings {
   instagramUrl          String?
   youtubeUrl            String?
   twitterUrl            String?
+  appDownloadUrl        String?
   updatedAt             DateTime @updatedAt
 }

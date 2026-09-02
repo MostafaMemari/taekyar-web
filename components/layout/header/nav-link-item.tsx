@@ -4,14 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-interface NavItemProps {
+interface NavItemProps extends Omit<React.ComponentProps<typeof Link>, "href"> {
   href: string;
   label: string;
-  className?: string;
   activeClassName?: string;
   inactiveClassName?: string;
   onNavigate?: () => void;
-  children?: React.ReactNode;
+}
+
+export interface NavItemView {
+  id: number;
+  title: string;
+  href: string;
+  children: NavItemView[];
 }
 
 function isHomeHref(href: string) {
@@ -35,18 +40,24 @@ export function NavLinkItem({
   inactiveClassName,
   onNavigate,
   children,
+  onClick,
+  ref,
+  ...props
 }: NavItemProps) {
   const active = useIsActive(href);
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     if (isHomeHref(href) && window.location.pathname === "/") {
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
     onNavigate?.();
+    onClick?.(event);
   };
 
   return (
     <Link
+      {...props}
+      ref={ref}
       href={href}
       onClick={handleClick}
       aria-current={active ? "page" : undefined}

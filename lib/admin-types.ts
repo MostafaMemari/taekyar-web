@@ -106,6 +106,7 @@ export interface SiteSettingsInput {
   instagramUrl: string | null;
   youtubeUrl: string | null;
   twitterUrl: string | null;
+  appDownloadUrl: string | null;
 }
 
 export type SiteSettingsFieldKey =
@@ -119,7 +120,8 @@ export type SiteSettingsFieldKey =
   | "telegramUrl"
   | "instagramUrl"
   | "youtubeUrl"
-  | "twitterUrl";
+  | "twitterUrl"
+  | "appDownloadUrl";
 
 export type SiteSettingsFieldErrors = Partial<Record<SiteSettingsFieldKey, string>>;
 

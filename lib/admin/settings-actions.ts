@@ -45,6 +45,7 @@ function normalizeSettingsInput(input: SiteSettingsInput): {
     instagramUrl: normalizeUrl(input.instagramUrl),
     youtubeUrl: normalizeUrl(input.youtubeUrl),
     twitterUrl: normalizeUrl(input.twitterUrl),
+    appDownloadUrl: normalizeUrl(input.appDownloadUrl),
   };
   for (const [key, result] of Object.entries(socials)) {
     if (result === "invalid") {
@@ -76,6 +77,7 @@ function normalizeSettingsInput(input: SiteSettingsInput): {
       instagramUrl: socials.instagramUrl === "invalid" ? null : socials.instagramUrl,
       youtubeUrl: socials.youtubeUrl === "invalid" ? null : socials.youtubeUrl,
       twitterUrl: socials.twitterUrl === "invalid" ? null : socials.twitterUrl,
+      appDownloadUrl: socials.appDownloadUrl === "invalid" ? null : socials.appDownloadUrl,
     },
   };
 }
