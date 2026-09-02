@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 
 import {
   NavigationMenu,
@@ -12,18 +13,6 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { NavLinkItem, isActivePath, useIsActive, type NavItemView } from "./nav-link-item";
-
-function Underline({ active }: { active: boolean }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={cn(
-        "absolute -bottom-[7px] end-0 h-[2px] rounded-full bg-primary transition-all duration-300",
-        active ? "w-full opacity-100" : "w-0 opacity-0"
-      )}
-    />
-  );
-}
 
 function isActiveBranch(item: NavItemView, pathname: string): boolean {
   return (
@@ -40,6 +29,20 @@ function DesktopNavLink({ item }: { item: NavItemView }) {
 }
 
 function DesktopNavLinkLeaf({ href, label }: { href: string; label: string }) {
+  return (
+    <NavigationMenuLink asChild>
+      <NavLinkItem
+        href={href}
+        label={label}
+        className="-my-1 rounded-md px-2.5 py-1 text-sm transition-colors duration-200"
+        activeClassName="bg-muted font-bold text-foreground"
+        inactiveClassName="font-medium text-muted-foreground hover:bg-muted/70 hover:text-foreground"
+      />
+    </NavigationMenuLink>
+  );
+}
+
+function NavChildLink({ href, label }: { href: string; label: string }) {
   const active = useIsActive(href);
 
   return (
@@ -47,11 +50,19 @@ function DesktopNavLinkLeaf({ href, label }: { href: string; label: string }) {
       <NavLinkItem
         href={href}
         label={label}
-        className="relative -my-1 rounded-sm py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-        activeClassName="font-bold text-foreground"
-        inactiveClassName="font-medium text-muted-foreground hover:text-foreground"
+        className="group/item flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors duration-200"
+        activeClassName="bg-primary/[0.07] font-bold text-primary"
+        inactiveClassName="text-muted-foreground hover:bg-muted hover:text-foreground"
       >
-        <Underline active={active} />
+        <ChevronLeft
+          aria-hidden="true"
+          className={cn(
+            "size-3.5 shrink-0 transition-all duration-200",
+            active
+              ? "text-primary opacity-70"
+              : "translate-x-1 opacity-0 group-focus-visible/item:translate-x-0 group-focus-visible/item:opacity-60 group-hover/item:translate-x-0 group-hover/item:opacity-60"
+          )}
+        />
       </NavLinkItem>
     </NavigationMenuLink>
   );
@@ -62,15 +73,7 @@ function NavChildrenList({ items }: { items: NavItemView[] }) {
     <ul className="flex flex-col gap-0.5">
       {items.map((child) => (
         <li key={child.id}>
-          <NavigationMenuLink asChild>
-            <NavLinkItem
-              href={child.href}
-              label={child.title}
-              className="rounded-lg px-3 py-2 text-[13px] transition-colors"
-              activeClassName="bg-primary/[0.07] font-bold text-primary"
-              inactiveClassName="text-muted-foreground hover:bg-muted hover:text-foreground"
-            />
-          </NavigationMenuLink>
+          <NavChildLink href={child.href} label={child.title} />
           {child.children.length > 0 ? (
             <div className="mt-0.5 space-y-0.5 border-s-2 border-primary/20 ps-2">
               <NavChildrenList items={child.children} />
@@ -90,16 +93,15 @@ function DesktopNavDropdown({ item }: { item: NavItemView }) {
     <>
       <NavigationMenuTrigger
         className={cn(
-          "relative -my-1 rounded-sm py-1 text-sm transition-colors",
+          "-my-1 rounded-md px-2.5 py-1 text-sm transition-colors duration-200 data-open:bg-muted/70",
           active
-            ? "font-bold text-foreground"
-            : "font-medium text-muted-foreground hover:text-foreground"
+            ? "bg-muted font-bold text-foreground"
+            : "font-medium text-muted-foreground hover:bg-muted/70 hover:text-foreground"
         )}
       >
         {item.title}
-        <Underline active={active} />
       </NavigationMenuTrigger>
-      <NavigationMenuContent className="min-w-44 rounded-xl p-1.5">
+      <NavigationMenuContent className="min-w-48">
         <NavChildrenList items={item.children} />
       </NavigationMenuContent>
     </>
