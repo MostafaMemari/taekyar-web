@@ -27,6 +27,13 @@ export function isActivePath(href: string, pathname: string): boolean {
   return isHomeHref(href) ? pathname === "/" : pathname.startsWith(href);
 }
 
+export function isActiveBranch(item: NavItemView, pathname: string): boolean {
+  return (
+    isActivePath(item.href, pathname) ||
+    item.children.some((child) => isActiveBranch(child, pathname))
+  );
+}
+
 export function useIsActive(href: string) {
   const pathname = usePathname();
   return isActivePath(href, pathname);

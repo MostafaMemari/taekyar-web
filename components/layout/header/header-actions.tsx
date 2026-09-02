@@ -28,12 +28,13 @@ export function HeaderActions({
   children,
 }: HeaderActionsProps) {
   return (
-    <div className="ms-auto flex items-center gap-1.5 md:ms-0 md:gap-3">
+    <div className="flex items-center gap-1.5 max-md:col-start-1 max-md:row-start-1 md:gap-3">
       {children}
       {appDownloadUrl ? <DownloadAppButton href={appDownloadUrl} /> : null}
       <MobileMenu
         open={menuOpen}
         onOpenChange={onMenuOpenChange}
+        appDownloadUrl={appDownloadUrl}
         siteName={siteName}
         logoImage={logoImage}
         logoImageAlt={logoImageAlt}

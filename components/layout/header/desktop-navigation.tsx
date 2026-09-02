@@ -12,14 +12,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { NavLinkItem, isActivePath, useIsActive, type NavItemView } from "./nav-link-item";
-
-function isActiveBranch(item: NavItemView, pathname: string): boolean {
-  return (
-    isActivePath(item.href, pathname) ||
-    item.children.some((child) => isActiveBranch(child, pathname))
-  );
-}
+import { NavLinkItem, isActiveBranch, useIsActive, type NavItemView } from "./nav-link-item";
 
 function DesktopNavLink({ item }: { item: NavItemView }) {
   if (item.children.length > 0) {
