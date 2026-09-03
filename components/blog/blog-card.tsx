@@ -53,23 +53,23 @@ export function BlogCard({ post }: { post: BlogPost }) {
       <CardCover post={post} />
 
       <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
-        <h3 className="line-clamp-2 text-[15px] font-bold leading-6 sm:text-[16px] sm:leading-7">
+        <h3 className="text-[15px] font-bold leading-6 sm:text-[16px] sm:leading-7">
           <Link
             href={href}
-            className="rounded-sm transition-colors before:absolute before:inset-0 hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="block truncate rounded-sm transition-colors before:absolute before:inset-0 hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             {post.title}
           </Link>
         </h3>
 
         {post.date || post.readTimeMinutes ? (
-          <p className="mt-1.5 flex flex-nowrap items-center gap-x-2 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
-            {post.date ? <span>{formatFaDate(post.date)}</span> : null}
+          <p className="mt-1.5 flex min-w-0 flex-nowrap items-center gap-x-2 overflow-hidden whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+            {post.date ? <span className="min-w-0 truncate">{formatFaDate(post.date)}</span> : null}
             {post.date && post.readTimeMinutes ? (
               <span aria-hidden="true" className="size-1 shrink-0 rounded-full bg-muted-foreground/30" />
             ) : null}
             {post.readTimeMinutes ? (
-              <span className="inline-flex items-center gap-1">
+              <span className="inline-flex shrink-0 items-center gap-1">
                 <Clock className="size-3 shrink-0" />
                 {toFaDigits(post.readTimeMinutes)} {BLOG_INDEX_LABELS.readTimeSuffix}
               </span>
