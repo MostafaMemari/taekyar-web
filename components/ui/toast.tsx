@@ -52,7 +52,7 @@ function ToastTitle({ className, ...props }: React.ComponentProps<typeof ToastPr
   return (
     <ToastPrimitive.Title
       data-slot="toast-title"
-      className={cn("text-sm font-extrabold leading-7 text-[#171717]", className)}
+      className={cn("text-sm font-extrabold leading-7 text-foreground", className)}
       {...props}
     />
   );
@@ -65,7 +65,7 @@ function ToastDescription({
   return (
     <ToastPrimitive.Description
       data-slot="toast-description"
-      className={cn("mt-1 text-[13px] leading-6 text-[#6b6b66] sm:text-sm", className)}
+      className={cn("mt-1 text-[13px] leading-6 text-muted-foreground sm:text-sm", className)}
       {...props}
     />
   );

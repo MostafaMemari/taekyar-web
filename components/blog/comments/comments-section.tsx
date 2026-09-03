@@ -29,7 +29,7 @@ export function CommentsSection({ comments, postSlug }: CommentsSectionProps) {
 
   return (
     <section aria-labelledby="comments-title" className="mt-8 sm:mt-10">
-      <div className="border-b border-black/[0.06] pb-4 sm:pb-5">
+      <div className="border-b border-border/60 pb-4 sm:pb-5">
         <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
           <div>
             <p className="text-[11px] font-bold tracking-wide text-primary sm:text-xs">

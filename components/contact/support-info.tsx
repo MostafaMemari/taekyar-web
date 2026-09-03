@@ -45,7 +45,7 @@ export async function SupportInfo() {
         </li>
       </ul>
 
-      <BeltDivider variant="pill" width="contained" className="mt-6 h-1 w-16 opacity-70" />
+      <BeltDivider variant="pill" className="mt-6 h-1 w-16 opacity-70" />
 
       <Button
         asChild

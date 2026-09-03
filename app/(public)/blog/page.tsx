@@ -61,7 +61,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         </Reveal>
 
         <Reveal delay={80}>
-          <div className="mt-6 flex flex-col gap-3 border-b border-black/[0.06] pb-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pb-5">
+          <div className="mt-6 flex flex-col gap-3 border-b border-border/60 pb-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pb-5">
             <CategoryFilter activeCategory={activeCategory} />
             <p className="shrink-0 text-xs font-medium text-muted-foreground sm:text-[13px]">
               <span className="font-bold tabular-nums text-foreground">{toFaDigits(totalCount)}</span> {BLOG_INDEX_LABELS.resultsSuffix}

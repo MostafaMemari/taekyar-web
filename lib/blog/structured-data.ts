@@ -32,9 +32,10 @@ interface ArchiveJsonLdInput {
   description?: string | null;
   imageUrl?: string | null;
   posts: BlogPost[];
+  totalCount?: number;
 }
 
-export function archiveJsonLd({ name, path, description, imageUrl, posts }: ArchiveJsonLdInput) {
+export function archiveJsonLd({ name, path, description, imageUrl, posts, totalCount }: ArchiveJsonLdInput) {
   const image = imageUrl ? r2PublicUrl(imageUrl) : undefined;
 
   return {
@@ -46,7 +47,7 @@ export function archiveJsonLd({ name, path, description, imageUrl, posts }: Arch
     ...(image ? { image } : {}),
     mainEntity: {
       "@type": "ItemList",
-      numberOfItems: posts.length,
+      numberOfItems: totalCount ?? posts.length,
       itemListElement: posts.map((post, index) => ({
         "@type": "ListItem",
         position: index + 1,

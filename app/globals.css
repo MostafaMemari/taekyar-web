@@ -199,6 +199,9 @@
   html {
     scroll-behavior: auto;
   }
+  [data-slot="skeleton"] {
+    animation: none;
+  }
   .reveal-hidden {
     opacity: 1;
     transform: none;
@@ -319,7 +322,7 @@
   overflow: hidden;
   border-radius: 1rem;
   background: var(--muted);
-  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.06);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--border) 55%, transparent);
 }
 .article-content figure img {
   width: 100%;

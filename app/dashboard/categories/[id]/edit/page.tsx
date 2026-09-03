@@ -59,7 +59,7 @@ export default async function EditCategoryPage({ params }: EditCategoryPageProps
         <p className="mt-1 text-sm text-muted-foreground">{TAXONOMY_LABELS.kinds.category.editDescription}</p>
       </div>
 
-      <div className="rounded-2xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05] sm:p-6">
+      <div className="rounded-2xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-border/50 sm:p-6">
         <TaxonomyForm
           kind="category"
           mode="edit"

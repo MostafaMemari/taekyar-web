@@ -2,15 +2,24 @@ import Link from "next/link";
 import { ChevronLeft, type LucideIcon } from "lucide-react";
 
 import { PostGrid } from "@/components/blog/post-grid";
+import { BlogPagination } from "@/components/blog/pagination";
 import { TaxonomySeoContent } from "@/components/blog/taxonomy-seo-content";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
+import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
 import type { BlogPost } from "@/lib/blog";
+import { toFaDigits } from "@/lib/utils";
 
 export interface TaxonomyBreadcrumb {
   name: string;
   path: string;
+}
+
+export interface TaxonomyPagination {
+  currentPage: number;
+  totalPages: number;
+  hrefFor: (page: number) => string;
 }
 
 interface TaxonomyArchiveProps {
@@ -21,7 +30,9 @@ interface TaxonomyArchiveProps {
   imageAlt?: string | null;
   placeholderIcon?: LucideIcon;
   posts: BlogPost[];
+  totalCount: number;
   breadcrumbs: TaxonomyBreadcrumb[];
+  pagination?: TaxonomyPagination;
 }
 
 export function TaxonomyArchive({
@@ -32,7 +43,9 @@ export function TaxonomyArchive({
   imageAlt,
   placeholderIcon,
   posts,
+  totalCount,
   breadcrumbs,
+  pagination,
 }: TaxonomyArchiveProps) {
   return (
     <>
@@ -70,7 +83,16 @@ export function TaxonomyArchive({
             <h1 className="mt-2.5 text-balance text-[1.65rem] font-black leading-[1.35] tracking-tight sm:mt-3 sm:text-[2rem] sm:leading-[1.35] lg:text-[2.35rem]">
               {title}
             </h1>
-            <BeltDivider variant="pill" width="contained" className="mt-3.5 h-1 w-16 sm:w-20" />
+            <BeltDivider variant="pill" className="mt-3.5 h-1 w-16 sm:w-20" />
+            <p className="mt-3.5 text-xs font-medium text-muted-foreground sm:text-[13px]">
+              <span className="font-bold tabular-nums text-foreground">{toFaDigits(totalCount)}</span> {BLOG_INDEX_LABELS.resultsSuffix}
+              {pagination && pagination.totalPages > 1 ? (
+                <>
+                  {" · "}
+                  صفحه {toFaDigits(pagination.currentPage)} از {toFaDigits(pagination.totalPages)}
+                </>
+              ) : null}
+            </p>
           </div>
         </Reveal>
       </Section>
@@ -78,6 +100,16 @@ export function TaxonomyArchive({
       <Section containerClassName="pt-6 pb-2 sm:pt-7 lg:pt-8">
         <PostGrid posts={posts} />
       </Section>
+
+      {pagination && pagination.totalPages > 1 ? (
+        <Section containerClassName="pb-2 pt-8 sm:pt-10">
+          <BlogPagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            hrefFor={pagination.hrefFor}
+          />
+        </Section>
+      ) : null}
 
       {description ? (
         <Section containerClassName="pt-8 pb-2 sm:pt-10">

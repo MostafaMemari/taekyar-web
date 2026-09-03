@@ -32,7 +32,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                     "group relative flex items-start gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors",
                     active
                       ? "bg-primary/[0.07] text-primary"
-                      : "text-muted-foreground hover:bg-black/[0.03] hover:text-foreground"
+                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                   )}
                 >
                   <span

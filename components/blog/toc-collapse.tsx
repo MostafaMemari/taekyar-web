@@ -17,7 +17,7 @@ export function TocCollapse({ items }: TocCollapseProps) {
   if (items.length === 0) return null;
 
   return (
-    <details className="group overflow-hidden rounded-2xl bg-card shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05] lg:hidden">
+    <details className="group overflow-hidden rounded-2xl bg-card shadow-sm shadow-black/[0.04] ring-1 ring-border/50 lg:hidden">
       <summary className="flex min-h-[46px] cursor-pointer list-none items-center gap-2.5 px-3.5 py-3 text-foreground [&::-webkit-details-marker]:hidden sm:min-h-12 sm:px-4">
         <ListTree className="size-4 shrink-0 text-primary" />
         <span className="text-[13px] font-bold leading-5">{POST_LABELS.tocMobileTitle}</span>
@@ -30,7 +30,7 @@ export function TocCollapse({ items }: TocCollapseProps) {
         />
       </summary>
 
-      <nav aria-label="سرفصل‌های مقاله" className="border-t border-black/[0.06] p-2 sm:p-2.5">
+      <nav aria-label="سرفصل‌های مقاله" className="border-t border-border/60 p-2 sm:p-2.5">
         <ul className="space-y-0.5">
           {items.map((item, index) => {
             const active = activeId === item.id;
@@ -43,7 +43,7 @@ export function TocCollapse({ items }: TocCollapseProps) {
                     "flex min-h-11 items-start gap-2.5 rounded-lg px-2.5 py-2.5 text-[13px] leading-6 transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
                     active
                       ? "bg-primary/[0.07] font-bold text-primary"
-                      : "font-medium text-muted-foreground hover:bg-black/[0.03] hover:text-foreground"
+                      : "font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                   )}
                 >
                   <span

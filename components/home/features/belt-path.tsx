@@ -23,7 +23,7 @@ export function BeltPath() {
               className={cn(
                 CELL_BASE,
                 current && "border-primary/60 bg-card shadow-sm",
-                !current && earned && "border-transparent bg-[#fafaf8] ring-1 ring-black/[0.04]",
+                !current && earned && "border-transparent bg-[#fafaf8] ring-1 ring-border/40",
                 isNext && "border-dashed border-primary/40 bg-transparent",
                 !earned && !isNext && "border-transparent bg-transparent"
               )}

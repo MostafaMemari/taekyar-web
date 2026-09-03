@@ -130,3 +130,70 @@ export const getPostsByTag = cache(
     }
   },
 );
+
+interface TaxonomyPaginationInput {
+  page: number;
+  perPage: number;
+}
+
+interface PaginatedPosts {
+  posts: BlogPost[];
+  totalCount: number;
+}
+
+async function getDescendantCategoryIds(path: string): Promise<number[]> {
+  const descendants = await prisma.category.findMany({
+    where: { path: { startsWith: `${path}/` } },
+    select: { id: true },
+  });
+  return descendants.map((descendant) => descendant.id);
+}
+
+export const getPaginatedPostsByCategory = cache(
+  async (
+    category: { id: number; path: string },
+    { page, perPage }: TaxonomyPaginationInput,
+  ): Promise<PaginatedPosts> => {
+    try {
+      const categoryIds = [category.id, ...(await getDescendantCategoryIds(category.path))];
+      const where = {
+        ...PUBLIC_POST_WHERE,
+        categories: { some: { id: { in: categoryIds } } },
+      };
+      const [totalCount, posts] = await Promise.all([
+        prisma.post.count({ where }),
+        prisma.post.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          include: POST_INCLUDE,
+          skip: (page - 1) * perPage,
+          take: perPage,
+        }),
+      ]);
+      return { posts: toPostRows(posts), totalCount };
+    } catch {
+      return { posts: [], totalCount: 0 };
+    }
+  },
+);
+
+export const getPaginatedPostsByTag = cache(
+  async (tagId: number, { page, perPage }: TaxonomyPaginationInput): Promise<PaginatedPosts> => {
+    const where = { ...PUBLIC_POST_WHERE, tags: { some: { id: tagId } } };
+    try {
+      const [totalCount, posts] = await Promise.all([
+        prisma.post.count({ where }),
+        prisma.post.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          include: POST_INCLUDE,
+          skip: (page - 1) * perPage,
+          take: perPage,
+        }),
+      ]);
+      return { posts: toPostRows(posts), totalCount };
+    } catch {
+      return { posts: [], totalCount: 0 };
+    }
+  },
+);

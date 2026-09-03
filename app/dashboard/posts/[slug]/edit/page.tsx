@@ -62,7 +62,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
         <p className="mt-1 text-sm text-muted-foreground">{POST_FORM_LABELS.editDescription}</p>
       </div>
 
-      <div className="rounded-2xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05] sm:p-6">
+      <div className="rounded-2xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-border/50 sm:p-6">
         <PostForm
           mode="edit"
           initial={initial}

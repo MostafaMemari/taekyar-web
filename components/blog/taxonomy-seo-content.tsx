@@ -18,7 +18,7 @@ export function TaxonomySeoContent({ title, content, imageUrl, imageAlt, placeho
     <section className={SURFACE_CARD} aria-labelledby="taxonomy-seo-heading">
       <div className="mx-auto max-w-4xl p-4 sm:p-6 lg:p-10">
         {imageUrl ? (
-          <div className="relative mx-auto aspect-square w-full max-w-[240px] overflow-hidden rounded-2xl bg-muted/40 shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06] sm:max-w-[280px]">
+          <div className="relative mx-auto aspect-square w-full max-w-[240px] overflow-hidden rounded-2xl bg-muted/40 shadow-md shadow-black/[0.07] ring-1 ring-border/60 sm:max-w-[280px]">
             <Image
               src={r2PublicUrl(imageUrl)}
               alt={imageAlt || title}
@@ -28,7 +28,7 @@ export function TaxonomySeoContent({ title, content, imageUrl, imageAlt, placeho
             />
           </div>
         ) : placeholderIcon ? (
-          <div className="relative mx-auto aspect-square w-full max-w-[240px] overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06] sm:max-w-[280px]">
+          <div className="relative mx-auto aspect-square w-full max-w-[240px] overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-border/60 sm:max-w-[280px]">
             <ImagePlaceholder
               icon={placeholderIcon}
               label={imageAlt || title}

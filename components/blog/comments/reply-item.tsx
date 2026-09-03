@@ -13,7 +13,7 @@ function ReplyAvatar({ author }: { author: string }) {
     <span
       aria-hidden="true"
       className={cn(
-        "flex size-8 shrink-0 select-none items-center justify-center rounded-full text-[13px] font-black ring-1 ring-black/[0.06] sm:size-9 sm:text-sm",
+        "flex size-8 shrink-0 select-none items-center justify-center rounded-full text-[13px] font-black ring-1 ring-border/60 sm:size-9 sm:text-sm",
         COMMENT_AVATAR_TINTS[tintIndex],
       )}
     >
@@ -28,7 +28,7 @@ interface ReplyItemProps {
 
 export function ReplyItem({ reply }: ReplyItemProps) {
   return (
-    <article className="rounded-lg px-2.5 py-3 transition-colors duration-200 hover:bg-black/[0.025]">
+    <article className="rounded-lg px-2.5 py-3 transition-colors duration-200 hover:bg-muted/50">
       <header className="flex items-center gap-2.5">
         <ReplyAvatar author={reply.author} />
 

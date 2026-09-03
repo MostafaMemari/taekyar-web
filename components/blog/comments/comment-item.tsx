@@ -20,7 +20,7 @@ function CommentAvatar({ author }: { author: string }) {
     <span
       aria-hidden="true"
       className={cn(
-        "flex size-10 shrink-0 select-none items-center justify-center rounded-full text-base font-black ring-1 ring-black/[0.06]",
+        "flex size-10 shrink-0 select-none items-center justify-center rounded-full text-base font-black ring-1 ring-border/60",
         COMMENT_AVATAR_TINTS[tintIndex],
       )}
     >
@@ -89,7 +89,7 @@ export function CommentItem({ comment, postSlug }: CommentItemProps) {
           <time className="whitespace-nowrap text-[11px] font-medium leading-5 text-muted-foreground sm:text-xs">
             {comment.date}
           </time>
-          <span aria-hidden="true" className="hidden h-4 w-px bg-black/[0.08] sm:block" />
+          <span aria-hidden="true" className="hidden h-4 w-px bg-border sm:block" />
           <CommentDialog
             postSlug={postSlug}
             parentId={comment.id}
@@ -107,7 +107,7 @@ export function CommentItem({ comment, postSlug }: CommentItemProps) {
         </div>
       </header>
 
-      <p className="mt-3 border-t border-black/[0.04] pt-3 text-pretty text-[14px] leading-7 text-foreground/85 sm:mt-3.5 sm:pt-3.5 sm:text-[15px] sm:leading-8">
+      <p className="mt-3 border-t border-border/50 pt-3 text-pretty text-[14px] leading-7 text-foreground/85 sm:mt-3.5 sm:pt-3.5 sm:text-[15px] sm:leading-8">
         {comment.message}
       </p>
 

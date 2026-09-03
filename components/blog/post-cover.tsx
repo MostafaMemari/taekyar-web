@@ -18,7 +18,7 @@ export function PostCover({ post }: { post: BlogPost }) {
         style={{ backgroundColor: color }}
       />
 
-      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06]">
+      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-border/60">
         {post.coverImage ? (
           <Image
             src={r2PublicUrl(post.coverImage)}

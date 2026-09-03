@@ -15,7 +15,7 @@ function AccordionItem({ className, ...props }: React.ComponentProps<typeof Acco
     <AccordionPrimitive.Item
       data-slot="accordion-item"
       className={cn(
-        "rounded-2xl bg-card shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/[0.06] data-[state=open]:shadow-md data-[state=open]:shadow-black/[0.06] data-[state=open]:ring-primary/40",
+        "rounded-2xl bg-card shadow-sm shadow-black/[0.04] ring-1 ring-border/50 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:shadow-black/[0.06] data-[state=open]:shadow-md data-[state=open]:shadow-black/[0.06] data-[state=open]:ring-primary/40",
         className,
       )}
       {...props}

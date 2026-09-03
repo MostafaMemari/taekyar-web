@@ -38,7 +38,7 @@ function CategoryTreeList({ nodes, activePath }: { nodes: PublicCategoryNode[]; 
                 "group flex min-h-10 items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors",
                 active
                   ? "bg-primary/[0.07]"
-                  : "hover:bg-black/[0.03] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                  : "hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
               )}
             >
               <CategoryIconBadge

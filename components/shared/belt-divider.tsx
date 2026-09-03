@@ -42,7 +42,7 @@ export function BeltDivider({ variant = "strip", width = "full", className }: Be
 
   if (variant === "pill") {
     return (
-      <div aria-hidden="true" className={cn(beltDividerVariants({ variant, width: "full" }), className)}>
+      <div aria-hidden="true" className={cn(beltDividerVariants({ variant, width }), className)}>
         <div className="flex h-full">{segments}</div>
       </div>
     );

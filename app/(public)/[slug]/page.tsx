@@ -75,7 +75,7 @@ export default async function StaticPage({ params }: StaticPageProps) {
       <Section className="pb-0 sm:pb-0 lg:pb-0">
         <Reveal>
           <div className="mx-auto max-w-3xl">
-            <header className="border-b border-black/[0.06] pb-5 sm:pb-6">
+            <header className="border-b border-border/60 pb-5 sm:pb-6">
               <h1 className="text-balance text-[1.65rem] font-black leading-[1.35] tracking-tight sm:text-[2rem] sm:leading-[1.35] lg:text-[2.35rem]">
                 {page.title}
               </h1>
@@ -86,7 +86,7 @@ export default async function StaticPage({ params }: StaticPageProps) {
 
       <Section containerClassName="pt-6 sm:pt-8">
         <div className="mx-auto max-w-3xl">
-          <div className="relative aspect-[16/7] w-full overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-black/[0.06]">
+          <div className="relative aspect-[16/7] w-full overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-border/60">
             {page.coverImage ? (
               <Image
                 src={r2PublicUrl(page.coverImage)}
@@ -102,7 +102,7 @@ export default async function StaticPage({ params }: StaticPageProps) {
           </div>
 
           <Reveal delay={80}>
-            <div className="mt-6 rounded-2xl bg-card p-4 shadow-sm shadow-black/[0.04] ring-1 ring-black/[0.05] sm:p-6 lg:p-10">
+            <div className="mt-6 rounded-2xl bg-card p-4 shadow-sm shadow-black/[0.04] ring-1 ring-border/50 sm:p-6 lg:p-10">
               <article
                 className="article-content"
                 dangerouslySetInnerHTML={{ __html: content }}

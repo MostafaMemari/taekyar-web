@@ -95,7 +95,7 @@ export function MenuManager({ location, items, targets }: MenuManagerProps) {
     return (
       <li key={item.id}>
         <div
-          className="flex flex-wrap items-center gap-2 rounded-xl bg-card px-3 py-2.5 ring-1 ring-black/[0.05]"
+          className="flex flex-wrap items-center gap-2 rounded-xl bg-card px-3 py-2.5 ring-1 ring-border/50"
           style={depth > 0 ? { marginInlineStart: `${depth * 1.25}rem` } : undefined}
         >
           <div className="min-w-0 flex-1">

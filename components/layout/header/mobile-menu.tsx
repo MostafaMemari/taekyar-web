@@ -155,7 +155,7 @@ export function MobileMenu({
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="theme-light w-[19rem] gap-0 border-none p-0 text-foreground">
-        <SheetHeader className="border-b border-black/[0.07] px-5 py-4">
+        <SheetHeader className="border-b border-border/60 px-5 py-4">
           <SheetTitle className="text-start">
             <Logo onNavigate={close} siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
           </SheetTitle>

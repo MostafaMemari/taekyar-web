@@ -16,7 +16,7 @@ export function NotFoundContent({ hint = "ممکن است نشانی تغییر 
       >
         ۴۰۴
       </p>
-      <BeltDivider variant="pill" width="contained" className="mt-4 h-1 w-16 sm:w-20" />
+      <BeltDivider variant="pill" className="mt-4 h-1 w-16 sm:w-20" />
       <h1 className="mt-5 text-balance text-xl font-black leading-[1.6] tracking-tight sm:text-2xl">
         صفحه‌ای که دنبالش بودید پیدا نشد
       </h1>

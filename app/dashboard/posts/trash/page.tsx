@@ -77,6 +77,7 @@ function TrashTable({ posts }: TrashTableProps) {
   return (
     <DashboardTable
       minWidth="min-w-[640px]"
+      hiddenOnMobile={[2, 4]}
       headers={[
         POSTS_TABLE_LABELS.columnTitle,
         POSTS_TABLE_LABELS.columnCategory,

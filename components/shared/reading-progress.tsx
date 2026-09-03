@@ -22,7 +22,7 @@ export function ReadingProgress() {
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(fraction * 100)}
-      className="fixed inset-x-0 top-0 z-50 h-[3px] bg-black/[0.08] transition-opacity duration-300 motion-reduce:transition-none"
+      className="fixed inset-x-0 top-0 z-50 h-[3px] bg-foreground/[0.08] transition-opacity duration-300 motion-reduce:transition-none"
       style={{ opacity: fraction > 0.005 ? 1 : 0 }}
     >
       <div aria-hidden="true" className="flex h-full">

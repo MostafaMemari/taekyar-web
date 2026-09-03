@@ -144,6 +144,7 @@ function PagesTable({ pages }: PagesTableProps) {
   return (
     <DashboardTable
       minWidth="min-w-[640px]"
+      hiddenOnMobile={[3]}
       headers={[
         PAGES_TABLE_LABELS.columnTitle,
         PAGES_TABLE_LABELS.columnStatus,

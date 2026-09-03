@@ -33,7 +33,7 @@ export function ImportantNoteView() {
 
 export function BlogImageView({ node }: NodeViewProps) {
   return (
-    <NodeViewWrapper as="figure" data-type="blog-image" className="my-4 overflow-hidden rounded-2xl bg-muted shadow-sm ring-1 ring-black/[0.06]">
+    <NodeViewWrapper as="figure" data-type="blog-image" className="my-4 overflow-hidden rounded-2xl bg-muted shadow-sm ring-1 ring-border/60">
       <Image
         src={node.attrs.src}
         alt={node.attrs.alt}

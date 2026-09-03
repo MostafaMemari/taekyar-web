@@ -48,6 +48,7 @@ function CategoryTable({ rows }: { rows: CategoryTableRow[] }) {
   return (
     <DashboardTable
       minWidth="min-w-[640px]"
+      hiddenOnMobile={[2]}
       headers={[
         TAXONOMY_LABELS.nameLabel,
         TAXONOMY_LABELS.slugLabel,
@@ -95,6 +96,7 @@ function TagTable({ rows }: { rows: TagTableRow[] }) {
   return (
     <DashboardTable
       minWidth="min-w-[640px]"
+      hiddenOnMobile={[2]}
       headers={[
         TAXONOMY_LABELS.nameLabel,
         TAXONOMY_LABELS.slugLabel,

@@ -9,7 +9,7 @@ import { ABOUT_MOTTO_CARD } from "@/data/about";
 import { cn, toFaDigits } from "@/lib/utils";
 
 const SHEET =
-  "pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-card shadow-sm shadow-black/[0.05] ring-1 ring-black/[0.05]";
+  "pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-card shadow-sm shadow-black/[0.05] ring-1 ring-border/50";
 
 const NAV_BUTTON =
   "flex size-8 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
@@ -26,7 +26,7 @@ export function MottoCard() {
       <span aria-hidden="true" className={cn(SHEET, "rotate-[1.6deg]")} />
       <span aria-hidden="true" className={cn(SHEET, "-rotate-[1.6deg]")} />
 
-      <BeltDivider variant="pill" width="contained" className="h-1 w-14" />
+      <BeltDivider variant="pill" className="h-1 w-14" />
 
       <div aria-live="polite" className="grid py-5">
         {quotes.map((item, index) => (
@@ -43,7 +43,7 @@ export function MottoCard() {
         ))}
       </div>
 
-      <figcaption className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-3 border-t border-black/[0.05] pt-4">
+      <figcaption className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-3 border-t border-border/60 pt-4">
         <span className="flex items-center gap-2 text-xs font-bold text-foreground sm:text-[13px]">
           <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
           {current.author}

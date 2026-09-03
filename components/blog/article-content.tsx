@@ -11,7 +11,7 @@ export function PostTags({ tags }: { tags: BlogPost["tags"] }) {
   if (tags.length === 0) return null;
 
   return (
-    <div className="mt-8 flex flex-wrap items-center gap-2 border-t border-black/[0.06] pt-5 sm:mt-10 sm:pt-6">
+    <div className="mt-8 flex flex-wrap items-center gap-2 border-t border-border/60 pt-5 sm:mt-10 sm:pt-6">
       <span className="text-xs font-bold text-foreground">{POST_LABELS.tagsLabel}</span>
       {tags.map((tag) => (
         <Link

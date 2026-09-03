@@ -10,7 +10,7 @@ import { formatFaDate, toFaDigits } from "@/lib/utils";
 
 export function PostTopbar() {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-black/[0.06] pb-4 sm:pb-5">
+    <div className="flex items-center justify-between gap-3 border-b border-border/60 pb-4 sm:pb-5">
       <Link
         href="/blog"
         className="inline-flex min-h-9 items-center gap-1.5 rounded-md px-1.5 py-1 text-[13px] font-semibold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:px-0 sm:text-sm"

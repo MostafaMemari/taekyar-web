@@ -51,7 +51,7 @@ export function Hero({ appDownloadUrl }: { appDownloadUrl?: string | null }) {
               </Button>
             </div>
 
-            <ul className="mt-8 flex w-full flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-black/[0.06] pt-5 lg:mt-10 lg:justify-start lg:pt-6">
+            <ul className="mt-8 flex w-full flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-border/60 pt-5 lg:mt-10 lg:justify-start lg:pt-6">
               {TRUST_BADGES.map((badge) => (
                 <li key={badge} className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                   <Check className="size-3.5 shrink-0 text-belt-green" strokeWidth={2.5} />

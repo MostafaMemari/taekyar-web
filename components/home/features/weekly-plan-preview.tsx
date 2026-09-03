@@ -24,7 +24,7 @@ function PlanStats() {
       {WEEKLY_STATS.map(({ label, value }) => (
         <div
           key={label}
-          className="rounded-xl bg-card p-2.5 text-center ring-1 ring-black/[0.04]"
+          className="rounded-xl bg-card p-2.5 text-center ring-1 ring-border/40"
         >
           <p className="text-base font-black leading-none text-foreground">{value}</p>
           <p className="mt-1 text-[10px] font-medium text-muted-foreground">{label}</p>
@@ -72,7 +72,7 @@ function PlanWeek() {
                 ? "bg-primary text-white"
                 : done
                   ? "bg-primary/10 text-primary"
-                  : "bg-card text-muted-foreground ring-1 ring-black/[0.05]"
+                  : "bg-card text-muted-foreground ring-1 ring-border/50"
             )}
           >
             <Icon className="size-3.5" />
@@ -99,7 +99,7 @@ function PlanWeek() {
 
 export function WeeklyPlanPreview() {
   return (
-    <div className="rounded-2xl bg-[#fafaf8] p-4 ring-1 ring-black/[0.05] sm:p-5">
+    <div className="rounded-2xl bg-[#fafaf8] p-4 ring-1 ring-border/50 sm:p-5">
       <PlanHeader />
       <PlanStats />
       <PlanWeek />
