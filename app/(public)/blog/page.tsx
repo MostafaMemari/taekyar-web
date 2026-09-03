@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { BlogHeader } from "@/components/blog/blog-header";
 import { BlogPagination } from "@/components/blog/pagination";
 import { CategoryFilter } from "@/components/blog/category-filter";
+import { PaginationScrollTop } from "@/components/blog/pagination-scroll-top";
 import { BLOG_INDEX_LABELS, BLOG_PAGINATION } from "@/data/blog/index-page";
 import { PostGrid } from "@/components/blog/post-grid";
 import { Reveal } from "@/components/shared/reveal";
@@ -55,7 +56,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <>
-      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10">
+      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10" id="archive-top">
+        <PaginationScrollTop targetId="archive-top" />
         <Reveal>
           <BlogHeader />
         </Reveal>

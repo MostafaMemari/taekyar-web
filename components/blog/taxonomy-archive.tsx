@@ -3,6 +3,7 @@ import { ChevronLeft, type LucideIcon } from "lucide-react";
 
 import { PostGrid } from "@/components/blog/post-grid";
 import { BlogPagination } from "@/components/blog/pagination";
+import { PaginationScrollTop } from "@/components/blog/pagination-scroll-top";
 import { TaxonomySeoContent } from "@/components/blog/taxonomy-seo-content";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { Reveal } from "@/components/shared/reveal";
@@ -49,7 +50,8 @@ export function TaxonomyArchive({
 }: TaxonomyArchiveProps) {
   return (
     <>
-      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10">
+      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10" id="archive-top">
+        <PaginationScrollTop targetId="archive-top" />
         <Reveal>
           <nav aria-label="مسیر" className="flex flex-wrap items-center gap-1.5 text-[12px] font-medium text-muted-foreground">
             {breadcrumbs.map((crumb, index) => {

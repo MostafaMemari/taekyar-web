@@ -16,6 +16,7 @@ export function ScrollReset() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const isHistoryNavigation = useRef(false);
+  const previous = useRef<{ pathname: string; page: string } | null>(null);
 
   useEffect(() => {
     const markHistoryNavigation = () => {
@@ -27,12 +28,25 @@ export function ScrollReset() {
   }, []);
 
   useEffect(() => {
+    const snapshot = { pathname, page: searchParams.get("page") ?? "" };
+
     if (isHistoryNavigation.current) {
       isHistoryNavigation.current = false;
+      previous.current = snapshot;
       return;
     }
 
-    if (window.location.hash) return;
+    if (window.location.hash) {
+      previous.current = snapshot;
+      return;
+    }
+
+    const prev = previous.current;
+    previous.current = snapshot;
+
+    if (prev && prev.pathname === snapshot.pathname && prev.page !== snapshot.page) {
+      return;
+    }
 
     scrollToTopInstantly();
 
