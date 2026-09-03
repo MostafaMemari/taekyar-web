@@ -3,15 +3,18 @@ import { Features } from "@/components/home/features/features";
 import { BlogPreview } from "@/components/home/blog-preview/blog-preview";
 import { Faq } from "@/components/home/faq/faq";
 import { CtaSection } from "@/components/home/cta/cta";
+import { getSiteSettings } from "@/lib/site-settings";
 
-export default function Home() {
+export default async function Home() {
+  const settings = await getSiteSettings();
+
   return (
     <>
-      <Hero />
+      <Hero appDownloadUrl={settings.appDownloadUrl} />
       <Features />
       <BlogPreview />
       <Faq />
-      <CtaSection />
+      <CtaSection appDownloadUrl={settings.appDownloadUrl} />
     </>
   );
 }

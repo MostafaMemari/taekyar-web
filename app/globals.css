@@ -219,7 +219,7 @@
   margin-top: 0;
 }
 .article-content p {
-  color: var(--muted-foreground);
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
   font-size: 0.9375rem;
   line-height: 2.1;
 }
@@ -263,7 +263,7 @@
 .article-content ol {
   margin-block: 0.25rem;
   padding-inline-start: 1.5rem;
-  color: var(--muted-foreground);
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
   font-size: 0.9375rem;
   line-height: 2;
 }

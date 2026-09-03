@@ -1,5 +1,6 @@
 "use client";
 
+import { POST_LABELS } from "@/data/blog/post-config";
 import { useReadingProgress } from "@/hooks/use-reading-progress";
 import { cn } from "@/lib/utils";
 
@@ -16,11 +17,15 @@ export function ReadingProgress() {
 
   return (
     <div
-      aria-hidden="true"
+      role="progressbar"
+      aria-label={POST_LABELS.progressLabel}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(fraction * 100)}
       className="fixed inset-x-0 top-0 z-50 h-[3px] bg-black/[0.08] transition-opacity duration-300 motion-reduce:transition-none"
       style={{ opacity: fraction > 0.005 ? 1 : 0 }}
     >
-      <div className="flex h-full">
+      <div aria-hidden="true" className="flex h-full">
         {BELT_FILL_COLORS.map((color, index) => {
           const fill = Math.min(1, Math.max(0, fraction * BELT_FILL_COLORS.length - index));
           return (

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
+import { ChevronLeft, type LucideIcon } from "lucide-react";
 
 import { PostGrid } from "@/components/blog/post-grid";
 import { TaxonomySeoContent } from "@/components/blog/taxonomy-seo-content";
@@ -38,14 +38,14 @@ export function TaxonomyArchive({
     <>
       <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10">
         <Reveal>
-          <nav aria-label="breadcrumb" className="flex flex-wrap items-center gap-1.5 text-[12px] font-medium text-muted-foreground">
+          <nav aria-label="مسیر" className="flex flex-wrap items-center gap-1.5 text-[12px] font-medium text-muted-foreground">
             {breadcrumbs.map((crumb, index) => {
               const last = index === breadcrumbs.length - 1;
 
               return (
                 <span key={crumb.path} className="flex items-center gap-1.5">
                   {index > 0 ? (
-                    <span aria-hidden="true" className="text-muted-foreground/40">/</span>
+                    <ChevronLeft aria-hidden="true" className="size-3.5 text-muted-foreground/40" />
                   ) : null}
                   {last ? (
                     <span aria-current="page" className="font-bold text-foreground">{crumb.name}</span>

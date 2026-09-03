@@ -18,7 +18,7 @@ function CardCover({ post }: { post: BlogPost }) {
         <>
           <Image
             src={r2PublicUrl(post.coverImage)}
-            alt=""
+            alt={post.coverImageAlt || post.title}
             fill
             unoptimized
             className="object-cover transition-transform duration-500 group-hover/card:scale-[1.04]"
@@ -32,7 +32,7 @@ function CardCover({ post }: { post: BlogPost }) {
         />
       )}
       {post.category ? (
-        <Badge className="absolute start-3 top-3 border-none bg-white/90 text-[11px] font-bold tracking-tight text-[#171717] shadow-sm backdrop-blur-sm sm:text-xs">
+        <Badge className="absolute start-3 top-3 border border-border/40 bg-card/90 text-[11px] font-bold tracking-tight text-card-foreground shadow-sm backdrop-blur-sm sm:text-xs">
           {post.category}
         </Badge>
       ) : null}
@@ -47,18 +47,16 @@ export function BlogCard({ post }: { post: BlogPost }) {
     <article
       className={cn(
         SURFACE_CARD,
-        "group/card flex h-full flex-col overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/[0.06]"
+        "group/card relative flex h-full flex-col overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/[0.06]"
       )}
     >
-      <Link href={href} className="block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50" aria-label={post.title}>
-        <CardCover post={post} />
-      </Link>
+      <CardCover post={post} />
 
       <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
-        <h3 className="text-[15px] font-bold leading-6 sm:text-[16px] sm:leading-7">
+        <h3 className="line-clamp-2 text-[15px] font-bold leading-6 sm:text-[16px] sm:leading-7">
           <Link
             href={href}
-            className="block truncate rounded-sm transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="rounded-sm transition-colors before:absolute before:inset-0 hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             {post.title}
           </Link>
@@ -85,15 +83,13 @@ export function BlogCard({ post }: { post: BlogPost }) {
           </p>
         ) : null}
 
-        <Link
-          href={href}
-          tabIndex={-1}
+        <span
           aria-hidden="true"
           className="mt-auto inline-flex items-center gap-1.5 self-start pt-4 text-[13px] font-bold text-primary transition-all group-hover/card:gap-2 sm:pt-5 sm:text-sm"
         >
           {BLOG_INDEX_LABELS.readMore}
           <ArrowLeft className="size-3.5 sm:size-4" />
-        </Link>
+        </span>
       </div>
     </article>
   );

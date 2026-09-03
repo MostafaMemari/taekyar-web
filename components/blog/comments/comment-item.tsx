@@ -12,13 +12,16 @@ import { cn } from "@/lib/utils";
 
 function CommentAvatar({ author }: { author: string }) {
   const initial = author.trim().charAt(0);
+  const tintIndex =
+    [...author].reduce((sum, char) => sum + char.charCodeAt(0), 0) %
+    COMMENT_AVATAR_TINTS.length;
 
   return (
     <span
       aria-hidden="true"
       className={cn(
         "flex size-10 shrink-0 select-none items-center justify-center rounded-full text-base font-black ring-1 ring-black/[0.06]",
-        COMMENT_AVATAR_TINTS[0],
+        COMMENT_AVATAR_TINTS[tintIndex],
       )}
     >
       {initial}
@@ -104,7 +107,7 @@ export function CommentItem({ comment, postSlug }: CommentItemProps) {
         </div>
       </header>
 
-      <p className="mt-3 border-t border-black/[0.04] pt-3 text-pretty text-[14px] leading-7 text-muted-foreground sm:mt-3.5 sm:pt-3.5 sm:text-[15px] sm:leading-8">
+      <p className="mt-3 border-t border-black/[0.04] pt-3 text-pretty text-[14px] leading-7 text-foreground/85 sm:mt-3.5 sm:pt-3.5 sm:text-[15px] sm:leading-8">
         {comment.message}
       </p>
 

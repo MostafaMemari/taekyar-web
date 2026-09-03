@@ -8,23 +8,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { cn } from "@/lib/utils";
 import { CONTACT_CARD, FAQS, FAQ_INTRO } from "@/data/home/faq";
 
 function FaqList() {
   return (
     <Accordion
       type="multiple"
-      className="mt-8 grid grid-cols-1 items-start gap-4 lg:mt-10 lg:grid-cols-2 lg:gap-5"
+      className="mx-auto mt-8 grid max-w-3xl grid-cols-1 items-start gap-4 lg:mt-10"
     >
       {FAQS.map(({ question, answer }, index) => (
         <AccordionItem
           key={question}
           value={`faq-${index + 1}`}
-          className={cn(
-            "px-5 py-1 sm:px-6",
-            index === FAQS.length - 1 && "lg:col-span-2"
-          )}
+          className="px-5 py-1 sm:px-6"
         >
           <AccordionTrigger>{question}</AccordionTrigger>
           <AccordionContent>{answer}</AccordionContent>

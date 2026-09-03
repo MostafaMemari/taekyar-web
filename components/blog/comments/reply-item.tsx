@@ -1,14 +1,21 @@
 import type { PostComment } from "@/data/blog/comments";
+import { COMMENT_AVATAR_TINTS } from "@/data/blog/comments";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 function ReplyAvatar({ author }: { author: string }) {
   const initial = author.trim().charAt(0);
+  const tintIndex =
+    [...author].reduce((sum, char) => sum + char.charCodeAt(0), 0) %
+    COMMENT_AVATAR_TINTS.length;
 
   return (
     <span
       aria-hidden="true"
-      className="flex size-8 shrink-0 select-none items-center justify-center rounded-full bg-primary/15 text-[13px] font-black text-primary ring-1 ring-black/[0.06] sm:size-9 sm:text-sm"
+      className={cn(
+        "flex size-8 shrink-0 select-none items-center justify-center rounded-full text-[13px] font-black ring-1 ring-black/[0.06] sm:size-9 sm:text-sm",
+        COMMENT_AVATAR_TINTS[tintIndex],
+      )}
     >
       {initial}
     </span>
@@ -50,7 +57,7 @@ export function ReplyItem({ reply }: ReplyItemProps) {
         </time>
       </header>
 
-      <p className="mt-1.5 ps-[calc(2rem+0.625rem)] text-[13.5px] leading-6 text-muted-foreground sm:ps-[calc(2.25rem+0.625rem)]">
+      <p className="mt-1.5 ps-[calc(2rem+0.625rem)] text-[13.5px] leading-6 text-foreground/85 sm:ps-[calc(2.25rem+0.625rem)]">
         {reply.message}
       </p>
     </article>

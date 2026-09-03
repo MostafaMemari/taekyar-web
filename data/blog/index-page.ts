@@ -37,7 +37,7 @@ export const BLOG_INDEX_LABELS = {
 };
 
 export const BLOG_PAGINATION = {
-  postsPerPage: 4,
+  postsPerPage: 6,
   navLabel: "ناوبری صفحات وبلاگ",
   prev: "صفحه قبل",
   next: "صفحه بعد",
