@@ -1,8 +1,10 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
-import { POST_FORM_LABELS, PAGES_FORM_LABELS, TAXONOMY_LABELS } from "@/data/dashboard/ui";
+import { FAQ_LABELS, POST_FORM_LABELS, PAGES_FORM_LABELS, TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { getSession } from "@/lib/auth";
 import type {
+  FaqFieldErrors,
+  FaqInput,
   PageFieldErrors,
   PageInput,
   PostFieldErrors,
@@ -59,6 +61,17 @@ export function revalidatePagePaths(slug: string) {
   revalidatePath(`/dashboard/pages`);
   revalidateTag("pages", "max");
   revalidateTag(`page-${slug}`, "max");
+}
+
+export function revalidateFaqPaths(slug?: string) {
+  revalidatePath("/");
+  revalidatePath("/dashboard/faqs");
+  revalidatePath("/dashboard");
+  revalidateTag("faqs", "max");
+  if (slug) {
+    revalidatePostPaths(slug);
+    revalidatePath(`/dashboard/posts/${slug}/edit`);
+  }
 }
 
 export function normalizeOptionalText(value: unknown): string | null {
@@ -172,6 +185,7 @@ export interface NormalizedPost {
   coverImageAlt: string | null;
   seo: NormalizedSeo;
   status: PostPublishStatus;
+  faqs?: FaqInput[];
 }
 
 export type PostValidationResult =
@@ -233,6 +247,7 @@ export type PostValidationResult =
       coverImageAlt: normalizeOptionalText(input.coverImageAlt),
       seo: normalizeSeoInput(input),
       status: input.status === "DRAFT" ? "DRAFT" : "PUBLISHED",
+      faqs: input.faqs === undefined ? undefined : normalizePostFaqs(input.faqs),
     },
   };
 }
@@ -280,4 +295,46 @@ export function normalizePageInput(input: PageInput): PageValidationResult {
       status: input.status === "DRAFT" ? "DRAFT" : "PUBLISHED",
     },
   };
+}
+
+export const FAQ_QUESTION_MAX_LENGTH = 300;
+export const FAQ_ANSWER_MAX_LENGTH = 5000;
+
+export type FaqValidationResult =
+  | { ok: true; data: FaqInput }
+  | { ok: false; fieldErrors: FaqFieldErrors; message?: string };
+
+export function normalizeFaqInput(input: FaqInput): FaqValidationResult {
+  const fieldErrors: FaqFieldErrors = {};
+  const question = String(input.question ?? "").trim();
+  const answer = String(input.answer ?? "").trim();
+
+  if (!question) {
+    fieldErrors.question = FAQ_LABELS.questionRequired;
+  } else if (question.length > FAQ_QUESTION_MAX_LENGTH) {
+    fieldErrors.question = FAQ_LABELS.questionTooLong;
+  }
+
+  if (!answer) {
+    fieldErrors.answer = FAQ_LABELS.answerRequired;
+  } else if (answer.length > FAQ_ANSWER_MAX_LENGTH) {
+    fieldErrors.answer = FAQ_LABELS.answerTooLong;
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { ok: false, fieldErrors };
+  }
+
+  return { ok: true, data: { question, answer } };
+}
+
+export function normalizePostFaqs(value: unknown): FaqInput[] {
+  if (!Array.isArray(value)) return [];
+  const faqs: FaqInput[] = [];
+  for (const item of value) {
+    if (!item || typeof item !== "object") continue;
+    const result = normalizeFaqInput(item as FaqInput);
+    if (result.ok) faqs.push(result.data);
+  }
+  return faqs.slice(0, 30);
 }

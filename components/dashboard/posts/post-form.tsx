@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { createPost, updatePost } from "@/lib/admin-actions";
-import type { PostFieldErrors, PostInput } from "@/lib/admin-types";
+import type { FaqInput, PostFieldErrors, PostInput } from "@/lib/admin-types";
 import { parsePostHtml } from "@/lib/post-content";
 import { RichContentEditor } from "./rich-content-editor";
 import { CoverImageField, type CoverImageValue } from "@/components/dashboard/shared/cover-image-field";
 import { MainInfoFields } from "./post-form/form-fields";
+import { PostFaqEditor } from "./post-form/post-faq-editor";
 import { PostSidebarFields } from "./post-form/post-sidebar-fields";
 import { SeoFields } from "./post-form/seo-fields";
 import type { FieldDraft } from "./post-form/types";
@@ -45,6 +46,7 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
     alt: initial.coverImageAlt ?? "",
   });
   const [content, setContent] = useState<string>(parsePostHtml(initial.content));
+  const [faqs, setFaqs] = useState<FaqInput[]>(initial.faqs ?? []);
   const [isPending, startTransition] = useTransition();
   const [fieldErrors, setFieldErrors] = useState<PostFieldErrors>({});
 
@@ -85,6 +87,7 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
       canonical: fields.canonical.trim() || null,
       robotsTags: fields.robotsTags.trim() || null,
       status,
+      faqs: mode === "create" ? faqs : undefined,
     };
 
     setFieldErrors({});
@@ -109,6 +112,11 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
         <div className="min-w-0 space-y-5 lg:col-span-2">
           <MainInfoFields fields={fields} onFieldChange={setField} fieldErrors={fieldErrors} />
           <RichContentEditor initialContent={content} onChange={setContent} error={fieldErrors.content} />
+          {mode === "create" ? (
+            <PostFaqEditor mode="create" value={faqs} onChange={setFaqs} />
+          ) : (
+            <PostFaqEditor mode="edit" postSlug={currentSlug ?? ""} initialFaqs={initial.faqs ?? []} />
+          )}
           <SeoFields fields={fields} onFieldChange={setField} fieldErrors={fieldErrors} />
         </div>
 

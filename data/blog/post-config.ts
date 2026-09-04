@@ -18,6 +18,11 @@ export const POST_CONTACT_CTA = {
   actionHref: "/contact",
 } as const;
 
+export const POST_FAQ_COPY = {
+  eyebrow: "سوالات متداول",
+  title: "سوالات پرتکرار درباره این مقاله",
+} as const;
+
 export const POST_LABELS = {
   backToBlog: "بازگشت به وبلاگ",
   author: "تیم تحریریه تک‌یار",

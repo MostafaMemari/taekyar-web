@@ -8,3 +8,4 @@ export * from "./admin/taxonomy-actions";
 export * from "./admin/image-actions";
 export * from "./admin/media-actions";
 export * from "./admin/settings-actions";
+export * from "./admin/faq-actions";

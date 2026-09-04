@@ -32,6 +32,27 @@ enum MenuLocation {
   FOOTER_BLOG
 }
 
+enum FaqLocation {
+  HOMEPAGE
+  BLOG
+}
+
+model Faq {
+  id        Int         @id @default(autoincrement())
+  question  String
+  answer    String
+  location  FaqLocation @default(HOMEPAGE)
+  postId    Int?
+  post      Post?       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  order     Int         @default(0)
+  isActive  Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+
+  @@index([location, order])
+  @@index([postId, order])
+}
+
 model MenuItem {
   id         Int          @id @default(autoincrement())
   title      String
@@ -84,6 +105,7 @@ model Post {
   comments        Comment[]
   seo             SeoMetadata?
   menuItems       MenuItem[]
+  faqs            Faq[]
 }
 
 model Category {

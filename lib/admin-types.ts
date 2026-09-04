@@ -30,6 +30,7 @@ export interface PostInput extends SeoOverrideInput {
   coverImage: string | null;
   coverImageAlt: string | null;
   status: PostPublishStatus;
+  faqs?: FaqInput[];
 }
 
 export interface PageInput extends SeoOverrideInput {
@@ -174,5 +175,26 @@ export type LoginError = "invalid" | "captcha_wrong" | "captcha_expired";
 
 export interface LoginState {
   error?: LoginError;
+}
+
+export type FaqLocationDto = "HOMEPAGE" | "BLOG";
+
+export interface FaqInput {
+  question: string;
+  answer: string;
+}
+
+export interface HomepageFaqInput extends FaqInput {
+  isActive: boolean;
+}
+
+export type FaqFieldKey = "question" | "answer";
+
+export type FaqFieldErrors = Partial<Record<FaqFieldKey, string>>;
+
+export interface FaqFormState {
+  status: "idle" | "error";
+  message?: string;
+  fieldErrors?: FaqFieldErrors;
 }
 

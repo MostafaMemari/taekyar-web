@@ -28,6 +28,7 @@ export default async function NewPostPage() {
     canonical: null,
     robotsTags: null,
     status: "PUBLISHED",
+    faqs: [],
   };
 
   return (

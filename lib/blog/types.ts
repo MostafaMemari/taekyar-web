@@ -8,6 +8,13 @@ export interface PostCategoryRef {
   image: string | null;
 }
 
+export interface FaqRef {
+  id: number;
+  question: string;
+  answer: string;
+  order: number;
+}
+
 export interface BlogPost {
   id: number;
   slug: string;
@@ -18,6 +25,7 @@ export interface BlogPost {
   categoryPath: string | null;
   categoryImage: string | null;
   tags: Array<{ id: number; name: string; slug: string }>;
+  faqs: FaqRef[];
   date: Date | null;
   readTimeMinutes: number | null;
   coverImage: string | null;
@@ -46,6 +54,7 @@ export interface BlogPostRow {
   updatedAt: Date;
   categories: PostCategoryRef[];
   tags: Array<{ id: number; name: string; slug: string }>;
+  faqs?: FaqRef[];
 }
 
 export function toBlogPost(post: BlogPostRow): BlogPost {
@@ -61,6 +70,7 @@ export function toBlogPost(post: BlogPostRow): BlogPost {
     categoryPath: primaryCategory?.path ?? null,
     categoryImage: primaryCategory?.image ?? null,
     tags: post.tags,
+    faqs: [...(post.faqs ?? [])].sort((a, b) => a.order - b.order || a.id - b.id),
     date: post.date,
     readTimeMinutes: post.readTimeMinutes,
     coverImage: post.coverImage,
@@ -71,7 +81,16 @@ export function toBlogPost(post: BlogPostRow): BlogPost {
   };
 }
 
-export const POST_INCLUDE = { categories: true, tags: true, seo: true } as const;
+export const POST_INCLUDE = {
+  categories: true,
+  tags: true,
+  seo: true,
+  faqs: {
+    where: { isActive: true },
+    orderBy: { order: "asc" as const },
+    select: { id: true, question: true, answer: true, order: true },
+  },
+} as const;
 
 export function toPostRows(posts: Array<BlogPostRow & { content?: unknown }>): BlogPost[] {
   return posts.map(toBlogPost);

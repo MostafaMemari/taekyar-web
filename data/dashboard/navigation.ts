@@ -1,4 +1,4 @@
-import { FileText, FolderTree, Images, LayoutDashboard, ListTree, MessagesSquare, Settings, StickyNote, Tag as TagIcon } from "lucide-react";
+import { FileText, FolderTree, HelpCircle, Images, LayoutDashboard, ListTree, MessagesSquare, Settings, StickyNote, Tag as TagIcon } from "lucide-react";
 
 export const DASHBOARD_NAV = [
   { href: "/dashboard", label: "نمای کلی", Icon: LayoutDashboard },
@@ -8,6 +8,7 @@ export const DASHBOARD_NAV = [
   { href: "/dashboard/media", label: "رسانه‌ها", Icon: Images },
   { href: "/dashboard/categories", label: "دسته‌بندی‌ها", Icon: FolderTree },
   { href: "/dashboard/tags", label: "برچسب‌ها", Icon: TagIcon },
+  { href: "/dashboard/faqs", label: "سوالات متداول", Icon: HelpCircle },
   { href: "/dashboard/comments", label: "دیدگاه‌ها", Icon: MessagesSquare },
   { href: "/dashboard/settings", label: "تنظیمات سایت", Icon: Settings },
 ];

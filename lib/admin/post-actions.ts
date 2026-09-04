@@ -36,7 +36,7 @@ export async function createPost(_previousState: PostFormState, input: PostInput
 
   const publishDate = data.status === "PUBLISHED" ? new Date() : null;
   try {
-    const { tagIds, categoryIds, content, seo, ...postData } = data;
+    const { tagIds, categoryIds, content, seo, faqs, ...postData } = data;
     const post = await prisma.post.create({
       data: {
         ...postData,
@@ -45,6 +45,17 @@ export async function createPost(_previousState: PostFormState, input: PostInput
         date: publishDate,
         categories: { connect: categoryIds.map((id) => ({ id })) },
         tags: { connect: tagIds.map((id) => ({ id })) },
+        faqs:
+          faqs && faqs.length > 0
+            ? {
+                create: faqs.map((faq, index) => ({
+                  ...faq,
+                  location: "BLOG",
+                  order: index,
+                  isActive: true,
+                })),
+              }
+            : undefined,
       },
     });
     if (hasSeoData(seo)) {
@@ -86,7 +97,7 @@ export async function updatePost(
   const publishDate = firstPublication ? new Date() : current.date;
 
   try {
-    const { tagIds, categoryIds, content, seo, ...postData } = data;
+    const { tagIds, categoryIds, content, seo, faqs, ...postData } = data;
     await prisma.$transaction([
       prisma.post.update({
         where: { slug: currentSlug },
@@ -100,6 +111,24 @@ export async function updatePost(
         },
       }),
       seoWriteOps(current.id, seo),
+      ...(faqs
+        ? [
+            prisma.faq.deleteMany({ where: { postId: current.id } }),
+            ...(faqs.length > 0
+              ? [
+                  prisma.faq.createMany({
+                    data: faqs.map((faq, index) => ({
+                      ...faq,
+                      location: "BLOG" as const,
+                      postId: current.id,
+                      order: index,
+                      isActive: true,
+                    })),
+                  }),
+                ]
+              : []),
+          ]
+        : []),
     ]);
   } catch (error) {
     if (isSlugConflict(error)) {

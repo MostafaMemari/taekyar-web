@@ -53,6 +53,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     canonical: post.seo?.canonical ?? null,
     robotsTags: post.seo?.robotsTags ?? null,
     status: post.status,
+    faqs: post.faqs.map((faq) => ({ question: faq.question, answer: faq.answer })),
   };
 
   return (

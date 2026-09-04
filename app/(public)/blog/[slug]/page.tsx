@@ -5,7 +5,8 @@ import { ArticleContent } from "@/components/blog/article-content";
 import { CommentsSection } from "@/components/blog/comments/comments-section";
 import { PostCover } from "@/components/blog/post-cover";
 import { PostHeader, PostTopbar } from "@/components/blog/post-header";
-import { POST_CONTACT_CTA, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/data/blog/post-config";
+import { POST_CONTACT_CTA, POST_FAQ_COPY, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/data/blog/post-config";
+import { FaqSection } from "@/components/faq/faq-section";
 import { RelatedPosts } from "@/components/blog/related-posts";
 import { SidebarAppCta } from "@/components/blog/sidebar-app-cta";
 import { SidebarCategories } from "@/components/blog/sidebar-categories";
@@ -139,6 +140,14 @@ export default async function PostPage({ params }: PostPageProps) {
                   <ArticleContent post={post} content={content} />
                 </article>
               </Reveal>
+
+              {post.faqs.length > 0 ? (
+                <Reveal delay={100}>
+                  <div className="mt-10 sm:mt-12">
+                    <FaqSection faqs={post.faqs} {...POST_FAQ_COPY} />
+                  </div>
+                </Reveal>
+              ) : null}
 
               <Reveal delay={120}>
                 <CommentsSection comments={comments} postSlug={post.slug} />
