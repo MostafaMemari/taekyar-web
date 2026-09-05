@@ -2,7 +2,7 @@ import { HERO2_BENEFITS } from "@/data/home/hero2";
 
 export function Hero2Benefits() {
   return (
-    <ul className="mt-9 grid w-full max-w-md grid-cols-1 gap-x-8 gap-y-3 border-t border-border/60 pt-6 sm:grid-cols-3 lg:max-w-none">
+    <ul className="mt-8 grid w-full max-w-md grid-cols-1 gap-x-8 gap-y-3 border-t border-border/60 pt-5 sm:grid-cols-3 lg:max-w-none">
       {HERO2_BENEFITS.map((benefit) => (
         <li
           key={benefit.title}

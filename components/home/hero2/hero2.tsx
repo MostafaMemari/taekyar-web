@@ -9,7 +9,7 @@ export function Hero2({ appDownloadUrl }: { appDownloadUrl?: string | null }) {
       {/* TODO: Enable tatami background later
       <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0" /> */}
 
-      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-4 pb-14 pt-10 sm:px-6 sm:pt-12 lg:grid-cols-[1fr_1.05fr] lg:gap-8 lg:px-8 lg:pb-16 lg:pt-14">
+      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-4 pb-10 pt-8 sm:px-6 sm:pt-10 lg:grid-cols-[1fr_1.05fr] lg:gap-6 lg:px-8 lg:pb-12 lg:pt-10">
         <Reveal className="order-2 lg:order-1">
           <Hero2Content appDownloadUrl={appDownloadUrl} />
         </Reveal>

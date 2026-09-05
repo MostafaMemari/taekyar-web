@@ -1,12 +1,4 @@
-import {
-  ArrowLeft,
-  CirclePlay,
-  Download,
-  HeartPulse,
-  ShieldCheck,
-  Sparkles,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowLeft, CirclePlay, Download, HeartPulse, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react";
 
 export const HERO2_CHARACTER = {
   baseSrc: "/01.png",
@@ -25,7 +17,7 @@ export const HERO2_EYEBROW = "اعتماد به نفس، قدرت و انضبا�
 export const HERO2_TITLE = {
   line1: "از اولین ضربه،",
   line2Prefix: "تا",
-  highlight: "کمربند سیاه",
+  highlight: "کمربند مشکی",
 };
 
 export const HERO2_DESCRIPTION =

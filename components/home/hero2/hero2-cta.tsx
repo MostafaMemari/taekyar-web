@@ -10,7 +10,7 @@ export function Hero2Cta({ appDownloadUrl }: Hero2CtaProps) {
   const downloadHref = appDownloadUrl ?? "#download";
 
   return (
-    <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5 lg:justify-start">
+    <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5 lg:justify-start">
       <Button
         asChild
         size="lg"

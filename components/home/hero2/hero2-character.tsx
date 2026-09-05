@@ -59,7 +59,7 @@ export function Hero2Character() {
   }, []);
 
   return (
-    <div className="relative mx-auto w-full max-w-[330px] sm:max-w-[400px] lg:max-w-[520px]">
+    <div className="relative mx-auto w-full max-w-[300px] sm:max-w-[360px] lg:max-w-[440px]">
       <div
         aria-hidden="true"
         className="absolute inset-x-6 bottom-10 top-16 rounded-full bg-primary/[0.06] blur-3xl"
