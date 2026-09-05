@@ -79,5 +79,3 @@ export const HERO2_FLOAT_BADGES: Hero2FloatBadge[] = [
     description: "ورزشکار فعال",
   },
 ];
-
-export const HERO2_HOVER_HINT = "نشانگر را روی کاراکتر ببر";

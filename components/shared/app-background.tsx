@@ -14,17 +14,13 @@ interface AppBackgroundProps {
   children: React.ReactNode;
 }
 
-export function AppBackground({ variant = "tatami", children }: AppBackgroundProps) {
+export function AppBackground({ variant, children }: AppBackgroundProps) {
   return (
     <>
-      <div
-        aria-hidden="true"
-        className="theme-light pointer-events-none fixed inset-0 -z-10 bg-background"
-      />
-      <div
-        aria-hidden="true"
-        className={cn("pointer-events-none fixed inset-0 -z-10", APP_BACKGROUND_STYLES[variant])}
-      />
+      <div aria-hidden="true" className="theme-light pointer-events-none fixed inset-0 -z-10 bg-background" />
+
+      {variant && <div aria-hidden="true" className={cn("pointer-events-none fixed inset-0 -z-10", APP_BACKGROUND_STYLES[variant])} />}
+
       {children}
     </>
   );

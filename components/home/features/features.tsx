@@ -1,33 +1,22 @@
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import { SectionHeader } from "@/components/shared/section-header";
-import { BeltPath } from "./belt-path";
-import { FEATURES_INTRO, SUPPORTING_FEATURES } from "@/data/home/features";
-import { FeatureCard, FeaturedFeatureCard } from "./feature-cards";
+import { FEATURES_INTRO, FEATURE_CARDS } from "@/data/home/features";
+import { FeatureCard } from "./feature-cards";
 
 export function Features() {
   return (
-    <Section id="features" divider="top" containerClassName="py-10 sm:py-12 lg:py-14">
+    <Section id="features" containerClassName="py-10 sm:py-12 lg:py-14">
       <Reveal>
         <SectionHeader {...FEATURES_INTRO} />
       </Reveal>
 
-      <div className="mt-8 space-y-4 lg:mt-10 lg:space-y-5">
-        <Reveal>
-          <FeaturedFeatureCard />
-        </Reveal>
-
-        <Reveal delay={80}>
-          <BeltPath />
-        </Reveal>
-
-        <div className="grid gap-4 md:grid-cols-3 lg:gap-5">
-          {SUPPORTING_FEATURES.map((feature, index) => (
-            <Reveal key={feature.title} delay={(index + 1) * 80}>
-              <FeatureCard {...feature} />
-            </Reveal>
-          ))}
-        </div>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:mt-10 lg:grid-cols-4 lg:gap-5">
+        {FEATURE_CARDS.map((feature, index) => (
+          <Reveal key={feature.title} delay={(index + 1) * 80} className="h-full">
+            <FeatureCard {...feature} />
+          </Reveal>
+        ))}
       </div>
     </Section>
   );

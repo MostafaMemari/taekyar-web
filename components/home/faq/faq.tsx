@@ -13,7 +13,6 @@ export async function Faq() {
   return (
     <Section
       id="faq"
-      divider="top"
       containerClassName="py-10 sm:py-12 lg:py-14"
     >
       <Reveal>

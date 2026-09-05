@@ -54,7 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn("h-full antialiased dark font-sans", vazirmatn.variable, geistMono.variable)}
     >
       <body className="flex min-h-full flex-col">
-        <AppBackground variant="tatami">{children}</AppBackground>
+        <AppBackground>{children}</AppBackground>
       </body>
     </html>
   );

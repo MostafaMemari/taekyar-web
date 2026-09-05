@@ -1,38 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useSyncExternalStore } from "react";
-import { MousePointer2 } from "lucide-react";
+import { useEffect, useRef } from "react";
 
-import { HERO2_CHARACTER, HERO2_FLOAT_BADGES, HERO2_HOVER_HINT } from "@/data/home/hero2";
+import { HERO2_CHARACTER, HERO2_FLOAT_BADGES } from "@/data/home/hero2";
 
 const SIZES = "(max-width: 640px) 88vw, (max-width: 1024px) 60vw, 42vw";
 const HOVER_QUERY = "(hover: hover) and (pointer: fine)";
 const SPOT_MASK =
   "radial-gradient(circle var(--spot) at var(--mx, -100%) var(--my, -100%), #000 55%, transparent 100%)";
 
-function subscribeHoverCapability(onChange: () => void) {
-  const mediaQuery = window.matchMedia(HOVER_QUERY);
-  mediaQuery.addEventListener("change", onChange);
-  return () => mediaQuery.removeEventListener("change", onChange);
-}
-
-function getHoverSnapshot() {
-  return window.matchMedia(HOVER_QUERY).matches;
-}
-
-function getHoverServerSnapshot() {
-  return false;
-}
-
 export function Hero2Character() {
   const frameRef = useRef<HTMLDivElement>(null);
   const gearLayerRef = useRef<HTMLDivElement>(null);
-  const canHover = useSyncExternalStore(
-    subscribeHoverCapability,
-    getHoverSnapshot,
-    getHoverServerSnapshot
-  );
 
   useEffect(() => {
     const frame = frameRef.current;
@@ -142,12 +122,6 @@ export function Hero2Character() {
           />
         </div>
       </div>
-      {canHover ? (
-        <p className="absolute -bottom-1 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-border/60 bg-card/90 px-3 py-1.5 text-[11px] font-semibold text-muted-foreground shadow-sm backdrop-blur-sm">
-          <MousePointer2 className="size-3.5 text-primary" />
-          {HERO2_HOVER_HINT}
-        </p>
-      ) : null}
     </div>
   );
 }
