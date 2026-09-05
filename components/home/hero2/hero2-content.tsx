@@ -10,8 +10,8 @@ interface Hero2ContentProps {
 export function Hero2Content({ appDownloadUrl }: Hero2ContentProps) {
   return (
     <div className="flex flex-col items-center text-center lg:items-start lg:text-start">
-      <span className="inline-flex items-center gap-2.5 text-[13px] font-bold text-primary">
-        <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+      <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3.5 py-1.5 text-[13px] font-bold text-primary">
+        <span className="size-1.5 rounded-full bg-primary" />
         {HERO2_EYEBROW}
       </span>
 

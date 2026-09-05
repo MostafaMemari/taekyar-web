@@ -25,10 +25,12 @@ export function Hero2Cta({ appDownloadUrl }: Hero2CtaProps) {
         asChild
         variant="outline"
         size="lg"
-        className="h-12 gap-2 rounded-xl px-5 text-[15px] font-semibold text-foreground transition-transform duration-200 hover:-translate-y-0.5 hover:bg-muted"
+        className="group h-12 gap-2.5 rounded-xl px-5 text-[15px] font-semibold text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-muted"
       >
         <a href={HERO2_SECONDARY_CTA.href}>
-          <HERO2_SECONDARY_CTA.Icon className="!size-5 text-primary" />
+          <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
+            <HERO2_SECONDARY_CTA.Icon className="size-3 fill-current" />
+          </span>
           {HERO2_SECONDARY_CTA.label}
         </a>
       </Button>

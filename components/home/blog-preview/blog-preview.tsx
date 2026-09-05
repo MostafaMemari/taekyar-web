@@ -13,7 +13,11 @@ export async function BlogPreview() {
   const posts = await getBlogPosts();
 
   return (
-    <Section id="blog-preview" divider="top">
+    <Section
+      id="blog-preview"
+      divider="top"
+      containerClassName="py-10 sm:py-12 lg:py-14"
+    >
       <Reveal>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeader {...BLOG_PREVIEW_INTRO} className="max-w-xl" />

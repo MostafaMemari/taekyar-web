@@ -38,7 +38,7 @@ export function Logo({ onNavigate, siteName = SITE_NAME, logoImage, logoImageAlt
           className="h-9 w-auto object-contain"
         />
       ) : (
-        <span className="text-[17px] font-black tracking-tight text-foreground">
+        <span className="text-lg font-black tracking-tight text-foreground">
           {siteName}
         </span>
       )}

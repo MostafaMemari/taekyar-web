@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { MousePointer2 } from "lucide-react";
 
-import { HERO2_CHARACTER } from "@/data/home/hero2";
+import { HERO2_CHARACTER, HERO2_FLOAT_BADGES, HERO2_HOVER_HINT } from "@/data/home/hero2";
 
 const SIZES = "(max-width: 640px) 88vw, (max-width: 1024px) 60vw, 42vw";
 const HOVER_QUERY = "(hover: hover) and (pointer: fine)";
@@ -13,6 +14,18 @@ const SPOT_MASK =
 export function Hero2Character() {
   const frameRef = useRef<HTMLDivElement>(null);
   const gearLayerRef = useRef<HTMLDivElement>(null);
+  const [canHover, setCanHover] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(HOVER_QUERY).matches
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(HOVER_QUERY);
+    const syncHoverCapability = (event: MediaQueryListEvent) =>
+      setCanHover(event.matches);
+    mediaQuery.addEventListener("change", syncHoverCapability);
+    return () =>
+      mediaQuery.removeEventListener("change", syncHoverCapability);
+  }, []);
 
   useEffect(() => {
     const frame = frameRef.current;
@@ -62,12 +75,37 @@ export function Hero2Character() {
     <div className="relative mx-auto w-full max-w-[300px] sm:max-w-[360px] lg:max-w-[440px]">
       <div
         aria-hidden="true"
+        className="absolute inset-x-2 bottom-6 top-12 -rotate-3 rounded-[3rem] bg-secondary"
+      >
+        <div
+          aria-hidden="true"
+          className="absolute inset-4 rounded-[2.2rem] border border-dashed border-border"
+        />
+      </div>
+      <div
+        aria-hidden="true"
         className="absolute inset-x-6 bottom-10 top-16 rounded-full bg-primary/[0.06] blur-3xl"
       />
       <div
         aria-hidden="true"
         className="absolute bottom-3 left-1/2 h-8 w-1/2 -translate-x-1/2 rounded-[100%] bg-black/15 blur-lg"
       />
+      <div className="animate-hero-float absolute start-0 top-8 z-10 rounded-2xl border border-border/70 bg-card/95 px-3.5 py-2 shadow-lg shadow-black/[0.06] backdrop-blur-sm">
+        <p className="text-[13px] font-black text-foreground">
+          {HERO2_FLOAT_BADGES[0].title}
+        </p>
+        <p className="text-[11px] leading-4 text-muted-foreground">
+          {HERO2_FLOAT_BADGES[0].description}
+        </p>
+      </div>
+      <div className="animate-hero-float absolute bottom-16 end-0 z-10 hidden rounded-2xl border border-border/70 bg-card/95 px-3.5 py-2 shadow-lg shadow-black/[0.06] backdrop-blur-sm [animation-delay:-3s] sm:block">
+        <p className="text-[13px] font-black text-primary">
+          {HERO2_FLOAT_BADGES[1].title}
+        </p>
+        <p className="text-[11px] leading-4 text-muted-foreground">
+          {HERO2_FLOAT_BADGES[1].description}
+        </p>
+      </div>
       <div
         ref={frameRef}
         className="animate-hero-float relative aspect-[1066/1475] w-full"
@@ -97,6 +135,12 @@ export function Hero2Character() {
           />
         </div>
       </div>
+      {canHover ? (
+        <p className="absolute -bottom-1 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-border/60 bg-card/90 px-3 py-1.5 text-[11px] font-semibold text-muted-foreground shadow-sm backdrop-blur-sm">
+          <MousePointer2 className="size-3.5 text-primary" />
+          {HERO2_HOVER_HINT}
+        </p>
+      ) : null}
     </div>
   );
 }

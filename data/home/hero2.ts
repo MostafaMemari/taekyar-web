@@ -1,4 +1,4 @@
-import { ArrowLeft, CirclePlay, Download, HeartPulse, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Download, HeartPulse, Play, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react";
 
 export const HERO2_CHARACTER = {
   baseSrc: "/01.png",
@@ -32,7 +32,7 @@ export const HERO2_PRIMARY_CTA: Hero2Cta = {
 export const HERO2_SECONDARY_CTA: Hero2Cta = {
   label: "تماشای ویدیو",
   href: "#download",
-  Icon: CirclePlay,
+  Icon: Play,
 };
 
 export const HERO2_DOWNLOAD_CTA = {
@@ -63,3 +63,21 @@ export const HERO2_BENEFITS: Hero2Benefit[] = [
     Icon: Sparkles,
   },
 ];
+
+export interface Hero2FloatBadge {
+  title: string;
+  description: string;
+}
+
+export const HERO2_FLOAT_BADGES: Hero2FloatBadge[] = [
+  {
+    title: "کمربند مشکی",
+    description: "مسیر قهرمانی",
+  },
+  {
+    title: "+۵۰۰",
+    description: "ورزشکار فعال",
+  },
+];
+
+export const HERO2_HOVER_HINT = "نشانگر را روی کاراکتر ببر";

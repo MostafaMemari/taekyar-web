@@ -11,7 +11,11 @@ export async function Faq() {
   if (faqs.length === 0) return null;
 
   return (
-    <Section id="faq" divider="top">
+    <Section
+      id="faq"
+      divider="top"
+      containerClassName="py-10 sm:py-12 lg:py-14"
+    >
       <Reveal>
         <FaqSection faqs={faqs} {...FAQ_INTRO} />
       </Reveal>

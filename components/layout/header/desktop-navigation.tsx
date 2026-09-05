@@ -27,9 +27,9 @@ function DesktopNavLinkLeaf({ href, label }: { href: string; label: string }) {
       <NavLinkItem
         href={href}
         label={label}
-        className="-my-1 rounded-md px-2.5 py-1 text-sm transition-colors duration-200"
-        activeClassName="bg-muted font-bold text-foreground"
-        inactiveClassName="font-medium text-muted-foreground hover:bg-muted/70 hover:text-foreground"
+        className="relative -my-1 rounded-md px-3 py-2 text-[15px] transition-colors duration-200 after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:origin-right after:rounded-full after:bg-primary after:transition-transform after:duration-200"
+        activeClassName="font-bold text-foreground after:scale-x-100"
+        inactiveClassName="font-medium text-muted-foreground after:scale-x-0 hover:text-foreground hover:after:scale-x-100"
       />
     </NavigationMenuLink>
   );
@@ -86,10 +86,10 @@ function DesktopNavDropdown({ item }: { item: NavItemView }) {
     <>
       <NavigationMenuTrigger
         className={cn(
-          "-my-1 rounded-md px-2.5 py-1 text-sm transition-colors duration-200 data-open:bg-muted/70",
+          "relative -my-1 rounded-md px-3 py-2 text-[15px] transition-colors duration-200 after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:origin-right after:rounded-full after:bg-primary after:transition-transform after:duration-200 after:scale-x-0 hover:after:scale-x-100 data-open:after:scale-x-100",
           active
-            ? "bg-muted font-bold text-foreground"
-            : "font-medium text-muted-foreground hover:bg-muted/70 hover:text-foreground"
+            ? "font-bold text-foreground after:scale-x-100"
+            : "font-medium text-muted-foreground hover:text-foreground"
         )}
       >
         {item.title}
@@ -109,7 +109,7 @@ export function DesktopNavigation({ items }: { items: NavItemView[] }) {
       delayDuration={0}
       className="hidden max-w-none flex-1 md:flex"
     >
-      <NavigationMenuList className="justify-center gap-7">
+      <NavigationMenuList className="justify-center gap-1">
         {items.map((item) => (
           <NavigationMenuItem key={item.id}>
             <DesktopNavLink item={item} />

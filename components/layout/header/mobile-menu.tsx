@@ -149,7 +149,7 @@ export function MobileMenu({
           variant="ghost"
           size="icon"
           aria-label="باز کردن منو"
-          className="size-10 rounded-lg text-foreground hover:bg-muted"
+          className="size-10 rounded-xl border border-border/70 bg-card text-foreground shadow-sm hover:bg-muted"
         >
           <Menu className="!size-[22px]" />
         </Button>
@@ -161,8 +161,10 @@ export function MobileMenu({
           </SheetTitle>
         </SheetHeader>
 
-        <nav aria-label="منوی موبایل" className="flex flex-col gap-0.5 overflow-y-auto p-3">
-          <MobileNavList items={items} onNavigate={close} />
+        <nav aria-label="منوی موبایل" className="flex flex-col overflow-y-auto p-3">
+          <div className="flex flex-col divide-y divide-border/50 px-1">
+            <MobileNavList items={items} onNavigate={close} />
+          </div>
         </nav>
 
         <div className="mt-auto space-y-3 p-4 pb-6">

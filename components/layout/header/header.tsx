@@ -32,11 +32,11 @@ export function Header({
   return (
     <header
       className={cn(
-        "theme-light sticky top-0 z-40 border-b border-transparent bg-background transition-[border-color,box-shadow] duration-300",
-        scrolled && "border-border/60 shadow-[0_4px_16px_-12px_rgba(23,23,23,0.25)]"
+        "theme-light sticky top-0 z-40 border-b border-transparent bg-background/90 backdrop-blur-md transition-[border-color,box-shadow] duration-300",
+        scrolled && "border-border/60 shadow-[0_10px_30px_-18px_rgba(23,23,23,0.25)]"
       )}
     >
-      <div className="mx-auto grid h-16 max-w-7xl grid-cols-[2.5rem_minmax(0,1fr)_2.5rem] items-center px-4 sm:h-[68px] md:flex md:gap-8 md:px-6 lg:px-8">
+      <div className="mx-auto grid h-16 max-w-7xl grid-cols-[2.5rem_minmax(0,1fr)_2.5rem] items-center px-4 sm:h-[68px] md:flex md:h-[72px] md:gap-6 md:px-6 lg:px-8">
         <div className="max-md:col-start-2 max-md:row-start-1 max-md:justify-self-center">
           <Logo siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
         </div>

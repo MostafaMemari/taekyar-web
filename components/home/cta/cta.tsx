@@ -10,7 +10,7 @@ export function CtaSection({ appDownloadUrl }: { appDownloadUrl?: string | null 
   const downloadHref = appDownloadUrl ?? "/contact";
 
   return (
-    <Section containerClassName="pt-0 sm:pt-0 lg:pt-0" id="download">
+    <Section containerClassName="py-10 sm:py-12 lg:py-14" id="download">
       <Reveal>
         <div className="relative overflow-hidden rounded-3xl bg-[linear-gradient(135deg,#e0282e_0%,#b01d22_55%,#701014_100%)] px-6 pb-12 pt-14 text-center shadow-xl shadow-primary/25 sm:px-12">
           <BeltDivider width="full"
