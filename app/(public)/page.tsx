@@ -15,8 +15,8 @@ export default async function Home() {
     <>
       <Hero2 appDownloadUrl={settings.appDownloadUrl} />
       <TrustBar />
-      <Hero appDownloadUrl={settings.appDownloadUrl} />
       <Features />
+      <Hero appDownloadUrl={settings.appDownloadUrl} />
       <BeltJourney />
       <BlogPreview />
       <Faq />
