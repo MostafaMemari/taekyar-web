@@ -5,7 +5,6 @@ export interface HomeFeature {
   tint: string;
   title: string;
   description: string;
-  progress?: { value: number; label: string };
 }
 
 export const FEATURES_INTRO = {
@@ -26,7 +25,6 @@ export const FEATURE_CARDS: HomeFeature[] = [
     tint: "bg-[#1f5fa8]/10 text-[#1f5fa8]",
     title: "مسیر کمربند هوشمند",
     description: "از سفید تا مشکی؛ همیشه بدان چقدر مانده.",
-    progress: { value: 68, label: "۶۸٪ تا کمربند آبی" },
   },
   {
     Icon: Video,

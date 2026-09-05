@@ -1,6 +1,5 @@
 import { HERO2_DESCRIPTION, HERO2_EYEBROW, HERO2_TITLE } from "@/data/home/hero2";
 
-import { Hero2Benefits } from "./hero2-benefits";
 import { Hero2Cta } from "./hero2-cta";
 
 interface Hero2ContentProps {
@@ -44,8 +43,6 @@ export function Hero2Content({ appDownloadUrl }: Hero2ContentProps) {
       </p>
 
       <Hero2Cta appDownloadUrl={appDownloadUrl} />
-
-      <Hero2Benefits />
     </div>
   );
 }

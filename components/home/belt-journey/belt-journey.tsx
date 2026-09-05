@@ -1,4 +1,3 @@
-import { SURFACE_CARD } from "@/lib/styles";
 import { cn, toFaDigits } from "@/lib/utils";
 import { BELT_LEVELS } from "@/data/shared/belts";
 import { Reveal } from "@/components/shared/reveal";
@@ -19,18 +18,12 @@ export function BeltJourney() {
   return (
     <Section containerClassName="py-10 sm:py-12 lg:py-14">
       <Reveal>
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <SectionHeader {...BELT_JOURNEY_INTRO} className="max-w-xl" />
-          <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1.5 text-[13px] font-bold text-primary">
-            <span className="size-2 rounded-full bg-primary" />
-            کمربند {current.name}
-          </span>
-        </div>
+        <SectionHeader {...BELT_JOURNEY_INTRO} className="max-w-xl" />
       </Reveal>
 
       <Reveal delay={100}>
-        <div className={cn(SURFACE_CARD, "mt-8 px-4 py-6 sm:px-8 lg:mt-10")}>
-          <ol className="grid grid-cols-6 items-start gap-1 sm:gap-2">
+        <div className="mt-10 lg:mt-12">
+          <ol className="grid grid-cols-6 items-start gap-1 sm:gap-3">
             {BELT_LEVELS.map(({ name, color }, index) => {
               const state = beltState(index);
               const isCurrent = index === CURRENT_BELT_INDEX;
@@ -67,15 +60,17 @@ export function BeltJourney() {
               );
             })}
           </ol>
-          <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full bg-primary"
-              style={{ width: `${Math.round(((CURRENT_BELT_INDEX + 1) / BELT_LEVELS.length) * 100)}%` }}
-            />
+          <div className="mx-auto mt-8 max-w-2xl">
+            <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-primary"
+                style={{ width: `${Math.round(((CURRENT_BELT_INDEX + 1) / BELT_LEVELS.length) * 100)}%` }}
+              />
+            </div>
+            <p className="mt-2.5 text-center text-xs font-medium text-muted-foreground">
+              قدم {toFaDigits(CURRENT_BELT_INDEX + 1)} از {toFaDigits(BELT_LEVELS.length)} · کمربند {current.name}
+            </p>
           </div>
-          <p className="mt-2 text-center text-[11px] font-medium text-muted-foreground">
-            قدم {toFaDigits(CURRENT_BELT_INDEX + 1)} از {toFaDigits(BELT_LEVELS.length)}
-          </p>
         </div>
       </Reveal>
     </Section>

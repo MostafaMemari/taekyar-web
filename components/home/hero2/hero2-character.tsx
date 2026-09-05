@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-import { HERO2_CHARACTER, HERO2_FLOAT_BADGES } from "@/data/home/hero2";
+import { HERO2_CHARACTER, HERO2_FLOAT_BADGE } from "@/data/home/hero2";
 
 const SIZES = "(max-width: 640px) 88vw, (max-width: 1024px) 60vw, 42vw";
 const HOVER_QUERY = "(hover: hover) and (pointer: fine)";
@@ -79,18 +79,10 @@ export function Hero2Character() {
       />
       <div className="animate-hero-float absolute start-0 top-8 z-10 rounded-2xl border border-border/70 bg-card/95 px-3.5 py-2 shadow-lg shadow-black/[0.06] backdrop-blur-sm">
         <p className="text-[13px] font-black text-foreground">
-          {HERO2_FLOAT_BADGES[0].title}
+          {HERO2_FLOAT_BADGE.title}
         </p>
         <p className="text-[11px] leading-4 text-muted-foreground">
-          {HERO2_FLOAT_BADGES[0].description}
-        </p>
-      </div>
-      <div className="animate-hero-float absolute bottom-16 end-0 z-10 hidden rounded-2xl border border-border/70 bg-card/95 px-3.5 py-2 shadow-lg shadow-black/[0.06] backdrop-blur-sm [animation-delay:-3s] sm:block">
-        <p className="text-[13px] font-black text-primary">
-          {HERO2_FLOAT_BADGES[1].title}
-        </p>
-        <p className="text-[11px] leading-4 text-muted-foreground">
-          {HERO2_FLOAT_BADGES[1].description}
+          {HERO2_FLOAT_BADGE.description}
         </p>
       </div>
       <div
