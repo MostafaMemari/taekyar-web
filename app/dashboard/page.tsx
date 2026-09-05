@@ -10,25 +10,24 @@ import { prisma } from "@/lib/prisma";
 import { formatFaDate, toFaDigits } from "@/lib/utils";
 
 export default async function DashboardOverviewPage() {
-  const [postsCount, approvedCount, pendingCount, rejectedCount, pendingComments, recentPosts] =
-    await Promise.all([
-      prisma.post.count({ where: { deletedAt: null } }),
-      prisma.comment.count({ where: { status: "APPROVED" } }),
-      prisma.comment.count({ where: { status: "PENDING" } }),
-      prisma.comment.count({ where: { status: "REJECTED" } }),
-      prisma.comment.findMany({
-        where: { status: "PENDING" },
-        orderBy: { createdAt: "desc" },
-        take: 5,
-        include: { post: { select: { title: true, slug: true } } },
-      }),
-      prisma.post.findMany({
-        where: { deletedAt: null },
-        orderBy: { createdAt: "desc" },
-        take: 4,
-        select: { slug: true, title: true, createdAt: true },
-      }),
-    ]);
+  const [postsCount, approvedCount, pendingCount, rejectedCount, pendingComments, recentPosts] = await Promise.all([
+    prisma.post.count({ where: { deletedAt: null } }),
+    prisma.comment.count({ where: { status: "APPROVED" } }),
+    prisma.comment.count({ where: { status: "PENDING" } }),
+    prisma.comment.count({ where: { status: "REJECTED" } }),
+    prisma.comment.findMany({
+      where: { status: "PENDING" },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      include: { post: { select: { title: true, slug: true } } },
+    }),
+    prisma.post.findMany({
+      where: { deletedAt: null },
+      orderBy: { createdAt: "desc" },
+      take: 4,
+      select: { slug: true, title: true, createdAt: true },
+    }),
+  ]);
 
   const statValues: Record<(typeof OVERVIEW_STAT_CARDS)[number]["key"], number> = {
     posts: postsCount,
@@ -42,9 +41,7 @@ export default async function DashboardOverviewPage() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{OVERVIEW_LABELS.title}</h1>
-          <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
-            {OVERVIEW_LABELS.description}
-          </p>
+          <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">{OVERVIEW_LABELS.description}</p>
         </div>
         <Button asChild className="h-9 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15">
           <Link href="/dashboard/posts/new">
@@ -61,6 +58,7 @@ export default async function DashboardOverviewPage() {
               size="sm"
               className={`relative h-full overflow-hidden border-t-[3px] ${tint} shadow-sm shadow-black/[0.04] transition-colors hover:shadow-md motion-reduce:transition-none`}
             >
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.035]" />
               <CardContent className="relative p-4">
                 <div className="flex items-start justify-between gap-3">
                   <span className={`flex size-9 shrink-0 items-center justify-center rounded-xl border text-sm ring-1 ${iconClass}`}>
@@ -70,9 +68,7 @@ export default async function DashboardOverviewPage() {
                     {key === "pending" && pendingCount > 0 ? "نیاز به بررسی" : "به‌روز"}
                   </span>
                 </div>
-                <p className="mt-3 text-[28px] font-black leading-none tabular-nums tracking-tight">
-                  {toFaDigits(statValues[key])}
-                </p>
+                <p className="mt-3 text-[28px] font-black leading-none tabular-nums tracking-tight">{toFaDigits(statValues[key])}</p>
                 <p className="mt-1.5 text-xs font-bold leading-4 text-muted-foreground">{label}</p>
               </CardContent>
             </Card>
@@ -90,13 +86,14 @@ export default async function DashboardOverviewPage() {
                 </span>
                 {OVERVIEW_LABELS.pendingTitle}
               </CardTitle>
-              <Badge variant="secondary" className="rounded-full bg-belt-yellow/15 px-2.5 text-[11px] font-bold tabular-nums text-belt-yellow-fg ring-belt-yellow/20">
+              <Badge
+                variant="secondary"
+                className="rounded-full bg-belt-yellow/15 px-2.5 text-[11px] font-bold tabular-nums text-belt-yellow-fg ring-belt-yellow/20"
+              >
                 {toFaDigits(pendingCount)} در انتظار
               </Badge>
             </div>
-            <p className="mt-2 text-xs leading-5 text-muted-foreground">
-              دیدگاه‌هایی که پیش از انتشار نیاز به تأیید دارند
-            </p>
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">دیدگاه‌هایی که پیش از انتشار نیاز به تأیید دارند</p>
             <Separator className="mt-4 bg-border/60" />
           </CardHeader>
           <CardContent className="pt-4">
@@ -135,9 +132,7 @@ export default async function DashboardOverviewPage() {
                         </Link>
                       </span>
                     </div>
-                    <p className="mt-2 line-clamp-2 text-[13px] leading-6 text-muted-foreground">
-                      {comment.message}
-                    </p>
+                    <p className="mt-2 line-clamp-2 text-[13px] leading-6 text-muted-foreground">{comment.message}</p>
                   </li>
                 ))}
               </ul>
@@ -169,9 +164,7 @@ export default async function DashboardOverviewPage() {
                 {toFaDigits(recentPosts.length)} مقاله
               </span>
             </div>
-            <p className="mt-2 text-xs leading-5 text-muted-foreground">
-              آخرین محتوای منتشرشده — برای ویرایش سریع انتخاب کنید
-            </p>
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">آخرین محتوای منتشرشده — برای ویرایش سریع انتخاب کنید</p>
             <Separator className="mt-4 bg-border/60" />
           </CardHeader>
           <CardContent className="pt-3">

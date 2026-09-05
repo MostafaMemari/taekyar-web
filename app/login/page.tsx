@@ -12,7 +12,8 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="theme-light relative flex min-h-screen items-center justify-center px-4 py-8 text-foreground sm:p-6">
+    <div className="theme-light relative flex min-h-screen items-center justify-center bg-background px-4 py-8 text-foreground sm:p-6">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.035]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 flex h-[4px]">
         <span className="flex-1 bg-belt-white" />
         <span className="flex-1 bg-belt-yellow" />
@@ -25,6 +26,7 @@ export default function LoginPage() {
       <div className="relative w-full max-w-3xl overflow-hidden rounded-[20px] border border-border/60 bg-card shadow-2xl shadow-black/10 sm:rounded-[24px]">
         <div className="grid lg:grid-cols-[1.05fr_1.45fr]">
           <div className="dark relative hidden flex-col justify-between overflow-hidden bg-belt-black p-8 text-card-foreground lg:flex">
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.06]" />
             <div className="relative">
               <div className="flex items-center gap-3">
                 <span className="flex size-10 items-center justify-center rounded-xl bg-primary font-sans text-[18px] font-black text-primary-foreground shadow-md shadow-primary/30">
