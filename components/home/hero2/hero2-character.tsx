@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { MousePointer2 } from "lucide-react";
 
 import { HERO2_CHARACTER, HERO2_FLOAT_BADGES, HERO2_HOVER_HINT } from "@/data/home/hero2";
@@ -11,21 +11,28 @@ const HOVER_QUERY = "(hover: hover) and (pointer: fine)";
 const SPOT_MASK =
   "radial-gradient(circle var(--spot) at var(--mx, -100%) var(--my, -100%), #000 55%, transparent 100%)";
 
+function subscribeHoverCapability(onChange: () => void) {
+  const mediaQuery = window.matchMedia(HOVER_QUERY);
+  mediaQuery.addEventListener("change", onChange);
+  return () => mediaQuery.removeEventListener("change", onChange);
+}
+
+function getHoverSnapshot() {
+  return window.matchMedia(HOVER_QUERY).matches;
+}
+
+function getHoverServerSnapshot() {
+  return false;
+}
+
 export function Hero2Character() {
   const frameRef = useRef<HTMLDivElement>(null);
   const gearLayerRef = useRef<HTMLDivElement>(null);
-  const [canHover, setCanHover] = useState(
-    () => typeof window !== "undefined" && window.matchMedia(HOVER_QUERY).matches
+  const canHover = useSyncExternalStore(
+    subscribeHoverCapability,
+    getHoverSnapshot,
+    getHoverServerSnapshot
   );
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(HOVER_QUERY);
-    const syncHoverCapability = (event: MediaQueryListEvent) =>
-      setCanHover(event.matches);
-    mediaQuery.addEventListener("change", syncHoverCapability);
-    return () =>
-      mediaQuery.removeEventListener("change", syncHoverCapability);
-  }, []);
 
   useEffect(() => {
     const frame = frameRef.current;

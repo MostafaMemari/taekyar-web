@@ -31,15 +31,17 @@ export default async function PublicLayout({
       <Suspense fallback={null}>
         <AdminBar />
       </Suspense>
-      <Header
-        siteName={settings.siteName}
-        logoImage={settings.logo.url}
-        logoImageAlt={settings.logo.alt}
-        appDownloadUrl={settings.appDownloadUrl}
-        navItems={desktopItems}
-        mobileNavItems={mobileNav}
-      />
-      <main className="theme-light flex-1 bg-background text-foreground">{children}</main>
+      <div className="flex min-h-full flex-1 flex-col bg-[#fafaf8]">
+        <Header
+          siteName={settings.siteName}
+          logoImage={settings.logo.url}
+          logoImageAlt={settings.logo.alt}
+          appDownloadUrl={settings.appDownloadUrl}
+          navItems={desktopItems}
+          mobileNavItems={mobileNav}
+        />
+        <main className="theme-light flex-1 bg-background text-foreground">{children}</main>
+      </div>
       <Footer />
       <Toaster />
     </>

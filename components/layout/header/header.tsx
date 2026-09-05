@@ -32,8 +32,10 @@ export function Header({
   return (
     <header
       className={cn(
-        "theme-light sticky top-0 z-40 border-b border-transparent bg-background/90 backdrop-blur-md transition-[border-color,box-shadow] duration-300",
-        scrolled && "border-border/60 shadow-[0_10px_30px_-18px_rgba(23,23,23,0.25)]"
+        "theme-light sticky top-0 z-40 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
+        scrolled
+          ? "border-border/40 bg-[#fafaf8]/75 shadow-[0_12px_32px_-20px_rgba(23,23,23,0.28)]"
+          : "border-transparent bg-transparent"
       )}
     >
       <div className="mx-auto grid h-16 max-w-7xl grid-cols-[2.5rem_minmax(0,1fr)_2.5rem] items-center px-4 sm:h-[68px] md:flex md:h-[72px] md:gap-6 md:px-6 lg:px-8">
