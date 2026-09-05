@@ -1,4 +1,5 @@
 import { Hero } from "@/components/home/hero/hero";
+import { Hero2 } from "@/components/home/hero2/hero2";
 import { Features } from "@/components/home/features/features";
 import { BlogPreview } from "@/components/home/blog-preview/blog-preview";
 import { Faq } from "@/components/home/faq/faq";
@@ -10,6 +11,7 @@ export default async function Home() {
 
   return (
     <>
+      <Hero2 appDownloadUrl={settings.appDownloadUrl} />
       <Hero appDownloadUrl={settings.appDownloadUrl} />
       <Features />
       <BlogPreview />
