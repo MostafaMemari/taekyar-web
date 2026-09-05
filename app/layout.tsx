@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SITE_URL } from "@/lib/site";
 import { getSiteSettings } from "@/lib/site-settings";
+import { AppBackground } from "@/components/shared/app-background";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
@@ -52,7 +53,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       data-scroll-behavior="smooth"
       className={cn("h-full antialiased dark font-sans", vazirmatn.variable, geistMono.variable)}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <AppBackground variant="tatami">{children}</AppBackground>
+      </body>
     </html>
   );
 }

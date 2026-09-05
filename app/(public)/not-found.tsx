@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <Section pattern="none" containerClassName="pb-10 sm:pb-14">
+    <Section containerClassName="pb-10 sm:pb-14">
       <NotFoundContent />
     </Section>
   );

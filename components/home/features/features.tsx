@@ -7,11 +7,7 @@ import { FeatureCard, FeaturedFeatureCard } from "./feature-cards";
 
 export function Features() {
   return (
-    <Section
-      id="features"
-      divider="top"
-      containerClassName="py-10 sm:py-12 lg:py-14"
-    >
+    <Section id="features" divider="top" containerClassName="py-10 sm:py-12 lg:py-14">
       <Reveal>
         <SectionHeader {...FEATURES_INTRO} />
       </Reveal>

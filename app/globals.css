@@ -256,6 +256,20 @@
     repeating-linear-gradient(-45deg, rgba(23, 23, 23, 0.015) 0 1px, transparent 1px 12px);
 }
 
+@utility bg-section-glow {
+  background-image:
+    radial-gradient(ellipse 26rem 26rem at 50% -12rem, color-mix(in srgb, var(--primary) 5%, transparent), transparent 70%),
+    radial-gradient(ellipse 30rem 30rem at 50% -6rem, color-mix(in srgb, var(--primary) 7%, transparent), transparent 70%),
+    radial-gradient(rgba(23, 23, 23, 0.055) 1px, transparent 1.5px);
+
+  background-size:
+    auto,
+    auto,
+    22px 22px;
+
+  mask-image: linear-gradient(to bottom, transparent, black 12%, black 78%, transparent);
+}
+
 @keyframes hero-float {
   0%,
   100% {

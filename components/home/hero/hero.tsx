@@ -8,8 +8,8 @@ import { TRUST_BADGES } from "@/data/home/hero";
 export function Hero({ appDownloadUrl }: { appDownloadUrl?: string | null }) {
   const downloadHref = appDownloadUrl ?? "#download";
   return (
-    <section className="theme-light relative isolate overflow-hidden bg-background text-foreground">
-      <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0" />
+    <section className="theme-light relative isolate overflow-hidden text-foreground">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0" />
 
       <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 px-4 pb-10 pt-10 sm:px-6 sm:pb-11 sm:pt-12 lg:grid-cols-[1fr_0.9fr] lg:gap-10 lg:px-8 lg:pb-12 lg:pt-14">
         <Reveal>
@@ -33,10 +33,7 @@ export function Hero({ appDownloadUrl }: { appDownloadUrl?: string | null }) {
 
             <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5 lg:mt-9 lg:justify-start">
               <Button asChild size="lg" className="h-11 gap-2 rounded-lg px-5 text-[15px] font-bold shadow-sm shadow-primary/25">
-                <a
-                  href={downloadHref}
-                  {...(appDownloadUrl ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
+                <a href={downloadHref} {...(appDownloadUrl ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
                   <Download className="!size-[17px]" />
                   دانلود اپلیکیشن
                 </a>

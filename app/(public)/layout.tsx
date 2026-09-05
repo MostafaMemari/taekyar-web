@@ -31,7 +31,7 @@ export default async function PublicLayout({
       <Suspense fallback={null}>
         <AdminBar />
       </Suspense>
-      <div className="flex min-h-full flex-1 flex-col bg-[#fafaf8]">
+      <div className="flex min-h-full flex-1 flex-col">
         <Header
           siteName={settings.siteName}
           logoImage={settings.logo.url}
@@ -40,7 +40,7 @@ export default async function PublicLayout({
           navItems={desktopItems}
           mobileNavItems={mobileNav}
         />
-        <main className="theme-light flex-1 bg-background text-foreground">{children}</main>
+        <main className="theme-light flex-1 text-foreground">{children}</main>
       </div>
       <Footer />
       <Toaster />

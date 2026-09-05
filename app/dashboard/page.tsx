@@ -61,7 +61,6 @@ export default async function DashboardOverviewPage() {
               size="sm"
               className={`relative h-full overflow-hidden border-t-[3px] ${tint} shadow-sm shadow-black/[0.04] transition-colors hover:shadow-md motion-reduce:transition-none`}
             >
-              <div aria-hidden="true" className="bg-tatami pointer-events-none absolute inset-0 opacity-[0.035]" />
               <CardContent className="relative p-4">
                 <div className="flex items-start justify-between gap-3">
                   <span className={`flex size-9 shrink-0 items-center justify-center rounded-xl border text-sm ring-1 ${iconClass}`}>
