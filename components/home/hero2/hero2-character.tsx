@@ -104,6 +104,12 @@ export function Hero2Character() {
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 [--spot:clamp(4.5rem,12vw,10rem)]"
           style={{ WebkitMaskImage: SPOT_MASK, maskImage: SPOT_MASK }}
         >
+          <div aria-hidden="true" className="absolute inset-0 bg-background" />
+          <div aria-hidden="true" className="absolute inset-x-2 bottom-6 top-12 -rotate-3 rounded-[3rem] bg-secondary">
+            <div aria-hidden="true" className="absolute inset-4 rounded-[2.2rem] border border-dashed border-border" />
+          </div>
+          <div aria-hidden="true" className="absolute inset-x-6 bottom-10 top-16 rounded-full bg-primary/[0.06] blur-3xl" />
+          <div aria-hidden="true" className="absolute bottom-3 left-1/2 h-8 w-1/2 -translate-x-1/2 rounded-[100%] bg-black/15 blur-lg" />
           <Image
             src={HERO2_CHARACTER.gearSrc}
             alt=""
