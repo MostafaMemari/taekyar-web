@@ -22,7 +22,7 @@ const IMAGE_WIDTH = 200;
 const IMAGE_HEIGHT = 72;
 const FONT_SIZE = 48;
 
-const FONT_PATH = join(process.cwd(), "lib/captcha-fonts/Vazirmatn-Regular.ttf");
+const FONT_PATH = join(process.cwd(), "fonts/vazirmatn/Vazirmatn-Regular.ttf");
 
 export type CaptchaVerifyResult = "ok" | "wrong" | "expired";
 

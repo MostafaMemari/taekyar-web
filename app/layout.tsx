@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Vazirmatn } from "next/font/google";
+import localFont from "next/font/local";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SITE_URL } from "@/lib/site";
 import { getSiteSettings } from "@/lib/site-settings";
 import { AppBackground } from "@/components/shared/app-background";
 
-const vazirmatn = Vazirmatn({
-  subsets: ["arabic", "latin"],
+const vazirmatn = localFont({
+  src: "../fonts/vazirmatn/Vazirmatn-Variable.woff2",
   variable: "--font-vazirmatn",
+  display: "swap",
+  weight: "100 900",
 });
 
 const geistMono = Geist_Mono({
