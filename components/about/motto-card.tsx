@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
-import { SURFACE_CARD } from "@/lib/styles";
+import { Card, CardContent } from "@/components/ui/card";
 import { ABOUT_MOTTO_CARD } from "@/data/about";
 import { cn, toFaDigits } from "@/lib/utils";
 
@@ -22,9 +22,12 @@ export function MottoCard() {
   const moveTo = (step: number) => setActive((previous) => (previous + step + count) % count);
 
   return (
-    <figure className={cn(SURFACE_CARD, "relative p-6 sm:p-7")}>
-      <span aria-hidden="true" className={cn(SHEET, "rotate-[1.6deg]")} />
-      <span aria-hidden="true" className={cn(SHEET, "-rotate-[1.6deg]")} />
+    <Card asChild className="overflow-visible">
+      <figure className="relative">
+        <span aria-hidden="true" className={cn(SHEET, "rotate-[1.6deg]")} />
+        <span aria-hidden="true" className={cn(SHEET, "-rotate-[1.6deg]")} />
+
+        <CardContent className="p-6 sm:p-7">
 
       <BeltDivider variant="pill" className="h-1 w-14" />
 
@@ -61,6 +64,8 @@ export function MottoCard() {
           </button>
         </div>
       </figcaption>
-    </figure>
+        </CardContent>
+      </figure>
+    </Card>
   );
 }

@@ -1,7 +1,6 @@
 import { Section } from "@/components/shared/section";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SURFACE_CARD } from "@/lib/styles";
-import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
 
 export function LoadingStatus({ label }: { label: string }) {
   return (
@@ -13,17 +12,17 @@ export function LoadingStatus({ label }: { label: string }) {
 
 export function PostCardSkeleton() {
   return (
-    <div aria-hidden="true" className={cn(SURFACE_CARD, "flex h-full flex-col overflow-hidden")}>
+    <Card aria-hidden="true" className="h-full p-0">
       <Skeleton className="aspect-[16/10] w-full rounded-none" />
-      <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
+      <CardContent className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
         <Skeleton className="h-5 w-11/12" />
         <Skeleton className="mt-2 h-5 w-2/3" />
         <Skeleton className="mt-3 h-3.5 w-1/2" />
         <Skeleton className="mt-3 h-3.5 w-full" />
         <Skeleton className="mt-2 h-3.5 w-5/6" />
         <Skeleton className="mb-1 mt-4 h-5 w-24" />
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 

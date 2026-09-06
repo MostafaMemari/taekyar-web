@@ -13,13 +13,15 @@ const SOCIAL_ICONS = {
 } as const;
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { Button } from "@/components/ui/button";
-import { SURFACE_CARD } from "@/lib/styles";
+import { Card, CardContent } from "@/components/ui/card";
 
 export async function SupportInfo() {
   const settings = await getSiteSettings();
 
   return (
-    <aside aria-label="راهنمای تماس" className={SURFACE_CARD + " h-full p-5 sm:p-6"}>
+    <Card asChild className="h-full p-0" aria-label="راهنمای تماس">
+      <aside>
+        <CardContent className="p-5 sm:p-6">
       <h2 className="text-base font-extrabold">پیش از ارسال پیام</h2>
 
       <ul className="mt-4 space-y-4">
@@ -79,6 +81,8 @@ export async function SupportInfo() {
           </>
         ) : null}
       </div>
-    </aside>
+        </CardContent>
+      </aside>
+    </Card>
   );
 }

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Send } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { SURFACE_CARD } from "@/lib/styles";
+import { Card, CardContent } from "@/components/ui/card";
 import { FORM_LABELS, SUBJECT_OPTIONS, type ContactMessageDraft } from "@/data/contact";
 import { FieldError, FieldLabel, getAriaProps } from "@/components/shared/form-controls";
 import { SubmissionSuccess } from "./submission-success";
@@ -128,7 +128,8 @@ export function ContactForm() {
   }
 
   return (
-    <div className={SURFACE_CARD + " h-full p-5 sm:p-7"}>
+    <Card className="h-full p-0">
+      <CardContent className="h-full p-5 sm:p-7">
       {sent ? (
         <SubmissionSuccess onReset={handleReset} />
       ) : (
@@ -159,6 +160,7 @@ export function ContactForm() {
           </form>
         </>
       )}
-    </div>
+      </CardContent>
+    </Card>
   );
 }

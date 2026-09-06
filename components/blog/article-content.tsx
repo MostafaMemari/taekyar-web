@@ -5,8 +5,7 @@ import type { BlogPost } from "@/lib/blog";
 import { injectHeadingIds } from "@/lib/post-content";
 import { tagHref } from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import { Card } from "../ui/card";
-import { SURFACE_CARD } from "@/lib/styles";
+import { Card, CardContent } from "@/components/ui/card";
 
 export function TagPills({ tags, className }: { tags: BlogPost["tags"]; className?: string }) {
   if (tags.length === 0) return null;
@@ -46,9 +45,11 @@ interface ArticleContentProps {
 export function ArticleContent({ post, content }: ArticleContentProps) {
   return (
     <div className="max-w-3xl">
-      <div className={cn(SURFACE_CARD, "p-4 transition-shadow duration-300 hover:shadow-md hover:shadow-black/[0.06] sm:p-5")}>
-        <article className="article-content" dangerouslySetInnerHTML={{ __html: injectHeadingIds(content) }} />
-      </div>
+      <Card className="p-0">
+        <CardContent className="p-4 transition-shadow duration-300 hover:shadow-md hover:shadow-black/[0.06] sm:p-5">
+          <article className="article-content" dangerouslySetInnerHTML={{ __html: injectHeadingIds(content) }} />
+        </CardContent>
+      </Card>
       <PostTags tags={post.tags} />
     </div>
   );

@@ -1,4 +1,4 @@
-import { SURFACE_CARD, SURFACE_CARD_INTERACTIVE } from "@/lib/styles";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import {
   FEATURE_MAIN,
@@ -46,17 +46,21 @@ export function FeatureSpotlight() {
   const { Icon, tint, title, description } = FEATURE_MAIN;
 
   return (
-    <article className={cn(SURFACE_CARD, SURFACE_CARD_INTERACTIVE, "flex h-full flex-col p-5 sm:p-7")}>
-      <div className="flex items-center gap-3">
-        <span className={cn("flex size-11 shrink-0 items-center justify-center rounded-xl", tint)}>
-          <Icon className="!size-[22px]" />
-        </span>
-        <h3 className="text-xl font-extrabold leading-8 sm:text-2xl sm:leading-9">
-          {title}
-        </h3>
-      </div>
-      <p className="mt-3 max-w-md text-sm leading-7 text-muted-foreground">{description}</p>
-      <WeekStrip />
-    </article>
+    <Card asChild interactive className="h-full p-0">
+      <article>
+        <CardContent className="p-5 sm:p-7">
+          <div className="flex items-center gap-3">
+            <span className={cn("flex size-11 shrink-0 items-center justify-center rounded-xl", tint)}>
+              <Icon className="!size-[22px]" />
+            </span>
+            <h3 className="text-xl font-extrabold leading-8 sm:text-2xl sm:leading-9">
+              {title}
+            </h3>
+          </div>
+          <p className="mt-3 max-w-md text-sm leading-7 text-muted-foreground">{description}</p>
+          <WeekStrip />
+        </CardContent>
+      </article>
+    </Card>
   );
 }

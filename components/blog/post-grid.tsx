@@ -4,13 +4,13 @@ import { SearchX } from "lucide-react";
 import { BlogCard } from "@/components/blog/blog-card";
 import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
 import type { BlogPost } from "@/lib/blog";
-import { SURFACE_CARD } from "@/lib/styles";
-import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
 
 export function PostGrid({ posts }: { posts: BlogPost[] }) {
   if (posts.length === 0) {
     return (
-      <div className={cn(SURFACE_CARD, "flex flex-col items-center px-6 py-12 text-center sm:px-10 sm:py-14")}>
+      <Card className="p-0">
+        <CardContent className="flex flex-col items-center px-6 py-12 text-center sm:px-10 sm:py-14">
         <span className="flex size-12 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
           <SearchX className="size-6" />
         </span>
@@ -22,7 +22,8 @@ export function PostGrid({ posts }: { posts: BlogPost[] }) {
         >
           {BLOG_INDEX_LABELS.allCategories} — نمایش همه
         </Link>
-      </div>
+        </CardContent>
+      </Card>
     );
   }
 

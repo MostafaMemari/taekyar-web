@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Copy, ExternalLink, Info } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { MEDIA_LABELS } from "@/data/dashboard/ui";
@@ -49,12 +50,13 @@ export function MediaDetailsPanel({ item }: MediaDetailsPanelProps) {
   }
 
   return (
-    <aside className="overflow-hidden rounded-xl border border-border/60 bg-card shadow-sm shadow-black/[0.03] lg:sticky lg:top-4">
-      <div className="border-b border-border/60 bg-muted/30 px-4 py-3">
-        <h2 className="text-[13px] font-black">{MEDIA_LABELS.detailsTitle}</h2>
-      </div>
+    <Card asChild className="p-0 lg:sticky lg:top-4">
+      <aside className="overflow-hidden">
+        <div className="border-b border-border/60 bg-muted/30 px-4 py-3">
+          <h2 className="text-[13px] font-black">{MEDIA_LABELS.detailsTitle}</h2>
+        </div>
 
-      <div className="p-3 sm:p-4">
+        <div className="p-3 sm:p-4">
         <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted ring-1 ring-border/60">
           <Image
             src={item.url}
@@ -120,8 +122,9 @@ export function MediaDetailsPanel({ item }: MediaDetailsPanelProps) {
           </Button>
           <DeleteMediaButton mediaKey={item.key} />
         </div>
-      </div>
-    </aside>
+        </div>
+      </aside>
+    </Card>
   );
 }
 

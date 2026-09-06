@@ -2,7 +2,7 @@ import { Section } from "@/components/shared/section";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LoadingStatus } from "@/components/blog/loading-skeletons";
 import { POST_LAYOUT } from "@/data/blog/post-config";
-import { SURFACE_CARD } from "@/lib/styles";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export default function PostLoading() {
@@ -38,26 +38,30 @@ export default function PostLoading() {
             </div>
 
             <div className="min-w-0 lg:col-start-1 lg:row-start-2">
-              <div className={cn(SURFACE_CARD, "space-y-4 p-4 sm:p-6 lg:p-10")}>
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-11/12" />
-                <Skeleton className="mt-6 h-6 w-1/3" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-4/5" />
-                <Skeleton className="mt-6 h-24 w-full rounded-xl" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/5" />
-              </div>
+              <Card className="p-0">
+                <CardContent className="space-y-4 p-4 sm:p-6 lg:p-10">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-11/12" />
+                  <Skeleton className="mt-6 h-6 w-1/3" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-4/5" />
+                  <Skeleton className="mt-6 h-24 w-full rounded-xl" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/5" />
+                </CardContent>
+              </Card>
             </div>
 
             <div className="hidden min-w-0 lg:col-start-2 lg:row-start-2 lg:block">
-              <div className={cn(SURFACE_CARD, "space-y-2.5 p-4")}>
-                <Skeleton className="h-5 w-2/3" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-                <Skeleton className="h-4 w-4/6" />
-              </div>
+              <Card className="p-0">
+                <CardContent className="space-y-2.5 p-4">
+                  <Skeleton className="h-5 w-2/3" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-5/6" />
+                  <Skeleton className="h-4 w-4/6" />
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>

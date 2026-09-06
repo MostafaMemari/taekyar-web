@@ -7,7 +7,7 @@ import { COMMENT_AVATAR_TINTS, COMMENT_REPLY_LABELS } from "@/data/blog/comments
 import { CommentDialog } from "@/components/blog/comments/comment-dialog";
 import { ReplyItem } from "@/components/blog/comments/reply-item";
 import { Badge } from "@/components/ui/badge";
-import { SURFACE_CARD } from "@/lib/styles";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 function CommentAvatar({ author }: { author: string }) {
@@ -69,12 +69,9 @@ export function CommentItem({ comment, postSlug }: CommentItemProps) {
   const hasReplies = Boolean(comment.replies?.length);
 
   return (
-    <article
-      className={cn(
-        SURFACE_CARD,
-        "p-4 transition-shadow duration-300 hover:shadow-md hover:shadow-black/[0.06] sm:p-5",
-      )}
-    >
+    <Card asChild className="p-0 transition-shadow duration-300 hover:shadow-md hover:shadow-black/[0.06]">
+      <article>
+        <CardContent className="p-4 sm:p-5">
       <header className="flex items-center gap-3">
         <CommentAvatar author={comment.author} />
 
@@ -112,7 +109,9 @@ export function CommentItem({ comment, postSlug }: CommentItemProps) {
       </p>
 
       {hasReplies ? <ReplyThread replies={comment.replies!} /> : null}
-    </article>
+        </CardContent>
+      </article>
+    </Card>
   );
 }
 
