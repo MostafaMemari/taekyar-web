@@ -23,6 +23,12 @@ export interface TaxonomyPagination {
   hrefFor: (page: number) => string;
 }
 
+export interface TaxonomyRelatedLink {
+  name: string;
+  path: string;
+  count: number;
+}
+
 interface TaxonomyArchiveProps {
   eyebrow: string;
   title: string;
@@ -34,6 +40,8 @@ interface TaxonomyArchiveProps {
   totalCount: number;
   breadcrumbs: TaxonomyBreadcrumb[];
   pagination?: TaxonomyPagination;
+  relatedLabel?: string;
+  relatedLinks?: TaxonomyRelatedLink[];
 }
 
 export function TaxonomyArchive({
@@ -47,6 +55,8 @@ export function TaxonomyArchive({
   totalCount,
   breadcrumbs,
   pagination,
+  relatedLabel,
+  relatedLinks,
 }: TaxonomyArchiveProps) {
   return (
     <>
@@ -95,6 +105,27 @@ export function TaxonomyArchive({
                 </>
               ) : null}
             </p>
+
+            {relatedLinks && relatedLinks.length > 0 && relatedLabel ? (
+              <div className="mt-5">
+                <p className="text-[11px] font-bold text-muted-foreground">{relatedLabel}</p>
+                <ul className="mt-2.5 flex flex-wrap gap-2">
+                  {relatedLinks.map((link) => (
+                    <li key={link.path}>
+                      <Link
+                        href={link.path}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs font-bold text-foreground transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                      >
+                        {link.name}
+                        <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-muted-foreground">
+                          {toFaDigits(link.count)}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </div>
         </Reveal>
       </Section>
@@ -104,7 +135,7 @@ export function TaxonomyArchive({
       </Section>
 
       {pagination && pagination.totalPages > 1 ? (
-        <Section containerClassName="pb-2 pt-8 sm:pt-10">
+        <Section containerClassName="pb-10 pt-8 sm:pb-12 sm:pt-10">
           <BlogPagination
             currentPage={pagination.currentPage}
             totalPages={pagination.totalPages}
@@ -114,7 +145,7 @@ export function TaxonomyArchive({
       ) : null}
 
       {description ? (
-        <Section containerClassName="pt-8 pb-2 sm:pt-10">
+        <Section containerClassName="pb-10 pt-8 sm:pb-12 sm:pt-10">
           <TaxonomySeoContent
             title={title}
             content={description}

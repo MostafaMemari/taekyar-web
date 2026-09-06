@@ -18,7 +18,7 @@ export function PostGrid({ posts }: { posts: BlogPost[] }) {
         <p className="mt-2 max-w-sm text-sm leading-7 text-muted-foreground">{BLOG_INDEX_LABELS.emptyState}</p>
         <Link
           href="/blog"
-          className="mt-6 inline-flex h-9 items-center justify-center rounded-full bg-primary px-5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="mt-6 inline-flex h-9 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-white shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           {BLOG_INDEX_LABELS.allCategories} — نمایش همه
         </Link>
