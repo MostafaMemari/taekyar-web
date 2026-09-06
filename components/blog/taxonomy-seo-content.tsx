@@ -19,14 +19,9 @@ export function TaxonomySeoContent({ title, content, imageUrl, imageAlt, placeho
 
   return (
     <section className={SURFACE_CARD} aria-labelledby="taxonomy-seo-heading">
-      <div
-        className={cn(
-          "mx-auto max-w-4xl p-5 sm:p-7 lg:p-8",
-          hasMedia && "text-center"
-        )}
-      >
+      <div className="p-5 sm:p-7 lg:p-8">
         {imageUrl ? (
-          <div className="relative mx-auto aspect-square w-full max-w-[200px] overflow-hidden rounded-2xl bg-muted/40 shadow-md shadow-black/[0.07] ring-1 ring-border/60 sm:max-w-[220px]">
+          <div className="relative mx-auto aspect-square w-full max-w-[180px] overflow-hidden rounded-2xl bg-muted/40 shadow-md shadow-black/[0.07] ring-1 ring-border/60">
             <Image
               src={r2PublicUrl(imageUrl)}
               alt={imageAlt || title}
@@ -36,12 +31,12 @@ export function TaxonomySeoContent({ title, content, imageUrl, imageAlt, placeho
             />
           </div>
         ) : placeholderIcon ? (
-          <div className="relative mx-auto aspect-square w-full max-w-[200px] overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-border/60 sm:max-w-[220px]">
+          <div className="relative mx-auto aspect-square w-full max-w-[180px] overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-border/60">
             <ImagePlaceholder
               icon={placeholderIcon}
               label={imageAlt || title}
               className="rounded-2xl"
-              iconClassName="size-12"
+              iconClassName="size-11"
             />
           </div>
         ) : null}
@@ -50,17 +45,12 @@ export function TaxonomySeoContent({ title, content, imageUrl, imageAlt, placeho
           id="taxonomy-seo-heading"
           className={cn(
             "text-balance text-lg font-black tracking-tight sm:text-xl",
-            hasMedia && "mt-5 sm:mt-6"
+            hasMedia && "mt-5 text-center sm:mt-6"
           )}
         >
           {title}
         </h2>
-        <p
-          className={cn(
-            "mt-3 text-pretty text-[14px] leading-8 text-muted-foreground sm:text-[15px] sm:leading-8",
-            hasMedia ? "mx-auto max-w-2xl" : "max-w-2xl"
-          )}
-        >
+        <p className="mt-3 max-w-4xl text-pretty text-start text-[14px] leading-8 text-muted-foreground sm:text-[15px] sm:leading-8">
           {content}
         </p>
       </div>
