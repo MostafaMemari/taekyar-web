@@ -10,7 +10,7 @@ interface StatCardProps {
 export function StatCard({ icon: Icon, value, label, className }: StatCardProps) {
   return (
     <div className={className}>
-      <div className="flex items-center gap-2.5 rounded-2xl bg-card px-3.5 py-2.5 shadow-xl shadow-black/10 ring-1 ring-border/50">
+      <div className="flex items-center gap-2.5 rounded-2xl bg-card px-3.5 py-2.5 ring-1 ring-border/50">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
           <Icon className="!size-[18px]" />
         </span>
