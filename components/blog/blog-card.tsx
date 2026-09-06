@@ -11,7 +11,7 @@ import { postHref } from "@/lib/routes";
 import { SURFACE_CARD } from "@/lib/styles";
 import { cn, formatFaDate, toFaDigits } from "@/lib/utils";
 
-function CardCover({ post }: { post: BlogPost }) {
+export function CardCover({ post }: { post: BlogPost }) {
   return (
     <div className="relative aspect-[16/10] w-full overflow-hidden">
       {post.coverImage ? (
