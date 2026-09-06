@@ -14,14 +14,13 @@ Persian (fa, RTL) corporate site + blog with an admin dashboard. Next.js 16 (App
 
 ## Commands
 
-- Dev: `npm run dev` · Build: `npm run build` · Lint: `npm run lint` (bare `eslint` with flat config)
-- Typecheck: `npx tsc --noEmit` (no npm script; must pass clean)
-- Only test (captcha flow): `node --env-file=.env captcha-flow-test.mts` — needs a running Redis (`REDIS_URL`); without env it fails on the first Redis call
-- Prisma CLI does NOT auto-load `.env` (fails with `PrismaConfigEnvError`). Prefix every `prisma` command with `set -a && source .env && set +a`, e.g. `npx prisma migrate dev` or `npx prisma db seed`.
+- Dev: `npm run dev` (port **4500**, not 3000) · Lint: `npm run lint` (bare `eslint`, flat config) · Typecheck: `npx tsc --noEmit` (no npm script; must pass clean)
+- No test runner. Ad-hoc scripts run directly: `node --env-file=.env captcha-flow-test.mts` (captcha+Redis), `node --env-file=.env slug-flow-test.mts`, `node --env-file=.env e2e-captcha-check.mts` — all need a running Redis (`REDIS_URL`).
+- Prisma CLI does NOT auto-load `.env` (fails with `PrismaConfigEnvError`). Prefix every `prisma` command with `set -a && source .env && set +a`, e.g. `npx prisma migrate dev` or `npx prisma db seed` (`prisma.config.ts` seed is bare `node prisma/seed.ts`, so it needs the prefix too).
 - `npm run build` runs `prisma generate && prisma migrate deploy && prisma db seed && next build` → requires a reachable Postgres AND the env prefix above, or build fails.
-- `postinstall` runs `prisma generate` (fresh install is covered); re-run it after schema changes.
-- Copy `.env.example` → `.env` (gitignored). Required: `DATABASE_URL`, `SESSION_SECRET`, `REDIS_URL`. `ADMIN_USERNAME`/`ADMIN_PASSWORD` seed the admin login; `R2_*` needed for media uploads; `COMMENT_IP_PEPPER` optional (IP hashing has a built-in default).
-- Seed only upserts the admin user (content seeding is commented out) and skips silently if `ADMIN_USERNAME`/`ADMIN_PASSWORD` are unset.
+- `postinstall` runs `prisma generate`; re-run it after schema changes.
+- Copy `.env.example` → `.env` (gitignored). Required: `DATABASE_URL`, `SESSION_SECRET`, `REDIS_URL`. `ADMIN_USERNAME`/`ADMIN_PASSWORD` seed the admin login; `R2_*` needed for media uploads; `COMMENT_IP_PEPPER` optional (built-in default).
+- Seed upserts the admin user + `SiteSettings` row (id 1); content seeding is commented out. Skips admin silently if `ADMIN_USERNAME`/`ADMIN_PASSWORD` are unset.
 
 ## Architecture
 
@@ -36,16 +35,10 @@ Persian (fa, RTL) corporate site + blog with an admin dashboard. Next.js 16 (App
 
 ## Conventions
 
-- Inspect existing code first; follow its patterns. Reuse components, hooks, and utilities before creating new ones. No new dependencies without clear justification. Do not over-engineer.
-- One clear responsibility per component and hook. Extract sections instead of building monolithic components; prefer composition over prop-driven sprawl.
-- Components should not contain large static datasets, business logic, data fetching, complex state, large SVGs, or config objects — move those to `data/`, `lib/`, or dedicated files.
-- Reusable hooks go in `hooks/` (e.g. `use-reading-progress.ts`), never inside component folders; feature-specific hooks may live near their feature.
-- Avoid `useEffect` for derived state; prefer derived values. Avoid `any` and unsafe casts; type API responses and keep types near ownership.
-- Static data belongs in `data.ts`/`constants.ts`/`config.ts` files, not inline in JSX. Feature-specific data stays with the feature; shared data goes in the shared location. Never duplicate the same static data across components.
-- Do not add `"use client"` without a real need — default to Server Components. Do not assume behavior from older Next.js versions; consult `node_modules/next/dist/docs/` for unfamiliar APIs.
-- Follow the Taekyar design system: consistent spacing, typography, colors, radiuses, shadows, and interaction states. Reuse `components/ui` primitives (shadcn radix-nova, rtl: true). Preserve Persian RTL behavior everywhere.
+- Default to Server Components; add `"use client"` only with a real need. Do not assume older Next.js behavior — consult `node_modules/next/dist/docs/` for unfamiliar APIs.
+- Static site copy, labels, and nav live in `data/` (feature subfolders: `data/blog/`, `data/dashboard/`, …) — never inline large datasets in JSX or duplicate them across components. Business logic goes in `lib/`; reusable hooks go in `hooks/`, never inside component folders.
+- Reuse `components/ui` primitives (shadcn radix-nova, rtl: true). Preserve Persian RTL behavior everywhere; digits in captcha are Persian (۰-۹).
 - Extract reusable/large SVGs into their own files or components; never inline large icon definitions in page/section components.
-- Move files only with all imports updated; check for an appropriate existing location first.
 
 # Strict Code Comment Policy
 
