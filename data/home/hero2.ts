@@ -1,8 +1,8 @@
 import { ArrowLeft, Download, Play, type LucideIcon } from "lucide-react";
 
 export const HERO2_CHARACTER = {
-  baseSrc: "/01.png",
-  gearSrc: "/02.png",
+  baseSrc: "/hero/01.webp",
+  gearSrc: "/hero/02.webp",
   baseAlt: "تکواندوکار جوان با لباس سفید و کمربند سفید",
 };
 
