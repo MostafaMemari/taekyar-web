@@ -21,6 +21,8 @@ export const FEATURE_MAIN: HomeFeature = {
     "برنامه هفتگی که با سطح، هدف و سرعت تو تنظیم می‌شود؛ هر جلسه دقیقاً می‌دانی چه کنی.",
 };
 
+export const FEATURE_CARDS = FEATURE_MAIN;
+
 export type WeekDayState = "done" | "today" | "todo" | "rest";
 
 export interface WeekStripDay {
