@@ -14,15 +14,17 @@ export function SidebarSection({ title, icon: Icon, children, className }: Sideb
     <section
       aria-label={title}
       className={cn(
-        "overflow-hidden rounded-2xl bg-card shadow-sm shadow-black/[0.04] ring-1 ring-border/50",
+        "overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm shadow-black/[0.02]",
         className
       )}
     >
-      <div className="flex items-center gap-2 border-b border-border/60 px-3.5 py-2.5 sm:px-4">
-        <Icon className="size-3.5 sm:size-4 text-primary" />
-        <h2 className="text-[11px] font-bold text-foreground sm:text-xs">{title}</h2>
+      <div className="flex items-center gap-2.5 border-b border-border/60 bg-muted/20 px-3.5 py-2.5 sm:px-4">
+        <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <Icon className="size-3.5" aria-hidden="true" />
+        </span>
+        <h2 className="text-[12px] font-black text-foreground sm:text-[13px]">{title}</h2>
       </div>
-      <div className="p-1.5 sm:p-2">{children}</div>
+      <div className="p-2 sm:p-2.5">{children}</div>
     </section>
   );
 }

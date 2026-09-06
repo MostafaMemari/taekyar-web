@@ -13,7 +13,7 @@ export async function SidebarAppCta() {
   return (
     <section
       aria-label={POST_LABELS.appCtaTitle}
-      className="relative overflow-hidden rounded-2xl bg-belt-black p-3.5 shadow-sm shadow-black/[0.08] sm:p-4"
+      className="relative overflow-hidden rounded-2xl border border-belt-black/80 bg-belt-black p-3.5 shadow-md shadow-black/[0.12] sm:p-4"
     >
       <BeltDivider width="full" className="absolute inset-x-0 top-0 h-[3px] border-0 opacity-80" />
 

@@ -35,31 +35,36 @@ function CategoryTreeList({ nodes, activePath }: { nodes: PublicCategoryNode[]; 
               href={categoryHref(node.path)}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "group flex min-h-10 items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors",
+                "group flex min-h-10 items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors",
                 active
-                  ? "bg-primary/[0.07]"
+                  ? "bg-primary/[0.07] ring-1 ring-primary/25"
                   : "hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
               )}
             >
               <CategoryIconBadge
                 category={node.name}
-                className="size-7 rounded-md"
+                className={cn("size-7 rounded-md transition-shadow", active && "shadow-sm")}
                 iconClassName="size-3.5"
               />
               <span
                 className={cn(
-                  "flex-1 text-[13px]",
+                  "min-w-0 flex-1 truncate text-[13px] leading-6",
                   active ? "font-bold text-primary" : "font-medium text-foreground"
                 )}
               >
                 {node.name}
               </span>
-              <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold tabular-nums text-muted-foreground">
+              <span
+                className={cn(
+                  "rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums transition-colors",
+                  active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+                )}
+              >
                 {node.postCount}
               </span>
             </Link>
             {node.children.length > 0 ? (
-              <div className="ps-4">
+              <div className="relative ms-[21px] border-s border-border/60 ps-2.5">
                 <CategoryTreeList nodes={node.children} activePath={activePath} />
               </div>
             ) : null}
