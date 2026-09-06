@@ -121,7 +121,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
           <div
             className={cn(
-              "mt-6 grid gap-6 sm:mt-7 sm:gap-7 lg:mt-10 lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-12 lg:gap-y-8 xl:gap-x-14",
+              "mt-6 grid gap-6 sm:mt-7 sm:gap-7 lg:mt-10 lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-8 lg:gap-y-8 xl:gap-x-10",
               POST_LAYOUT.postColumns,
             )}
           >

@@ -1,5 +1,5 @@
 export const POST_LAYOUT = {
-  postColumns: "lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_23rem]",
+  postColumns: "lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_24rem]",
 } as const;
 
 export const RELATED_POSTS_COUNT = 3;
