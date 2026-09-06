@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import { SURFACE_CARD } from "@/lib/styles";
 import { cn } from "@/lib/utils";
+import { parsePostHtml, sanitizePostHtml } from "@/lib/post-content";
 import { r2PublicUrl } from "@/lib/r2-url";
 
 interface TaxonomySeoContentProps {
@@ -50,9 +51,10 @@ export function TaxonomySeoContent({ title, content, imageUrl, imageAlt, placeho
         >
           {title}
         </h2>
-        <p className="mt-3 max-w-4xl text-pretty text-start text-[14px] leading-8 text-muted-foreground sm:text-[15px] sm:leading-8">
-          {content}
-        </p>
+        <div
+          className="article-content mt-3 max-w-4xl text-start"
+          dangerouslySetInnerHTML={{ __html: sanitizePostHtml(parsePostHtml(content)) }}
+        />
       </div>
     </section>
   );

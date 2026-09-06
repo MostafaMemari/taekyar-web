@@ -11,6 +11,7 @@ import { getPaginatedPostsByCategory, resolveCategoryPath, getCategoryTree } fro
 import type { PublicCategoryNode } from "@/lib/blog/categories";
 import { buildPageMetadata } from "@/lib/seo";
 import { resolveSeo } from "@/lib/seo-resolve";
+import { htmlToPlainText } from "@/lib/post-content";
 import { categoryHref } from "@/lib/routes";
 import { toFaDigits } from "@/lib/utils";
 
@@ -98,9 +99,11 @@ export async function generateMetadata({ params, searchParams }: CategoryPagePro
   const totalPages = Math.max(1, Math.ceil(totalCount / BLOG_PAGINATION.postsPerPage));
   const currentPage = Math.min(requestedPage, totalPages);
 
+  const plainDescription = category.description ? htmlToPlainText(category.description) : null;
+
   const seo = resolveSeo(category.seo, {
     title: currentPage > 1 ? `${category.name} · صفحه ${toFaDigits(currentPage)}` : category.name,
-    description: category.description,
+    description: plainDescription,
     defaultDescription: `مقالات دسته‌بندی «${category.name}» در وبلاگ تک‌یار.`,
     canonicalPath: basePath,
   });
@@ -148,6 +151,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
     { name: category.name, path: basePath },
   ];
   const related = buildRelatedLinks(await getCategoryTree(), category.path);
+  const plainDescription = category.description ? htmlToPlainText(category.description) : null;
 
   return (
     <>
@@ -156,7 +160,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
         data={archiveJsonLd({
           name: category.name,
           path: pageHref(basePath, currentPage),
-          description: category.description,
+          description: plainDescription,
           imageUrl: category.image,
           posts: visiblePosts,
           totalCount,

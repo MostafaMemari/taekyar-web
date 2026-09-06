@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Link2 } from "lucide-react";
 
 import { CoverImageField, type CoverImageValue } from "@/components/dashboard/shared/cover-image-field";
+import { RichContentEditor } from "@/components/dashboard/posts/rich-content-editor";
 import { SeoFieldsGroup } from "@/components/dashboard/shared/seo-fields-group";
 import { FieldError } from "@/components/shared/form-controls";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { saveTaxonomy } from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
@@ -196,16 +196,12 @@ export function TaxonomyForm({
             <Separator className="bg-border/60" />
             <CardContent className="space-y-4 pt-4">
               <div className="space-y-1.5">
-                <Label htmlFor="taxonomy-description" className="text-[13px] font-bold">
+                <Label className="text-[13px] font-bold">
                   {TAXONOMY_LABELS.descriptionLabel}
                 </Label>
-                <Textarea
-                  id="taxonomy-description"
-                  rows={4}
-                  value={fields.description}
-                  placeholder={TAXONOMY_LABELS.descriptionPlaceholder}
-                  className="min-h-[104px] resize-y rounded-xl"
-                  onChange={(event) => setField("description", event.target.value)}
+                <RichContentEditor
+                  initialContent={fields.description}
+                  onChange={(html) => setField("description", html)}
                 />
               </div>
             </CardContent>

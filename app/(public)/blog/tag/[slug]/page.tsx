@@ -10,6 +10,7 @@ import { archiveJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
 import { getPaginatedPostsByTag, getTagBySlug } from "@/lib/blog";
 import { buildPageMetadata } from "@/lib/seo";
 import { resolveSeo } from "@/lib/seo-resolve";
+import { htmlToPlainText } from "@/lib/post-content";
 import { tagHref } from "@/lib/routes";
 import { SITE_NAME } from "@/lib/site";
 import { toFaDigits } from "@/lib/utils";
@@ -53,9 +54,11 @@ export async function generateMetadata({ params, searchParams }: TagPageProps): 
   const totalPages = Math.max(1, Math.ceil(totalCount / BLOG_PAGINATION.postsPerPage));
   const currentPage = Math.min(requestedPage, totalPages);
 
+  const plainDescription = tag.description ? htmlToPlainText(tag.description) : null;
+
   const seo = resolveSeo(tag.seo, {
     title: currentPage > 1 ? `${tag.name} · صفحه ${toFaDigits(currentPage)}` : tag.name,
-    description: tag.description,
+    description: plainDescription,
     defaultDescription: `مقالات و آموزش‌های مرتبط با «${tag.name}» در وبلاگ ${SITE_NAME}.`,
     canonicalPath: basePath,
   });
@@ -98,6 +101,7 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
     { name: "وبلاگ", path: "/blog" },
     { name: tag.name, path: basePath },
   ];
+  const plainDescription = tag.description ? htmlToPlainText(tag.description) : null;
 
   return (
     <>
@@ -106,7 +110,7 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
         data={archiveJsonLd({
           name: tag.name,
           path: pageHref(basePath, currentPage),
-          description: tag.description,
+          description: plainDescription,
           imageUrl: tag.image,
           posts: visiblePosts,
           totalCount,
