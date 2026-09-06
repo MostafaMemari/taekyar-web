@@ -17,7 +17,7 @@ export function SectionHeader({
   return (
     <div className={cn("max-w-2xl", className)}>
       <span className="text-sm font-bold text-primary">{eyebrow}</span>
-      <h2 className="mt-3 text-3xl font-extrabold leading-[1.4] sm:text-4xl">
+      <h2 className="mt-3 text-balance text-3xl font-extrabold leading-[1.4] sm:text-4xl">
         {title}
       </h2>
       <BeltDivider variant="pill" className="mt-4 h-1 w-20" />

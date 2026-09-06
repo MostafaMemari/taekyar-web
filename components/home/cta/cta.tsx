@@ -12,12 +12,12 @@ export function CtaSection({ appDownloadUrl }: { appDownloadUrl?: string | null 
   return (
     <Section tone="dark" containerClassName="py-10 sm:py-12 lg:py-14" id="download">
       <Reveal>
-        <div className="relative overflow-hidden rounded-3xl bg-[linear-gradient(135deg,#e0282e_0%,#b01d22_55%,#701014_100%)] px-6 pb-12 pt-14 text-center shadow-xl shadow-primary/25 sm:px-12">
+        <div className="relative overflow-hidden rounded-2xl bg-[linear-gradient(135deg,#e0282e_0%,#b01d22_55%,#701014_100%)] px-6 pb-12 pt-14 text-center shadow-xl shadow-primary/25 sm:px-12">
           <BeltDivider width="full"
             className="absolute inset-x-0 top-0 h-[3px] border-0 opacity-90"
           />
           <div className="relative mx-auto max-w-2xl">
-            <h2 className="text-3xl font-black leading-snug text-white sm:text-4xl">
+            <h2 className="text-balance text-3xl font-black leading-snug text-white sm:text-4xl">
               {CTA_CONTENT.title}
             </h2>
             <p className="mt-4 text-[15px] leading-8 text-white/85 sm:text-base">
