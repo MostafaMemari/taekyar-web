@@ -15,21 +15,32 @@ export function Hero2Content({ appDownloadUrl }: Hero2ContentProps) {
       </span>
 
       <h1 className="mt-4 max-w-xl text-[2.125rem] font-black leading-[1.25] tracking-[-0.01em] sm:text-[2.75rem] sm:leading-[1.22] lg:text-[3.25rem] lg:leading-[1.18]">
-        <span className="block">{HERO2_TITLE.line1}</span>
         <span className="block">
-          {HERO2_TITLE.line2Prefix}{" "}
-          <span className="relative inline-block text-primary">
-            {HERO2_TITLE.highlight}
+          {HERO2_TITLE.line1.prefix}{" "}
+          <span className="text-primary">{HERO2_TITLE.line1.highlight}</span>
+        </span>
+        <span className="block">
+          {HERO2_TITLE.line2.prefix}{" "}
+          <span className="relative inline-block">
+            <span className="bg-gradient-to-b from-slate-700 via-slate-900 to-slate-900 bg-clip-text text-transparent">
+              {HERO2_TITLE.line2.highlight}
+            </span>
             <svg
               aria-hidden="true"
               viewBox="0 0 220 12"
               preserveAspectRatio="none"
-              className="absolute -bottom-1.5 start-0 h-[0.22em] w-full text-primary/30"
+              className="absolute -bottom-1.5 start-0 h-[0.22em] w-full opacity-40"
             >
+              <defs>
+                <linearGradient id="hero-journey-stroke" x1="1" y1="0" x2="0" y2="0">
+                  <stop offset="0" stopColor="#2563eb" />
+                  <stop offset="1" stopColor="#0f172a" />
+                </linearGradient>
+              </defs>
               <path
                 d="M4 9C60 3 160 3 216 8"
                 fill="none"
-                stroke="currentColor"
+                stroke="url(#hero-journey-stroke)"
                 strokeWidth="5"
                 strokeLinecap="round"
               />

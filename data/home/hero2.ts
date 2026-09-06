@@ -15,9 +15,8 @@ interface Hero2Cta {
 export const HERO2_EYEBROW = "اعتماد به نفس، قدرت و انضباط را بساز";
 
 export const HERO2_TITLE = {
-  line1: "از اولین ضربه،",
-  line2Prefix: "تا",
-  highlight: "کمربند مشکی",
+  line1: { prefix: "از", highlight: "اولین ضربه،" },
+  line2: { prefix: "تا", highlight: "کمربند مشکی" },
 };
 
 export const HERO2_DESCRIPTION =

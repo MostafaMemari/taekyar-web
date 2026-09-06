@@ -17,8 +17,8 @@ export function Hero2Cta({ appDownloadUrl }: Hero2CtaProps) {
         className="h-12 gap-2 rounded-xl px-6 text-[15px] font-bold shadow-md shadow-primary/25 transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30"
       >
         <a href={HERO2_PRIMARY_CTA.href}>
-          <HERO2_PRIMARY_CTA.Icon className="!size-[17px]" />
           {HERO2_PRIMARY_CTA.label}
+          <HERO2_PRIMARY_CTA.Icon className="!size-[17px]" />
         </a>
       </Button>
       <Button
@@ -28,10 +28,10 @@ export function Hero2Cta({ appDownloadUrl }: Hero2CtaProps) {
         className="group h-12 gap-2.5 rounded-xl px-5 text-[15px] font-semibold text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-muted"
       >
         <a href={HERO2_SECONDARY_CTA.href}>
+          {HERO2_SECONDARY_CTA.label}
           <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform duration-200 group-hover:scale-105">
             <HERO2_SECONDARY_CTA.Icon className="size-3 fill-current" />
           </span>
-          {HERO2_SECONDARY_CTA.label}
         </a>
       </Button>
       <Button
@@ -40,10 +40,7 @@ export function Hero2Cta({ appDownloadUrl }: Hero2CtaProps) {
         size="lg"
         className="h-12 gap-2 px-4 text-[15px] font-semibold text-muted-foreground hover:text-foreground"
       >
-        <a
-          href={downloadHref}
-          {...(appDownloadUrl ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        >
+        <a href={downloadHref} {...(appDownloadUrl ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
           دانلود اپلیکیشن
         </a>
       </Button>
