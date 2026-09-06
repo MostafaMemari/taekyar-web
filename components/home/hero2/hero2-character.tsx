@@ -21,19 +21,19 @@ export function Hero2Character() {
     if (!window.matchMedia(HOVER_QUERY).matches) return;
 
     let rafId = 0;
-    let spotX = 0;
-    let spotY = 0;
+    let spotClientX = 0;
+    let spotClientY = 0;
 
     const applySpot = () => {
       rafId = 0;
-      gearLayer.style.setProperty("--mx", `${spotX}px`);
-      gearLayer.style.setProperty("--my", `${spotY}px`);
+      const rect = frame.getBoundingClientRect();
+      gearLayer.style.setProperty("--mx", `${spotClientX - rect.left}px`);
+      gearLayer.style.setProperty("--my", `${spotClientY - rect.top}px`);
     };
 
     const onPointerMove = (event: PointerEvent) => {
-      const rect = frame.getBoundingClientRect();
-      spotX = event.clientX - rect.left;
-      spotY = event.clientY - rect.top;
+      spotClientX = event.clientX;
+      spotClientY = event.clientY;
       if (!rafId) rafId = requestAnimationFrame(applySpot);
     };
 
