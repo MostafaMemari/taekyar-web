@@ -16,7 +16,10 @@ function RelatedPostCard({ post }: { post: BlogPost }) {
   const href = postHref(post.slug);
 
   return (
-    <Card asChild className="relative h-full p-0 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/[0.06]">
+    <Card
+      asChild
+      className="relative h-full p-0 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/[0.06] gap-0"
+    >
       <article>
         <CardCover post={post} />
 
@@ -36,9 +39,7 @@ function RelatedPostCard({ post }: { post: BlogPost }) {
             </p>
           ) : null}
 
-          {post.tags.length > 0 ? (
-            <TagPills tags={post.tags} className="mt-auto pt-3 sm:pt-4" />
-          ) : null}
+          {post.tags.length > 0 ? <TagPills tags={post.tags} className="mt-auto pt-3 sm:pt-4" /> : null}
         </CardContent>
       </article>
     </Card>
