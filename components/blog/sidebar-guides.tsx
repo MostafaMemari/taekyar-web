@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { ArrowLeft, Clock } from "lucide-react";
+import { ArrowLeft, CalendarDays, Clock } from "lucide-react";
 
 import { POST_LABELS, TRAINING_GUIDE_SLUGS } from "@/data/blog/post-config";
 import { SidebarSection } from "@/components/blog/sidebar-section";
 import { CategoryIconBadge } from "@/components/blog/category-icon-badge";
 import { getBlogPosts } from "@/lib/blog";
-import { toFaDigits } from "@/lib/utils";
+import { formatFaDate, toFaDigits } from "@/lib/utils";
 import { Dumbbell } from "lucide-react";
 
 interface SidebarGuidesProps {
@@ -32,13 +32,28 @@ export async function SidebarGuides({ currentSlug }: SidebarGuidesProps) {
               >
                 <CategoryIconBadge category={post.category} className="mt-0.5 size-9 rounded-lg" iconClassName="size-4" />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[13px] font-bold leading-6 text-foreground transition-colors group-hover:text-primary">
+                  <span className="block truncate text-[13px] font-bold leading-6 text-foreground transition-colors group-hover:text-primary">
                     {post.title}
                   </span>
-                  <span className="mt-0.5 flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
-                    <Clock className="size-3 shrink-0" />
-                    {post.readTimeMinutes ? `${toFaDigits(post.readTimeMinutes)} ${POST_LABELS.readTimeSuffix}` : ""}
-                  </span>
+                  {post.date || post.readTimeMinutes ? (
+                    <span className="mt-0.5 flex min-w-0 flex-nowrap items-center gap-x-2 overflow-hidden whitespace-nowrap text-[11px] font-medium text-muted-foreground">
+                      {post.date ? (
+                        <span className="inline-flex shrink-0 items-center gap-1">
+                          <CalendarDays className="size-3 shrink-0" />
+                          {formatFaDate(post.date)}
+                        </span>
+                      ) : null}
+                      {post.date && post.readTimeMinutes ? (
+                        <span aria-hidden="true" className="size-1 shrink-0 rounded-full bg-muted-foreground/30" />
+                      ) : null}
+                      {post.readTimeMinutes ? (
+                        <span className="inline-flex shrink-0 items-center gap-1">
+                          <Clock className="size-3 shrink-0" />
+                          {toFaDigits(post.readTimeMinutes)} {POST_LABELS.readTimeSuffix}
+                        </span>
+                      ) : null}
+                    </span>
+                  ) : null}
                 </span>
                 <ArrowLeft
                   aria-hidden="true"
