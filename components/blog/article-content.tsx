@@ -4,8 +4,6 @@ import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
 import { injectHeadingIds } from "@/lib/post-content";
 import { tagHref } from "@/lib/routes";
-import { SURFACE_CARD } from "@/lib/styles";
-import { cn } from "@/lib/utils";
 
 export function PostTags({ tags }: { tags: BlogPost["tags"] }) {
   if (tags.length === 0) return null;
@@ -33,13 +31,11 @@ interface ArticleContentProps {
 
 export function ArticleContent({ post, content }: ArticleContentProps) {
   return (
-    <div className={cn(SURFACE_CARD, "p-4 sm:p-6 lg:p-10 xl:p-12")}>
-      <div className="max-w-3xl">
-        <article
-          className="article-content"
-          dangerouslySetInnerHTML={{ __html: injectHeadingIds(content) }}
-        />
-      </div>
+    <div className="max-w-3xl">
+      <article
+        className="article-content"
+        dangerouslySetInnerHTML={{ __html: injectHeadingIds(content) }}
+      />
       <PostTags tags={post.tags} />
     </div>
   );

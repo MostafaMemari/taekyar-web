@@ -69,8 +69,8 @@ interface PostRailProps {
 
 function PostRail({ slug, categoryPath, tocItems }: PostRailProps) {
   return (
-    <div className="space-y-3.5 sm:space-y-4 lg:sticky lg:top-[88px]">
-      <div className="hidden lg:block">
+    <div className="space-y-3.5 sm:space-y-4">
+      <div className="hidden lg:block lg:sticky lg:top-[88px]">
         <TableOfContents items={tocItems} />
       </div>
       <SidebarGuides currentSlug={slug} />
