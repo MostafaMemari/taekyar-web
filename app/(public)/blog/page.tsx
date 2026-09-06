@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { BlogHeader } from "@/components/blog/blog-header";
 import { BlogPagination } from "@/components/blog/pagination";
 import { CategoryFilter } from "@/components/blog/category-filter";
 import { PaginationScrollTop } from "@/components/blog/pagination-scroll-top";
+import { BlogIndexSkeleton } from "@/components/blog/loading-skeletons";
 import { BLOG_INDEX_LABELS, BLOG_PAGINATION } from "@/data/blog/index-page";
 import { PostGrid } from "@/components/blog/post-grid";
 import { Reveal } from "@/components/shared/reveal";
@@ -40,7 +42,15 @@ function buildPageHref(activeCategory: BlogCategoryName | null, page: number): s
   return query ? `/blog?${query}` : "/blog";
 }
 
-export default async function BlogPage({ searchParams }: BlogPageProps) {
+export default function BlogPage({ searchParams }: BlogPageProps) {
+  return (
+    <Suspense fallback={<BlogIndexSkeleton />}>
+      <BlogIndex searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function BlogIndex({ searchParams }: BlogPageProps) {
   const { category, page } = await searchParams;
   const activeCategory = resolveCategory(category);
 
