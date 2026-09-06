@@ -24,7 +24,7 @@ export function TrainingScreen({ onBack }: TrainingScreenProps) {
   };
 
   return (
-    <div className="flex h-full flex-col gap-3">
+    <div className="flex h-full flex-col gap-2.5 sm:gap-3">
       <div className="flex items-center justify-between">
         <button
           type="button"
@@ -39,7 +39,7 @@ export function TrainingScreen({ onBack }: TrainingScreenProps) {
       </div>
 
       {allDone ? (
-        <div className="flex flex-col items-center rounded-2xl bg-primary/[0.07] px-3 py-5 text-center">
+        <div className="flex flex-col items-center rounded-2xl bg-primary/[0.07] px-3 py-4 text-center sm:py-5">
           <span className="flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary">
             <Trophy className="size-5" />
           </span>
@@ -66,7 +66,7 @@ export function TrainingScreen({ onBack }: TrainingScreenProps) {
                   aria-pressed={done}
                   onClick={() => toggleTraining(title)}
                   className={cn(
-                    "flex w-full cursor-pointer items-center gap-2.5 rounded-xl border p-2.5 text-start transition-all duration-200",
+                    "flex w-full cursor-pointer items-center gap-2 rounded-xl border p-2 text-start transition-all duration-200 sm:gap-2.5 sm:p-2.5",
                     done
                       ? "border-primary/30 bg-primary/[0.06]"
                       : "border-black/5 bg-[#fafaf8] hover:border-primary/30"
@@ -80,7 +80,7 @@ export function TrainingScreen({ onBack }: TrainingScreenProps) {
                   >
                     <Check className="size-3" strokeWidth={3.5} />
                   </span>
-                  <span className={cn("flex size-8 shrink-0 items-center justify-center rounded-lg", tint)}>
+                  <span className={cn("flex size-7 shrink-0 items-center justify-center rounded-lg sm:size-8", tint)}>
                     <Icon className="size-3.5" />
                   </span>
                   <span className="min-w-0 flex-1">
@@ -89,7 +89,7 @@ export function TrainingScreen({ onBack }: TrainingScreenProps) {
                     </span>
                     <span className="mt-0.5 block text-[9px] text-black/40">{meta}</span>
                   </span>
-                  <span className="shrink-0 text-[9px] font-semibold text-black/40">{duration}</span>
+                  <span className="shrink-0 whitespace-nowrap text-[9px] font-semibold text-black/40">{duration}</span>
                 </button>
               </li>
             );

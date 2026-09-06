@@ -17,10 +17,10 @@ export function AppScreen({ belts }: AppScreenProps) {
   const [screen, setScreen] = useState<PhoneScreen>("home");
 
   return (
-    <div className="overflow-hidden rounded-[2.1rem] bg-white">
-      <div className="flex items-center justify-between px-6 pt-3 text-[10px] font-bold text-black/70">
+    <div className="overflow-hidden rounded-[1.7rem] bg-white sm:rounded-[2.1rem]">
+      <div className="flex items-center justify-between px-4 pt-2.5 text-[10px] font-bold text-black/70 sm:px-6 sm:pt-3">
         <span>۹:۴۱</span>
-        <span className="h-5 w-16 rounded-full bg-[#16161a]" />
+        <span className="h-4 w-12 rounded-full bg-[#16161a] sm:h-5 sm:w-16" />
         <span className="flex items-end gap-[3px]">
           <span className="h-1 w-[3px] rounded-full bg-black/50" />
           <span className="h-1.5 w-[3px] rounded-full bg-black/50" />
@@ -29,7 +29,7 @@ export function AppScreen({ belts }: AppScreenProps) {
         </span>
       </div>
 
-      <div className="grid px-4 pb-4 pt-3">
+      <div className="grid px-3 pb-3 pt-2.5 sm:px-4 sm:pb-4 sm:pt-3">
         <div
           aria-hidden={screen !== "home"}
           inert={screen !== "home"}
@@ -56,7 +56,7 @@ export function AppScreen({ belts }: AppScreenProps) {
         </div>
       </div>
 
-      <div className="flex items-center justify-around border-t border-black/5 px-6 py-2.5 text-black/30">
+      <div className="flex items-center justify-around border-t border-black/5 px-4 py-2 text-black/30 sm:px-6 sm:py-2.5">
         <Home className="size-4 text-primary" />
         <Dumbbell className="size-4" />
         <User className="size-4" />

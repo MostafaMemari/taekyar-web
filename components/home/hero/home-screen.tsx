@@ -13,22 +13,22 @@ export function HomeScreen({ belts, onStartTraining }: HomeScreenProps) {
   );
 
   return (
-    <div className="flex h-full flex-col gap-3">
+    <div className="flex h-full flex-col gap-2.5 sm:gap-3">
       <div className="flex items-center justify-between">
-        <div>
+        <div className="min-w-0">
           <p className="text-[10px] font-medium text-black/45">
             {HERO_APP_PREVIEW.greeting}
           </p>
-          <p className="text-[13px] font-extrabold text-black">
+          <p className="truncate text-[13px] font-extrabold text-black">
             {HERO_APP_PREVIEW.weekTitle}
           </p>
         </div>
-        <span className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
-          <User className="size-4" />
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/20 sm:size-9">
+          <User className="size-3.5 sm:size-4" />
         </span>
       </div>
 
-      <div className="rounded-2xl bg-[#fafaf8] p-3 ring-1 ring-black/5">
+      <div className="rounded-2xl bg-[#fafaf8] p-2.5 ring-1 ring-black/5 sm:p-3">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-bold text-black/60">
             {HERO_APP_PREVIEW.beltLabel}
@@ -50,7 +50,7 @@ export function HomeScreen({ belts, onStartTraining }: HomeScreenProps) {
         </div>
       </div>
 
-      <div className="rounded-2xl bg-[#fafaf8] p-3 ring-1 ring-black/5">
+      <div className="rounded-2xl bg-[#fafaf8] p-2.5 ring-1 ring-black/5 sm:p-3">
         <div className="flex items-baseline justify-between">
           <p className="text-[11px] font-extrabold text-black">
             {HERO_APP_PREVIEW.weekDone} {HERO_APP_PREVIEW.weekLabel}

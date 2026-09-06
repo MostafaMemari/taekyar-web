@@ -14,16 +14,11 @@ export function PhoneMockup() {
         태권도
       </span>
 
-      <div className="relative w-[218px] rounded-[2.6rem] bg-[#16161a] p-[10px] ring-1 ring-black/30 sm:w-[248px] lg:w-[264px]">
+      <div className="relative w-[264px] rounded-[2.2rem] bg-[#16161a] p-2 ring-1 ring-black/30 sm:w-[264px] sm:rounded-[2.6rem] sm:p-[10px] lg:w-[264px]">
         <AppScreen belts={BELT_COLORS} />
       </div>
 
-      <StatCard
-        icon={Dumbbell}
-        value="۵۰+"
-        label="فن آموزشی"
-        className="absolute -top-6 end-2 animate-hero-float sm:-end-10"
-      />
+      <StatCard icon={Dumbbell} value="۵۰+" label="فن آموزشی" className="absolute -top-6 end-2 animate-hero-float sm:-end-10" />
       <StatCard
         icon={Users}
         value="۱۰۰۰+"

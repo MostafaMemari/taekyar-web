@@ -5,3 +5,10 @@ export const BELT_JOURNEY_INTRO = {
 };
 
 export const CURRENT_BELT_INDEX = 2;
+
+export const BELT_JOURNEY_LABELS = {
+  currentBadge: "کمربند فعلی",
+  nextLabel: "قدم بعد",
+  nextPrefix: "قدم بعد:",
+  completedLabel: "مسیر کامل شد",
+};
