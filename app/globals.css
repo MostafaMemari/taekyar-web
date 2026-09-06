@@ -232,8 +232,31 @@
     scrollbar-gutter: stable;
   }
   ::selection {
-    background-color: #e0282e;
+    background-color: #2563eb;
     color: #ffffff;
+  }
+
+  ::-moz-selection {
+    background-color: #2563eb;
+    color: #ffffff;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f8fafc;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #2563eb;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1d4ed8;
   }
 }
 
