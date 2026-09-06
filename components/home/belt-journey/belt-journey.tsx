@@ -16,7 +16,7 @@ export function BeltJourney() {
   const current = BELT_LEVELS[CURRENT_BELT_INDEX];
 
   return (
-    <Section containerClassName="py-10 sm:py-12 lg:py-14">
+    <Section tone="accent" containerClassName="py-10 sm:py-12 lg:py-14">
       <Reveal>
         <SectionHeader {...BELT_JOURNEY_INTRO} className="max-w-xl" />
       </Reveal>

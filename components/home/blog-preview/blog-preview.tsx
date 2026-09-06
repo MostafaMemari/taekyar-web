@@ -15,6 +15,7 @@ export async function BlogPreview() {
   return (
     <Section
       id="blog-preview"
+      tone="default"
       containerClassName="py-10 sm:py-12 lg:py-14"
     >
       <Reveal>

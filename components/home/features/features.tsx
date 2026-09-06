@@ -7,7 +7,7 @@ import { FeatureSpotlight } from "./feature-spotlight";
 
 export function Features() {
   return (
-    <Section id="features" containerClassName="py-10 sm:py-12 lg:py-14">
+    <Section id="features" tone="default" containerClassName="py-10 sm:py-12 lg:py-14">
       <Reveal>
         <SectionHeader {...FEATURES_INTRO} className="max-w-xl" />
       </Reveal>

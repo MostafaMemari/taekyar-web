@@ -4,9 +4,9 @@ import { TRUST_STATS } from "@/data/home/trust";
 
 export function TrustBar() {
   return (
-    <Section containerClassName="py-2">
+    <Section tone="soft" containerClassName="py-2">
       <Reveal>
-        <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-5 border-y border-border/50 py-6 sm:gap-x-2">
+        <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-5 py-6 sm:gap-x-2">
           {TRUST_STATS.map(({ value, label, Icon }) => (
             <li
               key={label}
