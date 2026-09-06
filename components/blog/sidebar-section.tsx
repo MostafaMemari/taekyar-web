@@ -11,7 +11,7 @@ interface SidebarSectionProps {
 
 export function SidebarSection({ title, icon: Icon, children, className }: SidebarSectionProps) {
   return (
-    <Card asChild className="p-0" aria-label={title}>
+    <Card asChild className="p-0 gap-0" aria-label={title}>
       <section className={className}>
         <div className="flex items-center gap-2.5 border-b border-border/60 bg-muted/20 px-3.5 py-2.5 sm:px-4">
           <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">

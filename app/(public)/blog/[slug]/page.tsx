@@ -69,7 +69,7 @@ interface PostRailProps {
 
 function PostRail({ slug, categoryPath, tocItems }: PostRailProps) {
   return (
-    <div className="space-y-4 lg:sticky lg:top-[88px] lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto lg:pe-1.5 lg:[scrollbar-width:thin]">
+    <div className="space-y-4 lg:sticky lg:top-[88px]">
       <div className="hidden lg:block">
         <TableOfContents items={tocItems} />
       </div>
@@ -109,11 +109,7 @@ export default async function PostPage({ params }: PostPageProps) {
     <>
       <JsonLd data={articleJsonLd(post)} />
       <JsonLd
-        data={breadcrumbJsonLd([
-          { name: "وبلاگ", path: "/blog" },
-          ...categoryTrail,
-          { name: post.title, path: postHref(post.slug) },
-        ])}
+        data={breadcrumbJsonLd([{ name: "وبلاگ", path: "/blog" }, ...categoryTrail, { name: post.title, path: postHref(post.slug) }])}
       />
       <Section className="pb-0 sm:pb-0 lg:pb-0">
         <Reveal>

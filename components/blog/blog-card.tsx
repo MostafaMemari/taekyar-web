@@ -26,10 +26,7 @@ export function CardCover({ post }: { post: BlogPost }) {
           <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
         </>
       ) : (
-        <ImagePlaceholder
-          icon={Newspaper}
-          iconClassName="group-hover/card:scale-[1.08]"
-        />
+        <ImagePlaceholder icon={Newspaper} iconClassName="group-hover/card:scale-[1.08]" />
       )}
       {post.category ? (
         <Badge className="absolute start-3 top-3 border border-border/40 bg-card/90 text-[11px] font-bold tracking-tight text-card-foreground shadow-sm backdrop-blur-sm sm:text-xs">
@@ -44,7 +41,10 @@ export function BlogCard({ post }: { post: BlogPost }) {
   const href = postHref(post.slug);
 
   return (
-    <Card asChild className="relative h-full p-0 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/[0.06]">
+    <Card
+      asChild
+      className="relative h-full p-0 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/[0.06] gap-0"
+    >
       <article>
         <CardCover post={post} />
 

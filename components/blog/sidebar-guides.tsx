@@ -22,37 +22,33 @@ export async function SidebarGuides({ currentSlug }: SidebarGuidesProps) {
 
   return (
     <SidebarSection title={POST_LABELS.guidesTitle} icon={Dumbbell}>
-        <ul className="space-y-1.5">
-          {guides.map((post) => {
-            return (
-              <li key={post.id}>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="group flex items-start gap-2.5 rounded-xl border border-transparent p-2 transition-all hover:border-border/60 hover:bg-muted/40 hover:shadow-sm hover:shadow-black/[0.03] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                >
-                  <CategoryIconBadge
-                    category={post.category}
-                    className="mt-0.5 size-9 rounded-lg"
-                    iconClassName="size-4"
-                  />
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[13px] font-bold leading-6 text-foreground transition-colors group-hover:text-primary">
-                      {post.title}
-                    </span>
-                    <span className="mt-0.5 flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
-                      <Clock className="size-3 shrink-0" />
-                      {post.readTimeMinutes ? `${toFaDigits(post.readTimeMinutes)} ${POST_LABELS.readTimeSuffix}` : ""}
-                    </span>
+      <ul className="space-y-1.5">
+        {guides.map((post) => {
+          return (
+            <li key={post.id}>
+              <Link
+                href={`/blog/${post.slug}`}
+                className="group flex items-start gap-2.5 rounded-xl border border-transparent p-2 transition-all hover:border-border/60 hover:bg-muted/40 hover:shadow-sm hover:shadow-black/[0.03] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                <CategoryIconBadge category={post.category} className="mt-0.5 size-9 rounded-lg" iconClassName="size-4" />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[13px] font-bold leading-6 text-foreground transition-colors group-hover:text-primary">
+                    {post.title}
                   </span>
-                  <ArrowLeft
-                    aria-hidden="true"
-                    className="mt-1.5 size-3.5 shrink-0 text-muted-foreground/40 transition-all group-hover:-translate-x-0.5 group-hover:text-primary motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
-                  />
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+                  <span className="mt-0.5 flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
+                    <Clock className="size-3 shrink-0" />
+                    {post.readTimeMinutes ? `${toFaDigits(post.readTimeMinutes)} ${POST_LABELS.readTimeSuffix}` : ""}
+                  </span>
+                </span>
+                <ArrowLeft
+                  aria-hidden="true"
+                  className="mt-1.5 size-3.5 shrink-0 text-muted-foreground/40 transition-all group-hover:-translate-x-0.5 group-hover:text-primary motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+                />
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </SidebarSection>
   );
 }
