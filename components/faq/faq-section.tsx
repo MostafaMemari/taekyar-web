@@ -16,6 +16,7 @@ interface FaqSectionProps {
   description?: string;
   id?: string;
   className?: string;
+  accordionClassName?: string;
 }
 
 export function FaqJsonLd({ faqs }: { faqs: Pick<PublicFaq, "question" | "answer">[] }) {
@@ -23,14 +24,20 @@ export function FaqJsonLd({ faqs }: { faqs: Pick<PublicFaq, "question" | "answer
   return <JsonLd data={faqJsonLd(faqs.map((faq, index) => ({ id: index, ...faq })))} />;
 }
 
-export function FaqSection({ faqs, eyebrow, title, description, id, className }: FaqSectionProps) {
+export function FaqSection({ faqs, eyebrow, title, description, id, className, accordionClassName }: FaqSectionProps) {
   if (faqs.length === 0) return null;
 
   return (
     <div id={id} className={cn("scroll-mt-24", className)}>
       <FaqJsonLd faqs={faqs} />
       <SectionHeader eyebrow={eyebrow} title={title} description={description} />
-      <Accordion type="multiple" className="mx-auto mt-8 grid max-w-3xl grid-cols-1 items-start gap-4 lg:mt-10">
+      <Accordion
+        type="multiple"
+        className={cn(
+          "mx-auto mt-8 grid max-w-3xl grid-cols-1 items-start gap-4 lg:mt-10",
+          accordionClassName,
+        )}
+      >
         {faqs.map(({ question, answer }, index) => (
           <AccordionItem key={`${question}-${index}`} value={`faq-${index + 1}`} className="px-5 py-1 sm:px-6">
             <AccordionTrigger>{question}</AccordionTrigger>

@@ -16,7 +16,11 @@ export async function Faq() {
       containerClassName="py-10 sm:py-12 lg:py-14"
     >
       <Reveal>
-        <FaqSection faqs={faqs} {...FAQ_INTRO} />
+        <FaqSection
+          faqs={faqs}
+          {...FAQ_INTRO}
+          accordionClassName="max-w-5xl px-4 sm:px-6 md:grid-cols-2 md:gap-5 lg:gap-6 lg:px-0"
+        />
       </Reveal>
 
       <Reveal delay={120}>
