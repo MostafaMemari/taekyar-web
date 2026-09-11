@@ -117,7 +117,7 @@
   --card-foreground: #f5f3ef;
   --popover: #171717;
   --popover-foreground: #f5f3ef;
-  --primary: #e0282e;
+  --primary: #2563eb;
   --primary-foreground: #ffffff;
   --secondary: #232323;
   --secondary-foreground: #f5f3ef;
@@ -128,7 +128,7 @@
   --destructive: #ff5257;
   --border: rgba(245, 243, 239, 0.1);
   --input: rgba(245, 243, 239, 0.14);
-  --ring: #e0282e;
+  --ring: #2563eb;
 }
 
 .theme-light {

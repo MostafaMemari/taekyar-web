@@ -12,6 +12,7 @@ import { DashboardUserMenu } from "@/components/dashboard/layout/dashboard-user-
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { DASHBOARD_LABELS } from "@/data/dashboard/ui";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { resolveDashboardTitle } from "@/lib/dashboard-navigation";
 import { toFaDigits } from "@/lib/utils";
 
@@ -32,7 +33,14 @@ export function DashboardTopbar({
 }: DashboardTopbarProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 64rem)");
+  const [wasDesktop, setWasDesktop] = useState(isDesktop);
   const title = resolveDashboardTitle(pathname);
+
+  if (wasDesktop !== isDesktop) {
+    setWasDesktop(isDesktop);
+    if (isDesktop) setOpen(false);
+  }
 
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-card">
@@ -51,7 +59,7 @@ export function DashboardTopbar({
 
           <SheetContent
             side="right"
-            className="theme-admin w-[300px] gap-0 bg-card p-0 sm:w-[320px]"
+            className="theme-admin w-[300px] gap-0 bg-card p-0 sm:w-[320px] lg:hidden"
             aria-label={DASHBOARD_LABELS.sectionLabel}
           >
             <SheetHeader className="sr-only">

@@ -33,7 +33,7 @@ function Toast({ tone, className, ...props }: React.ComponentProps<typeof ToastP
       data-slot="toast"
       data-tone={tone}
       className={cn(
-        "pointer-events-auto relative w-full overflow-hidden rounded-xl bg-white p-4 ps-5 shadow-lg shadow-black/[0.08] ring-1",
+        "theme-light pointer-events-auto relative w-full overflow-hidden rounded-xl bg-white p-4 ps-5 shadow-lg shadow-black/[0.08] ring-1",
         TONE_RING[tone],
         "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-top-6",
         "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
