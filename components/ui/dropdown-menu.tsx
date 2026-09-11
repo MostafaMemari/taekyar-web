@@ -5,8 +5,12 @@ import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
 
 import { cn } from "@/lib/utils";
 
-function DropdownMenu({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
-  return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
+function DropdownMenu({
+  modal = false,
+  dir = "rtl",
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
+  return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" modal={modal} dir={dir} {...props} />;
 }
 
 function DropdownMenuTrigger({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
@@ -24,7 +28,7 @@ function DropdownMenuPortal({ ...props }: React.ComponentProps<typeof DropdownMe
 function DropdownMenuContent({
   className,
   sideOffset = 6,
-  align = "end",
+  align = "start",
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
   return (
@@ -54,7 +58,7 @@ function DropdownMenuItem({
       data-slot="dropdown-menu-item"
       data-variant={variant}
       className={cn(
-        "relative flex min-h-10 cursor-pointer items-center gap-2.5 rounded-md px-2.5 text-[13px] font-medium leading-5 outline-none select-none transition-colors focus-visible:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted motion-reduce:transition-none",
+        "relative flex min-h-10 cursor-pointer items-center gap-2.5 rounded-md px-2.5 text-start text-[13px] font-medium leading-5 outline-none select-none transition-colors focus-visible:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50 data-highlighted:bg-muted motion-reduce:transition-none",
         variant === "destructive"
           ? "text-destructive data-highlighted:bg-destructive/10 data-highlighted:text-destructive"
           : "text-foreground data-highlighted:text-foreground",
@@ -72,7 +76,7 @@ function DropdownMenuLabel({
   return (
     <DropdownMenuPrimitive.Label
       data-slot="dropdown-menu-label"
-      className={cn("px-2.5 py-2 text-[13px] font-bold leading-5 text-foreground", className)}
+      className={cn("px-2.5 py-2 text-start text-[13px] font-bold leading-5 text-foreground", className)}
       {...props}
     />
   );

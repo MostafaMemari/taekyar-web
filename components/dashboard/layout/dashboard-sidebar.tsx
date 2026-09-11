@@ -37,14 +37,14 @@ export function DashboardSidebar({
         <BeltDivider width="full" className="h-full border-0" />
       </div>
 
-      <div className="shrink-0 border-b border-border px-5 pb-4 pt-5">
+      <div className="shrink-0 border-b border-border px-5 pb-2 pt-4">
         <Logo siteName={siteName} logoImage={logoImage} logoImageAlt={logoImageAlt} />
-        <p className="mt-2 text-[11px] font-semibold leading-4 text-muted-foreground">{DASHBOARD_LABELS.panel}</p>
+        <p className="mt-1.5 text-[11px] font-semibold leading-4 text-muted-foreground">{DASHBOARD_LABELS.panel}</p>
       </div>
 
       <nav
         aria-label={DASHBOARD_LABELS.sectionLabel}
-        className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3 pt-1"
       >
         <SidebarNavSection
           items={[DASHBOARD_NAV_PRIMARY]}
