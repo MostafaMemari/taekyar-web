@@ -9,11 +9,7 @@ import { getMenuTree } from "@/lib/menu";
 import { MOBILE_NAV_FALLBACK } from "@/data/layout/navigation";
 import { getSiteSettings } from "@/lib/site-settings";
 
-export default async function PublicLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function PublicLayout({ children }: { children: React.ReactNode }) {
   const [settings, desktopItems, mobileItems] = await Promise.all([
     getSiteSettings(),
     getMenuTree("HEADER_DESKTOP"),
