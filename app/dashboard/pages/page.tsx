@@ -1,20 +1,26 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, FileText, Pencil, Search } from "lucide-react";
+import { FileText, Pencil } from "lucide-react";
 
 import { DeletePageButton } from "@/components/dashboard/pages/delete-page-button";
+import { ForwardIcon } from "@/components/dashboard/shared/directional-icons";
 import { DashboardEmptyState } from "@/components/dashboard/shared/dashboard-empty-state";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import {
   DashboardTable,
   DashboardTableCell,
   DashboardTableRow,
 } from "@/components/dashboard/shared/dashboard-table";
+import {
+  DashboardCountChip,
+  DashboardSearchField,
+  DashboardToolbar,
+} from "@/components/dashboard/shared/dashboard-toolbar";
 import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
-import { Badge } from "@/components/ui/badge";
+import { RowActionButton } from "@/components/dashboard/shared/row-action-button";
+import { resolveContentTone, StatusBadge } from "@/components/dashboard/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { PAGES_TABLE_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
 import { pageHref } from "@/lib/routes";
@@ -57,40 +63,29 @@ export default async function DashboardPagesPage({ searchParams }: PagesPageProp
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{PAGES_TABLE_LABELS.title}</h1>
-          <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
-            {PAGES_TABLE_LABELS.description}
-          </p>
-        </div>
+      <DashboardPageHeader
+        title={PAGES_TABLE_LABELS.title}
+        description={PAGES_TABLE_LABELS.description}
+        actions={
+          <Button asChild className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold">
+            <Link href="/dashboard/pages/new">
+              {PAGES_TABLE_LABELS.newPage}
+              <ForwardIcon className="size-4" aria-hidden="true" />
+            </Link>
+          </Button>
+        }
+      />
 
-        <Button asChild className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15">
-          <Link href="/dashboard/pages/new">
-            {PAGES_TABLE_LABELS.newPage}
-            <ArrowLeft className="size-4" aria-hidden="true" />
-          </Link>
-        </Button>
-      </div>
-
-      <Card className="p-0">
-        <div className="p-3 sm:p-4">
-          <form role="search" aria-label={PAGES_TABLE_LABELS.searchLabel} action="/dashboard/pages" className="relative">
-            <Search
-              aria-hidden="true"
-              className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/50"
-            />
-            <Input
-              type="search"
-              name="q"
-              defaultValue={query}
-              placeholder={PAGES_TABLE_LABELS.searchPlaceholder}
-              aria-label={PAGES_TABLE_LABELS.searchLabel}
-              className="h-10 rounded-xl bg-card ps-9 pe-4 text-[13px] placeholder:text-muted-foreground/60"
-            />
-          </form>
-        </div>
-        <Separator className="bg-border/60" />
+      <Card className="gap-0 rounded-xl p-0 shadow-none">
+        <DashboardToolbar>
+          <DashboardSearchField
+            action="/dashboard/pages"
+            label={PAGES_TABLE_LABELS.searchLabel}
+            placeholder={PAGES_TABLE_LABELS.searchPlaceholder}
+            defaultValue={query}
+          />
+          <DashboardCountChip count={total} suffix={PAGES_TABLE_LABELS.resultsSuffix} />
+        </DashboardToolbar>
 
         {pages.length === 0 ? (
           <DashboardEmptyState
@@ -98,14 +93,14 @@ export default async function DashboardPagesPage({ searchParams }: PagesPageProp
             hint={query ? "جستجوی دیگری را امتحان کنید یا فیلتر را پاک کنید." : PAGES_TABLE_LABELS.emptyHint}
             action={
               query ? (
-                <Button variant="outline" asChild className="h-9 rounded-xl px-4 text-[13px] font-bold">
+                <Button variant="outline" asChild className="h-10 rounded-lg px-4 text-[13px] font-bold">
                   <Link href="/dashboard/pages">پاک کردن جستجو</Link>
                 </Button>
               ) : (
-                <Button asChild className="h-9 rounded-xl px-4 text-[13px] font-bold">
+                <Button asChild className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold">
                   <Link href="/dashboard/pages/new">
                     {PAGES_TABLE_LABELS.newPage}
-                    <ArrowLeft className="size-4" aria-hidden="true" />
+                    <ForwardIcon className="size-4" aria-hidden="true" />
                   </Link>
                 </Button>
               )
@@ -143,7 +138,8 @@ interface PagesTableProps {
 function PagesTable({ pages }: PagesTableProps) {
   return (
     <DashboardTable
-      minWidth="min-w-[640px]"
+      caption={PAGES_TABLE_LABELS.title}
+      minWidth="min-w-[720px]"
       hiddenOnMobile={[3]}
       headers={[
         PAGES_TABLE_LABELS.columnTitle,
@@ -164,11 +160,11 @@ function PagesTable({ pages }: PagesTableProps) {
                   width={40}
                   height={40}
                   unoptimized
-                  className="size-10 shrink-0 rounded-lg object-cover ring-1 ring-border/60"
+                  className="size-10 shrink-0 rounded-lg object-cover ring-1 ring-border"
                 />
               ) : (
                 <span
-                  className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground ring-1 ring-border/60"
+                  className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground ring-1 ring-border"
                   aria-hidden="true"
                 >
                   <FileText className="size-4" />
@@ -179,12 +175,12 @@ function PagesTable({ pages }: PagesTableProps) {
                   <Link
                     href={pageHref(page.slug)}
                     target="_blank"
-                    className="block truncate rounded-sm text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                    className="block truncate rounded-sm text-[13px] font-bold leading-5 text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
                   >
                     {page.title}
                   </Link>
                 ) : (
-                  <span className="block truncate text-[13px] font-bold leading-5">{page.title}</span>
+                  <span className="block truncate text-[13px] font-bold leading-5 text-foreground">{page.title}</span>
                 )}
                 <span
                   dir="ltr"
@@ -197,35 +193,22 @@ function PagesTable({ pages }: PagesTableProps) {
             </div>
           </DashboardTableCell>
           <DashboardTableCell>
-            {page.status === "PUBLISHED" ? (
-              <Badge variant="outline" className="h-4.5 border-emerald-300/70 bg-emerald-50 px-1.5 text-[10px] font-bold text-emerald-800">
-                {PAGES_TABLE_LABELS.statusPublished}
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="h-4.5 border-amber-300/70 bg-amber-50 px-1.5 text-[10px] font-bold text-amber-800">
-                {PAGES_TABLE_LABELS.statusDraft}
-              </Badge>
-            )}
+            <StatusBadge tone={resolveContentTone(page.status)}>
+              {page.status === "PUBLISHED" ? PAGES_TABLE_LABELS.statusPublished : PAGES_TABLE_LABELS.statusDraft}
+            </StatusBadge>
           </DashboardTableCell>
           <DashboardTableCell className="whitespace-nowrap">
-            <span className="block text-[13px] text-foreground">{formatFaDate(page.updatedAt)}</span>
-            <span className="mt-0.5 block text-[11px] text-muted-foreground">
+            <span className="block text-[13px] tabular-nums text-foreground">
               {PAGES_TABLE_LABELS.updatedLabel} {formatFaDate(page.updatedAt)}
             </span>
           </DashboardTableCell>
-          <DashboardTableCell className="py-3">
+          <DashboardTableCell>
             <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                asChild
-                aria-label={PAGES_TABLE_LABELS.edit}
-                className="size-8 rounded-lg"
-              >
+              <RowActionButton asChild aria-label={PAGES_TABLE_LABELS.edit} title={PAGES_TABLE_LABELS.edit}>
                 <Link href={`/dashboard/pages/${page.slug}/edit`}>
                   <Pencil className="size-4" aria-hidden="true" />
                 </Link>
-              </Button>
+              </RowActionButton>
               <DeletePageButton slug={page.slug} />
             </div>
           </DashboardTableCell>

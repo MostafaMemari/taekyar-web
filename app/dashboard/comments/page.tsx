@@ -3,10 +3,11 @@ import { ExternalLink } from "lucide-react";
 
 import { CommentActions } from "@/components/dashboard/comments/comment-actions";
 import { DashboardEmptyState } from "@/components/dashboard/shared/dashboard-empty-state";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
+import { resolveCommentTone, StatusBadge } from "@/components/dashboard/shared/status-badge";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Card } from "@/components/ui/card";
 import type { CommentStatus } from "@/lib/admin-types";
 import { COMMENT_STATUS_META, COMMENTS_ADMIN_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
@@ -83,55 +84,56 @@ export default async function DashboardCommentsPage({ searchParams }: CommentsPa
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{COMMENTS_ADMIN_LABELS.title}</h1>
-        <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
-          {COMMENTS_ADMIN_LABELS.description}
-        </p>
-      </div>
+      <DashboardPageHeader title={COMMENTS_ADMIN_LABELS.title} description={COMMENTS_ADMIN_LABELS.description} />
 
-      <Card className="p-3">
-        <nav aria-label={COMMENTS_ADMIN_LABELS.title} className="flex flex-wrap items-center gap-2">
-          {filters.map((filter) => {
-            const href = buildHref(1, filter.key);
-            const active = (statusFilter ?? null) === filter.key;
+      <nav
+        aria-label={COMMENTS_ADMIN_LABELS.title}
+        className="flex flex-wrap items-center gap-1.5 rounded-xl border border-border bg-card p-1.5"
+      >
+        {filters.map((filter) => {
+          const href = buildHref(1, filter.key);
+          const active = (statusFilter ?? null) === filter.key;
 
-            return (
-              <Link
-                key={filter.label}
-                href={href}
-                aria-current={active ? "page" : undefined}
+          return (
+            <Link
+              key={filter.label}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "inline-flex h-9 items-center gap-2 rounded-lg px-3 text-[13px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none",
+                active
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+            >
+              {filter.label}
+              <span
                 className={cn(
-                  "inline-flex min-h-9 items-center gap-2 rounded-full border px-4 text-[13px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none",
-                  active
-                    ? "border-primary bg-primary text-white shadow-sm shadow-primary/20"
-                    : "border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground",
+                  "rounded-md px-1.5 py-0.5 text-[11px] font-semibold tabular-nums",
+                  active ? "bg-primary-foreground/20" : "bg-muted",
                 )}
               >
-                {filter.label}
-                <span
-                  className={cn(
-                    "rounded-full px-1.5 py-0.5 text-[10px] font-bold tabular-nums ring-1",
-                    active ? "bg-white/20 ring-white/20" : "bg-muted ring-border/60",
-                  )}
-                >
-                  {toFaDigits(filter.count)}
-                </span>
-              </Link>
-            );
-          })}
-        </nav>
-      </Card>
+                {toFaDigits(filter.count)}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      <p role="status" className="sr-only">
+        {toFaDigits(total)} {COMMENTS_ADMIN_LABELS.resultsSuffix}
+        {statusFilter ? ` · ${COMMENT_STATUS_META[statusFilter].label}` : ""}
+      </p>
 
       {comments.length === 0 ? (
-        <Card className="border-dashed">
+        <Card className="gap-0 rounded-xl p-0 shadow-none">
           <DashboardEmptyState
             title={COMMENTS_ADMIN_LABELS.empty}
             hint="دیدگاهی با این فیلتر یافت نشد — فیلتر را تغییر دهید یا منتظر دیدگاه جدید باشید."
           />
         </Card>
       ) : (
-        <ul className="space-y-3.5">
+        <ul className="space-y-3">
           {comments.map((comment) => (
             <CommentRowItem key={comment.id} comment={comment} />
           ))}
@@ -154,28 +156,25 @@ export default async function DashboardCommentsPage({ searchParams }: CommentsPa
 function CommentRowItem({ comment }: { comment: CommentRow }) {
   return (
     <li>
-      <Card className="overflow-hidden shadow-sm shadow-black/[0.03]">
-        <CardContent className="p-4 sm:p-5">
+      <Card className="gap-0 rounded-xl p-0 shadow-none">
+        <div className="p-4 sm:p-5">
           <CommentBody comment={comment} post={comment.post} />
 
           {comment.replies.length > 0 ? (
-            <div className="mt-4 rounded-xl border border-border/60 bg-muted/30 p-2 sm:p-3">
-              <p className="px-1 pb-2 text-[11px] font-bold tracking-wide text-muted-foreground">
+            <div className="mt-4 rounded-lg border border-border bg-surface-muted p-3">
+              <p className="pb-2 text-[11px] font-semibold tracking-wide text-muted-foreground">
                 {COMMENTS_ADMIN_LABELS.repliesLabel} · {toFaDigits(comment.replies.length)} پاسخ
               </p>
               <ul className="space-y-2">
                 {comment.replies.map((reply) => (
-                  <li
-                    key={reply.id}
-                    className="rounded-xl border border-border/60 bg-card px-3 py-3 shadow-sm shadow-black/[0.02]"
-                  >
+                  <li key={reply.id} className="rounded-lg border border-border bg-card px-3 py-3">
                     <CommentBody comment={reply} post={comment.post} variant="reply" />
                   </li>
                 ))}
               </ul>
             </div>
           ) : null}
-        </CardContent>
+        </div>
       </Card>
     </li>
   );
@@ -194,45 +193,35 @@ function CommentBody({
     <div>
       <div className="flex flex-wrap items-center gap-2">
         {variant === "reply" ? (
-          <Badge variant="secondary" className="rounded-full bg-muted px-2 text-[10px] font-bold text-muted-foreground ring-1 ring-border/60">
+          <Badge variant="outline" className="rounded-md border-border bg-muted px-1.5 text-[10px] font-semibold text-muted-foreground">
             {COMMENTS_ADMIN_LABELS.replyTag}
           </Badge>
         ) : null}
 
         <h3
           className={cn(
-            "max-w-full truncate text-[13px] font-black leading-5",
+            "max-w-full truncate text-[13px] font-bold leading-5 text-foreground",
             comment.isTeamAuthor && "text-primary",
           )}
         >
           {comment.author}
         </h3>
 
-        <Badge
-          variant="secondary"
-          className={cn(
-            "rounded-full px-2 py-0 text-[11px] font-bold ring-1",
-            COMMENT_STATUS_META[comment.status].badgeClassName,
-          )}
-        >
+        <StatusBadge tone={resolveCommentTone(comment.status)}>
           {COMMENT_STATUS_META[comment.status].label}
-        </Badge>
+        </StatusBadge>
 
-        <time className="ms-auto whitespace-nowrap rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground ring-1 ring-border/60">
+        <time className="ms-auto whitespace-nowrap text-[11px] font-medium tabular-nums text-muted-foreground">
           {formatFaDate(comment.createdAt)}
         </time>
       </div>
 
-      <p className="mt-3 text-pretty text-[13.5px] leading-7 text-foreground/80">
-        {comment.message}
-      </p>
+      <p className="mt-3 text-pretty text-[13.5px] leading-7 text-foreground/80">{comment.message}</p>
 
-      <Separator className="my-3 bg-border/60" />
-
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
         <Link
           href={`/blog/${post.slug}`}
-          className="inline-flex min-h-8 items-center gap-1.5 rounded-lg bg-muted/40 px-2.5 text-[12px] font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none"
+          className="inline-flex h-9 items-center gap-1.5 rounded-lg px-2 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none"
         >
           <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
           <span className="truncate">
@@ -245,4 +234,3 @@ function CommentBody({
     </div>
   );
 }
-

@@ -1,25 +1,27 @@
 "use client";
 
+import { useTransition } from "react";
 import { RotateCcw, Trash2 } from "lucide-react";
 
+import {
+  ROW_ACTION_DESTRUCTIVE_CLASS,
+  ROW_ACTION_PRIMARY_CLASS,
+  RowActionButton,
+} from "@/components/dashboard/shared/row-action-button";
 import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
-import { Button } from "@/components/ui/button";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
 import { deletePostPermanently, restorePost } from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
-import { useTransition } from "react";
 
 export function RestorePostButton({ slug }: { slug: string }) {
   const [isPending, startTransition] = useTransition();
 
   return (
-    <Button
-      variant="ghost"
-      size="icon-sm"
+    <RowActionButton
       disabled={isPending}
       aria-label={POSTS_TABLE_LABELS.restore}
       title={POSTS_TABLE_LABELS.restore}
-      className="size-8 rounded-lg text-muted-foreground hover:bg-primary/10 hover:text-primary"
+      className={ROW_ACTION_PRIMARY_CLASS}
       onClick={() => {
         startTransition(async () => {
           const result = await restorePost(slug);
@@ -31,8 +33,8 @@ export function RestorePostButton({ slug }: { slug: string }) {
         });
       }}
     >
-      <RotateCcw className="size-4" />
-    </Button>
+      <RotateCcw className="size-4" aria-hidden="true" />
+    </RowActionButton>
   );
 }
 
@@ -52,15 +54,13 @@ export function PermanentDeleteButton({ slug }: { slug: string }) {
         }
       }}
       trigger={
-        <Button
-          variant="ghost"
-          size="icon-sm"
+        <RowActionButton
           aria-label={POSTS_TABLE_LABELS.permanentDelete}
-      title={POSTS_TABLE_LABELS.permanentDeleteTitle}
-          className="size-8 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+          title={POSTS_TABLE_LABELS.permanentDeleteTitle}
+          className={ROW_ACTION_DESTRUCTIVE_CLASS}
         >
-          <Trash2 className="size-4" />
-        </Button>
+          <Trash2 className="size-4" aria-hidden="true" />
+        </RowActionButton>
       }
     />
   );

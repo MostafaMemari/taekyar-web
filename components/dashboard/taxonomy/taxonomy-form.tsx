@@ -114,7 +114,7 @@ export function TaxonomyForm({
         <div className="min-w-0 space-y-5 lg:col-span-2">
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-[14px] font-black">اطلاعات اصلی</CardTitle>
+              <CardTitle className="text-sm font-bold">اطلاعات اصلی</CardTitle>
               <p className="text-xs leading-5 text-muted-foreground">{TAXONOMY_LABELS.mainInfoHint}</p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -164,7 +164,7 @@ export function TaxonomyForm({
                     <SelectTrigger id="taxonomy-parent" className="h-10 w-full rounded-xl">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="theme-admin">
                       <SelectItem value={ROOT_PARENT_VALUE}>{TAXONOMY_LABELS.parentRootOption}</SelectItem>
                       {parentOptions.map((option) => (
                         <SelectItem key={option.id} value={String(option.id)}>
@@ -191,7 +191,7 @@ export function TaxonomyForm({
 
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-[14px] font-black">{TAXONOMY_LABELS.descriptionLabel}</CardTitle>
+              <CardTitle className="text-sm font-bold">{TAXONOMY_LABELS.descriptionLabel}</CardTitle>
             </CardHeader>
             <Separator className="bg-border/60" />
             <CardContent className="space-y-4 pt-4">
@@ -256,7 +256,8 @@ export function TaxonomyForm({
         <Button
           type="submit"
           disabled={isPending}
-          className="h-11 gap-2 rounded-xl px-8 text-[13px] font-bold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none"
+          aria-busy={isPending}
+          className="h-10 gap-2 rounded-lg px-6 text-[13px] font-bold"
         >
           {isPending
             ? TAXONOMY_LABELS.saving

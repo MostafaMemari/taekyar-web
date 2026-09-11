@@ -16,7 +16,7 @@ export function PageMainInfoFields({ fields, onFieldChange, fieldErrors }: PageM
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-[14px] font-black">اطلاعات اصلی</CardTitle>
+        <CardTitle className="text-sm font-bold">اطلاعات اصلی</CardTitle>
         <p className="text-xs leading-5 text-muted-foreground">{PAGES_FORM_LABELS.mainInfoHint}</p>
       </CardHeader>
       <CardContent className="space-y-4">

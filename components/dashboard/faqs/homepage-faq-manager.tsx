@@ -90,13 +90,13 @@ export function HomepageFaqManager({ initialFaqs }: { initialFaqs: HomepageFaqIt
   }
 
   return (
-    <Card className="p-0">
+    <Card className="gap-0 rounded-xl p-0 shadow-none">
       <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-3 p-4 sm:p-5">
-        <CardTitle className="text-[15px] font-black">{FAQ_LABELS.listTitle}</CardTitle>
+        <CardTitle className="text-sm font-bold">{FAQ_LABELS.listTitle}</CardTitle>
         <Button
           type="button"
           onClick={openCreate}
-          className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15"
+          className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold"
         >
           <Plus className="size-4" aria-hidden="true" />
           {FAQ_LABELS.newFaq}

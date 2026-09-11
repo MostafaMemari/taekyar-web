@@ -105,7 +105,7 @@ export function MediaPicker({
   return (
     <Dialog onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="theme-admin max-w-3xl">
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>{MEDIA_LABELS.description}</DialogDescription>

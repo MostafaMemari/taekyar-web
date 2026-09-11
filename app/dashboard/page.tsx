@@ -1,33 +1,52 @@
 import Link from "next/link";
-import { ArrowLeft, FileText, Inbox, MessagesSquare } from "lucide-react";
+import { Activity, FileText, MessagesSquare } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
+import { ActivityChart } from "@/components/dashboard/overview/activity-chart";
+import { DashboardEmptyState } from "@/components/dashboard/shared/dashboard-empty-state";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
+import { DashboardSection } from "@/components/dashboard/shared/dashboard-section";
+import { ForwardIcon } from "@/components/dashboard/shared/directional-icons";
+import { StatCard } from "@/components/dashboard/shared/stat-card";
+import { resolveCommentTone, StatusBadge } from "@/components/dashboard/shared/status-badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { COMMENT_STATUS_META, OVERVIEW_LABELS, OVERVIEW_STAT_CARDS } from "@/data/dashboard/ui";
+import {
+  COMMENT_STATUS_META,
+  OVERVIEW_ACTIVITY_WEEKS,
+  OVERVIEW_LABELS,
+  OVERVIEW_PENDING_LIMIT,
+  OVERVIEW_RECENT_POSTS_LIMIT,
+  OVERVIEW_STAT_CARDS,
+} from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
-import { formatFaDate, toFaDigits } from "@/lib/utils";
+import { buildWeeklyActivityBuckets, getActivityWindowStart } from "@/lib/dashboard-activity";
+import { formatFaDate } from "@/lib/utils";
 
 export default async function DashboardOverviewPage() {
-  const [postsCount, approvedCount, pendingCount, rejectedCount, pendingComments, recentPosts] = await Promise.all([
-    prisma.post.count({ where: { deletedAt: null } }),
-    prisma.comment.count({ where: { status: "APPROVED" } }),
-    prisma.comment.count({ where: { status: "PENDING" } }),
-    prisma.comment.count({ where: { status: "REJECTED" } }),
-    prisma.comment.findMany({
-      where: { status: "PENDING" },
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      include: { post: { select: { title: true, slug: true } } },
-    }),
-    prisma.post.findMany({
-      where: { deletedAt: null },
-      orderBy: { createdAt: "desc" },
-      take: 4,
-      select: { slug: true, title: true, createdAt: true },
-    }),
-  ]);
+  const activityStart = getActivityWindowStart(OVERVIEW_ACTIVITY_WEEKS);
+
+  const [postsCount, approvedCount, pendingCount, rejectedCount, pendingComments, recentPosts, activityComments] =
+    await Promise.all([
+      prisma.post.count({ where: { deletedAt: null } }),
+      prisma.comment.count({ where: { status: "APPROVED" } }),
+      prisma.comment.count({ where: { status: "PENDING" } }),
+      prisma.comment.count({ where: { status: "REJECTED" } }),
+      prisma.comment.findMany({
+        where: { status: "PENDING" },
+        orderBy: { createdAt: "desc" },
+        take: OVERVIEW_PENDING_LIMIT,
+        include: { post: { select: { title: true, slug: true } } },
+      }),
+      prisma.post.findMany({
+        where: { deletedAt: null },
+        orderBy: { createdAt: "desc" },
+        take: OVERVIEW_RECENT_POSTS_LIMIT,
+        select: { slug: true, title: true, createdAt: true },
+      }),
+      prisma.comment.findMany({
+        where: { createdAt: { gte: activityStart } },
+        select: { createdAt: true },
+      }),
+    ]);
 
   const statValues: Record<(typeof OVERVIEW_STAT_CARDS)[number]["key"], number> = {
     posts: postsCount,
@@ -36,178 +55,136 @@ export default async function DashboardOverviewPage() {
     rejected: rejectedCount,
   };
 
+  const buckets = buildWeeklyActivityBuckets(activityComments, OVERVIEW_ACTIVITY_WEEKS);
+  const activityTotal = buckets.reduce((sum, count) => sum + count, 0);
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{OVERVIEW_LABELS.title}</h1>
-          <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">{OVERVIEW_LABELS.description}</p>
-        </div>
-        <Button asChild className="h-9 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15">
-          <Link href="/dashboard/posts/new">
-            {OVERVIEW_LABELS.newPost}
-            <ArrowLeft className="size-4" aria-hidden="true" />
-          </Link>
-        </Button>
-      </div>
+    <div className="space-y-5">
+      <DashboardPageHeader
+        title={OVERVIEW_LABELS.title}
+        description={OVERVIEW_LABELS.description}
+        actions={
+          <Button asChild className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold">
+            <Link href="/dashboard/posts/new">
+              {OVERVIEW_LABELS.newPost}
+              <ForwardIcon className="size-4" aria-hidden="true" />
+            </Link>
+          </Button>
+        }
+      />
 
       <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-        {OVERVIEW_STAT_CARDS.map(({ key, label, icon: Icon, tint, iconClass }) => (
+        {OVERVIEW_STAT_CARDS.map(({ key, label, icon: Icon, tone, href }) => (
           <li key={key}>
-            <Card
-              size="sm"
-              className={`relative h-full overflow-hidden border-t-[3px] ${tint} shadow-sm shadow-black/[0.04] transition-colors hover:shadow-md motion-reduce:transition-none`}
-            >
-              <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.035]" />
-              <CardContent className="relative p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <span className={`flex size-9 shrink-0 items-center justify-center rounded-xl border text-sm ring-1 ${iconClass}`}>
-                    <Icon className="size-4" aria-hidden="true" />
-                  </span>
-                  <span className="rounded-full bg-card px-2 py-1 text-[10px] font-bold tracking-widest text-muted-foreground ring-1 ring-border/60">
-                    {key === "pending" && pendingCount > 0 ? "نیاز به بررسی" : "به‌روز"}
-                  </span>
-                </div>
-                <p className="mt-3 text-[28px] font-black leading-none tabular-nums tracking-tight">{toFaDigits(statValues[key])}</p>
-                <p className="mt-1.5 text-xs font-bold leading-4 text-muted-foreground">{label}</p>
-              </CardContent>
-            </Card>
+            <StatCard label={label} value={statValues[key]} Icon={Icon} tone={tone} href={href} />
           </li>
         ))}
       </ul>
 
+      <DashboardSection title={OVERVIEW_LABELS.activityTitle} description={OVERVIEW_LABELS.activityHint} Icon={Activity}>
+        <ActivityChart buckets={buckets} total={activityTotal} />
+      </DashboardSection>
+
       <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
-        <Card className="overflow-hidden">
-          <CardHeader className="gap-0 pb-0">
-            <div className="flex items-center justify-between gap-3">
-              <CardTitle className="flex items-center gap-2.5 text-[14px] font-black">
-                <span className="flex size-8 items-center justify-center rounded-lg bg-belt-yellow/15 text-belt-yellow-fg ring-1 ring-belt-yellow/20">
-                  <MessagesSquare className="size-4" aria-hidden="true" />
-                </span>
-                {OVERVIEW_LABELS.pendingTitle}
-              </CardTitle>
-              <Badge
-                variant="secondary"
-                className="rounded-full bg-belt-yellow/15 px-2.5 text-[11px] font-bold tabular-nums text-belt-yellow-fg ring-belt-yellow/20"
-              >
-                {toFaDigits(pendingCount)} در انتظار
-              </Badge>
-            </div>
-            <p className="mt-2 text-xs leading-5 text-muted-foreground">دیدگاه‌هایی که پیش از انتشار نیاز به تأیید دارند</p>
-            <Separator className="mt-4 bg-border/60" />
-          </CardHeader>
-          <CardContent className="pt-4">
-            {pendingComments.length === 0 ? (
-              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/70 bg-muted/30 px-4 py-8 text-center">
-                <span className="flex size-10 items-center justify-center rounded-full bg-card text-muted-foreground ring-1 ring-border">
-                  <Inbox className="size-5" aria-hidden="true" />
-                </span>
-                <p className="mt-3 text-[13px] font-bold">{OVERVIEW_LABELS.emptyPending}</p>
-                <p className="mt-1 max-w-xs text-xs leading-5 text-muted-foreground">
-                  همه دیدگاه‌ها بررسی شده‌اند — مورد جدیدی در صف نیست.
-                </p>
-              </div>
-            ) : (
-              <ul className="space-y-2.5">
-                {pendingComments.map((comment) => (
-                  <li
-                    key={comment.id}
-                    className="group rounded-xl border border-border/60 bg-card p-3 shadow-sm shadow-black/[0.03] transition-colors hover:bg-muted/40 motion-reduce:transition-none"
-                  >
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <span className="text-[13px] font-bold leading-5">{comment.author}</span>
-                      <Badge
-                        variant="secondary"
-                        className={COMMENT_STATUS_META[comment.status].badgeClassName + " rounded-full px-2 py-0 text-[11px] font-bold"}
-                      >
-                        {COMMENT_STATUS_META[comment.status].label}
-                      </Badge>
-                      <span className="ms-auto flex items-center gap-1 text-[11px] text-muted-foreground">
-                        {OVERVIEW_LABELS.onPostSuffix}
-                        <Link
-                          href="/dashboard/comments?status=PENDING"
-                          className="max-w-[14ch] truncate font-bold text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 rounded-sm"
-                        >
-                          {comment.post.title}
-                        </Link>
-                      </span>
-                    </div>
-                    <p className="mt-2 line-clamp-2 text-[13px] leading-6 text-muted-foreground">{comment.message}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-
+        <DashboardSection
+          title={OVERVIEW_LABELS.pendingTitle}
+          description={OVERVIEW_LABELS.pendingHint}
+          Icon={MessagesSquare}
+          action={
             <Button
-              variant="outline"
+              variant="ghost"
               asChild
-              className="mt-4 h-10 w-full justify-between rounded-xl border-border/60 px-4 text-[13px] font-bold hover:bg-muted/60 motion-reduce:transition-none"
+              className="h-9 gap-1.5 rounded-lg px-2.5 text-[13px] font-bold text-muted-foreground hover:text-foreground"
             >
-              <Link href="/dashboard/comments">
+              <Link href="/dashboard/comments?status=PENDING">
                 {OVERVIEW_LABELS.manageComments}
-                <ArrowLeft className="size-4 shrink-0" aria-hidden="true" />
+                <ForwardIcon className="size-3.5" aria-hidden="true" />
               </Link>
             </Button>
-          </CardContent>
-        </Card>
+          }
+        >
+          {pendingComments.length === 0 ? (
+            <DashboardEmptyState title={OVERVIEW_LABELS.emptyPending} hint={OVERVIEW_LABELS.emptyPendingHint} />
+          ) : (
+            <ul className="space-y-2">
+              {pendingComments.map((comment) => (
+                <li key={comment.id} className="rounded-lg border border-border bg-background p-3">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span className="text-[13px] font-bold leading-5 text-foreground">{comment.author}</span>
+                    <StatusBadge tone={resolveCommentTone(comment.status)}>
+                      {COMMENT_STATUS_META[comment.status].label}
+                    </StatusBadge>
+                    <span className="ms-auto flex min-w-0 items-center gap-1 text-[11px] text-muted-foreground">
+                      {OVERVIEW_LABELS.onPostSuffix}
+                      <Link
+                        href="/dashboard/comments?status=PENDING"
+                        className="max-w-40 truncate rounded-sm font-bold text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                      >
+                        {comment.post.title}
+                      </Link>
+                    </span>
+                  </div>
+                  <p className="mt-2 line-clamp-2 text-[13px] leading-6 text-muted-foreground">{comment.message}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </DashboardSection>
 
-        <Card className="overflow-hidden">
-          <CardHeader className="gap-0 pb-0">
-            <div className="flex items-center justify-between gap-3">
-              <CardTitle className="flex items-center gap-2.5 text-[14px] font-black">
-                <span className="flex size-8 items-center justify-center rounded-lg bg-belt-blue/10 text-belt-blue ring-1 ring-belt-blue/15">
-                  <FileText className="size-4" aria-hidden="true" />
-                </span>
-                {OVERVIEW_LABELS.recentPostsTitle}
-              </CardTitle>
-              <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold tabular-nums text-muted-foreground ring-1 ring-border/60">
-                {toFaDigits(recentPosts.length)} مقاله
-              </span>
-            </div>
-            <p className="mt-2 text-xs leading-5 text-muted-foreground">آخرین محتوای منتشرشده — برای ویرایش سریع انتخاب کنید</p>
-            <Separator className="mt-4 bg-border/60" />
-          </CardHeader>
-          <CardContent className="pt-3">
-            {recentPosts.length === 0 ? (
-              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border/70 bg-muted/30 px-4 py-8 text-center">
-                <span className="flex size-10 items-center justify-center rounded-full bg-card text-muted-foreground ring-1 ring-border">
-                  <FileText className="size-5" aria-hidden="true" />
-                </span>
-                <p className="mt-3 text-[13px] font-bold">هنوز مقاله‌ای نیست</p>
-                <p className="mt-1 text-xs text-muted-foreground">اولین مقاله را بسازید تا اینجا نمایش داده شود.</p>
-              </div>
-            ) : (
-              <ul className="divide-y divide-border/60 overflow-hidden rounded-xl border border-border/60">
-                {recentPosts.map((post) => (
-                  <li key={post.slug} className="group bg-card">
-                    <Link
-                      href={`/dashboard/posts/${post.slug}/edit`}
-                      className="flex items-center justify-between gap-3 px-3 py-3 transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-inset motion-reduce:transition-none"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-[13px] font-bold leading-5 group-hover:text-primary">{post.title}</p>
-                        <p className="mt-0.5 text-[11px] leading-4 text-muted-foreground">{formatFaDate(post.createdAt)}</p>
-                      </div>
-                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border bg-card text-muted-foreground opacity-0 transition-all group-hover:opacity-100 motion-reduce:transition-none">
-                        <ArrowLeft className="size-3.5" aria-hidden="true" />
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-
+        <DashboardSection
+          title={OVERVIEW_LABELS.recentPostsTitle}
+          description={OVERVIEW_LABELS.recentPostsHint}
+          Icon={FileText}
+          action={
             <Button
+              variant="ghost"
               asChild
-              className="mt-4 h-10 w-full justify-between rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15 hover:bg-primary/90 motion-reduce:transition-none"
+              className="h-9 gap-1.5 rounded-lg px-2.5 text-[13px] font-bold text-muted-foreground hover:text-foreground"
             >
-              <Link href="/dashboard/posts/new">
-                {OVERVIEW_LABELS.newPost}
-                <ArrowLeft className="size-4 shrink-0" aria-hidden="true" />
+              <Link href="/dashboard/posts">
+                {OVERVIEW_LABELS.viewAllPosts}
+                <ForwardIcon className="size-3.5" aria-hidden="true" />
               </Link>
             </Button>
-          </CardContent>
-        </Card>
+          }
+        >
+          {recentPosts.length === 0 ? (
+            <DashboardEmptyState
+              title={OVERVIEW_LABELS.emptyPosts}
+              hint={OVERVIEW_LABELS.emptyPostsHint}
+              icon={<FileText className="size-6" aria-hidden="true" />}
+              action={
+                <Button asChild className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold">
+                  <Link href="/dashboard/posts/new">
+                    {OVERVIEW_LABELS.newPost}
+                    <ForwardIcon className="size-4" aria-hidden="true" />
+                  </Link>
+                </Button>
+              }
+            />
+          ) : (
+            <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border">
+              {recentPosts.map((post) => (
+                <li key={post.slug}>
+                  <Link
+                    href={`/dashboard/posts/${post.slug}/edit`}
+                    className="group flex items-center justify-between gap-3 px-3 py-3 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-inset motion-reduce:transition-none"
+                  >
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[13px] font-bold leading-5 text-foreground group-hover:text-primary">
+                        {post.title}
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-4 tabular-nums text-muted-foreground">
+                        {formatFaDate(post.createdAt)}
+                      </span>
+                    </span>
+                    <ForwardIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </DashboardSection>
       </div>
     </div>
   );

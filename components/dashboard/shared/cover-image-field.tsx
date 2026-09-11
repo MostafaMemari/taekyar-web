@@ -66,7 +66,7 @@ export function CoverImageField({ value, onChange, labels, error, altError }: Co
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-[14px] font-black">{t.title}</CardTitle>
+        <CardTitle className="text-sm font-bold">{t.title}</CardTitle>
         <p className="text-xs leading-5 text-muted-foreground">{t.description}</p>
       </CardHeader>
       <CardContent className="space-y-4">

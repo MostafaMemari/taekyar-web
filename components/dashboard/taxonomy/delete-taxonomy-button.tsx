@@ -2,8 +2,8 @@
 
 import { Trash2 } from "lucide-react";
 
+import { ROW_ACTION_DESTRUCTIVE_CLASS, RowActionButton } from "@/components/dashboard/shared/row-action-button";
 import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
-import { Button } from "@/components/ui/button";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { deleteTaxonomy } from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
@@ -35,14 +35,9 @@ export function DeleteTaxonomyButton({ kind, id }: DeleteTaxonomyButtonProps) {
         }
       }}
       trigger={
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          aria-label={TAXONOMY_LABELS.deleteLabel}
-          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-        >
-          <Trash2 className="size-4" />
-        </Button>
+        <RowActionButton aria-label={TAXONOMY_LABELS.deleteLabel} title={TAXONOMY_LABELS.deleteLabel} className={ROW_ACTION_DESTRUCTIVE_CLASS}>
+          <Trash2 className="size-4" aria-hidden="true" />
+        </RowActionButton>
       }
     />
   );

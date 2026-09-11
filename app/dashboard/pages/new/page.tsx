@@ -1,5 +1,6 @@
 import type { PageInput } from "@/lib/admin-types";
 import { PageForm } from "@/components/dashboard/pages/page-form";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { PAGES_FORM_LABELS } from "@/data/dashboard/ui";
 
 export const metadata = { title: PAGES_FORM_LABELS.newTitle };
@@ -21,12 +22,9 @@ export default function NewPageView() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-black text-foreground sm:text-2xl">{PAGES_FORM_LABELS.newTitle}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{PAGES_FORM_LABELS.newDescription}</p>
-      </div>
+      <DashboardPageHeader title={PAGES_FORM_LABELS.newTitle} description={PAGES_FORM_LABELS.newDescription} />
 
-      <div className="rounded-2xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-border/50 sm:p-6">
+      <div className="rounded-xl border border-border bg-card p-4 sm:p-6">
         <PageForm mode="create" initial={initial} />
       </div>
     </div>

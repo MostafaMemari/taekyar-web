@@ -1,9 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 
 import { RestorePostButton, PermanentDeleteButton } from "@/components/dashboard/posts/trash-post-actions";
+import { BackIcon } from "@/components/dashboard/shared/directional-icons";
 import { DashboardEmptyState } from "@/components/dashboard/shared/dashboard-empty-state";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import {
   DashboardTable,
   DashboardTableCell,
@@ -32,25 +34,20 @@ export default async function TrashPostsPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">
-            {POSTS_TABLE_LABELS.trashTitle}
-          </h1>
-          <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
-            {POSTS_TABLE_LABELS.trashDescription}
-          </p>
-        </div>
+      <DashboardPageHeader
+        title={POSTS_TABLE_LABELS.trashTitle}
+        description={POSTS_TABLE_LABELS.trashDescription}
+        actions={
+          <Button asChild variant="outline" className="h-10 gap-2 rounded-lg border-border px-4 text-[13px] font-bold text-muted-foreground">
+            <Link href="/dashboard/posts">
+              <BackIcon className="size-4" aria-hidden="true" />
+              {POSTS_TABLE_LABELS.backToPosts}
+            </Link>
+          </Button>
+        }
+      />
 
-        <Button asChild variant="outline" className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold text-muted-foreground">
-          <Link href="/dashboard/posts">
-            <ArrowRight className="size-4" aria-hidden="true" />
-            {POSTS_TABLE_LABELS.backToPosts}
-          </Link>
-        </Button>
-      </div>
-
-      <Card className="p-0">
+      <Card className="gap-0 overflow-hidden rounded-xl p-0 shadow-none">
         {posts.length === 0 ? (
           <DashboardEmptyState title={POSTS_TABLE_LABELS.trashEmpty} hint={POSTS_TABLE_LABELS.trashEmptyHint} />
         ) : (
@@ -76,7 +73,8 @@ interface TrashTableProps {
 function TrashTable({ posts }: TrashTableProps) {
   return (
     <DashboardTable
-      minWidth="min-w-[640px]"
+      caption={POSTS_TABLE_LABELS.trashTitle}
+      minWidth="min-w-[720px]"
       hiddenOnMobile={[2, 4]}
       headers={[
         POSTS_TABLE_LABELS.columnTitle,
@@ -98,21 +96,21 @@ function TrashTable({ posts }: TrashTableProps) {
                   width={40}
                   height={40}
                   unoptimized
-                  className="size-10 shrink-0 rounded-lg object-cover opacity-70 ring-1 ring-border/60"
+                  className="size-10 shrink-0 rounded-lg object-cover opacity-70 ring-1 ring-border"
                 />
               ) : (
                 <span
-                  className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-[11px] font-black text-muted-foreground ring-1 ring-border/60"
+                  className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-[11px] font-bold text-muted-foreground ring-1 ring-border"
                   aria-hidden="true"
                 >
                   {post.title.trim().charAt(0) || "—"}
                 </span>
               )}
               <div className="min-w-0">
-                <span className="block truncate text-[13px] font-bold leading-5">{post.title}</span>
+                <span className="block truncate text-[13px] font-bold leading-5 text-foreground">{post.title}</span>
                 <span
                   dir="ltr"
-                  className="mt-0.5 flex items-center gap-1 truncate text-[11px] text-muted-foreground"
+                  className="mt-1 flex items-center gap-1 truncate text-[11px] text-muted-foreground"
                 >
                   <FileText className="size-3 shrink-0" aria-hidden="true" />
                   /blog/{post.slug}
@@ -122,19 +120,19 @@ function TrashTable({ posts }: TrashTableProps) {
           </DashboardTableCell>
           <DashboardTableCell>
             <span className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground">
-              <span className="size-1.5 rounded-full bg-belt-blue" aria-hidden="true" />
+              <span className="size-1.5 rounded-full bg-muted-foreground/50" aria-hidden="true" />
               {post.categories.map((category) => category.name).join("، ") || "—"}
             </span>
           </DashboardTableCell>
-          <DashboardTableCell className="whitespace-nowrap text-[13px] text-muted-foreground">
+          <DashboardTableCell className="whitespace-nowrap text-[13px] tabular-nums text-muted-foreground">
             {post.deletedAt ? formatFaDate(post.deletedAt) : "—"}
           </DashboardTableCell>
           <DashboardTableCell className="whitespace-nowrap">
-            <span className="inline-flex min-w-6 justify-center rounded-full bg-muted px-2 py-0.5 text-[12px] font-bold tabular-nums text-muted-foreground ring-1 ring-border/60">
+            <span className="inline-flex min-w-7 justify-center rounded-md border border-border bg-muted px-2 py-0.5 text-[12px] font-semibold tabular-nums text-muted-foreground">
               {toFaDigits(post._count.comments)}
             </span>
           </DashboardTableCell>
-          <DashboardTableCell className="py-3">
+          <DashboardTableCell>
             <div className="flex items-center gap-1">
               <RestorePostButton slug={post.slug} />
               <PermanentDeleteButton slug={post.slug} />

@@ -2,13 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { CornerDownRight, Pencil } from "lucide-react";
 
+import { RowActionButton } from "@/components/dashboard/shared/row-action-button";
 import {
   DashboardTable,
   DashboardTableCell,
   DashboardTableRow,
 } from "@/components/dashboard/shared/dashboard-table";
 import { DeleteTaxonomyButton } from "@/components/dashboard/taxonomy/delete-taxonomy-button";
-import { Button } from "@/components/ui/button";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { buildCategoryTree, flattenCategoryTree } from "@/lib/blog/categories";
 import { r2PublicUrl } from "@/lib/r2-url";
@@ -47,7 +47,8 @@ function CategoryTable({ rows }: { rows: CategoryTableRow[] }) {
 
   return (
     <DashboardTable
-      minWidth="min-w-[640px]"
+      caption={TAXONOMY_LABELS.kinds.category.title}
+      minWidth="min-w-[720px]"
       hiddenOnMobile={[2]}
       headers={[
         TAXONOMY_LABELS.nameLabel,
@@ -67,20 +68,20 @@ function CategoryTable({ rows }: { rows: CategoryTableRow[] }) {
                 style={depth > 0 ? { paddingInlineStart: `${depth * 20}px` } : undefined}
               >
                 {depth > 0 ? (
-                  <CornerDownRight className="size-4 shrink-0 text-muted-foreground/50" aria-hidden="true" />
+                  <CornerDownRight className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                 ) : null}
                 <RowIdentity name={row.name} image={row.image} href={url} />
               </div>
             </DashboardTableCell>
             <DashboardTableCell dir="ltr" className="text-start text-[13px] font-medium text-muted-foreground">
-              <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-mono ring-1 ring-border/60">
+              <span className="rounded-md border border-border bg-muted px-2 py-0.5 font-mono text-[11px]">
                 {decodeURIComponent(url)}
               </span>
             </DashboardTableCell>
             <DashboardTableCell>
               <PostsCount count={row._count.posts} />
             </DashboardTableCell>
-            <DashboardTableCell className="py-3">
+            <DashboardTableCell>
               <RowActions basePath={basePath} id={row.id} kind="category" />
             </DashboardTableCell>
           </DashboardTableRow>
@@ -95,7 +96,8 @@ function TagTable({ rows }: { rows: TagTableRow[] }) {
 
   return (
     <DashboardTable
-      minWidth="min-w-[640px]"
+      caption={TAXONOMY_LABELS.kinds.tag.title}
+      minWidth="min-w-[720px]"
       hiddenOnMobile={[2]}
       headers={[
         TAXONOMY_LABELS.nameLabel,
@@ -113,14 +115,14 @@ function TagTable({ rows }: { rows: TagTableRow[] }) {
               <RowIdentity name={row.name} image={row.image} href={url} />
             </DashboardTableCell>
             <DashboardTableCell dir="ltr" className="text-start text-[13px] font-medium text-muted-foreground">
-              <span className="rounded-full bg-muted px-2 py-1 text-[11px] font-mono ring-1 ring-border/60">
+              <span className="rounded-md border border-border bg-muted px-2 py-0.5 font-mono text-[11px]">
                 {decodeURIComponent(url)}
               </span>
             </DashboardTableCell>
             <DashboardTableCell>
               <PostsCount count={row._count.posts} />
             </DashboardTableCell>
-            <DashboardTableCell className="py-3">
+            <DashboardTableCell>
               <RowActions basePath={basePath} id={row.id} kind="tag" />
             </DashboardTableCell>
           </DashboardTableRow>
@@ -141,11 +143,11 @@ function RowIdentity({ name, image, href }: { name: string; image: string | null
           width={40}
           height={40}
           unoptimized
-          className="size-10 shrink-0 rounded-lg object-cover ring-1 ring-border/60"
+          className="size-10 shrink-0 rounded-lg object-cover ring-1 ring-border"
         />
       ) : (
         <span
-          className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-[11px] font-black text-muted-foreground ring-1 ring-border/60"
+          className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-[11px] font-bold text-muted-foreground ring-1 ring-border"
           aria-hidden="true"
         >
           {name.trim().charAt(0) || "—"}
@@ -154,7 +156,7 @@ function RowIdentity({ name, image, href }: { name: string; image: string | null
       <Link
         href={href}
         target="_blank"
-        className="rounded-sm text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+        className="rounded-sm text-[13px] font-bold leading-5 text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
       >
         {name}
       </Link>
@@ -164,7 +166,7 @@ function RowIdentity({ name, image, href }: { name: string; image: string | null
 
 function PostsCount({ count }: { count: number }) {
   return (
-    <span className="inline-flex min-w-7 justify-center rounded-full bg-belt-blue/10 px-2 py-0.5 text-[12px] font-bold tabular-nums text-belt-blue ring-1 ring-belt-blue/15">
+    <span className="inline-flex min-w-7 justify-center rounded-md border border-border bg-muted px-2 py-0.5 text-[12px] font-semibold tabular-nums text-muted-foreground">
       {toFaDigits(count)}
     </span>
   );
@@ -173,17 +175,11 @@ function PostsCount({ count }: { count: number }) {
 function RowActions({ basePath, id, kind }: { basePath: string; id: number; kind: "category" | "tag" }) {
   return (
     <div className="flex items-center gap-1">
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        asChild
-        aria-label="ویرایش"
-        className="size-8 rounded-lg"
-      >
+      <RowActionButton asChild aria-label={TAXONOMY_LABELS.editLabel} title={TAXONOMY_LABELS.editLabel}>
         <Link href={`${basePath}/${id}/edit`}>
           <Pencil className="size-4" aria-hidden="true" />
         </Link>
-      </Button>
+      </RowActionButton>
       <DeleteTaxonomyButton kind={kind} id={id} />
     </div>
   );

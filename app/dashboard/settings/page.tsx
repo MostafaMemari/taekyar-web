@@ -1,4 +1,5 @@
 import { SettingsForm } from "@/components/dashboard/settings/settings-form";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { SETTINGS_LABELS } from "@/data/dashboard/settings";
 import { getSiteSettings } from "@/lib/site-settings";
 
@@ -13,12 +14,7 @@ export default async function DashboardSettingsPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{SETTINGS_LABELS.title}</h1>
-        <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
-          {SETTINGS_LABELS.description}
-        </p>
-      </div>
+      <DashboardPageHeader title={SETTINGS_LABELS.title} description={SETTINGS_LABELS.description} />
 
       <SettingsForm
         initial={{

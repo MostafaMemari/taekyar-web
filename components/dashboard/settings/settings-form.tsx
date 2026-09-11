@@ -207,7 +207,7 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
         <div className="min-w-0 space-y-5">
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-[14px] font-black">{SETTINGS_LABELS.siteInfoTitle}</CardTitle>
+              <CardTitle className="text-sm font-bold">{SETTINGS_LABELS.siteInfoTitle}</CardTitle>
               <p className="text-xs leading-5 text-muted-foreground">{SETTINGS_LABELS.siteInfoHint}</p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -262,7 +262,7 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
 
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-[14px] font-black">{SETTINGS_LABELS.seoTitle}</CardTitle>
+              <CardTitle className="text-sm font-bold">{SETTINGS_LABELS.seoTitle}</CardTitle>
               <p className="text-xs leading-5 text-muted-foreground">{SETTINGS_LABELS.seoHint}</p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -301,7 +301,7 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
         <div className="min-w-0 space-y-5">
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-[14px] font-black">{SETTINGS_LABELS.imagesTitle}</CardTitle>
+              <CardTitle className="text-sm font-bold">{SETTINGS_LABELS.imagesTitle}</CardTitle>
               <p className="text-xs leading-5 text-muted-foreground">{SETTINGS_LABELS.imagesHint}</p>
             </CardHeader>
             <CardContent className="space-y-5">
@@ -347,7 +347,7 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
 
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-[14px] font-black">{SETTINGS_LABELS.socialTitle}</CardTitle>
+              <CardTitle className="text-sm font-bold">{SETTINGS_LABELS.socialTitle}</CardTitle>
               <p className="text-xs leading-5 text-muted-foreground">{SETTINGS_LABELS.socialHint}</p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -380,7 +380,7 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
 
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-[14px] font-black">{SETTINGS_LABELS.appDownloadTitle}</CardTitle>
+              <CardTitle className="text-sm font-bold">{SETTINGS_LABELS.appDownloadTitle}</CardTitle>
               <p className="text-xs leading-5 text-muted-foreground">{SETTINGS_LABELS.appDownloadHint}</p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -405,7 +405,7 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
       </div>
 
 
-      <Button type="submit" disabled={isPending} className="h-11 gap-2 rounded-xl px-8 text-[13px] font-bold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none">
+      <Button type="submit" disabled={isPending} aria-busy={isPending} className="h-10 gap-2 rounded-lg px-6 text-[13px] font-bold">
         {isPending ? SETTINGS_LABELS.saving : SETTINGS_LABELS.save}
       </Button>
     </form>

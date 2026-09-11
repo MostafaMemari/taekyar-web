@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import type { PageInput } from "@/lib/admin-types";
 import { PageForm } from "@/components/dashboard/pages/page-form";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { PAGES_FORM_LABELS } from "@/data/dashboard/ui";
 import { getPageBySlugForAdmin } from "@/lib/pages";
 import { r2PublicUrl } from "@/lib/r2-url";
@@ -47,12 +48,9 @@ export default async function EditPageView({ params }: EditPageViewProps) {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-black text-foreground sm:text-2xl">{PAGES_FORM_LABELS.editTitle}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{PAGES_FORM_LABELS.editDescription}</p>
-      </div>
+      <DashboardPageHeader title={PAGES_FORM_LABELS.editTitle} description={PAGES_FORM_LABELS.editDescription} />
 
-      <div className="rounded-2xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-border/50 sm:p-6">
+      <div className="rounded-xl border border-border bg-card p-4 sm:p-6">
         <PageForm
           mode="edit"
           initial={initial}

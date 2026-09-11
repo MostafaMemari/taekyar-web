@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import { Check, Trash2, X } from "lucide-react";
 
 import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
+import { ROW_ACTION_DESTRUCTIVE_CLASS, RowActionButton } from "@/components/dashboard/shared/row-action-button";
 import { Button } from "@/components/ui/button";
 import { COMMENTS_ADMIN_LABELS } from "@/data/dashboard/ui";
 import { deleteComment, setCommentStatus } from "@/lib/admin-actions";
@@ -36,10 +37,11 @@ export function CommentActions({ id, status }: CommentActionsProps) {
           variant="outline"
           size="sm"
           disabled={isPending}
-          className="h-8 gap-1.5 rounded-lg border-belt-green/30 text-[12px] font-bold text-belt-green hover:bg-belt-green/10"
+          aria-busy={isPending}
+          className="h-9 gap-1.5 rounded-lg border-success/30 text-[12px] font-bold text-success hover:bg-success/10"
           onClick={() => run(() => setCommentStatus(id, "APPROVED"), COMMENTS_ADMIN_LABELS.approved)}
         >
-          <Check className="size-3.5" />
+          <Check className="size-3.5" aria-hidden="true" />
           {COMMENTS_ADMIN_LABELS.approve}
         </Button>
       ) : null}
@@ -49,10 +51,11 @@ export function CommentActions({ id, status }: CommentActionsProps) {
           variant="outline"
           size="sm"
           disabled={isPending}
-          className="h-8 gap-1.5 rounded-lg border-belt-red/30 text-[12px] font-bold text-belt-red hover:bg-belt-red/10"
+          aria-busy={isPending}
+          className="h-9 gap-1.5 rounded-lg border-destructive/30 text-[12px] font-bold text-destructive hover:bg-destructive/10"
           onClick={() => run(() => setCommentStatus(id, "REJECTED"), COMMENTS_ADMIN_LABELS.rejected)}
         >
-          <X className="size-3.5" />
+          <X className="size-3.5" aria-hidden="true" />
           {COMMENTS_ADMIN_LABELS.reject}
         </Button>
       ) : null}
@@ -71,14 +74,13 @@ export function CommentActions({ id, status }: CommentActionsProps) {
           }
         }}
         trigger={
-          <Button
-            variant="ghost"
-            size="icon-sm"
+          <RowActionButton
             aria-label={COMMENTS_ADMIN_LABELS.delete}
-            className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+            title={COMMENTS_ADMIN_LABELS.delete}
+            className={ROW_ACTION_DESTRUCTIVE_CLASS}
           >
-            <Trash2 className="size-4" />
-          </Button>
+            <Trash2 className="size-4" aria-hidden="true" />
+          </RowActionButton>
         }
       />
     </div>

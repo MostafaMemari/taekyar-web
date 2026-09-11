@@ -181,10 +181,10 @@ export function MenuManager({ location, items, targets }: MenuManagerProps) {
     <Card>
       <CardHeader className="flex-row items-center justify-between space-y-0 pb-3">
         <div>
-          <CardTitle className="text-[14px] font-black">{MENUS_LABELS.locations[location]}</CardTitle>
+          <CardTitle className="text-sm font-bold">{MENUS_LABELS.locations[location]}</CardTitle>
           <p className="mt-1 text-xs leading-5 text-muted-foreground">{MENUS_LABELS.maxDepthHint}</p>
         </div>
-        <Button className="h-9 gap-2 rounded-xl px-4 text-[12px] font-bold" onClick={() => openCreate(null)}>
+        <Button className="h-10 gap-2 rounded-lg px-4 text-[12px] font-bold" onClick={() => openCreate(null)}>
           <Plus className="size-4" aria-hidden="true" />
           {MENUS_LABELS.addItem}
         </Button>
@@ -307,7 +307,7 @@ function MenuItemDialog({ open, onOpenChange, location, targets, editing, parent
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="theme-admin max-w-md">
         <DialogHeader>
           <DialogTitle>{editing ? MENUS_LABELS.editItem : MENUS_LABELS.addItem}</DialogTitle>
         </DialogHeader>
@@ -344,7 +344,7 @@ function MenuItemDialog({ open, onOpenChange, location, targets, editing, parent
               <SelectTrigger id={`${idPrefix}-type`} className="h-10 w-full rounded-xl">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="theme-admin">
                 {TYPE_ORDER.map((type) => (
                   <SelectItem key={type} value={type}>
                     {MENUS_LABELS.types[type]}
@@ -390,7 +390,7 @@ function MenuItemDialog({ open, onOpenChange, location, targets, editing, parent
                 <SelectTrigger id={`${idPrefix}-target`} className="h-10 w-full rounded-xl">
                   <SelectValue placeholder={MENUS_LABELS.targetPlaceholder} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="theme-admin">
                   {optionsFor(draft.type).map((option) => (
                     <SelectItem key={option.id} value={String(option.id)}>
                       {"— ".repeat(option.depth ?? 0)}

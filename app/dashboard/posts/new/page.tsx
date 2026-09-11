@@ -1,5 +1,6 @@
 import type { PostInput } from "@/lib/admin-types";
 import { PostForm } from "@/components/dashboard/posts/post-form";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { getCategories, getTags } from "@/lib/blog";
 import { toCategorySelectOptions } from "@/lib/blog/categories";
@@ -33,12 +34,9 @@ export default async function NewPostPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-black text-foreground sm:text-2xl">{POST_FORM_LABELS.newTitle}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{POST_FORM_LABELS.newDescription}</p>
-      </div>
+      <DashboardPageHeader title={POST_FORM_LABELS.newTitle} description={POST_FORM_LABELS.newDescription} />
 
-      <div className="rounded-2xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-border/50 sm:p-6">
+      <div className="rounded-xl border border-border bg-card p-4 sm:p-6">
         <PostForm
           mode="create"
           initial={initial}

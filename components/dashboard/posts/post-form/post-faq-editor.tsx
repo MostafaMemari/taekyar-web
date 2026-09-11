@@ -134,7 +134,7 @@ export function PostFaqEditor(props: PostFaqEditorProps) {
   return (
     <Card size="sm">
       <CardHeader>
-        <CardTitle className="text-[15px] font-black">{POST_FAQ_LABELS.sectionTitle}</CardTitle>
+        <CardTitle className="text-sm font-bold">{POST_FAQ_LABELS.sectionTitle}</CardTitle>
         <CardDescription className="text-xs leading-5">
           {POST_FAQ_LABELS.sectionDescription}
         </CardDescription>
@@ -261,7 +261,7 @@ export function PostFaqEditor(props: PostFaqEditorProps) {
       </CardContent>
 
       <Dialog open={dialogOpen} onOpenChange={handleDialogChange}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="theme-admin max-w-lg">
           <DialogHeader>
             <DialogTitle>
               {editingIndex === null ? POST_FAQ_LABELS.addItem : POST_FAQ_LABELS.editItem}

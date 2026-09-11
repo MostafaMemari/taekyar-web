@@ -87,7 +87,7 @@ export function FaqDialog({ open, onOpenChange, faqId, initial }: FaqDialogProps
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="theme-admin max-w-lg">
         <DialogHeader>
           <DialogTitle>{faqId === null ? FAQ_LABELS.createTitle : FAQ_LABELS.editTitle}</DialogTitle>
           <DialogDescription>

@@ -54,7 +54,7 @@ export function RobotsFields({ idPrefix, value, label, error, onChange }: Robots
               <SelectTrigger id={`${robotsId}-indexing`} className="h-9 w-full rounded-lg">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="theme-admin">
                 <SelectItem value="index">index</SelectItem>
                 <SelectItem value="noindex">noindex</SelectItem>
               </SelectContent>
@@ -69,7 +69,7 @@ export function RobotsFields({ idPrefix, value, label, error, onChange }: Robots
               <SelectTrigger id={`${robotsId}-following`} className="h-9 w-full rounded-lg">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="theme-admin">
                 <SelectItem value="follow">follow</SelectItem>
                 <SelectItem value="nofollow">nofollow</SelectItem>
               </SelectContent>
@@ -88,7 +88,7 @@ export function RobotsFields({ idPrefix, value, label, error, onChange }: Robots
               <SelectTrigger id={`${robotsId}-image`} className="h-9 w-full rounded-lg">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="theme-admin">
                 <SelectItem value="default">{l.seoRobotsImageDefault}</SelectItem>
                 <SelectItem value="large">{l.seoRobotsImageLarge}</SelectItem>
                 <SelectItem value="standard">{l.seoRobotsImageStandard}</SelectItem>
@@ -141,7 +141,7 @@ function RobotsValueField({ id, label, state, onUpdate }: RobotsValueFieldProps)
         <SelectTrigger id={id} className="h-9 w-full rounded-lg">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="theme-admin">
           <SelectItem value="default">{l.seoRobotsValueDefault}</SelectItem>
           <SelectItem value="unlimited">{l.seoRobotsValueUnlimited}</SelectItem>
           <SelectItem value="custom">{l.seoRobotsValueCustom}</SelectItem>
