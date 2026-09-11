@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *):not(:where(.theme-admin, .theme-admin *)));
+@custom-variant dark (&:is(.dark *):not(:where(.theme-admin, .theme-admin *, .theme-light, .theme-light *)));
 
 @theme inline {
   --color-background: var(--background);
@@ -152,6 +152,8 @@
 
   --accent: #dbeafe;
   --accent-foreground: #1e3a8a;
+
+  --destructive: #c81e24;
 
   --border: rgba(15, 23, 42, 0.12);
   --input: rgba(15, 23, 42, 0.16);
