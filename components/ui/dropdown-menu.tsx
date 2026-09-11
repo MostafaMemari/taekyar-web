@@ -28,7 +28,8 @@ function DropdownMenuPortal({ ...props }: React.ComponentProps<typeof DropdownMe
 function DropdownMenuContent({
   className,
   sideOffset = 6,
-  align = "start",
+  align = "end",
+  collisionPadding = 12,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
   return (
@@ -37,6 +38,7 @@ function DropdownMenuContent({
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}
         align={align}
+        collisionPadding={collisionPadding}
         className={cn(
           "theme-light z-50 max-h-(--radix-dropdown-menu-content-available-height) min-w-44 origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg",
           "data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
