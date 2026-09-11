@@ -4,13 +4,13 @@ import { TRUST_STATS } from "@/data/home/trust";
 
 export function TrustBar() {
   return (
-    <Section tone="soft" containerClassName="py-2">
+    <Section tone="soft" spacing="dense">
       <Reveal>
-        <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-5 py-6 sm:gap-x-2">
+        <ul className="grid grid-cols-2 justify-items-center gap-y-7 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-x-2">
           {TRUST_STATS.map(({ value, label, Icon }) => (
             <li
               key={label}
-              className="group flex items-center gap-3 px-4 sm:px-8 sm:[&:not(:first-child)]:border-s sm:[&:not(:first-child)]:border-border/50"
+              className="group flex items-center gap-3 px-2 sm:px-8 sm:[&:not(:first-child)]:border-s sm:[&:not(:first-child)]:border-border/50"
             >
               <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/[0.07] text-primary transition-transform duration-200 group-hover:-translate-y-0.5">
                 <Icon className="size-5" strokeWidth={2} />

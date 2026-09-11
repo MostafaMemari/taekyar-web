@@ -1,4 +1,4 @@
-import { Flame, Footprints, Zap, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Download, Flame, Footprints, Zap, type LucideIcon } from "lucide-react";
 
 import { BELT_LEVELS } from "@/data/shared/belts";
 
@@ -36,12 +36,50 @@ export const TODAY_TRAININGS: Training[] = [
   },
 ];
 
-export const HERO_COPY = {
-  eyebrow: "اپلیکیشن تک‌یار",
-  titleLine1: "پیشرفتت را",
-  titleLine2: "هفته‌به‌هفته ببین",
+export const HERO_CHARACTER = {
+  baseSrc: "/hero/01.webp",
+  gearSrc: "/hero/02.webp",
+  baseAlt: "تکواندوکار جوان با لباس سفید و کمربند سفید",
+};
+
+export const HERO_CONTENT = {
+  eyebrow: "اعتماد به نفس، قدرت و انضباط را بساز",
+  title: {
+    line1: { prefix: "از", highlight: "اولین ضربه،" },
+    line2: { prefix: "تا", highlight: "کمربند مشکی" },
+  },
   description:
-    "برنامه تمرین شخصی، ثبت جلسات و مسیر کمربند — همه در یک اپ، زیر نظر مربی.",
+    "تک‌یار فقط یک برنامه تمرینی نیست؛ همراهی برای ساختن اعتماد به نفس، تقویت مهارت‌ها و رسیدن به هدف در مسیر تکواندو است.",
+};
+
+export const HERO_MICROCOPY = "دانلود و شروع، رایگان.";
+
+export interface HeroCta {
+  label: string;
+  href: string;
+  Icon: LucideIcon;
+}
+
+export const HERO_PRIMARY_CTA: HeroCta = {
+  label: "دانلود اپلیکیشن",
+  href: "#download",
+  Icon: Download,
+};
+
+export const HERO_SECONDARY_CTA: HeroCta = {
+  label: "مشاهده امکانات",
+  href: "#features",
+  Icon: ArrowLeft,
+};
+
+export interface HeroFloatBadge {
+  title: string;
+  description: string;
+}
+
+export const HERO_FLOAT_BADGE: HeroFloatBadge = {
+  title: "کمربند مشکی",
+  description: "مسیر قهرمانی",
 };
 
 export const HERO_APP_PREVIEW = {

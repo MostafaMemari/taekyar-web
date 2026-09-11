@@ -1,4 +1,3 @@
-import { BeltDivider } from "@/components/shared/belt-divider";
 import { cn } from "@/lib/utils";
 
 interface SectionHeaderProps {
@@ -6,6 +5,20 @@ interface SectionHeaderProps {
   title: string;
   description?: string;
   className?: string;
+}
+
+export function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1 text-xs font-bold text-primary",
+        className,
+      )}
+    >
+      <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
+      {children}
+    </span>
+  );
 }
 
 export function SectionHeader({
@@ -16,13 +29,12 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div className={cn("max-w-2xl", className)}>
-      <span className="text-sm font-bold text-primary">{eyebrow}</span>
-      <h2 className="mt-3 text-balance text-3xl font-extrabold leading-[1.4] sm:text-4xl">
+      <Eyebrow>{eyebrow}</Eyebrow>
+      <h2 className="mt-4 text-balance text-3xl font-extrabold leading-[1.4] sm:text-4xl">
         {title}
       </h2>
-      <BeltDivider variant="pill" className="mt-4 h-1 w-20" />
       {description ? (
-        <p className="mt-4 text-[15px] font-normal leading-8 text-muted-foreground sm:text-base sm:leading-9">
+        <p className="mt-4 text-pretty text-[15px] font-normal leading-8 text-muted-foreground sm:text-base sm:leading-9">
           {description}
         </p>
       ) : null}

@@ -1,5 +1,4 @@
 import { Hero } from "@/components/home/hero/hero";
-import { Hero2 } from "@/components/home/hero2/hero2";
 import { TrustBar } from "@/components/home/trust/trust-bar";
 import { Features } from "@/components/home/features/features";
 import { BeltJourney } from "@/components/home/belt-journey/belt-journey";
@@ -13,10 +12,9 @@ export default async function Home() {
 
   return (
     <>
-      <Hero2 appDownloadUrl={settings.appDownloadUrl} />
+      <Hero appDownloadUrl={settings.appDownloadUrl} />
       <TrustBar />
       <Features />
-      <Hero appDownloadUrl={settings.appDownloadUrl} />
       <BeltJourney />
       <BlogPreview />
       <Faq />

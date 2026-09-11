@@ -53,7 +53,7 @@ export function ArchiveHeaderSkeleton() {
 export function BlogIndexSkeleton() {
   return (
     <>
-      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10">
+      <Section spacing="none" containerClassName="pb-4 pt-8 sm:pt-10 lg:pt-12">
         <ArchiveHeaderSkeleton />
         <div aria-hidden="true" className="mt-6 flex flex-col gap-3 border-b border-border/60 pb-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pb-5">
           <div className="flex items-center gap-2 overflow-hidden">
@@ -65,7 +65,7 @@ export function BlogIndexSkeleton() {
           <Skeleton className="h-4 w-32 shrink-0" />
         </div>
       </Section>
-      <Section containerClassName="pt-6 pb-2 sm:pt-7 lg:pt-8">
+      <Section spacing="none" containerClassName="pt-8 sm:pt-10">
         <PostGridSkeleton />
       </Section>
       <div className="pb-10" aria-hidden="true" />
@@ -77,10 +77,10 @@ export function TaxonomyLoadingSkeleton({ label }: { label: string }) {
   return (
     <>
       <LoadingStatus label={label} />
-      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10">
+      <Section spacing="none" containerClassName="pb-4 pt-8 sm:pt-10 lg:pt-12">
         <ArchiveHeaderSkeleton />
       </Section>
-      <Section containerClassName="pt-6 pb-2 sm:pt-7 lg:pt-8">
+      <Section spacing="none" containerClassName="pt-8 sm:pt-10">
         <PostGridSkeleton />
       </Section>
       <div className="pb-10" />

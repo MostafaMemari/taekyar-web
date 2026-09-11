@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, ChevronLeft, Download, Menu } from "lucide-react";
 
-import { BeltDivider } from "@/components/shared/belt-divider";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -53,7 +52,7 @@ function MobileNavLink({
       label={label}
       onNavigate={onNavigate}
       className={cn(
-        "flex cursor-pointer items-center justify-between rounded-lg px-3 py-3 text-[15px] transition-colors duration-200",
+        "flex cursor-pointer items-center justify-between rounded-xl px-3 py-3 text-[15px] transition-colors duration-200",
         className,
       )}
       activeClassName="bg-primary/[0.07] font-bold text-primary"
@@ -73,7 +72,7 @@ function MobileNavGroup({ item, onNavigate }: { item: NavItemView; onNavigate: (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger
         className={cn(
-          "group/collapsible flex w-full cursor-pointer items-center justify-between rounded-lg px-3 py-3 text-[15px] transition-colors duration-200 outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+          "group/collapsible flex w-full cursor-pointer items-center justify-between rounded-xl px-3 py-3 text-[15px] transition-colors duration-200 outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
           active
             ? "bg-primary/[0.07] font-bold text-primary"
             : "font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -167,11 +166,11 @@ export function MobileMenu({
           </div>
         </nav>
 
-        <div className="mt-auto space-y-3 p-4 pb-6">
+        <div className="mt-auto space-y-3 border-t border-border/60 p-4 pt-5">
           {appDownloadUrl ? (
             <Button
               asChild
-              className="h-12 w-full gap-2 rounded-lg text-[15px] font-bold shadow-sm shadow-primary/25"
+              className="h-12 w-full gap-2 rounded-xl text-[15px] font-bold shadow-sm shadow-primary/25"
               onClick={close}
             >
               <a href={appDownloadUrl} target="_blank" rel="noopener noreferrer">
@@ -183,12 +182,11 @@ export function MobileMenu({
           <Button
             variant="outline"
             asChild
-            className="h-11 w-full rounded-lg bg-card font-semibold"
+            className="h-11 w-full rounded-xl border-border bg-card font-semibold"
             onClick={close}
           >
             <Link href="/contact">تماس با ما</Link>
           </Button>
-          <BeltDivider width="full" className="mt-4" />
         </div>
       </SheetContent>
     </Sheet>

@@ -111,7 +111,7 @@ export default async function PostPage({ params }: PostPageProps) {
       <JsonLd
         data={breadcrumbJsonLd([{ name: "وبلاگ", path: "/blog" }, ...categoryTrail, { name: post.title, path: postHref(post.slug) }])}
       />
-      <Section className="pb-0 sm:pb-0 lg:pb-0">
+      <Section spacing="none" containerClassName="pt-6 sm:pt-8">
         <Reveal>
           <PostTopbar />
 
@@ -157,7 +157,7 @@ export default async function PostPage({ params }: PostPageProps) {
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-8 sm:pt-10">
+      <Section spacing="compact">
         <div>
           <Reveal delay={100}>
             <RelatedPosts posts={relatedPosts} />

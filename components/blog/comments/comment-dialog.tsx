@@ -97,7 +97,7 @@ export function CommentDialog({ postSlug, parentId, parentAuthor, trigger }: Com
               type="button"
               variant="outline"
               disabled={isSubmitting}
-              className="h-10 rounded-xl px-5 text-sm font-bold"
+              className="h-10 rounded-xl border-border px-5 text-sm font-bold"
               onClick={() => setOpen(false)}
             >
               {COMMENT_REPLY_LABELS.cancel}

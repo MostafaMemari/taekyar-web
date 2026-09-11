@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-import { BeltDivider } from "@/components/shared/belt-divider";
 import { Card, CardContent } from "@/components/ui/card";
 import { ABOUT_MOTTO_CARD } from "@/data/about";
 import { cn, toFaDigits } from "@/lib/utils";
@@ -28,10 +27,7 @@ export function MottoCard() {
         <span aria-hidden="true" className={cn(SHEET, "-rotate-[1.6deg]")} />
 
         <CardContent className="p-6 sm:p-7">
-
-      <BeltDivider variant="pill" className="h-1 w-14" />
-
-      <div aria-live="polite" className="grid py-5">
+          <div aria-live="polite" className="grid py-2 sm:py-3">
         {quotes.map((item, index) => (
           <blockquote
             key={item.author}

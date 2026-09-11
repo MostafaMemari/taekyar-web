@@ -5,7 +5,7 @@ import { PostGrid } from "@/components/blog/post-grid";
 import { BlogPagination } from "@/components/blog/pagination";
 import { PaginationScrollTop } from "@/components/blog/pagination-scroll-top";
 import { TaxonomySeoContent } from "@/components/blog/taxonomy-seo-content";
-import { BeltDivider } from "@/components/shared/belt-divider";
+import { PageHeader } from "@/components/shared/page-header";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
@@ -60,7 +60,7 @@ export function TaxonomyArchive({
 }: TaxonomyArchiveProps) {
   return (
     <>
-      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10" id="archive-top">
+      <Section spacing="none" containerClassName="pb-4 pt-8 sm:pt-10 lg:pt-12" id="archive-top">
         <PaginationScrollTop targetId="archive-top" />
         <Reveal>
           <nav aria-label="مسیر" className="flex flex-wrap items-center gap-1.5 text-[12px] font-medium text-muted-foreground">
@@ -87,16 +87,9 @@ export function TaxonomyArchive({
             })}
           </nav>
 
-          <div className="mt-4 max-w-2xl">
-            <span className="inline-flex items-center gap-2 text-[11px] font-bold tracking-widest text-primary sm:text-xs">
-              <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
-              {eyebrow}
-            </span>
-            <h1 className="mt-2.5 text-balance text-[1.65rem] font-black leading-[1.35] tracking-tight sm:mt-3 sm:text-[2rem] sm:leading-[1.35] lg:text-[2.35rem]">
-              {title}
-            </h1>
-            <BeltDivider variant="pill" className="mt-3.5 h-1 w-16 sm:w-20" />
-            <p className="mt-3.5 text-xs font-medium text-muted-foreground sm:text-[13px]">
+          <div className="mt-4">
+            <PageHeader eyebrow={eyebrow} title={title} />
+            <p className="mt-3 text-xs font-medium text-muted-foreground sm:text-[13px]">
               <span className="font-bold tabular-nums text-foreground">{toFaDigits(totalCount)}</span> {BLOG_INDEX_LABELS.resultsSuffix}
               {pagination && pagination.totalPages > 1 ? (
                 <>
@@ -130,12 +123,12 @@ export function TaxonomyArchive({
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-6 pb-2 sm:pt-7 lg:pt-8">
+      <Section spacing="none" containerClassName="pt-8 sm:pt-10">
         <PostGrid posts={posts} />
       </Section>
 
       {pagination && pagination.totalPages > 1 ? (
-        <Section containerClassName="pb-10 pt-8 sm:pb-12 sm:pt-10">
+        <Section spacing="compact">
           <BlogPagination
             currentPage={pagination.currentPage}
             totalPages={pagination.totalPages}
@@ -145,7 +138,7 @@ export function TaxonomyArchive({
       ) : null}
 
       {description ? (
-        <Section containerClassName="pb-10 pt-8 sm:pb-12 sm:pt-10">
+        <Section spacing="compact">
           <TaxonomySeoContent
             title={title}
             content={description}

@@ -11,7 +11,6 @@ const SOCIAL_ICONS = {
   youtube: YoutubeIcon,
   x: XIcon,
 } as const;
-import { BeltDivider } from "@/components/shared/belt-divider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -47,12 +46,10 @@ export async function SupportInfo() {
         </li>
       </ul>
 
-      <BeltDivider variant="pill" className="mt-6 h-1 w-16 opacity-70" />
-
       <Button
         asChild
         variant="outline"
-        className="mt-5 h-11 w-full gap-2 rounded-xl text-sm font-bold"
+        className="mt-6 h-11 w-full gap-2 rounded-xl border-border text-sm font-bold"
       >
         <Link href="/#faq">مشاهده سؤالات متداول</Link>
       </Button>

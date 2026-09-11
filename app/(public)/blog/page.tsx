@@ -66,7 +66,7 @@ async function BlogIndex({ searchParams }: BlogPageProps) {
 
   return (
     <>
-      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10" id="archive-top">
+      <Section spacing="none" containerClassName="pb-4 pt-8 sm:pt-10 lg:pt-12" id="archive-top">
         <PaginationScrollTop targetId="archive-top" />
         <Reveal>
           <BlogHeader />
@@ -88,12 +88,12 @@ async function BlogIndex({ searchParams }: BlogPageProps) {
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-6 pb-2 sm:pt-7 lg:pt-8">
+      <Section spacing="none" containerClassName="pt-8 sm:pt-10">
         <PostGrid posts={visiblePosts} />
       </Section>
 
       {totalPages > 1 ? (
-        <Section containerClassName="pb-12 pt-8 sm:pb-16">
+        <Section spacing="compact">
           <Reveal delay={160}>
             <BlogPagination
               currentPage={currentPage}

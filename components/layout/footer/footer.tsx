@@ -1,8 +1,9 @@
 import Link from "next/link";
 
-import { Send } from "lucide-react";
+import { Download, Send } from "lucide-react";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
+import { Button } from "@/components/ui/button";
 import { getCategoryTree } from "@/lib/blog";
 import { getMenuTree } from "@/lib/menu";
 import { flattenPublicCategoryTree, type PublicCategoryNode } from "@/lib/blog/categories";
@@ -108,6 +109,18 @@ export async function Footer() {
             <p className="max-w-xs text-sm leading-7 text-muted-foreground">
               {FOOTER_BLURB}
             </p>
+            {settings.appDownloadUrl ? (
+              <Button
+                asChild
+                size="lg"
+                className="mt-2 h-11 gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-white shadow-md shadow-black/25 hover:bg-primary/90"
+              >
+                <a href={settings.appDownloadUrl} target="_blank" rel="noopener noreferrer">
+                  <Download className="!size-4" />
+                  دانلود اپلیکیشن
+                </a>
+              </Button>
+            ) : null}
           </div>
 
           <FooterMenuColumn
@@ -138,7 +151,7 @@ export async function Footer() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={label}
-                        className="flex size-10 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                        className="flex size-10 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                       >
                         <Icon className="!size-[18px]" />
                       </a>

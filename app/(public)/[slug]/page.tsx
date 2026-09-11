@@ -72,7 +72,7 @@ export default async function StaticPage({ params }: StaticPageProps) {
           publisher: { "@type": "Organization", name: SITE_NAME },
         }}
       />
-      <Section className="pb-0 sm:pb-0 lg:pb-0">
+      <Section spacing="none" containerClassName="pt-6 sm:pt-8">
         <Reveal>
           <div className="mx-auto max-w-3xl">
             <header className="border-b border-border/60 pb-5 sm:pb-6">
@@ -84,7 +84,7 @@ export default async function StaticPage({ params }: StaticPageProps) {
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-6 sm:pt-8">
+      <Section spacing="none" containerClassName="pb-10 pt-8 sm:pb-14 sm:pt-10">
         <div className="mx-auto max-w-3xl">
           <div className="relative aspect-[16/7] w-full overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-border/60">
             {page.coverImage ? (

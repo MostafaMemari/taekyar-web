@@ -13,7 +13,7 @@ export function SubmissionSuccess({ onReset }: { onReset: () => void }) {
         <span className="flex size-14 items-center justify-center rounded-full bg-belt-green/15 text-belt-green ring-1 ring-belt-green/25">
           <CircleCheck className="!size-7" />
         </span>
-        <h3 className="mt-5 text-lg font-extrabold text-belt-black">{FORM_LABELS.successTitle}</h3>
+        <h3 className="mt-5 text-lg font-extrabold text-foreground">{FORM_LABELS.successTitle}</h3>
         <p className="mt-2 max-w-sm text-[13px] leading-7 text-muted-foreground sm:text-sm">
           {FORM_LABELS.successDescription}
         </p>
@@ -21,7 +21,7 @@ export function SubmissionSuccess({ onReset }: { onReset: () => void }) {
           type="button"
           variant="outline"
           onClick={onReset}
-          className="mt-6 h-11 gap-2 rounded-xl px-6 text-sm font-bold"
+          className="mt-6 h-11 gap-2 rounded-xl border-border px-6 text-sm font-bold"
         >
           <RotateCcw className="!size-4" />
           {FORM_LABELS.resetAction}

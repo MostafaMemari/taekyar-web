@@ -34,7 +34,7 @@ export function Header({
       className={cn(
         "theme-light sticky top-0 z-40 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
         scrolled
-          ? "border-border/40 bg-[#fafaf8]/75 shadow-[0_12px_32px_-20px_rgba(23,23,23,0.28)]"
+          ? "border-border/60 bg-background/80 shadow-[0_12px_32px_-20px_rgba(15,23,42,0.25)]"
           : "border-transparent bg-transparent"
       )}
     >

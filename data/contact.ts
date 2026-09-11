@@ -41,7 +41,7 @@ export const CONTACT_CHANNELS: ContactChannel[] = [
     hint: "شنبه تا پنج‌شنبه، ۹ تا ۱۸",
     href: `tel:${SUPPORT_PHONE_NUMBER}`,
     isExternal: false,
-    chipClassName: "bg-belt-green/15 text-belt-green ring-belt-green/25",
+    chipClassName: "bg-primary/15 text-primary ring-primary/25",
     iconName: "phone",
   },
   {
@@ -51,7 +51,7 @@ export const CONTACT_CHANNELS: ContactChannel[] = [
     hint: "پاسخ سریع در ساعات کاری",
     href: "https://t.me/TaekyarApp",
     isExternal: true,
-    chipClassName: "bg-belt-blue/15 text-belt-blue ring-belt-blue/25",
+    chipClassName: "bg-primary/15 text-primary ring-primary/25",
     iconName: "send",
   },
   {
@@ -61,7 +61,7 @@ export const CONTACT_CHANNELS: ContactChannel[] = [
     hint: "اخبار و نکته‌های تمرینی هفتگی",
     href: "https://instagram.com/taekyar.app",
     isExternal: true,
-    chipClassName: "bg-belt-yellow/20 text-yellow-700 ring-belt-yellow/40",
+    chipClassName: "bg-primary/15 text-primary ring-primary/25",
     iconName: "instagram",
   },
 ];

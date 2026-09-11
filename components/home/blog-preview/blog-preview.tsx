@@ -13,18 +13,14 @@ export async function BlogPreview() {
   const posts = await getBlogPosts();
 
   return (
-    <Section
-      id="blog-preview"
-      tone="default"
-      containerClassName="py-10 sm:py-12 lg:py-14"
-    >
+    <Section id="blog-preview" tone="default">
       <Reveal>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeader {...BLOG_PREVIEW_INTRO} className="max-w-xl" />
           <Button
             variant="outline"
             asChild
-            className="h-11 gap-2 rounded-xl bg-card font-semibold shadow-sm"
+            className="h-11 gap-2 rounded-xl border-border bg-card font-semibold shadow-sm"
           >
             <Link href="/blog">
               مشاهده همه مقالات
@@ -34,7 +30,7 @@ export async function BlogPreview() {
         </div>
       </Reveal>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-3 lg:mt-10 lg:gap-5">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:mt-10 lg:gap-6">
         {posts.slice(0, BLOG_PREVIEW_COUNT).map((post, index) => (
           <Reveal key={post.id} delay={index * 90} className="h-full">
             <BlogCard post={post} />

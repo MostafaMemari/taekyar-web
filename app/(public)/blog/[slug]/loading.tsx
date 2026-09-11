@@ -9,7 +9,7 @@ export default function PostLoading() {
   return (
     <>
       <LoadingStatus label="در حال بارگذاری مقاله…" />
-      <Section className="pb-0 sm:pb-0 lg:pb-0">
+      <Section spacing="none" containerClassName="pt-6 sm:pt-8">
         <div aria-hidden="true">
           <div className="flex items-center justify-between gap-3 border-b border-border/60 pb-4 sm:pb-5">
             <Skeleton className="h-6 w-32" />

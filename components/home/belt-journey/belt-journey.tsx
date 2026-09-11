@@ -2,6 +2,7 @@ import { cn, toFaDigits } from "@/lib/utils";
 import { BELT_LEVELS } from "@/data/shared/belts";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
+import { SectionHeader } from "@/components/shared/section-header";
 import { BELT_JOURNEY_INTRO, BELT_JOURNEY_LABELS, CURRENT_BELT_INDEX } from "@/data/home/belt-journey";
 import type { BeltState } from "./belt-icon";
 
@@ -16,16 +17,16 @@ export function BeltJourney() {
   const next = BELT_LEVELS[CURRENT_BELT_INDEX + 1] ?? null;
 
   return (
-    <Section tone="accent" containerClassName="py-6 sm:py-8">
+    <Section tone="accent" spacing="compact">
       <Reveal>
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
-          <div className="min-w-0">
-            <p className="text-xs font-bold text-primary">{BELT_JOURNEY_INTRO.eyebrow}</p>
-            <h2 className="mt-1 text-xl font-black leading-8 text-foreground sm:text-2xl sm:leading-9">
-              {BELT_JOURNEY_INTRO.title}
-            </h2>
-          </div>
-          <p className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-card px-3 py-1.5 text-xs shadow-sm ring-1 ring-border/50">
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+          <SectionHeader
+            eyebrow={BELT_JOURNEY_INTRO.eyebrow}
+            title={BELT_JOURNEY_INTRO.title}
+            description={BELT_JOURNEY_INTRO.description}
+            className="max-w-xl"
+          />
+          <p className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-card px-3.5 py-2 text-xs shadow-sm ring-1 ring-border/60">
             <span
               aria-hidden="true"
               className="size-2.5 rounded-full ring-1 ring-black/10"
@@ -37,13 +38,10 @@ export function BeltJourney() {
             </span>
           </p>
         </div>
-        <p className="mt-1.5 max-w-2xl text-[13px] leading-7 text-muted-foreground">
-          {BELT_JOURNEY_INTRO.description}
-        </p>
       </Reveal>
 
       <Reveal delay={80}>
-        <div className="relative mt-6 px-1 pt-6">
+        <div className="relative mt-10 px-1 pt-7 sm:mt-12">
           <span
             aria-hidden="true"
             className="absolute inset-x-1 top-[28px] h-0.5 rounded-full bg-gradient-to-l from-primary/60 via-primary/25 to-foreground/10"
@@ -56,7 +54,7 @@ export function BeltJourney() {
               return (
                 <li key={name} aria-current={isCurrent ? "step" : undefined} className="relative flex flex-col items-center">
                   {state === "next" ? (
-                    <span className="absolute -top-6 whitespace-nowrap text-[10px] font-bold text-primary">
+                    <span className="absolute -top-7 whitespace-nowrap text-[10px] font-bold text-primary">
                       {BELT_JOURNEY_LABELS.nextLabel}
                     </span>
                   ) : null}
@@ -75,7 +73,7 @@ export function BeltJourney() {
                   />
                   <span
                     className={cn(
-                      "mt-2 whitespace-nowrap text-[10px] leading-5",
+                      "mt-2.5 whitespace-nowrap text-[10px] leading-5 sm:text-[11px]",
                       isCurrent && "font-black text-foreground",
                       !isCurrent && state === "earned" && "font-bold text-foreground",
                       state === "next" && "font-bold text-foreground",
@@ -91,7 +89,7 @@ export function BeltJourney() {
           </ol>
         </div>
 
-        <p className="mt-4 flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 text-center text-xs">
+        <p className="mt-6 flex flex-wrap items-center justify-center gap-x-1.5 gap-y-1 text-center text-xs">
           {next ? (
             <>
               <span className="font-medium text-muted-foreground">{BELT_JOURNEY_LABELS.nextPrefix}</span>

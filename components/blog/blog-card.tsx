@@ -41,10 +41,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
   const href = postHref(post.slug);
 
   return (
-    <Card
-      asChild
-      className="relative h-full p-0 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/[0.06] gap-0"
-    >
+    <Card asChild interactive className="relative h-full p-0 gap-0">
       <article>
         <CardCover post={post} />
 
