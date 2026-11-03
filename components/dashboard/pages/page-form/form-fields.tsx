@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FieldError } from "@/components/shared/form-controls";
 import { PAGES_FORM_LABELS } from "@/data/dashboard/ui";
-import type { PageFieldErrors } from "@/lib/admin-types";
+import type { PageFieldErrors } from "@/types/api";
 import type { PageFieldDraft } from "./types";
 
 interface PageMainInfoFieldsProps {

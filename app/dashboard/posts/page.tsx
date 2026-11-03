@@ -16,7 +16,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/config/prisma";
 import { postHref } from "@/lib/routes";
 import { r2PublicUrl } from "@/lib/r2-url";
 import { formatFaDate, toFaDigits } from "@/lib/utils";

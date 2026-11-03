@@ -17,8 +17,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldError } from "@/components/shared/form-controls";
 import { FAQ_LABELS } from "@/data/dashboard/faqs";
-import type { FaqFieldErrors, HomepageFaqInput } from "@/lib/admin-types";
-import { createHomepageFaq, updateHomepageFaq } from "@/lib/admin-actions";
+import type { FaqFieldErrors, HomepageFaqInput } from "@/types/api";
+import { ApiClientError } from "@/lib/api/client";
+import { faqsApi } from "@/lib/api/endpoints";
 import { toast } from "@/hooks/use-toast";
 
 export interface FaqDialogValue {
@@ -63,25 +64,30 @@ export function FaqDialog({ open, onOpenChange, faqId, initial }: FaqDialogProps
     };
     setFieldErrors({});
     startTransition(async () => {
-      const result =
-        faqId === null
-          ? await createHomepageFaq({ status: "idle" }, input)
-          : await updateHomepageFaq({ status: "idle" }, { ...input, id: faqId });
-      if (result.status === "error") {
-        setFieldErrors(result.fieldErrors ?? {});
+      try {
+        if (faqId === null) {
+          await faqsApi.create(input);
+        } else {
+          await faqsApi.update(faqId, input);
+        }
         toast({
-          tone: "error",
-          title: FAQ_LABELS.errorToastTitle,
-          description: result.message ?? FAQ_LABELS.saveError,
+          tone: "success",
+          title: faqId === null ? FAQ_LABELS.created : FAQ_LABELS.updated,
         });
-        return;
+        onOpenChange(false);
+        router.refresh();
+      } catch (error) {
+        if (error instanceof ApiClientError) {
+          setFieldErrors((error.fieldErrors ?? {}) as FaqFieldErrors);
+          toast({
+            tone: "error",
+            title: FAQ_LABELS.errorToastTitle,
+            description: error.message && error.message !== error.code ? error.message : FAQ_LABELS.saveError,
+          });
+        } else {
+          toast({ tone: "error", title: FAQ_LABELS.errorToastTitle, description: FAQ_LABELS.saveError });
+        }
       }
-      toast({
-        tone: "success",
-        title: faqId === null ? FAQ_LABELS.created : FAQ_LABELS.updated,
-      });
-      onOpenChange(false);
-      router.refresh();
     });
   }
 

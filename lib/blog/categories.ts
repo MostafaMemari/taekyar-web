@@ -1,7 +1,7 @@
 import { cache } from "react";
 import type { Category, Prisma } from "@prisma/client";
 
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/config/prisma";
 
 export type CategoryWithSeo = Prisma.CategoryGetPayload<{ include: { seo: true } }>;
 

@@ -1,13 +1,14 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Check, Trash2, X } from "lucide-react";
 
 import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { COMMENTS_ADMIN_LABELS } from "@/data/dashboard/ui";
-import { deleteComment, setCommentStatus } from "@/lib/admin-actions";
-import type { CommentStatus } from "@/lib/admin-types";
+import { commentsApi } from "@/lib/api/endpoints";
+import type { CommentStatus } from "@/types/api";
 import { toast } from "@/hooks/use-toast";
 
 interface CommentActionsProps {
@@ -17,13 +18,15 @@ interface CommentActionsProps {
 
 export function CommentActions({ id, status }: CommentActionsProps) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
-  function run(task: () => Promise<{ ok: boolean }>, successMessage: string) {
+  function run(task: () => Promise<unknown>, successMessage: string) {
     startTransition(async () => {
-      const result = await task();
-      if (result.ok) {
+      try {
+        await task();
         toast({ tone: "success", title: successMessage });
-      } else {
+        router.refresh();
+      } catch {
         toast({ tone: "error", title: COMMENTS_ADMIN_LABELS.error });
       }
     });
@@ -37,7 +40,7 @@ export function CommentActions({ id, status }: CommentActionsProps) {
           size="sm"
           disabled={isPending}
           className="h-8 gap-1.5 rounded-lg border-belt-green/30 text-[12px] font-bold text-belt-green hover:bg-belt-green/10"
-          onClick={() => run(() => setCommentStatus(id, "APPROVED"), COMMENTS_ADMIN_LABELS.approved)}
+          onClick={() => run(() => commentsApi.setStatus(id, "APPROVED"), COMMENTS_ADMIN_LABELS.approved)}
         >
           <Check className="size-3.5" />
           {COMMENTS_ADMIN_LABELS.approve}
@@ -50,7 +53,7 @@ export function CommentActions({ id, status }: CommentActionsProps) {
           size="sm"
           disabled={isPending}
           className="h-8 gap-1.5 rounded-lg border-belt-red/30 text-[12px] font-bold text-belt-red hover:bg-belt-red/10"
-          onClick={() => run(() => setCommentStatus(id, "REJECTED"), COMMENTS_ADMIN_LABELS.rejected)}
+          onClick={() => run(() => commentsApi.setStatus(id, "REJECTED"), COMMENTS_ADMIN_LABELS.rejected)}
         >
           <X className="size-3.5" />
           {COMMENTS_ADMIN_LABELS.reject}
@@ -63,10 +66,11 @@ export function CommentActions({ id, status }: CommentActionsProps) {
         description={COMMENTS_ADMIN_LABELS.confirmDelete}
         confirmLabel={COMMENTS_ADMIN_LABELS.delete}
         onConfirm={async () => {
-          const result = await deleteComment(id);
-          if (result.ok) {
+          try {
+            await commentsApi.remove(id);
             toast({ tone: "success", title: COMMENTS_ADMIN_LABELS.deleted });
-          } else {
+            router.refresh();
+          } catch {
             toast({ tone: "error", title: COMMENTS_ADMIN_LABELS.error });
           }
         }}

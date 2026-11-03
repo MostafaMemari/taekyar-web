@@ -7,7 +7,7 @@ import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { MEDIA_LABELS } from "@/data/dashboard/ui";
 import { toast } from "@/hooks/use-toast";
-import { deleteMedia } from "@/lib/admin-actions";
+import { mediaApi } from "@/lib/api/endpoints";
 
 interface DeleteMediaButtonProps {
   mediaKey: string;
@@ -23,11 +23,11 @@ export function DeleteMediaButton({ mediaKey }: DeleteMediaButtonProps) {
       description={MEDIA_LABELS.confirmDelete}
       confirmLabel={MEDIA_LABELS.delete}
       onConfirm={async () => {
-        const result = await deleteMedia(mediaKey);
-        if (result.ok) {
+        try {
+          await mediaApi.remove(mediaKey);
           toast({ tone: "success", title: MEDIA_LABELS.deleted });
           router.refresh();
-        } else {
+        } catch {
           toast({ tone: "error", title: MEDIA_LABELS.deleteError });
         }
       }}

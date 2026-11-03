@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/config/prisma";
 import { r2PublicUrl } from "@/lib/r2-url";
 import { formatFaDate, toFaDigits } from "@/lib/utils";
 

@@ -9,6 +9,7 @@ import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import { getPublishedPageBySlug, pageMetaDescriptionFallback } from "@/lib/pages";
 import { parsePostHtml } from "@/lib/post-content";
+import { sanitizePostHtml } from "@/server/services/sanitizer";
 import { buildPageMetadata } from "@/lib/seo";
 import { resolveSeo } from "@/lib/seo-resolve";
 import { pageHref } from "@/lib/routes";
@@ -56,7 +57,7 @@ export default async function StaticPage({ params }: StaticPageProps) {
 
   if (!page) notFound();
 
-  const content = parsePostHtml(page.content);
+  const content = sanitizePostHtml(parsePostHtml(page.content));
 
   return (
     <>

@@ -7,9 +7,9 @@ import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { CommentStatus } from "@/lib/admin-types";
+import type { CommentStatus } from "@/types/api";
 import { COMMENT_STATUS_META, COMMENTS_ADMIN_LABELS } from "@/data/dashboard/ui";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/config/prisma";
 import { cn, formatFaDate, toFaDigits } from "@/lib/utils";
 
 const STATUS_FILTERS: CommentStatus[] = ["PENDING", "APPROVED", "REJECTED"];

@@ -18,7 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MENUS_LABELS } from "@/data/dashboard/ui";
-import { createMenuItem, deleteMenuItem, moveMenuItem, updateMenuItem } from "@/lib/admin-actions";
+import { ApiClientError } from "@/lib/api/client";
+import { menuItemsApi } from "@/lib/api/endpoints";
 import type {
   MenuItemFieldErrors,
   MenuItemInput,
@@ -26,8 +27,8 @@ import type {
   MenuItemRowDto,
   MenuItemTypeDto,
   MenuLocationDto,
-} from "@/lib/admin-types";
-import type { MenuLinkTargets } from "@/lib/admin/menu-targets";
+  MenuLinkTargets,
+} from "@/types/api";
 import { toast } from "@/hooks/use-toast";
 
 const TYPE_ORDER: MenuItemTypeDto[] = ["PAGE", "POST", "CATEGORY", "TAG", "CUSTOM"];
@@ -76,16 +77,22 @@ export function MenuManager({ location, items, targets }: MenuManagerProps) {
 
   function move(id: number, direction: "up" | "down") {
     startTransition(async () => {
-      const result = await moveMenuItem(id, direction);
-      if (!result.ok) toast({ tone: "error", title: MENUS_LABELS.moveUpError });
+      try {
+        await menuItemsApi.move(id, direction);
+      } catch {
+        toast({ tone: "error", title: MENUS_LABELS.moveUpError });
+      }
     });
   }
 
   function remove(id: number) {
     startTransition(async () => {
-      const result = await deleteMenuItem(id);
-      if (result.ok) toast({ tone: "success", title: MENUS_LABELS.deleted });
-      else toast({ tone: "error", title: MENUS_LABELS.deleteError });
+      try {
+        await menuItemsApi.remove(id);
+        toast({ tone: "success", title: MENUS_LABELS.deleted });
+      } catch {
+        toast({ tone: "error", title: MENUS_LABELS.deleteError });
+      }
     });
   }
 
@@ -275,16 +282,24 @@ function MenuItemDialog({ open, onOpenChange, location, targets, editing, parent
 
     setFieldErrors({});
     startTransition(async () => {
-      const result = editing
-        ? await updateMenuItem(editing.id, input)
-        : await createMenuItem(input);
-      if (result.status === "error") {
-        setFieldErrors(result.fieldErrors ?? {});
-        if (result.message) toast({ tone: "error", title: MENUS_LABELS.saveError, description: result.message });
-        return;
+      try {
+        if (editing) {
+          await menuItemsApi.update(editing.id, input);
+        } else {
+          await menuItemsApi.create(input);
+        }
+        toast({ tone: "success", title: MENUS_LABELS.saved });
+        onOpenChange(false);
+      } catch (error) {
+        if (error instanceof ApiClientError) {
+          setFieldErrors((error.fieldErrors ?? {}) as MenuItemFieldErrors);
+          if (error.message && error.message !== error.code) {
+            toast({ tone: "error", title: MENUS_LABELS.saveError, description: error.message });
+          }
+        } else {
+          toast({ tone: "error", title: MENUS_LABELS.saveError });
+        }
       }
-      toast({ tone: "success", title: MENUS_LABELS.saved });
-      onOpenChange(false);
     });
   }
 

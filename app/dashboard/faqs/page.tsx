@@ -1,5 +1,5 @@
 import { FAQ_LABELS } from "@/data/dashboard/ui";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/config/prisma";
 import { HomepageFaqManager } from "@/components/dashboard/faqs/homepage-faq-manager";
 
 export const dynamic = "force-dynamic";

@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/config/prisma";
 import { categoryHref, pageHref, postHref, tagHref } from "@/lib/routes";
 
 export type MenuLocation = "HEADER_DESKTOP" | "HEADER_MOBILE" | "FOOTER_QUICK" | "FOOTER_BLOG";

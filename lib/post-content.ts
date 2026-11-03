@@ -111,14 +111,6 @@ export function getHeadings(html: string): TocItem[] {
   return items;
 }
 
-export function sanitizePostHtml(html: string): string {
-  return html
-    .replaceAll(/<script[\s\S]*?<\/script>/gi, "")
-    .replaceAll(/<script[^>]*\/?>/gi, "")
-    .replaceAll(/\son\w+\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi, "")
-    .replaceAll(/(href|src)\s*=\s*("|')\s*javascript:[^"']*\2/gi, '$1="#"');
-}
-
 export function htmlToPlainText(html: string): string {
   return html
     .replace(/<[^>]*>/g, " ")

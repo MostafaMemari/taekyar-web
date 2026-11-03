@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { ImagePlus, X } from "lucide-react";
 
 import { MediaPicker } from "@/components/dashboard/media/media-picker";
@@ -11,8 +12,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SETTINGS_LABELS } from "@/data/dashboard/settings";
-import { saveSiteSettings } from "@/lib/admin-actions";
-import type { SiteSettingsFieldErrors, SiteSettingsInput } from "@/lib/admin-types";
+import { ApiClientError } from "@/lib/api/client";
+import { settingsApi } from "@/lib/api/endpoints";
+import type { SiteSettingsFieldErrors, SiteSettingsInput } from "@/types/api";
 import { IMAGE_REMOVE_BUTTON } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
@@ -146,6 +148,7 @@ interface SettingsFormProps {
 }
 
 export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initialOgImageUrl }: SettingsFormProps) {
+  const router = useRouter();
   const [fields, setFields] = useState<FormFields>(initial);
   const [logo, setLogo] = useState<SettingsImageValue>({
     key: initial.logoImage,
@@ -189,12 +192,17 @@ export function SettingsForm({ initial, initialLogoUrl, initialFaviconUrl, initi
 
     setFieldErrors({});
     startTransition(async () => {
-      const result = await saveSiteSettings(input);
-      if (result.status === "error") {
-        setFieldErrors(result.fieldErrors ?? {});
-        toast({ tone: "error", title: SETTINGS_LABELS.errorToastTitle, description: result.message });
-      } else if (result.status === "success") {
+      try {
+        await settingsApi.save(input);
         toast({ tone: "success", title: SETTINGS_LABELS.saved });
+        router.refresh();
+      } catch (error) {
+        if (error instanceof ApiClientError) {
+          setFieldErrors((error.fieldErrors ?? {}) as SiteSettingsFieldErrors);
+          toast({ tone: "error", title: SETTINGS_LABELS.errorToastTitle, description: error.message });
+        } else {
+          toast({ tone: "error", title: SETTINGS_LABELS.errorToastTitle, description: SETTINGS_LABELS.error });
+        }
       }
     });
   }

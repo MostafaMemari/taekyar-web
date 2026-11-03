@@ -1,11 +1,13 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
-import { deleteTaxonomy } from "@/lib/admin-actions";
+import { ApiClientError } from "@/lib/api/client";
+import { categoriesApi, tagsApi } from "@/lib/api/endpoints";
 import { toast } from "@/hooks/use-toast";
 
 interface DeleteTaxonomyButtonProps {
@@ -15,6 +17,7 @@ interface DeleteTaxonomyButtonProps {
 
 export function DeleteTaxonomyButton({ kind, id }: DeleteTaxonomyButtonProps) {
   const copy = TAXONOMY_LABELS.kinds[kind];
+  const router = useRouter();
 
   return (
     <ConfirmDialog
@@ -23,15 +26,22 @@ export function DeleteTaxonomyButton({ kind, id }: DeleteTaxonomyButtonProps) {
       description={copy.confirmDelete}
       confirmLabel={TAXONOMY_LABELS.deleteLabel}
       onConfirm={async () => {
-        const result = await deleteTaxonomy(kind, id);
-        if (result.ok) {
+        try {
+          if (kind === "category") {
+            await categoriesApi.remove(id);
+          } else {
+            await tagsApi.remove(id);
+          }
           toast({ tone: "success", title: copy.deleted });
-        } else if (result.reason === "hasChildren") {
-          toast({ tone: "error", title: TAXONOMY_LABELS.deleteBlockedChildren });
-        } else if (result.reason === "hasPosts") {
-          toast({ tone: "error", title: TAXONOMY_LABELS.deleteBlockedPosts });
-        } else {
-          toast({ tone: "error", title: TAXONOMY_LABELS.deleteError });
+          router.refresh();
+        } catch (error) {
+          if (error instanceof ApiClientError && error.code === "hasChildren") {
+            toast({ tone: "error", title: TAXONOMY_LABELS.deleteBlockedChildren });
+          } else if (error instanceof ApiClientError && error.code === "hasPosts") {
+            toast({ tone: "error", title: TAXONOMY_LABELS.deleteBlockedPosts });
+          } else {
+            toast({ tone: "error", title: TAXONOMY_LABELS.deleteError });
+          }
         }
       }}
       trigger={

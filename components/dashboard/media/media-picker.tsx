@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight, Inbox, LoaderCircle, Search, Upload } from "luci
 
 import { useMediaUpload } from "./hooks/use-media-upload";
 import { MediaGrid } from "./media-grid";
-import { listMediaAction } from "@/lib/admin-actions";
+import { mediaApi } from "@/lib/api/endpoints";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,7 +23,7 @@ import { Label } from "@/components/ui/label";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MEDIA_LABELS, POST_FORM_LABELS } from "@/data/dashboard/ui";
-import type { MediaPage } from "@/lib/media-list";
+import type { MediaPage } from "@/types/api";
 import { cn, getPageItems, toPersianDigits } from "@/lib/utils";
 
 export interface MediaPickerSelection {
@@ -61,8 +61,18 @@ export function MediaPicker({
   const selected = mediaPage?.items.find((item) => item.key === selectedKey) ?? null;
 
   const load = useCallback(async (nextQuery: string, nextPage = 1) => {
-    const result = await listMediaAction({ query: nextQuery, page: nextPage });
-    setMediaPage(result);
+    try {
+      const result = await mediaApi.list({ query: nextQuery, page: nextPage });
+      setMediaPage(result);
+    } catch {
+      setMediaPage({
+        items: [],
+        total: 0,
+        totalPages: 1,
+        currentPage: 1,
+        failed: true,
+      });
+    }
   }, []);
 
   function reset() {

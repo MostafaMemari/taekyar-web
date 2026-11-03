@@ -1,9 +1,14 @@
-import type { R2Object } from "@/lib/r2";
 import { toPersianDigits } from "@/lib/utils";
 
 export const MEDIA_PREFIX = "uploads/";
 
 export const MEDIA_MAX_BYTES = 1024 * 1024;
+
+export interface R2Object {
+  key: string;
+  size: number;
+  lastModified: string;
+}
 
 export interface MediaItem {
   key: string;

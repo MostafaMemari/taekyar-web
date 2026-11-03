@@ -1,16 +1,18 @@
 "use client";
 
 import { RotateCcw, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
-import { deletePostPermanently, restorePost } from "@/lib/admin-actions";
+import { postsApi } from "@/lib/api/endpoints";
 import { toast } from "@/hooks/use-toast";
 import { useTransition } from "react";
 
 export function RestorePostButton({ slug }: { slug: string }) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   return (
     <Button
@@ -22,10 +24,11 @@ export function RestorePostButton({ slug }: { slug: string }) {
       className="size-8 rounded-lg text-muted-foreground hover:bg-primary/10 hover:text-primary"
       onClick={() => {
         startTransition(async () => {
-          const result = await restorePost(slug);
-          if (result.ok) {
+          try {
+            await postsApi.restore(slug);
             toast({ tone: "success", title: POSTS_TABLE_LABELS.restored });
-          } else {
+            router.refresh();
+          } catch {
             toast({ tone: "error", title: POSTS_TABLE_LABELS.restoreError });
           }
         });
@@ -37,6 +40,8 @@ export function RestorePostButton({ slug }: { slug: string }) {
 }
 
 export function PermanentDeleteButton({ slug }: { slug: string }) {
+  const router = useRouter();
+
   return (
     <ConfirmDialog
       destructive
@@ -44,10 +49,11 @@ export function PermanentDeleteButton({ slug }: { slug: string }) {
       description={POSTS_TABLE_LABELS.permanentDeleteConfirm}
       confirmLabel={POSTS_TABLE_LABELS.permanentDelete}
       onConfirm={async () => {
-        const result = await deletePostPermanently(slug);
-        if (result.ok) {
+        try {
+          await postsApi.remove(slug);
           toast({ tone: "success", title: POSTS_TABLE_LABELS.permanentlyDeleted });
-        } else {
+          router.refresh();
+        } catch {
           toast({ tone: "error", title: POSTS_TABLE_LABELS.deleteError });
         }
       }}

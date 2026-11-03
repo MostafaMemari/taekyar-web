@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { Pencil } from "lucide-react";
 
-import { getAdminBarEditContext } from "@/lib/admin-actions";
-import type { AdminBarEdit } from "@/lib/admin/admin-bar-context";
+import { adminBarApi } from "@/lib/api/endpoints";
+import type { AdminBarEdit } from "@/types/api";
 
 interface AdminBarContextLinkProps {
   initialPathname: string;
@@ -25,8 +25,12 @@ export function AdminBarContextLink({ initialPathname, initialEdit }: AdminBarCo
     if (pathname === context.pathname) return;
 
     startTransition(async () => {
-      const edit = await getAdminBarEditContext(pathname);
-      setContext({ pathname, edit });
+      try {
+        const { context } = await adminBarApi.editContext(pathname);
+        setContext({ pathname, edit: context });
+      } catch {
+        setContext({ pathname, edit: null });
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);

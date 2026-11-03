@@ -6,7 +6,7 @@ import { Trash2 } from "lucide-react";
 import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { PAGES_TABLE_LABELS } from "@/data/dashboard/ui";
-import { deletePage } from "@/lib/admin-actions";
+import { pagesApi } from "@/lib/api/endpoints";
 import { toast } from "@/hooks/use-toast";
 
 export function DeletePageButton({ slug }: { slug: string }) {
@@ -19,11 +19,11 @@ export function DeletePageButton({ slug }: { slug: string }) {
       description={PAGES_TABLE_LABELS.deleteConfirm}
       confirmLabel={PAGES_TABLE_LABELS.delete}
       onConfirm={async () => {
-        const result = await deletePage(slug);
-        if (result.ok) {
+        try {
+          await pagesApi.remove(slug);
           toast({ tone: "success", title: PAGES_TABLE_LABELS.deleted });
           router.refresh();
-        } else {
+        } catch {
           toast({ tone: "error", title: PAGES_TABLE_LABELS.deleteError });
         }
       }}

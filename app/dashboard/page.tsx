@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { COMMENT_STATUS_META, OVERVIEW_LABELS, OVERVIEW_STAT_CARDS } from "@/data/dashboard/ui";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/config/prisma";
 import { formatFaDate, toFaDigits } from "@/lib/utils";
 
 export default async function DashboardOverviewPage() {

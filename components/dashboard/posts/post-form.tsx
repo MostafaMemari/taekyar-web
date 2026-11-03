@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
-import { createPost, updatePost } from "@/lib/admin-actions";
-import type { FaqInput, PostFieldErrors, PostInput } from "@/lib/admin-types";
+import { ApiClientError } from "@/lib/api/client";
+import { postsApi } from "@/lib/api/endpoints";
+import type { FaqInput, PostFieldErrors, PostInput } from "@/types/api";
 import { parsePostHtml } from "@/lib/post-content";
 import { RichContentEditor } from "./rich-content-editor";
 import { CoverImageField, type CoverImageValue } from "@/components/dashboard/shared/cover-image-field";
@@ -27,6 +29,7 @@ interface PostFormProps {
 }
 
 export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categories, tags }: PostFormProps) {
+  const router = useRouter();
   const [fields, setFields] = useState<FieldDraft>({
     title: initial.title,
     slug: initial.slug,
@@ -92,15 +95,23 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
 
     setFieldErrors({});
     startTransition(async () => {
-      const result =
-        mode === "edit"
-          ? await updatePost({ status: "idle" }, { ...input, currentSlug: currentSlug ?? "" })
-          : await createPost({ status: "idle" }, input);
-
-      if (result.status === "error") {
-        setFieldErrors(result.fieldErrors ?? {});
-        if (result.message) {
-          toast({ tone: "error", title: POST_FORM_LABELS.errorToastTitle, description: result.message });
+      try {
+        const result =
+          mode === "edit"
+            ? await postsApi.update(currentSlug ?? "", input)
+            : await postsApi.create(input);
+        if (result.slug) {
+          router.push("/dashboard/posts");
+          router.refresh();
+        }
+      } catch (error) {
+        if (error instanceof ApiClientError) {
+          setFieldErrors((error.fieldErrors ?? {}) as PostFieldErrors);
+          if (error.message && error.message !== error.code) {
+            toast({ tone: "error", title: POST_FORM_LABELS.errorToastTitle, description: error.message });
+          }
+        } else {
+          toast({ tone: "error", title: POST_FORM_LABELS.errorToastTitle, description: POST_FORM_LABELS.error });
         }
       }
     });

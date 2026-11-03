@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { MEDIA_LABELS } from "@/data/dashboard/ui";
-import { getMediaPage } from "@/lib/media-list";
+import { getMediaPage } from "@/server/services/media.service";
 import { toFaDigits } from "@/lib/utils";
 
 interface MediaPageProps {

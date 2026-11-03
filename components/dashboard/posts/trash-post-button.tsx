@@ -5,10 +5,13 @@ import { Trash2 } from "lucide-react";
 import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
-import { trashPost } from "@/lib/admin-actions";
+import { postsApi } from "@/lib/api/endpoints";
 import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 export function TrashPostButton({ slug }: { slug: string }) {
+  const router = useRouter();
+
   return (
     <ConfirmDialog
       destructive
@@ -16,10 +19,11 @@ export function TrashPostButton({ slug }: { slug: string }) {
       description={POSTS_TABLE_LABELS.deleteConfirm}
       confirmLabel={POSTS_TABLE_LABELS.delete}
       onConfirm={async () => {
-        const result = await trashPost(slug);
-        if (result.ok) {
+        try {
+          await postsApi.trash(slug);
           toast({ tone: "success", title: POSTS_TABLE_LABELS.deleted });
-        } else {
+          router.refresh();
+        } catch {
           toast({ tone: "error", title: POSTS_TABLE_LABELS.deleteError });
         }
       }}

@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/config/prisma";
 import type { PostComment } from "@/data/blog/comments";
 
 export const getPostComments = cache(

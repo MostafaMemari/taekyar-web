@@ -6,10 +6,10 @@ import { ExternalLink, LogOut, Shield } from "lucide-react";
 
 import { Logo } from "@/components/layout/header/logo";
 import { BeltDivider } from "@/components/shared/belt-divider";
+import { LogoutButton } from "@/components/shared/logout-button";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { DASHBOARD_LABELS, DASHBOARD_NAV } from "@/data/dashboard/ui";
-import { logout } from "@/lib/admin-actions";
 import { cn } from "@/lib/utils";
 
 interface DashboardSidebarProps {
@@ -102,18 +102,18 @@ export function DashboardSidebar({ username, siteName, logoImage, logoImageAlt }
                 <ExternalLink className="size-4" aria-hidden="true" />
               </Link>
             </Button>
-            <form action={logout}>
-              <Button
-                type="submit"
-                variant="ghost"
-                size="icon-sm"
-                aria-label={DASHBOARD_LABELS.logout}
-                title={DASHBOARD_LABELS.logout}
-                className="size-8 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-              >
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              asChild
+              aria-label={DASHBOARD_LABELS.logout}
+              title={DASHBOARD_LABELS.logout}
+              className="size-8 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+            >
+              <LogoutButton>
                 <LogOut className="size-4" aria-hidden="true" />
-              </Button>
-            </form>
+              </LogoutButton>
+            </Button>
           </div>
         </div>
       </div>

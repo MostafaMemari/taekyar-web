@@ -21,8 +21,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldError } from "@/components/shared/form-controls";
 import { POST_FAQ_LABELS } from "@/data/dashboard/faqs";
-import type { FaqInput } from "@/lib/admin-types";
-import { savePostFaqs } from "@/lib/admin-actions";
+import type { FaqInput } from "@/types/api";
+import { postsApi } from "@/lib/api/endpoints";
 import { cn } from "@/lib/utils";
 
 type PostFaqEditorProps =
@@ -55,10 +55,14 @@ export function PostFaqEditor(props: PostFaqEditorProps) {
     }
     startTransition(async () => {
       setOptimisticFaqs(next);
-      const result = await savePostFaqs(props.postSlug, next);
-      if (result.ok) {
-        toast({ tone: "success", title: POST_FAQ_LABELS.saved });
-      } else {
+      try {
+        const result = await postsApi.saveFaqs(props.postSlug, next);
+        if (result.ok) {
+          toast({ tone: "success", title: POST_FAQ_LABELS.saved });
+        } else {
+          toast({ tone: "error", title: POST_FAQ_LABELS.saveError });
+        }
+      } catch {
         toast({ tone: "error", title: POST_FAQ_LABELS.saveError });
       }
     });

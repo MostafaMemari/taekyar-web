@@ -14,9 +14,11 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
-import { saveTaxonomy } from "@/lib/admin-actions";
+import { ApiClientError } from "@/lib/api/client";
+import { categoriesApi, tagsApi } from "@/lib/api/endpoints";
 import { toast } from "@/hooks/use-toast";
-import type { TaxonomyFieldErrors, TaxonomyInput } from "@/lib/admin-types";
+import type { TaxonomyFieldErrors, TaxonomyInput } from "@/types/api";
+import { useRouter } from "next/navigation";
 
 export interface CategoryParentOption {
   id: number;
@@ -49,6 +51,7 @@ export function TaxonomyForm({
   currentId,
   parentOptions = [],
 }: TaxonomyFormProps) {
+  const router = useRouter();
   const [fields, setFields] = useState({
     name: initial.name,
     slug: initial.slug,
@@ -98,11 +101,28 @@ export function TaxonomyForm({
 
     setFieldErrors({});
     startTransition(async () => {
-      const result = await saveTaxonomy(kind, mode === "edit" ? currentId ?? null : null, input);
-      if (result.status === "error") {
-        setFieldErrors(result.fieldErrors ?? {});
-        if (result.message) {
-          toast({ tone: "error", title: TAXONOMY_LABELS.errorTitle, description: result.message });
+      try {
+        if (kind === "category") {
+          if (mode === "edit") {
+            await categoriesApi.update(currentId ?? 0, input);
+          } else {
+            await categoriesApi.create(input);
+          }
+        } else if (mode === "edit") {
+          await tagsApi.update(currentId ?? 0, input);
+        } else {
+          await tagsApi.create(input);
+        }
+        router.push(kind === "category" ? "/dashboard/categories" : "/dashboard/tags");
+        router.refresh();
+      } catch (error) {
+        if (error instanceof ApiClientError) {
+          setFieldErrors((error.fieldErrors ?? {}) as TaxonomyFieldErrors);
+          if (error.message && error.message !== error.code) {
+            toast({ tone: "error", title: TAXONOMY_LABELS.errorTitle, description: error.message });
+          }
+        } else {
+          toast({ tone: "error", title: TAXONOMY_LABELS.errorTitle, description: TAXONOMY_LABELS.error });
         }
       }
     });

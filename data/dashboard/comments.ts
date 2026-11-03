@@ -1,4 +1,4 @@
-import type { CommentStatus } from "@/lib/admin-types";
+import type { CommentStatus } from "@/types/api";
 
 export const COMMENTS_ADMIN_LABELS = {
   title: "مدیریت دیدگاه‌ها",

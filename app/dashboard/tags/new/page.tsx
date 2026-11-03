@@ -1,6 +1,6 @@
 import { TaxonomyForm } from "@/components/dashboard/taxonomy/taxonomy-form";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
-import type { TaxonomyInput } from "@/lib/admin-types";
+import type { TaxonomyInput } from "@/types/api";
 
 export const metadata = { title: TAXONOMY_LABELS.kinds.tag.newTitle };
 

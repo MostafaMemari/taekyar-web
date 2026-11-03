@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import type { PageInput } from "@/lib/admin-types";
+import type { PageInput } from "@/types/api";
 import { PageForm } from "@/components/dashboard/pages/page-form";
 import { PAGES_FORM_LABELS } from "@/data/dashboard/ui";
 import { getPageBySlugForAdmin } from "@/lib/pages";

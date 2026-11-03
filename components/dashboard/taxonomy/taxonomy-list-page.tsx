@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { filterCategoryRowsWithAncestors } from "@/lib/blog/categories";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/config/prisma";
 
 import { TaxonomyTable } from "./taxonomy-table";
 

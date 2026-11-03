@@ -9,11 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FAQ_LABELS } from "@/data/dashboard/faqs";
-import {
-  deleteHomepageFaq,
-  reorderHomepageFaqs,
-  toggleHomepageFaq,
-} from "@/lib/admin-actions";
+import { faqsApi } from "@/lib/api/endpoints";
 import { toast } from "@/hooks/use-toast";
 import { FaqDialog, type FaqDialogValue } from "./faq-dialog";
 
@@ -55,10 +51,10 @@ export function HomepageFaqManager({ initialFaqs }: { initialFaqs: HomepageFaqIt
     const next = !faq.isActive;
     startTransition(async () => {
       setOptimisticFaqs(faqs.map((item) => (item.id === faq.id ? { ...item, isActive: next } : item)));
-      const result = await toggleHomepageFaq(faq.id, next);
-      if (result.ok) {
+      try {
+        await faqsApi.toggle(faq.id, next);
         toast({ tone: "success", title: FAQ_LABELS.statusChanged });
-      } else {
+      } catch {
         toast({ tone: "error", title: FAQ_LABELS.statusError });
       }
     });
@@ -72,8 +68,9 @@ export function HomepageFaqManager({ initialFaqs }: { initialFaqs: HomepageFaqIt
     [next[index], next[target]] = [next[target], next[index]];
     startTransition(async () => {
       setOptimisticFaqs(next);
-      const result = await reorderHomepageFaqs(next.map((item) => item.id));
-      if (!result.ok) {
+      try {
+        await faqsApi.reorder(next.map((item) => item.id));
+      } catch {
         toast({ tone: "error", title: FAQ_LABELS.reorderError });
       }
     });
@@ -81,10 +78,10 @@ export function HomepageFaqManager({ initialFaqs }: { initialFaqs: HomepageFaqIt
 
   async function handleDelete(faq: HomepageFaqItem) {
     setOptimisticFaqs(faqs.filter((item) => item.id !== faq.id));
-    const result = await deleteHomepageFaq(faq.id);
-    if (result.ok) {
+    try {
+      await faqsApi.remove(faq.id);
       toast({ tone: "success", title: FAQ_LABELS.deleted });
-    } else {
+    } catch {
       toast({ tone: "error", title: FAQ_LABELS.deleteError });
     }
   }

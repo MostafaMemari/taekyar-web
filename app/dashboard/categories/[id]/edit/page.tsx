@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 
 import { TaxonomyForm } from "@/components/dashboard/taxonomy/taxonomy-form";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
-import type { TaxonomyInput } from "@/lib/admin-types";
+import type { TaxonomyInput } from "@/types/api";
 import { buildCategoryTree, flattenCategoryTree } from "@/lib/blog/categories";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/server/config/prisma";
 import { r2PublicUrl } from "@/lib/r2-url";
 
 interface EditCategoryPageProps {

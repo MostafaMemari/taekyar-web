@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PAGES_FORM_LABELS } from "@/data/dashboard/ui";
-import { createPage, updatePage } from "@/lib/admin-actions";
-import type { PageFieldErrors, PageInput } from "@/lib/admin-types";
+import { ApiClientError } from "@/lib/api/client";
+import { pagesApi } from "@/lib/api/endpoints";
+import type { PageFieldErrors, PageInput } from "@/types/api";
 import { parsePostHtml } from "@/lib/post-content";
 import { RichContentEditor } from "@/components/dashboard/posts/rich-content-editor";
 import { CoverImageField, type CoverImageValue } from "@/components/dashboard/shared/cover-image-field";
@@ -23,6 +25,7 @@ interface PageFormProps {
 }
 
 export function PageForm({ mode, initial, initialCoverUrl, currentSlug }: PageFormProps) {
+  const router = useRouter();
   const [fields, setFields] = useState<PageFieldDraft>({
     title: initial.title,
     slug: initial.slug,
@@ -66,15 +69,21 @@ export function PageForm({ mode, initial, initialCoverUrl, currentSlug }: PageFo
 
     setFieldErrors({});
     startTransition(async () => {
-      const result =
-        mode === "edit"
-          ? await updatePage({ status: "idle" }, { ...input, currentSlug: currentSlug ?? "" })
-          : await createPage({ status: "idle" }, input);
-
-      if (result.status === "error") {
-        setFieldErrors(result.fieldErrors ?? {});
-        if (result.message) {
-          toast({ tone: "error", title: PAGES_FORM_LABELS.errorToastTitle, description: result.message });
+      try {
+        const result =
+          mode === "edit" ? await pagesApi.update(currentSlug ?? "", input) : await pagesApi.create(input);
+        if (result.slug) {
+          router.push("/dashboard/pages");
+          router.refresh();
+        }
+      } catch (error) {
+        if (error instanceof ApiClientError) {
+          setFieldErrors((error.fieldErrors ?? {}) as PageFieldErrors);
+          if (error.message && error.message !== error.code) {
+            toast({ tone: "error", title: PAGES_FORM_LABELS.errorToastTitle, description: error.message });
+          }
+        } else {
+          toast({ tone: "error", title: PAGES_FORM_LABELS.errorToastTitle, description: PAGES_FORM_LABELS.error });
         }
       }
     });
