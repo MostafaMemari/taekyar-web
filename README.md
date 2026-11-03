@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Taekyar
 
-## Getting Started
+Persian (fa, RTL) corporate site + blog with an admin dashboard for the Taekyar martial-arts platform. Built with Next.js 16 (App Router), React 19, Tailwind v4, Prisma 7 + PostgreSQL, and shadcn/radix UI.
 
-First, run the development server:
+## Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+API-first, single Next.js application:
+
+```
+Frontend (React/Server Components)
+  → REST API  (app/api/v1, Route Handlers)
+    → Services (server/services, business logic)
+      → Prisma (server/config/prisma, PostgreSQL)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- All frontend business operations go through typed REST endpoints under `/api/v1` (`lib/api` client, `NEXT_PUBLIC_API_BASE_URL` optional).
+- Consistent JSON envelope: `{ ok: true, data }` / `{ ok: false, error: { code, message?, fieldErrors? } }`.
+- Zod validates every request; services keep business logic; repositories isolate CAPTCHA + rate-limit storage.
+- Server Actions are not used for business operations. Components never touch Prisma.
+- The service layer has no HTTP/React imports, so the backend can later be extracted to NestJS/Express by pointing `NEXT_PUBLIC_API_BASE_URL` at the new backend and reimplementing the same `/api/v1` contract.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+CAPTCHA (SVG, Persian digits ۰-۹), login throttling, and comment rate limiting are all stored in PostgreSQL (atomic single-use deletes + upsert counters). There is no Redis dependency.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Media uploads go to Cloudflare R2 (images only, magic-byte validated, server-only credentials).
 
-## Learn More
+## Getting started
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+cp .env.example .env   # fill in DATABASE_URL, SESSION_SECRET, R2_*
+npm install
+npx prisma migrate deploy
+npx prisma db seed     # creates the admin user + site settings
+npm run dev            # http://localhost:4500
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`prisma.config.ts` loads `.env` when present, so `prisma migrate dev` / `prisma db seed` work without exporting env vars manually.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Verification
 
-## Deploy on Vercel
+```bash
+npm run lint
+npx next typegen && npx tsc --noEmit
+npm run build
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+set -a && source .env && set +a
+node captcha-flow-test.mts   # captcha lifecycle, expiry, concurrency, rate limits (needs Postgres)
+node slug-flow-test.mts      # slug resolution (needs Postgres)
+node api-e2e-test.mts        # full REST API flow (needs Postgres + `npm run dev` on :4500)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Dashboard
+
+The admin dashboard at `/dashboard` covers posts (with Tiptap editor, SEO, per-post FAQs), hierarchical categories, tags, pages, menus, comment moderation, media (R2), homepage FAQs, and site settings. Sessions are HMAC-signed cookies (`taekyar_session`); `proxy.ts` gates `/dashboard/*`.
