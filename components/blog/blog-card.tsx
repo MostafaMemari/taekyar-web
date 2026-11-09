@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Clock, Newspaper } from "lucide-react";
+import { CalendarDays, Clock, Newspaper } from "lucide-react";
 
 import { BLOG_INDEX_LABELS } from "@/data/blog/index-page";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +9,7 @@ import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import type { BlogPost } from "@/lib/blog";
 import { r2PublicUrl } from "@/lib/r2-url";
 import { postHref } from "@/lib/routes";
-import { formatFaDate, toFaDigits } from "@/lib/utils";
+import { cn, formatFaDate, toFaDigits } from "@/lib/utils";
 
 export function CardCover({ post }: { post: BlogPost }) {
   return (
@@ -29,7 +29,7 @@ export function CardCover({ post }: { post: BlogPost }) {
         <ImagePlaceholder icon={Newspaper} iconClassName="group-hover/card:scale-[1.08]" />
       )}
       {post.category ? (
-        <Badge className="absolute start-3 top-3 border border-border/40 bg-card/90 text-[11px] font-bold tracking-tight text-card-foreground shadow-sm backdrop-blur-sm sm:text-xs">
+        <Badge className="absolute start-3 top-3 border-none bg-gradient-to-bl from-[#E0A800] via-[#C99416] to-[#9A6D00] text-[11px] font-extrabold tracking-tight text-[#2A1F00] shadow-[0_6px_16px_-6px_rgba(154,109,0,0.6)] sm:text-xs">
           {post.category}
         </Badge>
       ) : null}
@@ -37,52 +37,72 @@ export function CardCover({ post }: { post: BlogPost }) {
   );
 }
 
-export function BlogCard({ post }: { post: BlogPost }) {
+export function BlogCard({ post, featured }: { post: BlogPost; featured?: boolean }) {
   const href = postHref(post.slug);
 
   return (
-    <Card asChild interactive className="relative h-full p-0 gap-0">
+    <Card
+      asChild
+      interactive
+      className={cn(
+        "relative h-full p-0 gap-0",
+        featured && "lg:flex lg:flex-row lg:items-stretch",
+      )}
+    >
       <article>
-        <CardCover post={post} />
+        <div className={cn(featured && "lg:w-[52%] lg:shrink-0")}>
+          <CardCover post={post} />
+        </div>
 
-        <CardContent className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
-          <h3 className="text-[15px] font-bold leading-6 sm:text-[16px] sm:leading-7">
+        <CardContent
+          className={cn(
+            "flex min-w-0 flex-1 flex-col p-4 sm:p-5",
+            featured && "lg:justify-center lg:gap-1 lg:p-8",
+          )}
+        >
+          <h3
+            className={cn(
+              "text-[15px] font-bold leading-6 sm:text-[16px] sm:leading-7",
+              featured && "text-[17px] leading-7 sm:text-[19px] sm:leading-8 lg:text-[21px] lg:leading-9",
+            )}
+          >
             <Link
               href={href}
-              className="block truncate rounded-sm transition-colors before:absolute before:inset-0 hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="block rounded-sm line-clamp-2 transition-colors before:absolute before:inset-0 hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
             >
               {post.title}
             </Link>
           </h3>
 
-          {post.date || post.readTimeMinutes ? (
-            <p className="mt-1.5 flex min-w-0 flex-nowrap items-center gap-x-2 overflow-hidden whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
-              {post.date ? <span className="min-w-0 truncate">{formatFaDate(post.date)}</span> : null}
-              {post.date && post.readTimeMinutes ? (
-                <span aria-hidden="true" className="size-1 shrink-0 rounded-full bg-muted-foreground/30" />
-              ) : null}
-              {post.readTimeMinutes ? (
-                <span className="inline-flex shrink-0 items-center gap-1">
-                  <Clock className="size-3 shrink-0" />
-                  {toFaDigits(post.readTimeMinutes)} {BLOG_INDEX_LABELS.readTimeSuffix}
-                </span>
-              ) : null}
-            </p>
-          ) : null}
-
           {post.excerpt ? (
-            <p className="mt-2.5 line-clamp-2 text-pretty text-[13px] leading-6 text-muted-foreground sm:text-sm sm:leading-7">
+            <p
+              className={cn(
+                "mt-2.5 line-clamp-2 text-pretty text-[13px] leading-6 text-muted-foreground sm:text-sm sm:leading-7",
+                featured && "lg:line-clamp-3",
+              )}
+            >
               {post.excerpt}
             </p>
           ) : null}
 
-          <span
-            aria-hidden="true"
-            className="mt-auto inline-flex items-center gap-1.5 self-start pt-4 text-[13px] font-bold text-primary transition-all group-hover/card:gap-2 sm:pt-5 sm:text-sm"
-          >
-            {BLOG_INDEX_LABELS.readMore}
-            <ArrowLeft className="size-3.5 sm:size-4" />
-          </span>
+          <div className="min-h-3 flex-1" />
+
+          {post.date || post.readTimeMinutes ? (
+            <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-dashed border-black/[0.08] pt-3 text-[11px] font-medium text-black/45 sm:text-xs">
+              {post.readTimeMinutes ? (
+                <span className="inline-flex items-center gap-1.5">
+                  <Clock className="size-3.5 text-[#E0A800]" />
+                  {toFaDigits(post.readTimeMinutes)} {BLOG_INDEX_LABELS.readTimeSuffix}
+                </span>
+              ) : null}
+              {post.date ? (
+                <span className="inline-flex items-center gap-1.5">
+                  <CalendarDays className="size-3.5 text-[#E0A800]" />
+                  {formatFaDate(post.date)}
+                </span>
+              ) : null}
+            </div>
+          ) : null}
         </CardContent>
       </article>
     </Card>

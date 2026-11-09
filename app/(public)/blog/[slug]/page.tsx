@@ -4,22 +4,19 @@ import { notFound } from "next/navigation";
 import { ArticleContent } from "@/components/blog/article-content";
 import { CommentsSection } from "@/components/blog/comments/comments-section";
 import { PostCover } from "@/components/blog/post-cover";
-import { PostHeader, PostTopbar } from "@/components/blog/post-header";
+import { PostFooter } from "@/components/blog/post-footer";
+import { PostHeader } from "@/components/blog/post-header";
 import { POST_CONTACT_CTA, POST_FAQ_COPY, POST_LAYOUT, RELATED_POSTS_COUNT } from "@/data/blog/post-config";
 import { FaqSection } from "@/components/faq/faq-section";
 import { RelatedPosts } from "@/components/blog/related-posts";
-import { SidebarAppCta } from "@/components/blog/sidebar-app-cta";
-import { SidebarCategories } from "@/components/blog/sidebar-categories";
-import { SidebarGuides } from "@/components/blog/sidebar-guides";
 import { TableOfContents } from "@/components/blog/table-of-contents";
 import { TocCollapse } from "@/components/blog/toc-collapse";
 import { ContactBanner } from "@/components/shared/contact-banner";
 import { JsonLd } from "@/components/shared/json-ld";
-import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
 import { getPostComments, getBlogPosts, getPostBySlug, getCategoryAncestorsByPath } from "@/lib/blog";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
-import { getHeadings, type TocItem } from "@/lib/post-content";
+import { getHeadings } from "@/lib/post-content";
 import { getRelatedPosts } from "@/lib/blog-related";
 import { buildPageMetadata } from "@/lib/seo";
 import { resolveSeo } from "@/lib/seo-resolve";
@@ -61,25 +58,6 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   });
 }
 
-interface PostRailProps {
-  slug: string;
-  categoryPath: string;
-  tocItems: TocItem[];
-}
-
-function PostRail({ slug, categoryPath, tocItems }: PostRailProps) {
-  return (
-    <div className="space-y-4 lg:sticky lg:top-[88px]">
-      <div className="hidden lg:block">
-        <TableOfContents items={tocItems} />
-      </div>
-      <SidebarGuides currentSlug={slug} />
-      <SidebarCategories activeCategory={categoryPath} />
-      <SidebarAppCta />
-    </div>
-  );
-}
-
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
   const post = await getPostBySlug(decodeParam(slug));
@@ -111,68 +89,58 @@ export default async function PostPage({ params }: PostPageProps) {
       <JsonLd
         data={breadcrumbJsonLd([{ name: "وبلاگ", path: "/blog" }, ...categoryTrail, { name: post.title, path: postHref(post.slug) }])}
       />
-      <Section spacing="none" containerClassName="pt-6 sm:pt-8">
-        <Reveal>
-          <PostTopbar />
+      <Section spacing="none" containerClassName="pt-6 sm:pt-10">
+        <PostHeader post={post} trail={categoryTrail} />
 
-          <div
-            className={cn(
-              "mt-6 grid gap-6 sm:mt-7 sm:gap-7 lg:mt-10 lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-8 lg:gap-y-8 xl:gap-x-10",
-              POST_LAYOUT.postColumns,
-            )}
-          >
-            <div className="min-w-0 lg:col-start-1 lg:row-start-1">
-              <PostHeader post={post} />
-            </div>
+        <div className="mt-10 sm:mt-12">
+          <PostCover post={post} />
+        </div>
 
-            <div className="min-w-0 lg:col-start-2 lg:row-start-1">
-              <PostCover post={post} />
-            </div>
+        <div
+          className={cn(
+            "mt-10 grid gap-8 sm:mt-12 lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-10 xl:gap-x-14",
+            POST_LAYOUT.postColumns,
+          )}
+        >
+          <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+            <TocCollapse items={headings} />
+            <article className="mt-5 sm:mt-6 lg:mt-0">
+              <ArticleContent post={post} content={content} />
+            </article>
 
-            <div className="min-w-0 lg:col-start-1 lg:row-start-2">
-              <TocCollapse items={headings} />
-              <Reveal delay={80}>
-                <article className="mt-5 sm:mt-6 lg:mt-0">
-                  <ArticleContent post={post} content={content} />
-                </article>
-              </Reveal>
+            {post.faqs.length > 0 ? (
+              <div className="mt-10 sm:mt-12">
+                <FaqSection faqs={post.faqs} {...POST_FAQ_COPY} />
+              </div>
+            ) : null}
 
-              {post.faqs.length > 0 ? (
-                <Reveal delay={100}>
-                  <div className="mt-10 sm:mt-12">
-                    <FaqSection faqs={post.faqs} {...POST_FAQ_COPY} />
-                  </div>
-                </Reveal>
-              ) : null}
+            <CommentsSection comments={comments} postSlug={post.slug} />
 
-              <Reveal delay={120}>
-                <CommentsSection comments={comments} postSlug={post.slug} />
-              </Reveal>
-            </div>
-
-            <aside aria-label="ابزارهای مقاله" className="min-w-0 lg:col-start-2 lg:row-start-2">
-              <PostRail slug={post.slug} categoryPath={post.categoryPath ?? ""} tocItems={headings} />
-            </aside>
+            <PostFooter slug={post.slug} title={post.title} />
           </div>
-        </Reveal>
+
+          <aside aria-label="ابزارهای مقاله" className="min-w-0 lg:col-start-2 lg:row-start-2">
+            <div className="space-y-4 lg:sticky lg:top-[96px]">
+              <div className="hidden lg:block">
+                <TableOfContents items={headings} />
+              </div>
+            </div>
+          </aside>
+        </div>
       </Section>
 
       <Section spacing="compact">
         <div>
-          <Reveal delay={100}>
-            <RelatedPosts posts={relatedPosts} />
-          </Reveal>
+          <RelatedPosts posts={relatedPosts} />
         </div>
 
         <div className="mt-8 sm:mt-10">
-          <Reveal delay={120}>
-            <ContactBanner
-              title={POST_CONTACT_CTA.title}
-              description={POST_CONTACT_CTA.description}
-              actionLabel={POST_CONTACT_CTA.actionLabel}
-              actionHref={POST_CONTACT_CTA.actionHref}
-            />
-          </Reveal>
+          <ContactBanner
+            title={POST_CONTACT_CTA.title}
+            description={POST_CONTACT_CTA.description}
+            actionLabel={POST_CONTACT_CTA.actionLabel}
+            actionHref={POST_CONTACT_CTA.actionHref}
+          />
         </div>
       </Section>
     </>

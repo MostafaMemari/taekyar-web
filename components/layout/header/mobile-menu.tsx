@@ -55,7 +55,7 @@ function MobileNavLink({
         "flex cursor-pointer items-center justify-between rounded-xl px-3 py-3 text-[15px] transition-colors duration-200",
         className,
       )}
-      activeClassName="bg-primary/[0.07] font-bold text-primary"
+      activeClassName="bg-[#E0A800]/10 font-bold text-[#a37800]"
       inactiveClassName="font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
     >
       <ChevronLeft className="size-4 text-muted-foreground/50" />
@@ -74,7 +74,7 @@ function MobileNavGroup({ item, onNavigate }: { item: NavItemView; onNavigate: (
         className={cn(
           "group/collapsible flex w-full cursor-pointer items-center justify-between rounded-xl px-3 py-3 text-[15px] transition-colors duration-200 outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
           active
-            ? "bg-primary/[0.07] font-bold text-primary"
+            ? "bg-[#E0A800]/10 font-bold text-[#a37800]"
             : "font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
         )}
       >
@@ -82,13 +82,13 @@ function MobileNavGroup({ item, onNavigate }: { item: NavItemView; onNavigate: (
         <ChevronDown
           className={cn(
             "size-4 transition-transform duration-200",
-            active && "text-primary",
+            active && "text-[#a37800]",
             "group-data-open/collapsible:rotate-180",
           )}
         />
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <div className="mt-0.5 space-y-0.5 border-s-2 border-primary/20 ps-2">
+        <div className="mt-0.5 space-y-0.5 border-s-2 border-[#E0A800]/25 ps-2">
           {item.children.map((child) =>
             child.children.length > 0 ? (
               <MobileNavGroup key={child.id} item={child} onNavigate={onNavigate} />
@@ -170,7 +170,7 @@ export function MobileMenu({
           {appDownloadUrl ? (
             <Button
               asChild
-              className="h-12 w-full gap-2 rounded-xl text-[15px] font-bold shadow-sm shadow-primary/25"
+              className="h-12 w-full gap-2 rounded-xl bg-gradient-to-bl from-[#E0A800] via-[#C99416] to-[#9A6D00] text-[15px] font-extrabold text-[#2A1F00] shadow-sm shadow-[#9A6D00]/30 hover:from-[#EFAF0A] hover:via-[#D0A018] hover:to-[#A87800]"
               onClick={close}
             >
               <a href={appDownloadUrl} target="_blank" rel="noopener noreferrer">

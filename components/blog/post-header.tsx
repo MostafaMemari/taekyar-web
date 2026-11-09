@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Fragment } from "react";
-import { ArrowRight, CalendarDays, Clock } from "lucide-react";
+import { CalendarDays, ChevronLeft, Clock, PenLine } from "lucide-react";
 
 import { getCategoryStyle } from "@/data/blog/index-page";
 import { POST_LABELS } from "@/data/blog/post-config";
@@ -8,101 +7,83 @@ import type { BlogPost } from "@/lib/blog";
 import { categoryHref } from "@/lib/routes";
 import { formatFaDate, toFaDigits } from "@/lib/utils";
 
-export function PostTopbar() {
-  return (
-    <div className="flex items-center justify-between gap-3 border-b border-border/60 pb-4 sm:pb-5">
-      <Link
-        href="/blog"
-        className="inline-flex min-h-9 items-center gap-1.5 rounded-md px-1.5 py-1 text-[13px] font-semibold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:px-0 sm:text-sm"
-      >
-        <ArrowRight className="size-3.5 sm:size-4" />
-        {POST_LABELS.backToBlog}
-      </Link>
-
-      <p className="hidden items-center gap-2 text-xs font-bold tracking-wide text-muted-foreground/70 sm:flex">
-        <span aria-hidden="true" className="h-px w-8 bg-primary/40" />
-        وبلاگ تک‌یار
-      </p>
-    </div>
-  );
+interface PostHeaderProps {
+  post: BlogPost;
+  trail: Array<{ name: string; path: string }>;
 }
 
-function PostMeta({ post }: { post: BlogPost }) {
-  const items: React.ReactNode[] = [];
-
-  for (const category of post.categories) {
-    const { color, Icon } = getCategoryStyle(category.name);
-    items.push(
-      <Link
-        key={category.id}
-        href={categoryHref(category.path)}
-        className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-bold transition-opacity hover:opacity-80 sm:px-3 sm:py-1.5 sm:text-xs"
-        style={{ backgroundColor: `${color}14`, color }}
-      >
-        <Icon className="size-3.5" />
-        {category.name}
-      </Link>,
-    );
-  }
-
-  items.push(
-    <span className="inline-flex items-center gap-1.5 sm:gap-2">
-      <span
-        aria-hidden="true"
-        className="flex size-6 shrink-0 items-center justify-center rounded-full bg-belt-black text-[10px] font-black text-white ring-2 ring-white/10 sm:size-7 sm:text-[11px]"
-      >
-        ت
-      </span>
-      <span className="text-[11px] font-bold text-foreground sm:text-xs">{POST_LABELS.author}</span>
-    </span>,
-  );
-
-  if (post.date) {
-    items.push(
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground sm:gap-1.5 sm:text-xs">
-        <CalendarDays className="size-3 sm:size-3.5" />
-        {formatFaDate(post.date)}
-      </span>,
-    );
-  }
-
-  if (post.readTimeMinutes) {
-    items.push(
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground sm:gap-1.5 sm:text-xs">
-        <Clock className="size-3 sm:size-3.5" />
-        {toFaDigits(post.readTimeMinutes)} {POST_LABELS.readTimeSuffix}
-      </span>,
-    );
-  }
+export function PostHeader({ post, trail }: PostHeaderProps) {
+  const crumbs = [
+    { name: "خانه", path: "/" },
+    { name: "بلاگ", path: "/blog" },
+    ...trail,
+  ];
 
   return (
-    <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2 sm:gap-x-3 sm:gap-y-2.5">
-      {items.map((item, index) => (
-        <Fragment key={index}>
-          {index > 0 ? (
-            <span aria-hidden="true" className="hidden size-1 rounded-full bg-muted-foreground/40 sm:inline-block" />
-          ) : null}
-          {item}
-        </Fragment>
-      ))}
-    </div>
-  );
-}
+    <header className="mx-auto max-w-3xl text-center">
+      <nav aria-label="مسیر صفحه" className="flex flex-wrap items-center justify-center gap-1 text-[12px] font-medium text-black/45">
+        {crumbs.map((crumb, index) => (
+          <span key={crumb.path} className="inline-flex items-center gap-1">
+            {index > 0 ? <ChevronLeft aria-hidden="true" className="size-3 text-black/25" /> : null}
+            <Link href={crumb.path} className="transition-colors hover:text-[#a37800]">
+              {crumb.name}
+            </Link>
+          </span>
+        ))}
+        <span aria-hidden="true" className="inline-flex items-center gap-1 text-black/70">
+          <ChevronLeft className="size-3 text-black/25" />
+          <span className="line-clamp-1 max-w-56">{post.title}</span>
+        </span>
+      </nav>
 
-export function PostHeader({ post }: { post: BlogPost }) {
-  return (
-    <header>
-      <PostMeta post={post} />
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+        {post.categories.map((category) => {
+          const { color, Icon } = getCategoryStyle(category.name);
+          return (
+            <Link
+              key={category.id}
+              href={categoryHref(category.path)}
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-opacity hover:opacity-80"
+              style={{ backgroundColor: `${color}14`, color }}
+            >
+              <Icon className="size-3.5" />
+              {category.name}
+            </Link>
+          );
+        })}
+        {post.readTimeMinutes ? (
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-xs font-bold text-black/55">
+            <Clock className="size-3.5" />
+            {toFaDigits(post.readTimeMinutes)} {POST_LABELS.readTimeSuffix}
+          </span>
+        ) : null}
+      </div>
 
-      <h1 className="mt-3.5 text-balance text-[1.45rem] font-black leading-[1.6] tracking-tight sm:mt-4 sm:text-[1.9rem] sm:leading-[1.5] lg:mt-5 lg:text-[2.25rem] lg:leading-[1.45] xl:text-[2.5rem] xl:leading-[1.4]">
+      <h1 className="mt-5 text-balance font-heading text-[1.7rem] leading-[1.5] text-[#1b2330] sm:text-[2.1rem] sm:leading-[1.45] lg:text-[2.5rem] lg:leading-[1.4]">
         {post.title}
       </h1>
 
-      {post.excerpt ? (
-        <p className="mt-3 max-w-xl text-pretty text-[14.5px] leading-7 text-muted-foreground sm:mt-4 sm:text-[15.5px] sm:leading-8 lg:mt-5 lg:text-base lg:leading-9">
-          {post.excerpt}
-        </p>
-      ) : null}
+      <div aria-hidden="true" className="mx-auto mt-5 flex w-56 items-center gap-2">
+        <span className="h-px flex-1 bg-gradient-to-l from-[#E0A800] to-transparent" />
+        <span className="size-1.5 rotate-45 bg-[#E0A800]" />
+        <span className="h-px flex-1 bg-gradient-to-r from-[#E0A800] to-transparent" />
+      </div>
+
+      <div className="mx-auto mt-6 inline-flex items-center gap-3 rounded-full border border-black/[0.06] bg-white px-5 py-2.5 shadow-[0_10px_26px_-16px_rgba(15,23,42,0.3)]">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#EFC94C] to-[#D99E00] text-white shadow-[0_6px_12px_-6px_rgba(154,109,0,0.6)]">
+          <PenLine className="size-4" />
+        </span>
+        <span className="text-[13px]">
+          <span className="font-extrabold text-[#a37800]">{POST_LABELS.author}</span>
+          {post.date ? (
+            <span className="inline-flex items-center gap-1 text-black/50">
+              <span aria-hidden="true" className="mx-2 inline-block size-1 rounded-full bg-black/20" />
+              <CalendarDays className="size-3.5" />
+              {formatFaDate(post.date)}
+            </span>
+          ) : null}
+        </span>
+      </div>
     </header>
   );
 }

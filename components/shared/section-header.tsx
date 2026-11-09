@@ -11,11 +11,11 @@ export function Eyebrow({ children, className }: { children: React.ReactNode; cl
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1 text-xs font-bold text-primary",
+        "inline-flex items-center gap-2 rounded-full border border-[#E0A800]/25 bg-[#E0A800]/[0.08] px-3 py-1 text-xs font-bold text-[#a37800]",
         className,
       )}
     >
-      <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
+      <span aria-hidden="true" className="size-1.5 rounded-full bg-[#E0A800]" />
       {children}
     </span>
   );
@@ -30,7 +30,7 @@ export function SectionHeader({
   return (
     <div className={cn("max-w-2xl", className)}>
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-4 text-balance text-3xl font-extrabold leading-[1.4] sm:text-4xl">
+      <h2 className="mt-4 text-balance font-heading text-3xl leading-[1.4] sm:text-4xl">
         {title}
       </h2>
       {description ? (

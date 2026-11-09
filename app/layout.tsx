@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Geist_Mono } from "next/font/google";
+import { Geist_Mono, Lalezar } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SITE_URL } from "@/lib/site";
@@ -17,6 +17,13 @@ const vazirmatn = localFont({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const lalezar = Lalezar({
+  variable: "--font-lalezar",
+  subsets: ["arabic", "latin"],
+  weight: "400",
+  display: "swap",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -54,7 +61,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="fa"
       dir="rtl"
       data-scroll-behavior="smooth"
-      className={cn("h-full antialiased dark font-sans", vazirmatn.variable, geistMono.variable)}
+      className={cn(
+        "h-full antialiased dark font-sans",
+        vazirmatn.variable,
+        lalezar.variable,
+        geistMono.variable,
+      )}
     >
       <body className="flex min-h-full flex-col">
         <AppBackground>{children}</AppBackground>

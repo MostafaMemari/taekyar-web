@@ -27,7 +27,7 @@ function DesktopNavLinkLeaf({ href, label }: { href: string; label: string }) {
       <NavLinkItem
         href={href}
         label={label}
-        className="relative -my-1 rounded-md px-3 py-2 text-[15px] transition-colors duration-200 after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:origin-right after:rounded-full after:bg-primary after:transition-transform after:duration-200"
+        className="relative -my-1 rounded-md px-3 py-2 text-[15px] transition-colors duration-200 after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:origin-right after:rounded-full after:bg-[#E0A800] after:transition-transform after:duration-200"
         activeClassName="font-bold text-foreground after:scale-x-100"
         inactiveClassName="font-medium text-muted-foreground after:scale-x-0 hover:text-foreground hover:after:scale-x-100"
       />
@@ -44,7 +44,7 @@ function NavChildLink({ href, label }: { href: string; label: string }) {
         href={href}
         label={label}
         className="group/item flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-[13px] transition-colors duration-200"
-        activeClassName="bg-primary/[0.07] font-bold text-primary"
+        activeClassName="bg-[#E0A800]/10 font-bold text-[#a37800]"
         inactiveClassName="text-muted-foreground hover:bg-muted hover:text-foreground"
       >
         <ChevronLeft
@@ -52,7 +52,7 @@ function NavChildLink({ href, label }: { href: string; label: string }) {
           className={cn(
             "size-3.5 shrink-0 transition-all duration-200",
             active
-              ? "text-primary opacity-70"
+              ? "text-[#a37800] opacity-70"
               : "translate-x-1 opacity-0 group-focus-visible/item:translate-x-0 group-focus-visible/item:opacity-60 group-hover/item:translate-x-0 group-hover/item:opacity-60"
           )}
         />
@@ -68,7 +68,7 @@ function NavChildrenList({ items }: { items: NavItemView[] }) {
         <li key={child.id}>
           <NavChildLink href={child.href} label={child.title} />
           {child.children.length > 0 ? (
-            <div className="mt-0.5 space-y-0.5 border-s-2 border-primary/20 ps-2">
+            <div className="mt-0.5 space-y-0.5 border-s-2 border-[#E0A800]/25 ps-2">
               <NavChildrenList items={child.children} />
             </div>
           ) : null}
@@ -86,7 +86,7 @@ function DesktopNavDropdown({ item }: { item: NavItemView }) {
     <>
       <NavigationMenuTrigger
         className={cn(
-          "relative -my-1 rounded-md px-3 py-2 text-[15px] transition-colors duration-200 after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:origin-right after:rounded-full after:bg-primary after:transition-transform after:duration-200 after:scale-x-0 hover:after:scale-x-100 data-open:after:scale-x-100",
+          "relative -my-1 rounded-md px-3 py-2 text-[15px] transition-colors duration-200 after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:origin-right after:rounded-full after:bg-[#E0A800] after:transition-transform after:duration-200 after:scale-x-0 hover:after:scale-x-100 data-open:after:scale-x-100",
           active
             ? "font-bold text-foreground after:scale-x-100"
             : "font-medium text-muted-foreground hover:text-foreground"

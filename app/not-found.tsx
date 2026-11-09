@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <Section>
+    <Section className="theme-light">
       <NotFoundContent />
     </Section>
   );

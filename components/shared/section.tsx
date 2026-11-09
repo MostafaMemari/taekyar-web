@@ -7,10 +7,6 @@ const sectionVariants = cva("theme-light relative isolate", {
     tone: {
       default: "text-foreground",
       soft: "border-y border-border/50 bg-muted text-foreground",
-      accent: "border-y border-primary/10 bg-primary/[0.04] text-foreground",
-      contrast: "border-y border-border/50 bg-card text-foreground",
-      hero: "bg-section-glow text-foreground",
-      dark: "border-t border-white/10 bg-[#0b1220] bg-[radial-gradient(ellipse_40rem_20rem_at_50%_-8rem,rgba(37,99,235,0.28),transparent_70%)] text-slate-100",
     },
     spacing: {
       default: "py-12 sm:py-16 lg:py-20",

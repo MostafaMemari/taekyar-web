@@ -45,7 +45,7 @@ export function TaxonomySeoContent({ title, content, imageUrl, imageAlt, placeho
         <h2
           id="taxonomy-seo-heading"
           className={cn(
-            "text-balance text-lg font-black tracking-tight sm:text-xl",
+            "text-balance font-heading text-xl leading-[1.5] sm:text-2xl sm:leading-[1.45]",
             hasMedia && "mt-5 text-center sm:mt-6"
           )}
         >

@@ -73,10 +73,11 @@ async function BlogIndex({ searchParams }: BlogPageProps) {
         </Reveal>
 
         <Reveal delay={80}>
-          <div className="mt-6 flex flex-col gap-3 border-b border-border/60 pb-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pb-5">
+          <div className="mt-7 flex flex-col items-center gap-3">
             <CategoryFilter activeCategory={activeCategory} />
-            <p className="shrink-0 text-xs font-medium text-muted-foreground sm:text-[13px]">
-              <span className="font-bold tabular-nums text-foreground">{toFaDigits(totalCount)}</span> {BLOG_INDEX_LABELS.resultsSuffix}
+            <p className="shrink-0 text-xs font-medium text-black/45 sm:text-[13px]">
+              <span className="font-bold tabular-nums text-[#1b2330]">{toFaDigits(totalCount)}</span>{" "}
+              {BLOG_INDEX_LABELS.resultsSuffix}
               {totalPages > 1 && (
                 <>
                   {" · "}
