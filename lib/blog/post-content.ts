@@ -1,4 +1,4 @@
-import { r2PublicUrl } from "@/lib/r2-url";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 
 export interface TocItem {
   id: string;

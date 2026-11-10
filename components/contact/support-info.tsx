@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BookOpen, ChevronLeft, Clock, Send } from "lucide-react";
 
 import { PRE_CONTACT_TIPS, QUICK_FAQ_LABEL } from "@/data/contact";
-import { getSiteSettings } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site/site-settings";
 import { InstagramIcon, XIcon, YoutubeIcon } from "@/components/shared/icons";
 
 const SOCIAL_ICONS = {

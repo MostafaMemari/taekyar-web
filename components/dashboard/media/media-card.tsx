@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Check } from "lucide-react";
 
-import type { MediaItem } from "@/lib/media";
+import type { MediaItem } from "@/lib/media/media";
 import { cn } from "@/lib/utils";
 
 interface MediaCardProps {

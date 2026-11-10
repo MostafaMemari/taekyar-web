@@ -1,5 +1,5 @@
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
-import type { PostFieldErrors } from "@/lib/admin-types";
+import type { PostFieldErrors } from "@/lib/admin/types";
 import { SeoFieldsGroup } from "@/components/dashboard/shared/seo-fields-group";
 import type { FieldDraft } from "./types";
 

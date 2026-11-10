@@ -18,7 +18,7 @@ import {
   OVERVIEW_STAT_CARDS,
 } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
-import { buildWeeklyActivityBuckets, getActivityWindowStart } from "@/lib/dashboard-activity";
+import { buildWeeklyActivityBuckets, getActivityWindowStart } from "@/lib/dashboard/dashboard-activity";
 import { formatFaDate } from "@/lib/utils";
 
 export default async function DashboardOverviewPage() {

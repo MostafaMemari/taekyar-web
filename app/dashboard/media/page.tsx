@@ -15,7 +15,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { MEDIA_LABELS } from "@/data/dashboard/ui";
-import { getMediaPage } from "@/lib/media-list";
+import { getMediaPage } from "@/lib/media/media-list";
 
 interface MediaPageProps {
   searchParams: Promise<{ q?: string; page?: string }>;

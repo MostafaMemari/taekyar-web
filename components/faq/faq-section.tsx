@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { JsonLd } from "@/components/shared/json-ld";
 import { SectionHeader } from "@/components/shared/section-header";
-import { faqJsonLd, type PublicFaq } from "@/lib/faq";
+import { faqJsonLd, type PublicFaq } from "@/lib/site/faq";
 import { cn } from "@/lib/utils";
 
 interface FaqSectionProps {

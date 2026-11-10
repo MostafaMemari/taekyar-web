@@ -6,7 +6,7 @@ import { AdminBarContextLink } from "@/components/layout/admin-bar-context-link"
 import { ADMIN_BAR_LABELS } from "@/data/layout/admin-bar";
 import { logout } from "@/lib/admin-actions";
 import { resolveAdminBarEditContext } from "@/lib/admin/admin-bar-context";
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/auth";
 import { dashboardHref, PATHNAME_HEADER } from "@/lib/routes";
 
 function AdminBarLink({ href, label, Icon }: { href: string; label: string; Icon: typeof LayoutDashboard }) {

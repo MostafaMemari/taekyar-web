@@ -1,4 +1,4 @@
-import { uniqueSlugCandidate } from "@/lib/slug";
+import { uniqueSlugCandidate } from "@/lib/blog/slug";
 import { prisma } from "@/lib/prisma";
 
 export type SlugModel = "post" | "category" | "tag" | "page";

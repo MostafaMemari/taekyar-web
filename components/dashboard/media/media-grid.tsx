@@ -1,6 +1,6 @@
 "use client";
 
-import type { MediaItem } from "@/lib/media";
+import type { MediaItem } from "@/lib/media/media";
 import { cn } from "@/lib/utils";
 
 import { MediaCard } from "./media-card";

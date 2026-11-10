@@ -2,8 +2,8 @@ import { cache } from "react";
 import type { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
-import type { PostPublishStatus } from "@/lib/admin-types";
-import { parsePostHtml } from "@/lib/post-content";
+import type { PostPublishStatus } from "@/lib/admin/types";
+import { parsePostHtml } from "@/lib/blog/post-content";
 
 export type PageWithSeo = Prisma.PageGetPayload<{ include: { seo: true } }>;
 

@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { saveTaxonomy } from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
-import type { TaxonomyFieldErrors, TaxonomyInput } from "@/lib/admin-types";
+import type { TaxonomyFieldErrors, TaxonomyInput } from "@/lib/admin/types";
 
 export interface CategoryParentOption {
   id: number;

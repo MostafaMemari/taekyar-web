@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldError } from "@/components/shared/form-controls";
 import { FAQ_LABELS } from "@/data/dashboard/faqs";
-import type { FaqFieldErrors, HomepageFaqInput } from "@/lib/admin-types";
+import type { FaqFieldErrors, HomepageFaqInput } from "@/lib/admin/types";
 import { createHomepageFaq, updateHomepageFaq } from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
 

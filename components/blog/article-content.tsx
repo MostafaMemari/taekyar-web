@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
-import { injectHeadingIds } from "@/lib/post-content";
+import { injectHeadingIds } from "@/lib/blog/post-content";
 import { tagHref } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";

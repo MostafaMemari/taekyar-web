@@ -2,8 +2,8 @@ import { cache } from "react";
 
 import { SOCIAL_PLATFORMS, type SocialIconName } from "@/data/socials";
 import { prisma } from "@/lib/prisma";
-import { r2PublicUrl } from "@/lib/r2-url";
-import { FALLBACK_SITE_SETTINGS } from "@/lib/site";
+import { r2PublicUrl } from "@/lib/media/r2-url";
+import { FALLBACK_SITE_SETTINGS } from "@/lib/site/site";
 
 export interface SiteSocialLink {
   label: string;

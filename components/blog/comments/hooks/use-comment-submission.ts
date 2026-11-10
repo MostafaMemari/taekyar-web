@@ -4,13 +4,13 @@ import { useCallback, useState, type FormEvent } from "react";
 
 import { COMMENT_TOAST_MESSAGES } from "@/data/blog/comments";
 import { toast } from "@/hooks/use-toast";
-import { submitComment, type SubmitCommentResult } from "@/lib/comment-actions";
+import { submitComment, type SubmitCommentResult } from "@/lib/comments/comment-actions";
 import {
   EMPTY_COMMENT_DRAFT,
   validateCommentDraft,
   type CommentDraft,
   type CommentDraftErrors,
-} from "@/lib/comment-submission";
+} from "@/lib/comments/comment-submission";
 import { useCommentCaptcha } from "./use-comment-captcha";
 
 interface UseCommentSubmissionOptions {

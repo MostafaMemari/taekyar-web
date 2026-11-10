@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import { toast } from "@/hooks/use-toast";
 import { MEDIA_LABELS, UPLOAD_ERROR_LABELS } from "@/data/dashboard/ui";
 import { uploadImageAction } from "@/lib/admin-actions";
-import { MEDIA_MAX_BYTES } from "@/lib/media";
+import { MEDIA_MAX_BYTES } from "@/lib/media/media";
 import { toPersianDigits } from "@/lib/utils";
 
 type UploadError = "UNSUPPORTED_TYPE" | "FILE_TOO_LARGE" | "UPLOAD_FAILED";

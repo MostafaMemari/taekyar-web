@@ -1,7 +1,7 @@
 import { FaqSection } from "@/components/faq/faq-section";
 import { Section } from "@/components/shared/section";
 import { FAQ_INTRO } from "@/data/home/faq";
-import { getHomepageFaqs } from "@/lib/faq";
+import { getHomepageFaqs } from "@/lib/site/faq";
 
 export async function Faq() {
   const faqs = await getHomepageFaqs();

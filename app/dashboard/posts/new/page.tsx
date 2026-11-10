@@ -1,4 +1,4 @@
-import type { PostInput } from "@/lib/admin-types";
+import type { PostInput } from "@/lib/admin/types";
 import { PostForm } from "@/components/dashboard/posts/post-form";
 import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";

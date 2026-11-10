@@ -9,9 +9,9 @@ import { CATEGORY_PAGE_LABELS } from "@/data/blog/category-page";
 import { archiveJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
 import { getPaginatedPostsByCategory, resolveCategoryPath, getCategoryTree } from "@/lib/blog";
 import type { PublicCategoryNode } from "@/lib/blog/categories";
-import { buildPageMetadata } from "@/lib/seo";
-import { resolveSeo } from "@/lib/seo-resolve";
-import { htmlToPlainText } from "@/lib/post-content";
+import { buildPageMetadata } from "@/lib/seo/seo";
+import { resolveSeo } from "@/lib/seo/seo-resolve";
+import { htmlToPlainText } from "@/lib/blog/post-content";
 import { categoryHref } from "@/lib/routes";
 import { toFaDigits } from "@/lib/utils";
 

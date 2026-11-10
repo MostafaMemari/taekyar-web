@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { MenuItemOption } from "@/lib/admin-types";
+import type { MenuItemOption } from "@/lib/admin/types";
 
 export interface MenuLinkTargets {
   pages: MenuItemOption[];

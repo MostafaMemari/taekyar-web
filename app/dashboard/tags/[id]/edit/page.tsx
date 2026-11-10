@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { TaxonomyForm } from "@/components/dashboard/taxonomy/taxonomy-form";
 import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
-import type { TaxonomyInput } from "@/lib/admin-types";
+import type { TaxonomyInput } from "@/lib/admin/types";
 import { prisma } from "@/lib/prisma";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 
 interface EditTagPageProps {
   params: Promise<{ id: string }>;

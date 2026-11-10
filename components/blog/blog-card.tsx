@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import type { BlogPost } from "@/lib/blog";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 import { postHref } from "@/lib/routes";
 import { cn, formatFaDate, toFaDigits } from "@/lib/utils";
 

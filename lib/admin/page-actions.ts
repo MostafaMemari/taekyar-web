@@ -4,11 +4,11 @@ import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { PAGES_FORM_LABELS } from "@/data/dashboard/ui";
-import type { PageFormState, PageInput } from "@/lib/admin-types";
+import type { PageFormState, PageInput } from "@/lib/admin/types";
 import { prisma } from "@/lib/prisma";
 import { hasSeoData, normalizePageInput, requireSession, revalidatePagePaths } from "./shared";
 import type { NormalizedSeo } from "./shared";
-import { resolveUniqueSlug } from "@/lib/slug-server";
+import { resolveUniqueSlug } from "@/lib/blog/slug-server";
 
 function isSlugConflict(error: unknown): boolean {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002";

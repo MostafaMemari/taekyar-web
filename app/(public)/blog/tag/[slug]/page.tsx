@@ -8,11 +8,11 @@ import { BLOG_PAGINATION } from "@/data/blog/index-page";
 import { TAG_PAGE_LABELS } from "@/data/blog/tag-page";
 import { archiveJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
 import { getPaginatedPostsByTag, getTagBySlug, getTags } from "@/lib/blog";
-import { buildPageMetadata } from "@/lib/seo";
-import { resolveSeo } from "@/lib/seo-resolve";
-import { htmlToPlainText } from "@/lib/post-content";
+import { buildPageMetadata } from "@/lib/seo/seo";
+import { resolveSeo } from "@/lib/seo/seo-resolve";
+import { htmlToPlainText } from "@/lib/blog/post-content";
 import { tagHref } from "@/lib/routes";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME } from "@/lib/site/site";
 import { toFaDigits } from "@/lib/utils";
 
 export const revalidate = 60;

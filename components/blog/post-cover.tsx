@@ -3,7 +3,7 @@ import { Newspaper } from "lucide-react";
 
 import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import type { BlogPost } from "@/lib/blog";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 
 export function PostCover({ post }: { post: BlogPost }) {
   return (

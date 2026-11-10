@@ -1,6 +1,6 @@
-import type { ResolvedSeo, SeoOverrides } from "@/lib/seo";
-import { parseRobotsTags } from "@/lib/seo";
-import { SITE_URL } from "@/lib/site";
+import type { ResolvedSeo, SeoOverrides } from "@/lib/seo/seo";
+import { parseRobotsTags } from "@/lib/seo/seo";
+import { SITE_URL } from "@/lib/site/site";
 
 interface SeoFallbacks {
   title: string;

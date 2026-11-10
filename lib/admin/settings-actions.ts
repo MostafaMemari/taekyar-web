@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { SETTINGS_LABELS } from "@/data/dashboard/settings";
-import type { SiteSettingsFieldErrors, SiteSettingsInput } from "@/lib/admin-types";
+import type { SiteSettingsFieldErrors, SiteSettingsInput } from "@/lib/admin/types";
 import { prisma } from "@/lib/prisma";
 import { requireSession } from "./shared";
 

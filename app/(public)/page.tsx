@@ -12,7 +12,7 @@ import { Checklist } from "@/components/home/checklist/checklist";
 import { Faq } from "@/components/home/faq/faq";
 import { CtaSection } from "@/components/home/cta/cta";
 import { getCategoryTree } from "@/lib/blog";
-import { getSiteSettings } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site/site-settings";
 
 export default async function Home() {
   const settings = await getSiteSettings();

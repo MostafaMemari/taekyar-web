@@ -5,16 +5,16 @@ import { Download, Send } from "lucide-react";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { Button } from "@/components/ui/button";
 import { getCategoryTree } from "@/lib/blog";
-import { getMenuTree } from "@/lib/menu";
+import { getMenuTree } from "@/lib/site/menu";
 import { flattenPublicCategoryTree, type PublicCategoryNode } from "@/lib/blog/categories";
 import { categoryHref } from "@/lib/routes";
 import { FOOTER_BLURB, FOOTER_COPYRIGHT, FOOTER_SUGGESTED_PHRASES } from "@/data/layout/footer";
 import { navLinks } from "@/data/layout/navigation";
-import { getSiteSettings } from "@/lib/site-settings";
-import { getPublishedPageBySlug } from "@/lib/pages";
+import { getSiteSettings } from "@/lib/site/site-settings";
+import { getPublishedPageBySlug } from "@/lib/site/pages";
 import { pageHref } from "@/lib/routes";
 import { InstagramIcon, XIcon, YoutubeIcon } from "@/components/shared/icons";
-import type { MenuItemNode } from "@/lib/menu";
+import type { MenuItemNode } from "@/lib/site/menu";
 
 const SOCIAL_ICONS = {
   instagram: InstagramIcon,

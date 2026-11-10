@@ -5,7 +5,7 @@ import { ArrowLeft, Newspaper } from "lucide-react";
 import { Section } from "@/components/shared/section";
 import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import { getBlogPosts } from "@/lib/blog";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 import { postHref } from "@/lib/routes";
 import { formatFaDate } from "@/lib/utils";
 import { BLOG_SECTION } from "@/data/home/landing";

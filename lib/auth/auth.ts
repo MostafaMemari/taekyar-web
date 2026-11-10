@@ -7,7 +7,7 @@ import {
   createSessionToken,
   verifySessionToken,
   type SessionPayload,
-} from "@/lib/session";
+} from "@/lib/auth/session";
 
 export async function startSession(username: string): Promise<void> {
   const cookieStore = await cookies();

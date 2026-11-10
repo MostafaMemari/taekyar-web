@@ -1,7 +1,7 @@
 import type { BlogPost } from "./types";
 import { postHref } from "@/lib/routes";
-import { r2PublicUrl } from "@/lib/r2-url";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { r2PublicUrl } from "@/lib/media/r2-url";
+import { SITE_NAME, SITE_URL } from "@/lib/site/site";
 
 export interface BreadcrumbEntry {
   name: string;

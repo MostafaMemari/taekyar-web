@@ -1,7 +1,7 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { FAQ_LABELS, POST_FORM_LABELS, PAGES_FORM_LABELS, TAXONOMY_LABELS } from "@/data/dashboard/ui";
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/auth";
 import type {
   FaqFieldErrors,
   FaqInput,
@@ -12,9 +12,9 @@ import type {
   PostPublishStatus,
   TaxonomyFieldErrors,
   TaxonomyInput,
-} from "@/lib/admin-types";
-import { resolveSlug } from "@/lib/slug";
-import { sanitizePostHtml } from "@/lib/post-content";
+} from "@/lib/admin/types";
+import { resolveSlug } from "@/lib/blog/slug";
+import { sanitizePostHtml } from "@/lib/blog/post-content";
 
 export async function requireSession() {
   const session = await getSession();

@@ -4,8 +4,8 @@ import type { LucideIcon } from "lucide-react";
 import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { parsePostHtml, sanitizePostHtml } from "@/lib/post-content";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { parsePostHtml, sanitizePostHtml } from "@/lib/blog/post-content";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 
 interface TaxonomySeoContentProps {
   title: string;

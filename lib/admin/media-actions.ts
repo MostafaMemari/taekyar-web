@@ -1,9 +1,9 @@
 "use server";
 
-import { isMediaKey } from "@/lib/media";
-import type { MediaPage } from "@/lib/media-list";
-import { getMediaPage } from "@/lib/media-list";
-import { deleteImage } from "@/lib/r2";
+import { isMediaKey } from "@/lib/media/media";
+import type { MediaPage } from "@/lib/media/media-list";
+import { getMediaPage } from "@/lib/media/media-list";
+import { deleteImage } from "@/lib/media/r2";
 import { requireSession, revalidateMedia } from "./shared";
 
 export async function listMediaAction(

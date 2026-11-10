@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { getSiteSettings } from "@/lib/site-settings";
-import { r2PublicUrl } from "@/lib/r2-url";
-import { composeRobotsTags, parseRobotsUiState } from "@/lib/seo-robots";
+import { getSiteSettings } from "@/lib/site/site-settings";
+import { r2PublicUrl } from "@/lib/media/r2-url";
+import { composeRobotsTags, parseRobotsUiState } from "@/lib/seo/seo-robots";
 
 export interface SeoOverrides {
   seoTitle?: string | null;

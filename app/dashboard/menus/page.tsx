@@ -5,7 +5,7 @@ import { MENUS_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
 import { getMenuItemTargets } from "@/lib/admin/menu-targets";
 import { MenuManager } from "@/components/dashboard/menus/menu-manager";
-import type { MenuItemTypeDto, MenuLocationDto } from "@/lib/admin-types";
+import type { MenuItemTypeDto, MenuLocationDto } from "@/lib/admin/types";
 import { cn } from "@/lib/utils";
 
 export const metadata = { title: MENUS_LABELS.title };

@@ -6,7 +6,7 @@ import type {
   MenuItemFieldErrors,
   MenuItemFormState,
   MenuItemInput,
-} from "@/lib/admin-types";
+} from "@/lib/admin/types";
 import { prisma } from "@/lib/prisma";
 import { requireSession } from "./shared";
 

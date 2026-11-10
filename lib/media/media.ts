@@ -1,4 +1,4 @@
-import type { R2Object } from "@/lib/r2";
+import type { R2Object } from "@/lib/media/r2";
 import { toPersianDigits } from "@/lib/utils";
 
 export const MEDIA_PREFIX = "uploads/";

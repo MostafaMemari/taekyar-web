@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 
-import type { PostInput } from "@/lib/admin-types";
+import type { PostInput } from "@/lib/admin/types";
 import { PostForm } from "@/components/dashboard/posts/post-form";
 import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
 import { getCategories, getPostBySlugForAdmin, getTags } from "@/lib/blog";
 import { toCategorySelectOptions } from "@/lib/blog/categories";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 
 export const dynamic = "force-dynamic";
 

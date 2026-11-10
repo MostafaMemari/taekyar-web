@@ -21,7 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldError } from "@/components/shared/form-controls";
 import { POST_FAQ_LABELS } from "@/data/dashboard/faqs";
-import type { FaqInput } from "@/lib/admin-types";
+import type { FaqInput } from "@/lib/admin/types";
 import { savePostFaqs } from "@/lib/admin-actions";
 import { cn } from "@/lib/utils";
 

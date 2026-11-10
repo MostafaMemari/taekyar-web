@@ -4,7 +4,7 @@ import {
   FieldLabel,
   getAriaProps,
 } from "@/components/shared/form-controls";
-import type { CommentDraft, CommentDraftErrors } from "@/lib/comment-submission";
+import type { CommentDraft, CommentDraftErrors } from "@/lib/comments/comment-submission";
 
 interface CommentDraftFieldsProps {
   idPrefix: string;

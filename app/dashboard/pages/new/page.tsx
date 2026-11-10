@@ -1,4 +1,4 @@
-import type { PageInput } from "@/lib/admin-types";
+import type { PageInput } from "@/lib/admin/types";
 import { PageForm } from "@/components/dashboard/pages/page-form";
 import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { PAGES_FORM_LABELS } from "@/data/dashboard/ui";

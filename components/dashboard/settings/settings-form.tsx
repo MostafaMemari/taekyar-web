@@ -12,8 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SETTINGS_LABELS } from "@/data/dashboard/settings";
 import { saveSiteSettings } from "@/lib/admin-actions";
-import type { SiteSettingsFieldErrors, SiteSettingsInput } from "@/lib/admin-types";
-import { IMAGE_REMOVE_BUTTON } from "@/lib/styles";
+import type { SiteSettingsFieldErrors, SiteSettingsInput } from "@/lib/admin/types";
+import { IMAGE_REMOVE_BUTTON } from "@/lib/dashboard/styles";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 

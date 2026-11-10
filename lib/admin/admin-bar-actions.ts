@@ -1,6 +1,6 @@
 "use server";
 
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/auth";
 import { resolveAdminBarEditContext } from "./admin-bar-context";
 
 export async function getAdminBarEditContext(pathname: string): Promise<Awaited<ReturnType<typeof resolveAdminBarEditContext>>> {

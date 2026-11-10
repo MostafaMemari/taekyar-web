@@ -23,7 +23,7 @@ import { Label } from "@/components/ui/label";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MEDIA_LABELS, POST_FORM_LABELS } from "@/data/dashboard/ui";
-import type { MediaPage } from "@/lib/media-list";
+import type { MediaPage } from "@/lib/media/media-list";
 import { cn, getPageItems, toPersianDigits } from "@/lib/utils";
 
 export interface MediaPickerSelection {

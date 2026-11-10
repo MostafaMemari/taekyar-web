@@ -16,10 +16,10 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { Section } from "@/components/shared/section";
 import { getPostComments, getBlogPosts, getPostBySlug, getCategoryAncestorsByPath } from "@/lib/blog";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
-import { getHeadings } from "@/lib/post-content";
-import { getRelatedPosts } from "@/lib/blog-related";
-import { buildPageMetadata } from "@/lib/seo";
-import { resolveSeo } from "@/lib/seo-resolve";
+import { getHeadings } from "@/lib/blog/post-content";
+import { getRelatedPosts } from "@/lib/blog/related";
+import { buildPageMetadata } from "@/lib/seo/seo";
+import { resolveSeo } from "@/lib/seo/seo-resolve";
 import { categoryHref, postHref } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 

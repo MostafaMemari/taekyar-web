@@ -11,7 +11,7 @@ import {
 import { DeleteTaxonomyButton } from "@/components/dashboard/taxonomy/delete-taxonomy-button";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { buildCategoryTree, flattenCategoryTree } from "@/lib/blog/categories";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 import { categoryHref, tagHref } from "@/lib/routes";
 import { toFaDigits } from "@/lib/utils";
 

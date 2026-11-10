@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldError } from "@/components/shared/form-controls";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
-import type { PostFieldErrors } from "@/lib/admin-types";
+import type { PostFieldErrors } from "@/lib/admin/types";
 import type { FieldDraft } from "./types";
 
 interface MainInfoFieldsProps {

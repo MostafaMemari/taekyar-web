@@ -1,7 +1,7 @@
 "use server";
 
-import { uploadImage } from "@/lib/r2";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { uploadImage } from "@/lib/media/r2";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 import { requireSession } from "./shared";
 
 export async function uploadImageAction(

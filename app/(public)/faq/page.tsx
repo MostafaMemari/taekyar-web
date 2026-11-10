@@ -13,7 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { getHomepageFaqs } from "@/lib/faq";
+import { getHomepageFaqs } from "@/lib/site/faq";
 import { FAQ_INTRO, CONTACT_CARD } from "@/data/home/faq";
 
 export const metadata: Metadata = {

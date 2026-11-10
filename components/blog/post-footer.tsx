@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, MessageCircle, PenLine, Send } from "lucide-react";
 
 import { POST_LABELS } from "@/data/blog/post-config";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/lib/site/site";
 import { postHref } from "@/lib/routes";
 
 export function PostFooter({ slug, title }: { slug: string; title: string }) {

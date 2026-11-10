@@ -5,9 +5,9 @@ import { Header } from "@/components/layout/header/header";
 import { ScrollReset } from "@/components/layout/scroll-reset";
 import { ReadingProgress } from "@/components/shared/reading-progress";
 import { Toaster } from "@/components/ui/toast";
-import { getMenuTree } from "@/lib/menu";
+import { getMenuTree } from "@/lib/site/menu";
 import { MOBILE_NAV_FALLBACK } from "@/data/layout/navigation";
-import { getSiteSettings } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site/site-settings";
 
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
   const [settings, desktopItems, mobileItems] = await Promise.all([

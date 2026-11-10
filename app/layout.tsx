@@ -3,8 +3,8 @@ import localFont from "next/font/local";
 import { Geist_Mono, Lalezar } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { SITE_URL } from "@/lib/site";
-import { getSiteSettings } from "@/lib/site-settings";
+import { SITE_URL } from "@/lib/site/site";
+import { getSiteSettings } from "@/lib/site/site-settings";
 import { AppBackground } from "@/components/shared/app-background";
 
 const vazirmatn = localFont({

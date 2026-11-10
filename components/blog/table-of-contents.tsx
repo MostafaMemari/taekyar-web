@@ -2,9 +2,9 @@
 
 import { List } from "lucide-react";
 
-import { useActiveHeading } from "@/components/blog/hooks/use-active-heading";
+import { useActiveHeading } from "@/hooks/use-active-heading";
 import { POST_LABELS } from "@/data/blog/post-config";
-import type { TocItem } from "@/lib/post-content";
+import type { TocItem } from "@/lib/blog/post-content";
 import { cn, toFaDigits } from "@/lib/utils";
 
 interface TableOfContentsProps {

@@ -7,13 +7,13 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { getPublishedPageBySlug, pageMetaDescriptionFallback } from "@/lib/pages";
-import { parsePostHtml } from "@/lib/post-content";
-import { buildPageMetadata } from "@/lib/seo";
-import { resolveSeo } from "@/lib/seo-resolve";
+import { getPublishedPageBySlug, pageMetaDescriptionFallback } from "@/lib/site/pages";
+import { parsePostHtml } from "@/lib/blog/post-content";
+import { buildPageMetadata } from "@/lib/seo/seo";
+import { resolveSeo } from "@/lib/seo/seo-resolve";
 import { pageHref } from "@/lib/routes";
-import { r2PublicUrl } from "@/lib/r2-url";
-import { SITE_NAME } from "@/lib/site";
+import { r2PublicUrl } from "@/lib/media/r2-url";
+import { SITE_NAME } from "@/lib/site/site";
 
 interface StaticPageProps {
   params: Promise<{ slug: string }>;

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { MEDIA_LABELS } from "@/data/dashboard/ui";
-import type { MediaItem } from "@/lib/media";
+import type { MediaItem } from "@/lib/media/media";
 
 import { MediaDetailsPanel } from "./media-details-panel";
 import { MediaGrid } from "./media-grid";

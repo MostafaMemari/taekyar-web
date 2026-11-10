@@ -1,8 +1,8 @@
 import { TRAINING_GUIDE_SLUGS } from "@/data/blog/post-config";
 import { getBlogPosts, getCategoryTree } from "@/lib/blog";
 import { categoryHref, postHref } from "@/lib/routes";
-import { SITE_URL } from "@/lib/site";
-import { getSiteSettings } from "@/lib/site-settings";
+import { SITE_URL } from "@/lib/site/site";
+import { getSiteSettings } from "@/lib/site/site-settings";
 
 const RECENT_POSTS_COUNT = 10;
 

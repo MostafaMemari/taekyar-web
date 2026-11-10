@@ -2,9 +2,9 @@ import { DashboardSidebar } from "@/components/dashboard/layout/dashboard-sideba
 import { DashboardTopbar } from "@/components/dashboard/layout/dashboard-topbar";
 import { Toaster } from "@/components/ui/toast";
 import { DASHBOARD_LABELS } from "@/data/dashboard/ui";
-import { requireAdmin } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
-import { getSiteSettings } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site/site-settings";
 
 export const dynamic = "force-dynamic";
 

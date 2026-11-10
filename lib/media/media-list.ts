@@ -1,6 +1,6 @@
-import { MEDIA_PREFIX, toMediaItem, type MediaItem } from "@/lib/media";
-import { listObjects, type R2Object } from "@/lib/r2";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { MEDIA_PREFIX, toMediaItem, type MediaItem } from "@/lib/media/media";
+import { listObjects, type R2Object } from "@/lib/media/r2";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 
 export const MEDIA_PAGE_SIZE = 24;
 

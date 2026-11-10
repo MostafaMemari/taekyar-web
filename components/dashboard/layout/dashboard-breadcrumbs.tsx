@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { BreadcrumbSeparatorIcon } from "@/components/dashboard/shared/directional-icons";
 import { DASHBOARD_LABELS } from "@/data/dashboard/ui";
-import { resolveDashboardCrumbs } from "@/lib/dashboard-navigation";
+import { resolveDashboardCrumbs } from "@/lib/dashboard/dashboard-navigation";
 import { cn } from "@/lib/utils";
 
 interface DashboardBreadcrumbsProps {

@@ -1,6 +1,6 @@
 import { AwsClient } from "aws4fetch";
 
-import { MEDIA_MAX_BYTES } from "@/lib/media";
+import { MEDIA_MAX_BYTES } from "@/lib/media/media";
 
 const ALLOWED_IMAGE_TYPES: Record<string, string> = {
   "image/jpeg": "jpg",

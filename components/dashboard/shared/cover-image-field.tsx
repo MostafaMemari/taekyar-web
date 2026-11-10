@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
-import { IMAGE_REMOVE_BUTTON } from "@/lib/styles";
+import { IMAGE_REMOVE_BUTTON } from "@/lib/dashboard/styles";
 import { cn } from "@/lib/utils";
 
 export interface CoverImageValue {

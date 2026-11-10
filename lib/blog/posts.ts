@@ -2,8 +2,8 @@ import { cache } from "react";
 
 import { prisma } from "@/lib/prisma";
 import type { BlogCategoryName } from "@/data/blog/categories";
-import type { PostPublishStatus } from "@/lib/admin-types";
-import { parsePostHtml } from "@/lib/post-content";
+import type { PostPublishStatus } from "@/lib/admin/types";
+import { parsePostHtml } from "@/lib/blog/post-content";
 import { POST_INCLUDE, toPostRows, toBlogPost } from "./types";
 import type { BlogPost, PostWithContent } from "./types";
 

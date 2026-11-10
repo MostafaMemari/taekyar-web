@@ -8,7 +8,7 @@ import { ROW_ACTION_DESTRUCTIVE_CLASS, RowActionButton } from "@/components/dash
 import { Button } from "@/components/ui/button";
 import { COMMENTS_ADMIN_LABELS } from "@/data/dashboard/ui";
 import { deleteComment, setCommentStatus } from "@/lib/admin-actions";
-import type { CommentStatus } from "@/lib/admin-types";
+import type { CommentStatus } from "@/lib/admin/types";
 import { toast } from "@/hooks/use-toast";
 
 interface CommentActionsProps {

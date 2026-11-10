@@ -8,7 +8,7 @@ import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
 import { resolveCommentTone, StatusBadge } from "@/components/dashboard/shared/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import type { CommentStatus } from "@/lib/admin-types";
+import type { CommentStatus } from "@/lib/admin/types";
 import { COMMENT_STATUS_META, COMMENTS_ADMIN_LABELS } from "@/data/dashboard/ui";
 import { prisma } from "@/lib/prisma";
 import { cn, formatFaDate, toFaDigits } from "@/lib/utils";

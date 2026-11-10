@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 
-import type { PageInput } from "@/lib/admin-types";
+import type { PageInput } from "@/lib/admin/types";
 import { PageForm } from "@/components/dashboard/pages/page-form";
 import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { PAGES_FORM_LABELS } from "@/data/dashboard/ui";
-import { getPageBySlugForAdmin } from "@/lib/pages";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { getPageBySlugForAdmin } from "@/lib/site/pages";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 
 export const dynamic = "force-dynamic";
 

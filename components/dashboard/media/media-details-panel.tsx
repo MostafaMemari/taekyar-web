@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MEDIA_LABELS } from "@/data/dashboard/ui";
 import { toast } from "@/hooks/use-toast";
-import type { MediaItem } from "@/lib/media";
+import type { MediaItem } from "@/lib/media/media";
 import { cn, toPersianDigits } from "@/lib/utils";
 
 import { DeleteMediaButton } from "./delete-media-button";

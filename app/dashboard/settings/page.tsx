@@ -1,7 +1,7 @@
 import { SettingsForm } from "@/components/dashboard/settings/settings-form";
 import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { SETTINGS_LABELS } from "@/data/dashboard/settings";
-import { getSiteSettings } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site/site-settings";
 
 export const dynamic = "force-dynamic";
 

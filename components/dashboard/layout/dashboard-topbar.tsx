@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { DASHBOARD_LABELS } from "@/data/dashboard/ui";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { resolveDashboardTitle } from "@/lib/dashboard-navigation";
+import { resolveDashboardTitle } from "@/lib/dashboard/dashboard-navigation";
 import { toFaDigits } from "@/lib/utils";
 
 interface DashboardTopbarProps {

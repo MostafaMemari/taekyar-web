@@ -1,7 +1,7 @@
 "use server";
 
 import { FAQ_LABELS } from "@/data/dashboard/ui";
-import type { FaqFormState, FaqInput, HomepageFaqInput } from "@/lib/admin-types";
+import type { FaqFormState, FaqInput, HomepageFaqInput } from "@/lib/admin/types";
 import { prisma } from "@/lib/prisma";
 import { normalizeFaqInput, normalizePostFaqs, requireSession, revalidateFaqPaths } from "./shared";
 

@@ -12,7 +12,7 @@ import {
   parseRobotsUiState,
   type RobotsUiState,
   type RobotsValueState,
-} from "@/lib/seo-robots";
+} from "@/lib/seo/seo-robots";
 
 interface RobotsFieldsProps {
   idPrefix: string;

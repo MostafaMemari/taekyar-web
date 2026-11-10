@@ -3,10 +3,10 @@
 import { Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
-import type { TaxonomyFormState, TaxonomyInput } from "@/lib/admin-types";
+import type { TaxonomyFormState, TaxonomyInput } from "@/lib/admin/types";
 import { prisma } from "@/lib/prisma";
-import { deleteImage } from "@/lib/r2";
-import { resolveUniqueSlug } from "@/lib/slug-server";
+import { deleteImage } from "@/lib/media/r2";
+import { resolveUniqueSlug } from "@/lib/blog/slug-server";
 import type { NormalizedTaxonomy } from "./shared";
 import { normalizeTaxonomyInput, hasSeoData, requireSession, revalidateTaxonomy } from "./shared";
 import type { NormalizedSeo } from "./shared";

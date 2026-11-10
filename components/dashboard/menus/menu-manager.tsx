@@ -26,7 +26,7 @@ import type {
   MenuItemRowDto,
   MenuItemTypeDto,
   MenuLocationDto,
-} from "@/lib/admin-types";
+} from "@/lib/admin/types";
 import type { MenuLinkTargets } from "@/lib/admin/menu-targets";
 import { toast } from "@/hooks/use-toast";
 
