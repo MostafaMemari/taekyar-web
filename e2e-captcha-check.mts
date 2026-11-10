@@ -1,12 +1,25 @@
 import { createHash } from "node:crypto";
-import Redis from "ioredis";
+import { registerHooks } from "node:module";
+
+registerHooks({
+  resolve(specifier, context, nextResolve) {
+    try {
+      return nextResolve(specifier, context);
+    } catch (error) {
+      if (specifier.startsWith("./") || specifier.startsWith("../")) {
+        return nextResolve(`${specifier}.ts`, context);
+      }
+      throw error;
+    }
+  },
+});
+
+const { prisma } = await import("./lib/prisma.ts");
 
 const BASE_A = "http://localhost:3100";
 const BASE_B = "http://localhost:3101";
 const FA = "۰۱۲۳۴۵۶۷۸۹";
 const PEPPER = process.env.COMMENT_IP_PEPPER ?? "taekyar-comment-ip-pepper";
-
-const redis = new Redis(process.env.REDIS_URL);
 
 function extractActionFields(html: string) {
   const decode = (s: string) => s.replaceAll("&quot;", '"').replaceAll("&amp;", "&");
@@ -27,15 +40,17 @@ async function fetchCaptcha(base: string) {
   return { sessionToken: decodeURIComponent(cookie.split(";")[0].split("=")[1]), contentType, svg };
 }
 
-async function solveFromRedis(sessionToken: string): Promise<string> {
-  const raw = await redis.get(`captcha:challenge:${sessionToken}`);
-  if (!raw) throw new Error("challenge not in redis");
-  const { id, answerHash } = JSON.parse(raw) as { id: string; answerHash: string };
-  const target = (latin: string) => createHash("sha256").update(`${latin}${id}${PEPPER}`).digest("hex");
+async function solveFromDb(sessionToken: string): Promise<string> {
+  const row = await prisma.captchaChallenge.findUnique({
+    where: { sessionToken },
+    select: { challengeId: true, answerHash: true },
+  });
+  if (!row) throw new Error("challenge not in db");
+  const target = (latin: string) => createHash("sha256").update(`${latin}${row.challengeId}${PEPPER}`).digest("hex");
   for (let len = 4; len <= 5; len += 1) {
     for (let n = 0; n < 10 ** len; n += 1) {
       const latin = String(n).padStart(len, "0");
-      if (target(latin) === answerHash) {
+      if (target(latin) === row.answerHash) {
         return latin.split("").map((d) => FA[Number(d)]).join("");
       }
     }
@@ -73,10 +88,10 @@ const wrongResult = await submitLogin(BASE_B, wrong.sessionToken, "۱۱۱۱");
 console.log("2) cross-instance WRONG answer  ->", JSON.stringify(wrongResult));
 
 const good = await fetchCaptcha(BASE_A);
-const answer = await solveFromRedis(good.sessionToken);
-console.log("3) solved answer from redis:", answer);
+const answer = await solveFromDb(good.sessionToken);
+console.log("3) solved answer from db:", answer);
 const goodResult = await submitLogin(BASE_B, good.sessionToken, answer);
 console.log("4) cross-instance CORRECT answer ->", JSON.stringify(goodResult));
 
-await redis.quit();
+await prisma.$disconnect();
 process.exit(goodResult.redirected ? 0 : 1);

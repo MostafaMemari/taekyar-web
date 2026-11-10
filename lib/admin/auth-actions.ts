@@ -2,12 +2,12 @@
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { CAPTCHA_SESSION_COOKIE, verifyCaptchaAnswer } from "@/lib/captcha";
-import { getClientIp, hashClientIp } from "@/lib/comment-security";
-import { endSession, startSession } from "@/lib/auth";
-import type { LoginState } from "@/lib/admin-types";
+import { CAPTCHA_SESSION_COOKIE, verifyCaptchaAnswer } from "@/lib/captcha/captcha";
+import { getClientIp, hashClientIp } from "@/lib/comments/comment-security";
+import { endSession, startSession } from "@/lib/auth/auth";
+import type { LoginState } from "@/lib/admin/types";
 import { prisma } from "@/lib/prisma";
-import { verifyPassword } from "@/lib/session";
+import { verifyPassword } from "@/lib/auth/session";
 
 export async function login(_previousState: LoginState, formData: FormData): Promise<LoginState> {
   const username = String(formData.get("username") ?? "").trim();

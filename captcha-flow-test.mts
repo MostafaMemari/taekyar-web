@@ -14,9 +14,9 @@ registerHooks({
 });
 
 const { createCaptchaChallenge, createCaptchaSessionToken, hashCaptchaAnswer, verifyCaptchaAnswer } = await import(
-  "./lib/captcha.ts"
+  "./lib/captcha/captcha.ts"
 );
-const { redis } = await import("./lib/redis.ts");
+const { prisma } = await import("./lib/prisma.ts");
 
 const FA = "۰۱۲۳۴۵۶۷۸۹";
 const ANSWER_FA = "۷۳۹۴";
@@ -33,7 +33,13 @@ const IP_A = "hash-a";
 const IP_B = "hash-b";
 const TTL_SECONDS = 2;
 
-const freshSession = (): string => createCaptchaSessionToken();
+const mintedSessions = new Set<string>();
+
+const freshSession = (): string => {
+  const token = createCaptchaSessionToken();
+  mintedSessions.add(token);
+  return token;
+};
 
 async function mint(sessionToken: string, ipHash: string | null = IP_A) {
   return createCaptchaChallenge({ sessionToken, ipHash, ttlSeconds: TTL_SECONDS });
@@ -141,6 +147,7 @@ check(
   false,
 );
 
-await redis.quit();
+await prisma.captchaChallenge.deleteMany({ where: { sessionToken: { in: [...mintedSessions] } } });
+await prisma.$disconnect();
 console.log(failures === 0 ? "ALL TESTS PASSED" : `${failures} FAILURE(S)`);
 process.exit(failures === 0 ? 0 : 1);

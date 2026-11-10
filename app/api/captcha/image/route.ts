@@ -5,9 +5,9 @@ import {
   captchaSessionMaxAge,
   createCaptchaChallenge,
   createCaptchaSessionToken,
-} from "@/lib/captcha";
-import { isGenerationRateLimited } from "@/lib/captcha-rate-limit";
-import { getClientIp, hashClientIp } from "@/lib/comment-security";
+} from "@/lib/captcha/captcha";
+import { isGenerationRateLimited } from "@/lib/captcha/captcha-rate-limit";
+import { getClientIp, hashClientIp } from "@/lib/comments/comment-security";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

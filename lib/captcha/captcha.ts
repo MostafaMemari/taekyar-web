@@ -3,7 +3,8 @@ import { existsSync } from "fs";
 import { join } from "path";
 import { create, loadFont } from "svg-captcha";
 
-import { redis } from "./redis";
+import { prisma } from "../prisma";
+import { cleanupExpiredRateLimits } from "./rate-limit";
 
 export const CAPTCHA_SESSION_COOKIE = "tc_captcha";
 
@@ -15,8 +16,6 @@ const DIGIT_COUNT_MAX = 5;
 
 const FA_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
 const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
-
-const CHALLENGE_KEY_PREFIX = "captcha:challenge:";
 
 const IMAGE_WIDTH = 200;
 const IMAGE_HEIGHT = 72;
@@ -30,12 +29,6 @@ export interface CaptchaChallengeResult {
   id: string;
   svg: string;
   text: string;
-}
-
-interface StoredChallenge {
-  id: string;
-  answerHash: string;
-  ipHash: string | null;
 }
 
 function pepper(): string {
@@ -91,18 +84,32 @@ export async function createCaptchaChallenge(params: {
   });
 
   const id = randomBytes(16).toString("base64url");
-  const challenge: StoredChallenge = {
-    id,
-    answerHash: hashCaptchaAnswer(text, id),
-    ipHash: params.ipHash,
-  };
+  const ttlSeconds = params.ttlSeconds ?? CAPTCHA_TTL_SECONDS;
+  const expiresAt = new Date(Date.now() + ttlSeconds * 1000);
+  const answerHash = hashCaptchaAnswer(text, id);
 
-  await redis.set(
-    CHALLENGE_KEY_PREFIX + params.sessionToken,
-    JSON.stringify(challenge),
-    "EX",
-    params.ttlSeconds ?? CAPTCHA_TTL_SECONDS,
-  );
+  await prisma.captchaChallenge.upsert({
+    where: { sessionToken: params.sessionToken },
+    create: {
+      sessionToken: params.sessionToken,
+      challengeId: id,
+      answerHash,
+      ipHash: params.ipHash,
+      expiresAt,
+    },
+    update: {
+      challengeId: id,
+      answerHash,
+      ipHash: params.ipHash,
+      expiresAt,
+      usedAt: null,
+    },
+  });
+
+  await Promise.all([
+    prisma.captchaChallenge.deleteMany({ where: { expiresAt: { lt: new Date() } } }),
+    cleanupExpiredRateLimits(),
+  ]);
 
   return { id, svg, text };
 }
@@ -114,10 +121,20 @@ export async function verifyCaptchaAnswer(params: {
 }): Promise<CaptchaVerifyResult> {
   if (!params.sessionToken) return "expired";
 
-  const raw = await redis.getdel(CHALLENGE_KEY_PREFIX + params.sessionToken);
-  if (!raw) return "expired";
+  const consumed = await prisma.captchaChallenge.updateMany({
+    where: {
+      sessionToken: params.sessionToken,
+      usedAt: null,
+      expiresAt: { gt: new Date() },
+    },
+    data: { usedAt: new Date() },
+  });
+  if (consumed.count === 0) return "expired";
 
-  const challenge = JSON.parse(raw) as StoredChallenge;
+  const challenge = await prisma.captchaChallenge.findUnique({
+    where: { sessionToken: params.sessionToken },
+  });
+  if (!challenge) return "expired";
   if (challenge.ipHash !== params.ipHash) return "expired";
 
   const normalized = normalizeDigits(params.answer.trim());
@@ -128,5 +145,5 @@ export async function verifyCaptchaAnswer(params: {
 
   if (!wellFormed) return "wrong";
 
-  return hashesMatch(hashCaptchaAnswer(normalized, challenge.id), challenge.answerHash) ? "ok" : "wrong";
+  return hashesMatch(hashCaptchaAnswer(normalized, challenge.challengeId), challenge.answerHash) ? "ok" : "wrong";
 }
