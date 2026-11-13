@@ -6,7 +6,7 @@ const sectionVariants = cva("theme-light relative isolate", {
   variants: {
     tone: {
       default: "text-foreground",
-      soft: "border-y border-border/50 bg-muted text-foreground",
+      soft: "border-y border-[#E0A800]/15 bg-[#E0A800]/[0.05] text-foreground",
     },
     spacing: {
       default: "py-12 sm:py-16 lg:py-20",

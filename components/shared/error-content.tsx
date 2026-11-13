@@ -29,7 +29,7 @@ export function ErrorContent({
         <TriangleAlert className="size-7 sm:size-8" aria-hidden="true" />
       </span>
       <BeltDivider variant="pill" className="mt-5 h-1 w-16 sm:w-20" />
-      <h1 className="mt-5 text-balance text-xl font-black leading-[1.6] tracking-tight sm:text-2xl">
+      <h1 className="mt-5 text-balance font-heading text-2xl leading-[1.5] tracking-tight sm:text-3xl">
         {title}
       </h1>
       <p className="mt-2.5 max-w-sm text-pretty text-sm leading-7 text-muted-foreground">{description}</p>

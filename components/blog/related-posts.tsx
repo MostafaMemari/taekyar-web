@@ -53,7 +53,7 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
     <section aria-labelledby="related-posts-title">
       <div className="border-b border-border/60 pb-4 sm:pb-5">
         <Eyebrow>{POST_LABELS.relatedEyebrow}</Eyebrow>
-        <h2 id="related-posts-title" className="mt-3 text-[1.25rem] font-black leading-tight sm:text-2xl">
+        <h2 id="related-posts-title" className="mt-3 font-heading text-[1.25rem] leading-snug sm:text-2xl">
           {POST_LABELS.relatedTitle}
         </h2>
       </div>

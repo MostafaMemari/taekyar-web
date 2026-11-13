@@ -45,7 +45,7 @@ export default function LoginPage() {
                   <Shield className="size-3.5" aria-hidden="true" />
                   پیشخوان مدیریت
                 </p>
-                <h2 className="mt-4 text-balance font-sans text-[22px] font-black leading-8 text-card-foreground">
+                <h2 className="mt-4 text-balance font-heading text-[22px] leading-8 text-card-foreground">
                   همراه مطمئن
                   <br />
                   مدیریت محتوا
@@ -79,7 +79,7 @@ export default function LoginPage() {
             </div>
 
             <div className="mt-6 lg:mt-2">
-              <h1 className="font-sans text-[20px] font-black tracking-tight text-card-foreground sm:text-[22px]">{LOGIN_LABELS.title}</h1>
+              <h1 className="font-heading text-[22px] tracking-tight text-card-foreground sm:text-2xl">{LOGIN_LABELS.title}</h1>
               <p className="mt-2 font-sans text-[13px] leading-6 text-muted-foreground">{LOGIN_LABELS.description}</p>
             </div>
 

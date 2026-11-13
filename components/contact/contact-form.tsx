@@ -134,7 +134,7 @@ export function ContactForm() {
         <SubmissionSuccess onReset={handleReset} />
       ) : (
         <>
-          <h2 className="text-lg font-extrabold sm:text-xl">{FORM_LABELS.legend}</h2>
+          <h2 className="font-heading text-xl leading-snug sm:text-2xl">{FORM_LABELS.legend}</h2>
 
           <form noValidate onSubmit={handleSubmit} className="mt-6 space-y-5">
             <div className="grid gap-5 sm:grid-cols-2">

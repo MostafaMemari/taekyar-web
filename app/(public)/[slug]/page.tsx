@@ -76,7 +76,7 @@ export default async function StaticPage({ params }: StaticPageProps) {
         <Reveal>
           <div className="mx-auto max-w-3xl">
             <header className="border-b border-border/60 pb-5 sm:pb-6">
-              <h1 className="text-balance text-[1.65rem] font-black leading-[1.35] tracking-tight sm:text-[2rem] sm:leading-[1.35] lg:text-[2.35rem]">
+              <h1 className="text-balance font-heading text-[1.65rem] leading-[1.4] tracking-tight sm:text-[2rem] sm:leading-[1.35] lg:text-[2.35rem]">
                 {page.title}
               </h1>
             </header>

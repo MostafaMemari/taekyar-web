@@ -7,7 +7,7 @@ export function CtaSection({ appDownloadUrl }: { appDownloadUrl?: string | null 
 
   return (
     <section id="download" className="relative isolate scroll-mt-20 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
         
           <div className="relative overflow-hidden rounded-[28px] border border-[#E0A800]/20 bg-white px-5 py-14 text-center shadow-[0_30px_60px_-40px_rgba(154,109,0,0.45)] sm:px-8 sm:py-16">
             <div

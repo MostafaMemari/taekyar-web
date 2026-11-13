@@ -33,7 +33,7 @@ export function CommentsSection({ comments, postSlug }: CommentsSectionProps) {
         <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
           <div>
             <Eyebrow>{COMMENTS_LABELS.eyebrow}</Eyebrow>
-            <h2 id="comments-title" className="mt-3 text-[1.25rem] font-black leading-tight sm:text-2xl">
+            <h2 id="comments-title" className="mt-3 font-heading text-[1.25rem] leading-snug sm:text-2xl">
               {COMMENTS_LABELS.title}
               {totalComments > 0 ? (
                 <span className="ms-2 align-middle text-sm font-bold text-muted-foreground sm:text-[15px]">

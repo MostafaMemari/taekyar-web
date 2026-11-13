@@ -1,12 +1,12 @@
 import { toFaDigits } from "@/lib/utils";
 import {
-  BELT_PLATES,
   HERO_BADGE,
   HERO_BULLETS,
   HERO_CONTENT,
   HERO_PRIMARY_CTA,
   HERO_SECONDARY_CTA,
 } from "@/data/home/hero";
+import { HeroMascot } from "@/components/home/hero/hero-mascot";
 
 interface HeroProps {
   appDownloadUrl?: string | null;
@@ -82,43 +82,18 @@ export function Hero({ appDownloadUrl, postsCount, categoriesCount }: HeroProps)
         </div>
 
         <div className="order-1 lg:order-2">
-          <div className="relative mx-auto w-fit origin-center scale-[0.82] sm:scale-100">
+          <div className="relative mx-auto w-fit">
             <div
               aria-hidden="true"
-              className="absolute left-1/2 top-1/2 size-[130%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(224,168,0,0.16),transparent_62%)]"
+              className="absolute left-1/2 top-1/2 size-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(224,168,0,0.18),transparent_62%)]"
             />
+            <HeroMascot />
             <div
               aria-hidden="true"
-              className="absolute inset-y-2 left-1/2 w-4 -translate-x-1/2 rounded-full bg-gradient-to-b from-slate-200 via-slate-300 to-slate-400 shadow-[0_6px_14px_-6px_rgba(15,23,42,0.4)]"
+              className="mx-auto mt-3 h-5 w-3/5 rounded-[50%] bg-black/10 blur-lg motion-reduce:animate-none animate-[hero-shadow_5s_ease-in-out_infinite]"
             />
-            <div className="relative flex flex-col-reverse items-center gap-2 sm:gap-2.5">
-              {BELT_PLATES.map((plate) => (
-                <div
-                  key={plate.name}
-                  style={{
-                    width: plate.width,
-                    backgroundColor: plate.color,
-                    backgroundImage: plate.light
-                      ? "linear-gradient(90deg, #ffffff 0%, #e2e8f0 100%)"
-                      : `linear-gradient(90deg, color-mix(in srgb, ${plate.color} 78%, white) 0%, ${plate.color} 55%, color-mix(in srgb, ${plate.color} 82%, black) 100%)`,
-                  }}
-                  className="flex h-10 items-center justify-center rounded-full shadow-[0_18px_30px_-14px_rgba(15,23,42,0.35),inset_0_2px_6px_rgba(255,255,255,0.35),inset_-3px_0_8px_rgba(0,0,0,0.22)] sm:h-11"
-                >
-                  <span
-                    className={
-                      plate.light
-                        ? "text-[11px] font-extrabold text-slate-500"
-                        : "text-[11px] font-extrabold text-white/90"
-                    }
-                  >
-                    {plate.name}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <div className="absolute -bottom-2 left-1/2 h-6 w-3/4 -translate-x-1/2 rounded-[50%] bg-black/10 blur-xl" />
 
-            <div className="absolute -top-8 end-0 rounded-2xl border border-black/[0.06] bg-white px-5 py-3 text-center shadow-[0_18px_40px_-18px_rgba(15,23,42,0.25)]">
+            <div className="absolute -top-6 end-0 z-20 rounded-2xl border border-black/[0.06] bg-white px-5 py-3 text-center shadow-[0_18px_40px_-18px_rgba(15,23,42,0.25)]">
               <p className="text-2xl font-black leading-none text-[#d99e00]">
                 {HERO_BADGE.value}
               </p>

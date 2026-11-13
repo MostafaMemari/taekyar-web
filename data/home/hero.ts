@@ -41,21 +41,16 @@ export const HERO_SECONDARY_CTA: HeroCta = {
   Icon: Play,
 };
 
-export interface BeltPlate {
-  name: string;
-  color: string;
-  width: number;
-  light?: boolean;
-}
-
-export const BELT_PLATES: BeltPlate[] = [
-  { name: "سفید", color: "#e2e8f0", width: 120, light: true },
-  { name: "زرد", color: "#f4c430", width: 170 },
-  { name: "سبز", color: "#2e8b57", width: 216 },
-  { name: "آبی", color: "#1f5fa8", width: 260 },
-  { name: "قرمز", color: "#c21807", width: 292 },
-  { name: "مشکی", color: "#0d0d0d", width: 320 },
-];
+export const HERO_MASCOT = {
+  training: {
+    src: "/hero/01.webp",
+    alt: "شخصیت تک‌یار با لباس تمرین و کمربند سفید",
+  },
+  sparring: {
+    src: "/hero/02.webp",
+    alt: "شخصیت تک‌یار با تجهیزات مسابقه، کلاه و محافظ سینه",
+  },
+};
 
 export const HERO_BADGE = {
   value: "۶",

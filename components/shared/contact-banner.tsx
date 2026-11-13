@@ -23,7 +23,7 @@ export function ContactBanner({
       </span>
 
       <div className="contents lg:block lg:min-w-0 lg:flex-1">
-        <h3 className="text-lg font-extrabold text-white">{title}</h3>
+        <h3 className="font-heading text-xl leading-snug text-white sm:text-2xl">{title}</h3>
         <p className="col-span-full mt-1.5 text-sm leading-7 text-white/75">{description}</p>
       </div>
 

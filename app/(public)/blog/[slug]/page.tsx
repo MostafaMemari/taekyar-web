@@ -98,7 +98,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
         <div
           className={cn(
-            "mt-10 grid gap-8 sm:mt-12 lg:grid-rows-[auto_minmax(0,1fr)] lg:gap-x-10 xl:gap-x-14",
+            "mt-10 grid gap-8 sm:mt-12 lg:gap-x-10 xl:gap-x-14",
             POST_LAYOUT.postColumns,
           )}
         >
@@ -119,11 +119,12 @@ export default async function PostPage({ params }: PostPageProps) {
             <PostFooter slug={post.slug} title={post.title} />
           </div>
 
-          <aside aria-label="ابزارهای مقاله" className="min-w-0 lg:col-start-2 lg:row-start-2">
-            <div className="space-y-4 lg:sticky lg:top-[96px]">
-              <div className="hidden lg:block">
-                <TableOfContents items={headings} />
-              </div>
+          <aside
+            aria-label="ابزارهای مقاله"
+            className="min-w-0 lg:col-start-2 lg:row-start-1"
+          >
+            <div className="hidden lg:sticky lg:top-[96px] lg:block">
+              <TableOfContents items={headings} />
             </div>
           </aside>
         </div>
