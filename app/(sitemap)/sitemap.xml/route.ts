@@ -1,7 +1,7 @@
 import { getSitemapIndexEntries } from "@/lib/blog";
 import { sitemapHref } from "@/lib/routes";
-import { SITE_URL } from "@/lib/site";
-import { sitemapIndexXml } from "@/lib/sitemap-xml";
+import { SITE_URL } from "@/lib/site/site";
+import { sitemapIndexXml } from "@/lib/seo/sitemap-xml";
 
 export const revalidate = 3600;
 

@@ -1,44 +1,57 @@
-import { Download } from "lucide-react";
+import { Download, Users } from "lucide-react";
 
-import { BeltDivider } from "@/components/shared/belt-divider";
-import { Reveal } from "@/components/shared/reveal";
-import { Section } from "@/components/shared/section";
-import { Button } from "@/components/ui/button";
 import { CTA_CONTENT } from "@/data/home/cta";
 
 export function CtaSection({ appDownloadUrl }: { appDownloadUrl?: string | null }) {
-  const downloadHref = appDownloadUrl ?? "/contact";
+  const downloadHref = appDownloadUrl ?? "#download";
 
   return (
-    <Section tone="dark" containerClassName="py-10 sm:py-12 lg:py-14" id="download">
-      <Reveal>
-        <div className="relative overflow-hidden rounded-2xl bg-[linear-gradient(135deg,#e0282e_0%,#b01d22_55%,#701014_100%)] px-6 pb-12 pt-14 text-center shadow-xl shadow-primary/25 sm:px-12">
-          <BeltDivider width="full"
-            className="absolute inset-x-0 top-0 h-[3px] border-0 opacity-90"
-          />
-          <div className="relative mx-auto max-w-2xl">
-            <h2 className="text-balance text-3xl font-black leading-snug text-white sm:text-4xl">
-              {CTA_CONTENT.title}
-            </h2>
-            <p className="mt-4 text-[15px] leading-8 text-white/85 sm:text-base">
-              {CTA_CONTENT.description}
-            </p>
-            <Button
-              asChild
-              size="lg"
-              className="mt-8 h-12 gap-2.5 rounded-xl bg-white px-7 text-base font-bold text-primary shadow-xl shadow-black/20 hover:bg-white/90"
-            >
-              <a
-                href={downloadHref}
-                {...(appDownloadUrl ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              >
-                <Download />
-                {CTA_CONTENT.cta}
-              </a>
-            </Button>
+    <section id="download" className="relative isolate scroll-mt-20 overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        
+          <div className="relative overflow-hidden rounded-[28px] border border-[#E0A800]/20 bg-white px-5 py-14 text-center shadow-[0_30px_60px_-40px_rgba(154,109,0,0.45)] sm:px-8 sm:py-16">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-[radial-gradient(ellipse_at_top,rgba(224,168,0,0.28),transparent_70%)]"
+            />
+
+            <div className="relative mx-auto max-w-2xl">
+              <h2 className="text-balance text-3xl font-heading leading-snug text-[#1b2330] sm:text-4xl sm:leading-snug">
+                {CTA_CONTENT.title}
+              </h2>
+              <p className="mx-auto mt-4 max-w-xl text-pretty text-[15px] leading-8 text-black/55 sm:leading-9">
+                {CTA_CONTENT.description}
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href={downloadHref}
+                  {...(appDownloadUrl ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="inline-flex h-[52px] items-center gap-2.5 rounded-2xl bg-gradient-to-bl from-[#E0A800] via-[#C99416] to-[#9A6D00] px-7 text-[15px] font-extrabold text-[#2A1F00] shadow-[0_12px_26px_-10px_rgba(154,109,0,0.6)] transition-transform duration-200 hover:-translate-y-0.5"
+                >
+                  <Download className="!size-[18px]" />
+                  {CTA_CONTENT.cta}
+                </a>
+                <a
+                  href={CTA_CONTENT.secondary.href}
+                  className="inline-flex h-[52px] items-center gap-2.5 rounded-2xl border border-black/[0.09] bg-white px-6 text-[15px] font-bold text-[#1b2330] shadow-sm transition-colors duration-200 hover:border-[#E0A800]/50 hover:text-[#a37800]"
+                >
+                  <Users className="!size-[18px]" />
+                  {CTA_CONTENT.secondary.label}
+                </a>
+              </div>
+
+              <div className="mt-7">
+                {CTA_CONTENT.note.map((line) => (
+                  <p key={line} className="text-[12px] leading-6 text-black/45">
+                    {line}
+                  </p>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </Reveal>
-    </Section>
+        
+      </div>
+    </section>
   );
 }

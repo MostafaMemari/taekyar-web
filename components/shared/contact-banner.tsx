@@ -18,12 +18,12 @@ export function ContactBanner({
 }: ContactBannerProps) {
   return (
     <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-4 rounded-2xl bg-belt-black p-6 lg:flex lg:items-center lg:gap-6 lg:p-7">
-      <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary ring-1 ring-primary/25">
+      <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#E0A800]/15 text-[#a37800] ring-1 ring-[#E0A800]/25">
         <MessagesSquare className="!size-6" />
       </span>
 
       <div className="contents lg:block lg:min-w-0 lg:flex-1">
-        <h3 className="text-lg font-extrabold text-white">{title}</h3>
+        <h3 className="font-heading text-xl leading-snug text-white sm:text-2xl">{title}</h3>
         <p className="col-span-full mt-1.5 text-sm leading-7 text-white/75">{description}</p>
       </div>
 
@@ -35,7 +35,7 @@ export function ContactBanner({
       <Button
         asChild
         size="lg"
-        className="col-span-full h-11 w-full shrink-0 gap-2 rounded-xl bg-primary px-6 text-[15px] font-bold text-white shadow-lg shadow-primary/25 hover:bg-primary/90 lg:w-auto"
+        className="col-span-full h-11 w-full shrink-0 gap-2 rounded-xl bg-gradient-to-bl from-[#E0A800] via-[#C99416] to-[#9A6D00] px-6 text-[15px] font-extrabold text-[#2A1F00] shadow-lg shadow-[#9A6D00]/25 hover:from-[#EFAF0A] hover:via-[#D0A018] hover:to-[#A87800] lg:w-auto"
       >
         <Link href={actionHref}>
           {actionLabel}

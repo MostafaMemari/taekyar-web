@@ -9,7 +9,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FAQ_LABELS } from "@/data/dashboard/faqs";
-import { faqsApi } from "@/lib/api/endpoints";
+import {
+  deleteHomepageFaq,
+  reorderHomepageFaqs,
+  toggleHomepageFaq,
+} from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
 import { FaqDialog, type FaqDialogValue } from "./faq-dialog";
 
@@ -51,10 +55,10 @@ export function HomepageFaqManager({ initialFaqs }: { initialFaqs: HomepageFaqIt
     const next = !faq.isActive;
     startTransition(async () => {
       setOptimisticFaqs(faqs.map((item) => (item.id === faq.id ? { ...item, isActive: next } : item)));
-      try {
-        await faqsApi.toggle(faq.id, next);
+      const result = await toggleHomepageFaq(faq.id, next);
+      if (result.ok) {
         toast({ tone: "success", title: FAQ_LABELS.statusChanged });
-      } catch {
+      } else {
         toast({ tone: "error", title: FAQ_LABELS.statusError });
       }
     });
@@ -68,9 +72,8 @@ export function HomepageFaqManager({ initialFaqs }: { initialFaqs: HomepageFaqIt
     [next[index], next[target]] = [next[target], next[index]];
     startTransition(async () => {
       setOptimisticFaqs(next);
-      try {
-        await faqsApi.reorder(next.map((item) => item.id));
-      } catch {
+      const result = await reorderHomepageFaqs(next.map((item) => item.id));
+      if (!result.ok) {
         toast({ tone: "error", title: FAQ_LABELS.reorderError });
       }
     });
@@ -78,22 +81,22 @@ export function HomepageFaqManager({ initialFaqs }: { initialFaqs: HomepageFaqIt
 
   async function handleDelete(faq: HomepageFaqItem) {
     setOptimisticFaqs(faqs.filter((item) => item.id !== faq.id));
-    try {
-      await faqsApi.remove(faq.id);
+    const result = await deleteHomepageFaq(faq.id);
+    if (result.ok) {
       toast({ tone: "success", title: FAQ_LABELS.deleted });
-    } catch {
+    } else {
       toast({ tone: "error", title: FAQ_LABELS.deleteError });
     }
   }
 
   return (
-    <Card className="p-0">
+    <Card className="gap-0 rounded-xl p-0 shadow-none">
       <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-3 p-4 sm:p-5">
-        <CardTitle className="text-[15px] font-black">{FAQ_LABELS.listTitle}</CardTitle>
+        <CardTitle className="text-sm font-bold">{FAQ_LABELS.listTitle}</CardTitle>
         <Button
           type="button"
           onClick={openCreate}
-          className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15"
+          className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold"
         >
           <Plus className="size-4" aria-hidden="true" />
           {FAQ_LABELS.newFaq}

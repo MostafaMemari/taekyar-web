@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldError } from "@/components/shared/form-controls";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
-import type { PostFieldErrors } from "@/types/api";
+import type { PostFieldErrors } from "@/lib/admin/types";
 import type { FieldDraft } from "./types";
 
 interface MainInfoFieldsProps {
@@ -17,7 +17,7 @@ export function MainInfoFields({ fields, onFieldChange, fieldErrors }: MainInfoF
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-[14px] font-black">اطلاعات اصلی</CardTitle>
+        <CardTitle className="text-sm font-bold">اطلاعات اصلی</CardTitle>
         <p className="text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.mainInfoHint}</p>
       </CardHeader>
       <CardContent className="space-y-4">

@@ -1,13 +1,11 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 
+import { ROW_ACTION_DESTRUCTIVE_CLASS, RowActionButton } from "@/components/dashboard/shared/row-action-button";
 import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
-import { Button } from "@/components/ui/button";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
-import { ApiClientError } from "@/lib/api/client";
-import { categoriesApi, tagsApi } from "@/lib/api/endpoints";
+import { deleteTaxonomy } from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
 
 interface DeleteTaxonomyButtonProps {
@@ -17,7 +15,6 @@ interface DeleteTaxonomyButtonProps {
 
 export function DeleteTaxonomyButton({ kind, id }: DeleteTaxonomyButtonProps) {
   const copy = TAXONOMY_LABELS.kinds[kind];
-  const router = useRouter();
 
   return (
     <ConfirmDialog
@@ -26,33 +23,21 @@ export function DeleteTaxonomyButton({ kind, id }: DeleteTaxonomyButtonProps) {
       description={copy.confirmDelete}
       confirmLabel={TAXONOMY_LABELS.deleteLabel}
       onConfirm={async () => {
-        try {
-          if (kind === "category") {
-            await categoriesApi.remove(id);
-          } else {
-            await tagsApi.remove(id);
-          }
+        const result = await deleteTaxonomy(kind, id);
+        if (result.ok) {
           toast({ tone: "success", title: copy.deleted });
-          router.refresh();
-        } catch (error) {
-          if (error instanceof ApiClientError && error.code === "hasChildren") {
-            toast({ tone: "error", title: TAXONOMY_LABELS.deleteBlockedChildren });
-          } else if (error instanceof ApiClientError && error.code === "hasPosts") {
-            toast({ tone: "error", title: TAXONOMY_LABELS.deleteBlockedPosts });
-          } else {
-            toast({ tone: "error", title: TAXONOMY_LABELS.deleteError });
-          }
+        } else if (result.reason === "hasChildren") {
+          toast({ tone: "error", title: TAXONOMY_LABELS.deleteBlockedChildren });
+        } else if (result.reason === "hasPosts") {
+          toast({ tone: "error", title: TAXONOMY_LABELS.deleteBlockedPosts });
+        } else {
+          toast({ tone: "error", title: TAXONOMY_LABELS.deleteError });
         }
       }}
       trigger={
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          aria-label={TAXONOMY_LABELS.deleteLabel}
-          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-        >
-          <Trash2 className="size-4" />
-        </Button>
+        <RowActionButton aria-label={TAXONOMY_LABELS.deleteLabel} title={TAXONOMY_LABELS.deleteLabel} className={ROW_ACTION_DESTRUCTIVE_CLASS}>
+          <Trash2 className="size-4" aria-hidden="true" />
+        </RowActionButton>
       }
     />
   );

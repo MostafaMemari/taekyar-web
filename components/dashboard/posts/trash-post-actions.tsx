@@ -1,47 +1,44 @@
 "use client";
 
-import { RotateCcw, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-
-import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
-import { Button } from "@/components/ui/button";
-import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
-import { postsApi } from "@/lib/api/endpoints";
-import { toast } from "@/hooks/use-toast";
 import { useTransition } from "react";
+import { RotateCcw, Trash2 } from "lucide-react";
+
+import {
+  ROW_ACTION_DESTRUCTIVE_CLASS,
+  ROW_ACTION_PRIMARY_CLASS,
+  RowActionButton,
+} from "@/components/dashboard/shared/row-action-button";
+import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
+import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
+import { deletePostPermanently, restorePost } from "@/lib/admin-actions";
+import { toast } from "@/hooks/use-toast";
 
 export function RestorePostButton({ slug }: { slug: string }) {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   return (
-    <Button
-      variant="ghost"
-      size="icon-sm"
+    <RowActionButton
       disabled={isPending}
       aria-label={POSTS_TABLE_LABELS.restore}
       title={POSTS_TABLE_LABELS.restore}
-      className="size-8 rounded-lg text-muted-foreground hover:bg-primary/10 hover:text-primary"
+      className={ROW_ACTION_PRIMARY_CLASS}
       onClick={() => {
         startTransition(async () => {
-          try {
-            await postsApi.restore(slug);
+          const result = await restorePost(slug);
+          if (result.ok) {
             toast({ tone: "success", title: POSTS_TABLE_LABELS.restored });
-            router.refresh();
-          } catch {
+          } else {
             toast({ tone: "error", title: POSTS_TABLE_LABELS.restoreError });
           }
         });
       }}
     >
-      <RotateCcw className="size-4" />
-    </Button>
+      <RotateCcw className="size-4" aria-hidden="true" />
+    </RowActionButton>
   );
 }
 
 export function PermanentDeleteButton({ slug }: { slug: string }) {
-  const router = useRouter();
-
   return (
     <ConfirmDialog
       destructive
@@ -49,24 +46,21 @@ export function PermanentDeleteButton({ slug }: { slug: string }) {
       description={POSTS_TABLE_LABELS.permanentDeleteConfirm}
       confirmLabel={POSTS_TABLE_LABELS.permanentDelete}
       onConfirm={async () => {
-        try {
-          await postsApi.remove(slug);
+        const result = await deletePostPermanently(slug);
+        if (result.ok) {
           toast({ tone: "success", title: POSTS_TABLE_LABELS.permanentlyDeleted });
-          router.refresh();
-        } catch {
+        } else {
           toast({ tone: "error", title: POSTS_TABLE_LABELS.deleteError });
         }
       }}
       trigger={
-        <Button
-          variant="ghost"
-          size="icon-sm"
+        <RowActionButton
           aria-label={POSTS_TABLE_LABELS.permanentDelete}
-      title={POSTS_TABLE_LABELS.permanentDeleteTitle}
-          className="size-8 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+          title={POSTS_TABLE_LABELS.permanentDeleteTitle}
+          className={ROW_ACTION_DESTRUCTIVE_CLASS}
         >
-          <Trash2 className="size-4" />
-        </Button>
+          <Trash2 className="size-4" aria-hidden="true" />
+        </RowActionButton>
       }
     />
   );

@@ -1,16 +1,14 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
 
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { POST_FORM_LABELS } from "@/data/dashboard/ui";
-import { ApiClientError } from "@/lib/api/client";
-import { postsApi } from "@/lib/api/endpoints";
-import type { FaqInput, PostFieldErrors, PostInput } from "@/types/api";
-import { parsePostHtml } from "@/lib/post-content";
+import { createPost, updatePost } from "@/lib/admin-actions";
+import type { FaqInput, PostFieldErrors, PostInput } from "@/lib/admin/types";
+import { parsePostHtml } from "@/lib/blog/post-content";
 import { RichContentEditor } from "./rich-content-editor";
 import { CoverImageField, type CoverImageValue } from "@/components/dashboard/shared/cover-image-field";
 import { MainInfoFields } from "./post-form/form-fields";
@@ -29,7 +27,6 @@ interface PostFormProps {
 }
 
 export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categories, tags }: PostFormProps) {
-  const router = useRouter();
   const [fields, setFields] = useState<FieldDraft>({
     title: initial.title,
     slug: initial.slug,
@@ -95,23 +92,15 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
 
     setFieldErrors({});
     startTransition(async () => {
-      try {
-        const result =
-          mode === "edit"
-            ? await postsApi.update(currentSlug ?? "", input)
-            : await postsApi.create(input);
-        if (result.slug) {
-          router.push("/dashboard/posts");
-          router.refresh();
-        }
-      } catch (error) {
-        if (error instanceof ApiClientError) {
-          setFieldErrors((error.fieldErrors ?? {}) as PostFieldErrors);
-          if (error.message && error.message !== error.code) {
-            toast({ tone: "error", title: POST_FORM_LABELS.errorToastTitle, description: error.message });
-          }
-        } else {
-          toast({ tone: "error", title: POST_FORM_LABELS.errorToastTitle, description: POST_FORM_LABELS.error });
+      const result =
+        mode === "edit"
+          ? await updatePost({ status: "idle" }, { ...input, currentSlug: currentSlug ?? "" })
+          : await createPost({ status: "idle" }, input);
+
+      if (result.status === "error") {
+        setFieldErrors(result.fieldErrors ?? {});
+        if (result.message) {
+          toast({ tone: "error", title: POST_FORM_LABELS.errorToastTitle, description: result.message });
         }
       }
     });
@@ -120,7 +109,7 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
       <div className="grid items-start gap-5 lg:grid-cols-3">
-        <div className="min-w-0 space-y-5 lg:col-span-2">
+        <div className="order-1 min-w-0 space-y-5 lg:col-span-2">
           <MainInfoFields fields={fields} onFieldChange={setField} fieldErrors={fieldErrors} />
           <RichContentEditor initialContent={content} onChange={setContent} error={fieldErrors.content} />
           {mode === "create" ? (
@@ -128,19 +117,19 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
           ) : (
             <PostFaqEditor mode="edit" postSlug={currentSlug ?? ""} initialFaqs={initial.faqs ?? []} />
           )}
-          <SeoFields fields={fields} onFieldChange={setField} fieldErrors={fieldErrors} />
         </div>
 
         <aside
           aria-label={POST_FORM_LABELS.sidebarAriaLabel}
-          className="min-w-0 space-y-5 lg:sticky lg:top-6 lg:col-span-1 lg:max-h-[calc(100vh-3rem)] lg:self-start lg:overflow-y-auto lg:pb-1"
+          className="order-2 min-w-0 space-y-5 lg:sticky lg:top-6 lg:col-span-1 lg:max-h-[calc(100vh-3rem)] lg:self-start lg:overflow-y-auto lg:pb-1"
         >
           <CoverImageField
             value={coverImage}
             onChange={setCoverImage}
             error={fieldErrors.coverImage}
             altError={fieldErrors.coverImageAlt}
-          />          <PostSidebarFields
+          />
+          <PostSidebarFields
             categories={categories}
             selectedCategoryIds={selectedCategoryIds}
             onToggleCategory={toggleCategory}
@@ -149,6 +138,10 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
             onToggleTag={toggleTag}
           />
         </aside>
+
+        <div className="order-3 min-w-0 lg:col-span-2">
+          <SeoFields fields={fields} onFieldChange={setField} fieldErrors={fieldErrors} />
+        </div>
       </div>
 
       <Separator className="bg-border/60" />
@@ -157,7 +150,8 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
         <Button
           type="submit"
           disabled={isPending}
-          className="h-11 gap-2 rounded-xl px-8 text-[13px] font-bold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 motion-reduce:transition-none"
+          aria-busy={isPending}
+          className="h-10 gap-2 rounded-lg px-6 text-[13px] font-bold"
         >
           {isPending
             ? POST_FORM_LABELS.saving
@@ -170,8 +164,9 @@ export function PostForm({ mode, initial, initialCoverUrl, currentSlug, categori
           name="intent"
           value="draft"
           disabled={isPending}
+          aria-busy={isPending}
           variant="outline"
-          className="h-11 gap-2 rounded-xl border-border bg-card px-6 text-[13px] font-bold text-foreground hover:bg-muted hover:text-foreground"
+          className="h-10 gap-2 rounded-lg border-border bg-card px-5 text-[13px] font-bold text-foreground hover:bg-muted hover:text-foreground"
         >
           {mode === "edit" ? POST_FORM_LABELS.submitDraftUpdate : POST_FORM_LABELS.submitDraftCreate}
         </Button>

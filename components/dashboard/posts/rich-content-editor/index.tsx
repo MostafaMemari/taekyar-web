@@ -54,7 +54,7 @@ export function RichContentEditor({ initialContent, onChange, error }: RichConte
   );
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm shadow-black/[0.02]">
+    <div className="overflow-hidden rounded-xl border border-border bg-card">
       {editor ? <EditorToolbar editor={editor} imagePicker={imagePicker} /> : null}
 
       <EditorContent editor={editor} dir="rtl" />

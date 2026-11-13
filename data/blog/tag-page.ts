@@ -1,4 +1,3 @@
 export const TAG_PAGE_LABELS = {
-  eyebrow: "برچسب",
+  allPostsChip: "همه مقالات",
 } as const;
-

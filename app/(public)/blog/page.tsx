@@ -66,17 +66,18 @@ async function BlogIndex({ searchParams }: BlogPageProps) {
 
   return (
     <>
-      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10" id="archive-top">
+      <Section spacing="none" containerClassName="pb-4 pt-8 sm:pt-10 lg:pt-12" id="archive-top">
         <PaginationScrollTop targetId="archive-top" />
         <Reveal>
           <BlogHeader />
         </Reveal>
 
         <Reveal delay={80}>
-          <div className="mt-6 flex flex-col gap-3 border-b border-border/60 pb-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pb-5">
+          <div className="mt-7 flex flex-col items-center gap-3">
             <CategoryFilter activeCategory={activeCategory} />
-            <p className="shrink-0 text-xs font-medium text-muted-foreground sm:text-[13px]">
-              <span className="font-bold tabular-nums text-foreground">{toFaDigits(totalCount)}</span> {BLOG_INDEX_LABELS.resultsSuffix}
+            <p className="shrink-0 text-xs font-medium text-black/45 sm:text-[13px]">
+              <span className="font-bold tabular-nums text-[#1b2330]">{toFaDigits(totalCount)}</span>{" "}
+              {BLOG_INDEX_LABELS.resultsSuffix}
               {totalPages > 1 && (
                 <>
                   {" · "}
@@ -88,12 +89,12 @@ async function BlogIndex({ searchParams }: BlogPageProps) {
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-6 pb-2 sm:pt-7 lg:pt-8">
+      <Section spacing="none" containerClassName="pt-8 sm:pt-10">
         <PostGrid posts={visiblePosts} />
       </Section>
 
       {totalPages > 1 ? (
-        <Section containerClassName="pb-12 pt-8 sm:pb-16">
+        <Section spacing="compact">
           <Reveal delay={160}>
             <BlogPagination
               currentPage={currentPage}

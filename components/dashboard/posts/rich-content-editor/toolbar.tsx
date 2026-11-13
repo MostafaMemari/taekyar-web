@@ -89,7 +89,7 @@ export function EditorToolbar({ editor, imagePicker }: ToolbarProps) {
       <Divider />
 
       <ToolbarButton label="پاراگراف" active={editor.isActive("paragraph")} onClick={() => editor.chain().focus().setParagraph().run()}>
-        <span className="text-[11px] font-black">P</span>
+        <span className="text-[11px] font-bold">P</span>
       </ToolbarButton>
       {([1, 2, 3, 4] as const).map((level) => (
         <ToolbarButton

@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { prisma } from "@/server/config/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const getTags = cache(async () => {
   try {

@@ -2,10 +2,9 @@ import Link from "next/link";
 
 import { POST_LABELS } from "@/data/blog/post-config";
 import type { BlogPost } from "@/lib/blog";
-import { injectHeadingIds } from "@/lib/post-content";
+import { injectHeadingIds } from "@/lib/blog/post-content";
 import { tagHref } from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import { sanitizePostHtml } from "@/server/services/sanitizer";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function TagPills({ tags, className }: { tags: BlogPost["tags"]; className?: string }) {
@@ -48,10 +47,7 @@ export function ArticleContent({ post, content }: ArticleContentProps) {
     <div className="max-w-3xl">
       <Card className="p-0">
         <CardContent className="p-4 transition-shadow duration-300 hover:shadow-md hover:shadow-black/[0.06] sm:p-5">
-          <article
-            className="article-content"
-            dangerouslySetInnerHTML={{ __html: injectHeadingIds(sanitizePostHtml(content)) }}
-          />
+          <article className="article-content" dangerouslySetInnerHTML={{ __html: injectHeadingIds(content) }} />
         </CardContent>
       </Card>
       <PostTags tags={post.tags} />

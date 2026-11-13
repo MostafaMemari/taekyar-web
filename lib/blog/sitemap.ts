@@ -1,6 +1,6 @@
 import { cache } from "react";
 
-import { prisma } from "@/server/config/prisma";
+import { prisma } from "@/lib/prisma";
 import { PUBLIC_POST_WHERE } from "./posts";
 
 export const SITEMAP_URLS_PER_FILE = 50_000;

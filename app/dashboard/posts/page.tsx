@@ -1,24 +1,26 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, FileText, Pencil, Search, Trash2 } from "lucide-react";
+import { FileText, Pencil, Trash2 } from "lucide-react";
 
+import { TrashPostButton } from "@/components/dashboard/posts/trash-post-button";
+import { DashboardCountChip, DashboardSearchField, DashboardToolbar } from "@/components/dashboard/shared/dashboard-toolbar";
 import { DashboardEmptyState } from "@/components/dashboard/shared/dashboard-empty-state";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import {
   DashboardTable,
   DashboardTableCell,
   DashboardTableRow,
 } from "@/components/dashboard/shared/dashboard-table";
-import { TrashPostButton } from "@/components/dashboard/posts/trash-post-button";
+import { ForwardIcon } from "@/components/dashboard/shared/directional-icons";
 import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
-import { Badge } from "@/components/ui/badge";
+import { RowActionButton } from "@/components/dashboard/shared/row-action-button";
+import { resolveContentTone, StatusBadge } from "@/components/dashboard/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { POSTS_TABLE_LABELS } from "@/data/dashboard/ui";
-import { prisma } from "@/server/config/prisma";
+import { prisma } from "@/lib/prisma";
 import { postHref } from "@/lib/routes";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 import { formatFaDate, toFaDigits } from "@/lib/utils";
 
 interface PostsPageProps {
@@ -59,52 +61,41 @@ export default async function DashboardPostsPage({ searchParams }: PostsPageProp
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{POSTS_TABLE_LABELS.title}</h1>
-          <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
-            {POSTS_TABLE_LABELS.description}
-          </p>
-        </div>
+      <DashboardPageHeader
+        title={POSTS_TABLE_LABELS.title}
+        description={POSTS_TABLE_LABELS.description}
+        actions={
+          <>
+            <Button
+              asChild
+              variant="outline"
+              className="h-10 gap-2 rounded-lg border-border px-4 text-[13px] font-bold text-muted-foreground"
+            >
+              <Link href="/dashboard/posts/trash">
+                <Trash2 className="size-4" aria-hidden="true" />
+                {POSTS_TABLE_LABELS.trash}
+              </Link>
+            </Button>
+            <Button asChild className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold">
+              <Link href="/dashboard/posts/new">
+                {POSTS_TABLE_LABELS.newPost}
+                <ForwardIcon className="size-4" aria-hidden="true" />
+              </Link>
+            </Button>
+          </>
+        }
+      />
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Button
-            asChild
-            variant="outline"
-            className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold text-muted-foreground"
-          >
-            <Link href="/dashboard/posts/trash">
-              <Trash2 className="size-4" aria-hidden="true" />
-              {POSTS_TABLE_LABELS.trash}
-            </Link>
-          </Button>
-          <Button asChild className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15">
-            <Link href="/dashboard/posts/new">
-              {POSTS_TABLE_LABELS.newPost}
-              <ArrowLeft className="size-4" aria-hidden="true" />
-            </Link>
-          </Button>
-        </div>
-      </div>
-
-      <Card className="p-0">
-        <div className="p-3 sm:p-4">
-          <form role="search" aria-label={POSTS_TABLE_LABELS.searchLabel} action="/dashboard/posts" className="relative">
-            <Search
-              aria-hidden="true"
-              className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/50"
-            />
-            <Input
-              type="search"
-              name="q"
-              defaultValue={query}
-              placeholder={POSTS_TABLE_LABELS.searchPlaceholder}
-              aria-label={POSTS_TABLE_LABELS.searchLabel}
-              className="h-10 rounded-xl bg-card ps-9 pe-4 text-[13px] placeholder:text-muted-foreground/60"
-            />
-          </form>
-        </div>
-        <Separator className="bg-border/60" />
+      <Card className="gap-0 rounded-xl p-0 shadow-none">
+        <DashboardToolbar>
+          <DashboardSearchField
+            action="/dashboard/posts"
+            label={POSTS_TABLE_LABELS.searchLabel}
+            placeholder={POSTS_TABLE_LABELS.searchPlaceholder}
+            defaultValue={query}
+          />
+          <DashboardCountChip count={total} suffix={POSTS_TABLE_LABELS.resultsSuffix} />
+        </DashboardToolbar>
 
         {posts.length === 0 ? (
           <DashboardEmptyState
@@ -112,14 +103,14 @@ export default async function DashboardPostsPage({ searchParams }: PostsPageProp
             hint={query ? "جستجوی دیگری را امتحان کنید یا فیلتر را پاک کنید." : "اولین مقاله را بسازید تا فهرست اینجا پر شود."}
             action={
               query ? (
-                <Button variant="outline" asChild className="h-9 rounded-xl px-4 text-[13px] font-bold">
+                <Button variant="outline" asChild className="h-10 rounded-lg px-4 text-[13px] font-bold">
                   <Link href="/dashboard/posts">پاک کردن جستجو</Link>
                 </Button>
               ) : (
-                <Button asChild className="h-9 rounded-xl px-4 text-[13px] font-bold">
+                <Button asChild className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold">
                   <Link href="/dashboard/posts/new">
                     {POSTS_TABLE_LABELS.newPost}
-                    <ArrowLeft className="size-4" aria-hidden="true" />
+                    <ForwardIcon className="size-4" aria-hidden="true" />
                   </Link>
                 </Button>
               )
@@ -160,7 +151,8 @@ interface PostsTableProps {
 function PostsTable({ posts }: PostsTableProps) {
   return (
     <DashboardTable
-      minWidth="min-w-[720px]"
+      caption={POSTS_TABLE_LABELS.title}
+      minWidth="min-w-[760px]"
       hiddenOnMobile={[2, 4]}
       headers={[
         POSTS_TABLE_LABELS.columnTitle,
@@ -182,11 +174,11 @@ function PostsTable({ posts }: PostsTableProps) {
                   width={40}
                   height={40}
                   unoptimized
-                  className="size-10 shrink-0 rounded-lg object-cover ring-1 ring-border/60"
+                  className="size-10 shrink-0 rounded-lg object-cover ring-1 ring-border"
                 />
               ) : (
                 <span
-                  className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-[11px] font-black text-muted-foreground ring-1 ring-border/60"
+                  className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-[11px] font-bold text-muted-foreground ring-1 ring-border"
                   aria-hidden="true"
                 >
                   {post.title.trim().charAt(0) || "—"}
@@ -197,23 +189,18 @@ function PostsTable({ posts }: PostsTableProps) {
                   <Link
                     href={postHref(post.slug)}
                     target="_blank"
-                    className="block truncate rounded-sm text-[13px] font-bold leading-5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                    className="block truncate rounded-sm text-[13px] font-bold leading-5 text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
                   >
                     {post.title}
                   </Link>
                 ) : (
-                  <span className="block truncate text-[13px] font-bold leading-5">{post.title}</span>
+                  <span className="block truncate text-[13px] font-bold leading-5 text-foreground">{post.title}</span>
                 )}
                 <span className="mt-1 flex items-center gap-1.5">
                   {post.status === "DRAFT" ? (
-                    <Badge variant="outline" className="h-4.5 border-amber-300/70 bg-amber-50 px-1.5 text-[10px] font-bold text-amber-800">
-                      {POSTS_TABLE_LABELS.statusDraft}
-                    </Badge>
+                    <StatusBadge tone={resolveContentTone(post.status)}>{POSTS_TABLE_LABELS.statusDraft}</StatusBadge>
                   ) : null}
-                  <span
-                    dir="ltr"
-                    className="flex min-w-0 items-center gap-1 truncate text-[11px] text-muted-foreground"
-                  >
+                  <span dir="ltr" className="flex min-w-0 items-center gap-1 truncate text-[11px] text-muted-foreground">
                     <FileText className="size-3 shrink-0" aria-hidden="true" />
                     /blog/{post.slug}
                   </span>
@@ -223,34 +210,32 @@ function PostsTable({ posts }: PostsTableProps) {
           </DashboardTableCell>
           <DashboardTableCell>
             <span className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground">
-              <span className="size-1.5 rounded-full bg-belt-blue" aria-hidden="true" />
+              <span className="size-1.5 rounded-full bg-muted-foreground/50" aria-hidden="true" />
               {post.categories.map((category) => category.name).join("، ") || "—"}
             </span>
           </DashboardTableCell>
           <DashboardTableCell className="whitespace-nowrap">
-            <span className="block text-[13px] text-foreground">{formatFaDate(post.createdAt)}</span>
-            <span className="mt-0.5 block text-[11px] text-muted-foreground">
+            <span className="block text-[13px] tabular-nums text-foreground">{formatFaDate(post.createdAt)}</span>
+            <span className="mt-0.5 block text-[11px] tabular-nums text-muted-foreground">
               {POSTS_TABLE_LABELS.updatedLabel} {formatFaDate(post.updatedAt)}
             </span>
           </DashboardTableCell>
           <DashboardTableCell className="whitespace-nowrap">
-            <span className="inline-flex min-w-6 justify-center rounded-full bg-muted px-2 py-0.5 text-[12px] font-bold tabular-nums text-muted-foreground ring-1 ring-border/60">
+            <span className="inline-flex min-w-7 justify-center rounded-md border border-border bg-muted px-2 py-0.5 text-[12px] font-semibold tabular-nums text-muted-foreground">
               {toFaDigits(post._count.comments)}
             </span>
           </DashboardTableCell>
-          <DashboardTableCell className="py-3">
+          <DashboardTableCell>
             <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon-sm"
+              <RowActionButton
                 asChild
                 aria-label={POSTS_TABLE_LABELS.edit}
-                className="size-8 rounded-lg"
+                title={POSTS_TABLE_LABELS.edit}
               >
                 <Link href={`/dashboard/posts/${post.slug}/edit`}>
                   <Pencil className="size-4" aria-hidden="true" />
                 </Link>
-              </Button>
+              </RowActionButton>
               <TrashPostButton slug={post.slug} />
             </div>
           </DashboardTableCell>

@@ -29,8 +29,9 @@ export function MediaUploadButton() {
       <Button
         type="button"
         disabled={isPending}
+        aria-busy={isPending}
         onClick={() => inputRef.current?.click()}
-        className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15"
+        className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold"
       >
         {isPending ? (
           <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />

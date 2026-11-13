@@ -7,14 +7,13 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import { Reveal } from "@/components/shared/reveal";
 import { Section } from "@/components/shared/section";
-import { getPublishedPageBySlug, pageMetaDescriptionFallback } from "@/lib/pages";
-import { parsePostHtml } from "@/lib/post-content";
-import { sanitizePostHtml } from "@/server/services/sanitizer";
-import { buildPageMetadata } from "@/lib/seo";
-import { resolveSeo } from "@/lib/seo-resolve";
+import { getPublishedPageBySlug, pageMetaDescriptionFallback } from "@/lib/site/pages";
+import { parsePostHtml } from "@/lib/blog/post-content";
+import { buildPageMetadata } from "@/lib/seo/seo";
+import { resolveSeo } from "@/lib/seo/seo-resolve";
 import { pageHref } from "@/lib/routes";
-import { r2PublicUrl } from "@/lib/r2-url";
-import { SITE_NAME } from "@/lib/site";
+import { r2PublicUrl } from "@/lib/media/r2-url";
+import { SITE_NAME } from "@/lib/site/site";
 
 interface StaticPageProps {
   params: Promise<{ slug: string }>;
@@ -57,7 +56,7 @@ export default async function StaticPage({ params }: StaticPageProps) {
 
   if (!page) notFound();
 
-  const content = sanitizePostHtml(parsePostHtml(page.content));
+  const content = parsePostHtml(page.content);
 
   return (
     <>
@@ -73,11 +72,11 @@ export default async function StaticPage({ params }: StaticPageProps) {
           publisher: { "@type": "Organization", name: SITE_NAME },
         }}
       />
-      <Section className="pb-0 sm:pb-0 lg:pb-0">
+      <Section spacing="none" containerClassName="pt-6 sm:pt-8">
         <Reveal>
           <div className="mx-auto max-w-3xl">
             <header className="border-b border-border/60 pb-5 sm:pb-6">
-              <h1 className="text-balance text-[1.65rem] font-black leading-[1.35] tracking-tight sm:text-[2rem] sm:leading-[1.35] lg:text-[2.35rem]">
+              <h1 className="text-balance font-heading text-[1.65rem] leading-[1.4] tracking-tight sm:text-[2rem] sm:leading-[1.35] lg:text-[2.35rem]">
                 {page.title}
               </h1>
             </header>
@@ -85,7 +84,7 @@ export default async function StaticPage({ params }: StaticPageProps) {
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-6 sm:pt-8">
+      <Section spacing="none" containerClassName="pb-10 pt-8 sm:pb-14 sm:pt-10">
         <div className="mx-auto max-w-3xl">
           <div className="relative aspect-[16/7] w-full overflow-hidden rounded-2xl shadow-md shadow-black/[0.07] ring-1 ring-border/60">
             {page.coverImage ? (

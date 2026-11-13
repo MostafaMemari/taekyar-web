@@ -1,8 +1,11 @@
+import Link from "next/link";
+
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { MENUS_LABELS } from "@/data/dashboard/ui";
-import { prisma } from "@/server/config/prisma";
-import { getMenuItemTargets } from "@/server/services/menus.service";
+import { prisma } from "@/lib/prisma";
+import { getMenuItemTargets } from "@/lib/admin/menu-targets";
 import { MenuManager } from "@/components/dashboard/menus/menu-manager";
-import type { MenuItemTypeDto, MenuLocationDto } from "@/types/api";
+import type { MenuItemTypeDto, MenuLocationDto } from "@/lib/admin/types";
 import { cn } from "@/lib/utils";
 
 export const metadata = { title: MENUS_LABELS.title };
@@ -56,29 +59,31 @@ export default async function DashboardMenusPage({ searchParams }: MenusPageProp
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{MENUS_LABELS.title}</h1>
-        <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
-          {MENUS_LABELS.description}
-        </p>
-      </div>
+      <DashboardPageHeader title={MENUS_LABELS.title} description={MENUS_LABELS.description} />
 
-      <nav aria-label={MENUS_LABELS.locationLabel} className="flex flex-wrap gap-2">
-        {LOCATIONS.map((value) => (
-          <a
-            key={value}
-            href={`/dashboard/menus?location=${value}`}
-            aria-current={value === location ? "page" : undefined}
-            className={cn(
-              "inline-flex h-9 items-center rounded-xl px-4 text-[12px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
-              value === location
-                ? "bg-primary text-white shadow-md shadow-primary/20"
-                : "bg-card text-muted-foreground ring-1 ring-border/60 hover:text-foreground",
-            )}
-          >
-            {MENUS_LABELS.locations[value]}
-          </a>
-        ))}
+      <nav
+        aria-label={MENUS_LABELS.locationLabel}
+        className="flex flex-wrap items-center gap-1.5 rounded-xl border border-border bg-card p-1.5"
+      >
+        {LOCATIONS.map((value) => {
+          const active = value === location;
+
+          return (
+            <Link
+              key={value}
+              href={`/dashboard/menus?location=${value}`}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "inline-flex h-9 items-center rounded-lg px-3 text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none",
+                active
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+            >
+              {MENUS_LABELS.locations[value]}
+            </Link>
+          );
+        })}
       </nav>
 
       <MenuManager location={location} items={items} targets={targets} />

@@ -52,7 +52,7 @@ export function SeoFieldsGroup({ idPrefix, values, onChange, errors = {}, labels
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-[14px] font-black">{l.title}</CardTitle>
+        <CardTitle className="text-sm font-bold">{l.title}</CardTitle>
         <p className="text-xs leading-5 text-muted-foreground">{l.hint}</p>
       </CardHeader>
       <Separator className="bg-border/60" />

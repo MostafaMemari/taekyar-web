@@ -194,6 +194,24 @@ model Comment {
   updatedAt    DateTime      @default(now()) @updatedAt
 }
 
+model CaptchaChallenge {
+  sessionToken String    @id
+  challengeId  String
+  answerHash   String
+  ipHash       String?
+  expiresAt    DateTime
+  usedAt       DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([expiresAt])
+}
+
+model RateLimitCounter {
+  key     String   @id
+  count   Int      @default(0)
+  resetAt DateTime
+}
+
 model SiteSettings {
   id                    Int      @id @default(1)
   siteName              String
@@ -213,24 +231,4 @@ model SiteSettings {
   twitterUrl            String?
   appDownloadUrl        String?
   updatedAt             DateTime @updatedAt
-}
-
-model CaptchaChallenge {
-  sessionToken String   @id
-  challengeId  String
-  answerHash   String
-  ipHash       String?
-  expiresAt    DateTime
-  createdAt    DateTime @default(now())
-
-  @@index([expiresAt])
-}
-
-model RateLimitCounter {
-  key         String   @id
-  count       Int      @default(0)
-  windowStart DateTime
-  expiresAt   DateTime
-
-  @@index([expiresAt])
 }

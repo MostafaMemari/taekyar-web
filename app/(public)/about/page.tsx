@@ -18,31 +18,29 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10">
+      <Section spacing="none" containerClassName="pb-10 pt-8 sm:pb-12 sm:pt-10 lg:pt-12">
         <Reveal>
           <AboutHeader />
         </Reveal>
-      </Section>
 
-      <Section divider="top" containerClassName="pt-6 pb-10 sm:pt-7 sm:pb-12 lg:pb-14">
-        <Reveal delay={80}>
+        <Reveal delay={80} className="mt-10 sm:mt-12">
           <AboutStats />
         </Reveal>
       </Section>
 
-      <Section containerClassName="pt-2 pb-10 sm:pb-12 lg:pb-16">
+      <Section>
         <Reveal delay={120}>
           <AboutStory />
         </Reveal>
 
         <Reveal delay={160}>
-          <div className="mt-10 sm:mt-14 lg:mt-16">
+          <div className="mt-12 sm:mt-16">
             <AboutValues />
           </div>
         </Reveal>
       </Section>
 
-      <Section containerClassName="pb-12 sm:pb-16">
+      <Section spacing="none" containerClassName="pb-14 sm:pb-20">
         <Reveal delay={200}>
           <ContactBanner
             title={ABOUT_CTA.title}

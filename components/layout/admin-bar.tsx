@@ -3,10 +3,10 @@ import { headers } from "next/headers";
 import { LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
 
 import { AdminBarContextLink } from "@/components/layout/admin-bar-context-link";
-import { LogoutButton } from "@/components/shared/logout-button";
 import { ADMIN_BAR_LABELS } from "@/data/layout/admin-bar";
-import { resolveAdminBarEditContext } from "@/server/services/admin-bar.service";
-import { getSession } from "@/lib/auth";
+import { logout } from "@/lib/admin-actions";
+import { resolveAdminBarEditContext } from "@/lib/admin/admin-bar-context";
+import { getSession } from "@/lib/auth/auth";
 import { dashboardHref, PATHNAME_HEADER } from "@/lib/routes";
 
 function AdminBarLink({ href, label, Icon }: { href: string; label: string; Icon: typeof LayoutDashboard }) {
@@ -44,10 +44,15 @@ export async function AdminBar() {
             <ShieldCheck className="size-3.5 shrink-0" aria-hidden="true" />
             <span className="max-w-40 truncate">{session.username}</span>
           </span>
-          <LogoutButton className="inline-flex min-h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 font-bold text-white/80 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 motion-reduce:transition-none">
-            <LogOut className="size-3.5 shrink-0" aria-hidden="true" />
-            {ADMIN_BAR_LABELS.logout}
-          </LogoutButton>
+          <form action={logout}>
+            <button
+              type="submit"
+              className="inline-flex min-h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 font-bold text-white/80 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 motion-reduce:transition-none"
+            >
+              <LogOut className="size-3.5 shrink-0" aria-hidden="true" />
+              {ADMIN_BAR_LABELS.logout}
+            </button>
+          </form>
         </div>
       </div>
     </div>

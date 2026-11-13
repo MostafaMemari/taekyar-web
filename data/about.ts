@@ -63,21 +63,21 @@ export const ABOUT_VALUES: AboutValue[] = [
     title: "انگیزه پایدار",
     description: "پیشرفت را دیدنی می‌کنیم؛ رشد کمربندی، رکورد تمرین و گزارش هفتگی که تو را پای تشک نگه می‌دارد.",
     iconName: "trending-up",
-    chipClassName: "bg-belt-green/15 text-belt-green ring-belt-green/25",
+    chipClassName: "bg-primary/15 text-primary ring-primary/25",
   },
   {
     id: "community",
     title: "جامعه ورزشی",
     description: "وبلاگ، بحث‌ها و تجربه‌های ورزشکاران؛ جایی که یاد گرفتن تنها اتفاق نمی‌افتد.",
     iconName: "messages-square",
-    chipClassName: "bg-belt-blue/15 text-belt-blue ring-belt-blue/25",
+    chipClassName: "bg-primary/15 text-primary ring-primary/25",
   },
   {
     id: "simplicity",
     title: "سادگی و تمرکز",
     description: "بدون شلوغی و تبلیغ اضافه؛ فقط ابزارهایی که واقعاً در تمرین روزانه به کارت می‌آیند.",
     iconName: "sparkles",
-    chipClassName: "bg-belt-yellow/20 text-yellow-700 ring-belt-yellow/40",
+    chipClassName: "bg-primary/15 text-primary ring-primary/25",
   },
 ];
 

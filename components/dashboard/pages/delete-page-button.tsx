@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 
+import { ROW_ACTION_DESTRUCTIVE_CLASS, RowActionButton } from "@/components/dashboard/shared/row-action-button";
 import { ConfirmDialog } from "@/components/dashboard/shared/confirm-dialog";
-import { Button } from "@/components/ui/button";
 import { PAGES_TABLE_LABELS } from "@/data/dashboard/ui";
-import { pagesApi } from "@/lib/api/endpoints";
+import { deletePage } from "@/lib/admin-actions";
 import { toast } from "@/hooks/use-toast";
 
 export function DeletePageButton({ slug }: { slug: string }) {
@@ -19,23 +19,22 @@ export function DeletePageButton({ slug }: { slug: string }) {
       description={PAGES_TABLE_LABELS.deleteConfirm}
       confirmLabel={PAGES_TABLE_LABELS.delete}
       onConfirm={async () => {
-        try {
-          await pagesApi.remove(slug);
+        const result = await deletePage(slug);
+        if (result.ok) {
           toast({ tone: "success", title: PAGES_TABLE_LABELS.deleted });
           router.refresh();
-        } catch {
+        } else {
           toast({ tone: "error", title: PAGES_TABLE_LABELS.deleteError });
         }
       }}
       trigger={
-        <Button
-          variant="ghost"
-          size="icon-sm"
+        <RowActionButton
           aria-label={PAGES_TABLE_LABELS.delete}
-          className="size-8 rounded-lg text-destructive hover:bg-destructive/10 hover:text-destructive"
+          title={PAGES_TABLE_LABELS.delete}
+          className={ROW_ACTION_DESTRUCTIVE_CLASS}
         >
           <Trash2 className="size-4" aria-hidden="true" />
-        </Button>
+        </RowActionButton>
       }
     />
   );

@@ -61,7 +61,7 @@ export function PostSidebarFields({
     <>
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-[14px] font-black">{POST_FORM_LABELS.categoryLabel}</CardTitle>
+          <CardTitle className="text-sm font-bold">{POST_FORM_LABELS.categoryLabel}</CardTitle>
           <p className="text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.categoryHint}</p>
         </CardHeader>
         <CardContent>
@@ -85,7 +85,7 @@ export function PostSidebarFields({
 
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-[14px] font-black">{POST_FORM_LABELS.tagsLabel}</CardTitle>
+          <CardTitle className="text-sm font-bold">{POST_FORM_LABELS.tagsLabel}</CardTitle>
           <p className="text-xs leading-5 text-muted-foreground">{POST_FORM_LABELS.tagsHint}</p>
         </CardHeader>
         <CardContent>

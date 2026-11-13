@@ -1,17 +1,20 @@
 import Link from "next/link";
 
-import { Send } from "lucide-react";
+import { Download, Send } from "lucide-react";
 
 import { BeltDivider } from "@/components/shared/belt-divider";
+import { Button } from "@/components/ui/button";
 import { getCategoryTree } from "@/lib/blog";
-import { getMenuTree } from "@/lib/menu";
+import { getMenuTree } from "@/lib/site/menu";
 import { flattenPublicCategoryTree, type PublicCategoryNode } from "@/lib/blog/categories";
 import { categoryHref } from "@/lib/routes";
-import { FOOTER_BLURB, FOOTER_COPYRIGHT } from "@/data/layout/footer";
+import { FOOTER_BLURB, FOOTER_COPYRIGHT, FOOTER_SUGGESTED_PHRASES } from "@/data/layout/footer";
 import { navLinks } from "@/data/layout/navigation";
-import { getSiteSettings } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site/site-settings";
+import { getPublishedPageBySlug } from "@/lib/site/pages";
+import { pageHref } from "@/lib/routes";
 import { InstagramIcon, XIcon, YoutubeIcon } from "@/components/shared/icons";
-import type { MenuItemNode } from "@/lib/menu";
+import type { MenuItemNode } from "@/lib/site/menu";
 
 const SOCIAL_ICONS = {
   instagram: InstagramIcon,
@@ -20,12 +23,18 @@ const SOCIAL_ICONS = {
   x: XIcon,
 } as const;
 
-const staticQuickLinks: MenuItemNode[] = navLinks.map(({ href, label }, index) => ({
-  id: -(index + 1),
-  title: label,
-  href,
-  children: [],
-}));
+const staticQuickLinks: MenuItemNode[] = [
+  ...navLinks.map(({ href, label }, index) => ({
+    id: -(index + 1),
+    title: label,
+    href,
+    children: [],
+  })),
+  { id: -101, title: "درباره ما", href: "/about", children: [] },
+  { id: -103, title: "دانشنامه فن‌ها", href: "/techniques", children: [] },
+  { id: -104, title: "سوالات متداول", href: "/faq", children: [] },
+  { id: -105, title: "همکاری با ما", href: "/collab", children: [] },
+].filter((link, index, all) => all.findIndex((item) => item.href === link.href) === index);
 
 function LinkColumn({
   title,
@@ -85,12 +94,24 @@ function FooterMenuColumn({ title, links, ariaLabel, fallback }: { title: string
 }
 
 export async function Footer() {
-  const [categoryTree, settings, quickLinks, blogLinks] = await Promise.all([
+  const [categoryTree, settings, quickLinks, blogLinks, privacyPage, termsPage] = await Promise.all([
     getCategoryTree(),
     getSiteSettings(),
     getMenuTree("FOOTER_QUICK"),
     getMenuTree("FOOTER_BLOG"),
+    getPublishedPageBySlug("privacy"),
+    getPublishedPageBySlug("terms"),
   ]);
+
+  const legalLinks: MenuItemNode[] = [
+    ...(privacyPage
+      ? [{ id: -201, title: "حریم خصوصی", href: pageHref("privacy"), children: [] }]
+      : []),
+    ...(termsPage
+      ? [{ id: -202, title: "قوانین و مقررات", href: pageHref("terms"), children: [] }]
+      : []),
+  ];
+  const fallbackQuickLinks = [...staticQuickLinks, ...legalLinks];
 
   return (
     <footer className="bg-belt-black">
@@ -102,20 +123,35 @@ export async function Footer() {
               {settings.siteName}
               <span
                 aria-hidden="true"
-                className="ms-1.5 inline-block size-1.5 rounded-[2px] bg-primary align-middle"
+                className="ms-1.5 inline-block size-1.5 rounded-[2px] bg-[#E0A800] align-middle"
               />
             </p>
             <p className="max-w-xs text-sm leading-7 text-muted-foreground">
               {FOOTER_BLURB}
             </p>
+            {settings.appDownloadUrl ? (
+              <Button
+                asChild
+                size="lg"
+                className="mt-2 h-11 gap-2 rounded-xl bg-gradient-to-bl from-[#E0A800] via-[#C99416] to-[#9A6D00] px-5 text-sm font-extrabold text-[#2A1F00] shadow-md shadow-black/25 hover:from-[#EFAF0A] hover:via-[#D0A018] hover:to-[#A87800]"
+              >
+                <a href={settings.appDownloadUrl} target="_blank" rel="noopener noreferrer">
+                  <Download className="!size-4" />
+                  دانلود اپلیکیشن
+                </a>
+              </Button>
+            ) : null}
           </div>
 
-          <FooterMenuColumn
-            title="دسترسی سریع"
-            links={quickLinks}
-            ariaLabel="دسترسی سریع"
-            fallback={<LinkColumn title="دسترسی سریع" links={staticQuickLinks} ariaLabel="دسترسی سریع" />}
-          />
+          {quickLinks.length > 0 ? (
+            <LinkColumn
+              title="دسترسی سریع"
+              links={[...quickLinks, ...legalLinks]}
+              ariaLabel="دسترسی سریع"
+            />
+          ) : (
+            <LinkColumn title="دسترسی سریع" links={fallbackQuickLinks} ariaLabel="دسترسی سریع" />
+          )}
 
           <FooterMenuColumn
             title="موضوعات وبلاگ"
@@ -138,7 +174,7 @@ export async function Footer() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={label}
-                        className="flex size-10 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                        className="flex size-10 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                       >
                         <Icon className="!size-[18px]" />
                       </a>
@@ -150,7 +186,23 @@ export async function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-border pt-6 text-center text-sm text-muted-foreground">
+        <div className="mt-12 border-t border-border pt-6">
+          <p className="text-center text-[12px] font-bold text-muted-foreground">عبارات پیشنهادی:</p>
+          <ul className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-2">
+            {FOOTER_SUGGESTED_PHRASES.map((phrase) => (
+              <li key={phrase.href}>
+                <Link
+                  href={phrase.href}
+                  className="text-[12px] text-muted-foreground/80 transition-colors hover:text-foreground"
+                >
+                  {phrase.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-6 border-t border-border pt-6 text-center text-sm text-muted-foreground">
           {FOOTER_COPYRIGHT}
         </div>
       </div>

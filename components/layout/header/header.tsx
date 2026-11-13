@@ -34,8 +34,8 @@ export function Header({
       className={cn(
         "theme-light sticky top-0 z-40 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
         scrolled
-          ? "border-border/40 bg-[#fafaf8]/75 shadow-[0_12px_32px_-20px_rgba(23,23,23,0.28)]"
-          : "border-transparent bg-transparent"
+          ? "border-[#E0A800]/20 bg-[#faf3e6]/90 shadow-[0_12px_32px_-20px_rgba(15,23,42,0.25)]"
+          : "border-transparent bg-[#faf3e6]/80"
       )}
     >
       <div className="mx-auto grid h-16 max-w-7xl grid-cols-[2.5rem_minmax(0,1fr)_2.5rem] items-center px-4 sm:h-[68px] md:flex md:h-[72px] md:gap-6 md:px-6 lg:px-8">

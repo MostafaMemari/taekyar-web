@@ -13,14 +13,28 @@ export const OVERVIEW_LABELS = {
   newPost: "مقاله جدید",
   recentPostsTitle: "آخرین مقاله‌ها",
   onPostSuffix: "روی مقاله:",
+  pendingHint: "دیدگاه‌هایی که پیش از انتشار نیاز به تأیید دارند",
+  emptyPendingHint: "همه دیدگاه‌ها بررسی شده‌اند — مورد جدیدی در صف نیست.",
+  recentPostsHint: "آخرین مقاله‌های منتشرشده — برای ویرایش سریع انتخاب کنید",
+  emptyPosts: "هنوز مقاله‌ای نیست",
+  emptyPostsHint: "اولین مقاله را بسازید تا اینجا نمایش داده شود.",
+  viewAllPosts: "همه مقاله‌ها",
+  activityTitle: "فعالیت دیدگاه‌ها",
+  activityHint: "دیدگاه‌های ثبت‌شده در ۱۲ هفته اخیر",
+  activityChartLabel: "نمودار ستونی دیدگاه‌های ۱۲ هفته اخیر",
+  activityOldest: "۱۲ هفته پیش",
+  activityNewest: "امروز",
+  activityTotalSuffix: "دیدگاه",
 } as const;
+
+export type OverviewStatTone = "brand" | "warning" | "success" | "neutral";
 
 export interface OverviewStatCard {
   key: "posts" | "approved" | "pending" | "rejected";
   label: string;
   icon: typeof FileText;
-  tint: string;
-  iconClass: string;
+  tone: OverviewStatTone;
+  href: string;
 }
 
 export const OVERVIEW_STAT_CARDS: OverviewStatCard[] = [
@@ -28,28 +42,32 @@ export const OVERVIEW_STAT_CARDS: OverviewStatCard[] = [
     key: "posts",
     label: OVERVIEW_LABELS.postsCount,
     icon: FileText,
-    tint: "border-t-belt-blue bg-belt-blue/[0.04]",
-    iconClass: "bg-belt-blue/10 text-belt-blue ring-belt-blue/15",
+    tone: "brand",
+    href: "/dashboard/posts",
   },
   {
     key: "approved",
     label: OVERVIEW_LABELS.approvedComments,
     icon: CheckCircle2,
-    tint: "border-t-belt-green bg-belt-green/[0.04]",
-    iconClass: "bg-belt-green/10 text-belt-green ring-belt-green/15",
+    tone: "success",
+    href: "/dashboard/comments?status=APPROVED",
   },
   {
     key: "pending",
     label: OVERVIEW_LABELS.pendingComments,
     icon: Clock3,
-    tint: "border-t-belt-yellow bg-belt-yellow/[0.06]",
-    iconClass: "bg-belt-yellow/15 text-belt-yellow-fg ring-belt-yellow/20",
+    tone: "warning",
+    href: "/dashboard/comments?status=PENDING",
   },
   {
     key: "rejected",
     label: OVERVIEW_LABELS.rejectedComments,
     icon: XCircle,
-    tint: "border-t-belt-red bg-belt-red/[0.04]",
-    iconClass: "bg-belt-red/10 text-belt-red ring-belt-red/15",
+    tone: "neutral",
+    href: "/dashboard/comments?status=REJECTED",
   },
 ];
+
+export const OVERVIEW_ACTIVITY_WEEKS = 12;
+export const OVERVIEW_PENDING_LIMIT = 5;
+export const OVERVIEW_RECENT_POSTS_LIMIT = 5;

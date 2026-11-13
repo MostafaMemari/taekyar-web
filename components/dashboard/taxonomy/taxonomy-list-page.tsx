@@ -1,15 +1,19 @@
 import Link from "next/link";
-import { ArrowLeft, Search } from "lucide-react";
 
+import { ForwardIcon } from "@/components/dashboard/shared/directional-icons";
 import { DashboardEmptyState } from "@/components/dashboard/shared/dashboard-empty-state";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
+import {
+  DashboardCountChip,
+  DashboardSearchField,
+  DashboardToolbar,
+} from "@/components/dashboard/shared/dashboard-toolbar";
 import { PaginationNav } from "@/components/dashboard/shared/pagination-nav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
 import { filterCategoryRowsWithAncestors } from "@/lib/blog/categories";
-import { prisma } from "@/server/config/prisma";
+import { prisma } from "@/lib/prisma";
 
 import { TaxonomyTable } from "./taxonomy-table";
 
@@ -56,7 +60,7 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
             skip: (pageIndex - 1) * TAXONOMY_PER_PAGE,
             take: TAXONOMY_PER_PAGE,
           });
-          return { rows, pageCount, pageIndex };
+          return { rows, pageCount, pageIndex, total };
         })()
       : null;
 
@@ -65,6 +69,7 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
   const tagRows = tagResult?.rows ?? [];
 
   const rows = kind === "category" ? categoryRows : tagRows;
+  const total = kind === "category" ? categoryRows.length : (tagResult?.total ?? 0);
 
   function buildHref(targetPage: number) {
     const params = new URLSearchParams();
@@ -76,40 +81,29 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-[22px] font-black tracking-tight text-foreground sm:text-2xl">{copy.title}</h1>
-          <p className="mt-1.5 max-w-xl text-[13px] leading-6 text-muted-foreground sm:text-sm">
-            {copy.description}
-          </p>
-        </div>
+      <DashboardPageHeader
+        title={copy.title}
+        description={copy.description}
+        actions={
+          <Button asChild className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold">
+            <Link href={`${basePath}/new`}>
+              {copy.new}
+              <ForwardIcon className="size-4" aria-hidden="true" />
+            </Link>
+          </Button>
+        }
+      />
 
-        <Button asChild className="h-10 gap-2 rounded-xl px-4 text-[13px] font-bold shadow-md shadow-primary/15">
-          <Link href={`${basePath}/new`}>
-            {copy.new}
-            <ArrowLeft className="size-4" aria-hidden="true" />
-          </Link>
-        </Button>
-      </div>
-
-      <Card className="p-0">
-        <div className="p-3 sm:p-4">
-          <form role="search" aria-label={copy.searchPlaceholder} action={basePath} className="relative">
-            <Search
-              aria-hidden="true"
-              className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/50"
-            />
-            <Input
-              type="search"
-              name="q"
-              defaultValue={query}
-              placeholder={copy.searchPlaceholder}
-              aria-label={copy.searchPlaceholder}
-              className="h-10 rounded-xl bg-card ps-9 pe-4 text-[13px] placeholder:text-muted-foreground/60"
-            />
-          </form>
-        </div>
-        <Separator className="bg-border/60" />
+      <Card className="gap-0 rounded-xl p-0 shadow-none">
+        <DashboardToolbar>
+          <DashboardSearchField
+            action={basePath}
+            label={copy.searchPlaceholder}
+            placeholder={copy.searchPlaceholder}
+            defaultValue={query}
+          />
+          <DashboardCountChip count={total} suffix={copy.resultsSuffix} />
+        </DashboardToolbar>
 
         {rows.length === 0 ? (
           <DashboardEmptyState
@@ -121,14 +115,14 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
             }
             action={
               query ? (
-                <Button variant="outline" asChild className="h-9 rounded-xl px-4 text-[13px] font-bold">
+                <Button variant="outline" asChild className="h-10 rounded-lg px-4 text-[13px] font-bold">
                   <Link href={basePath}>پاک کردن جستجو</Link>
                 </Button>
               ) : (
-                <Button asChild className="h-9 rounded-xl px-4 text-[13px] font-bold">
+                <Button asChild className="h-10 gap-2 rounded-lg px-4 text-[13px] font-bold">
                   <Link href={`${basePath}/new`}>
                     {copy.new}
-                    <ArrowLeft className="size-4" aria-hidden="true" />
+                    <ForwardIcon className="size-4" aria-hidden="true" />
                   </Link>
                 </Button>
               )
@@ -145,12 +139,14 @@ export async function TaxonomyListPage({ kind, searchParams }: TaxonomyListPageP
         <PaginationNav
           currentPage={currentPage}
           totalPages={totalPages}
+          total={total}
           buildHref={buildHref}
           labels={{
             prevPage: TAXONOMY_LABELS.prevPage,
             nextPage: TAXONOMY_LABELS.nextPage,
             pageInfoSuffix: TAXONOMY_LABELS.pageInfoSuffix,
             title: TAXONOMY_LABELS.paginationNavLabel,
+            resultsSuffix: copy.resultsSuffix,
           }}
         />
       ) : null}

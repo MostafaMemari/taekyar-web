@@ -16,14 +16,14 @@ export function ImagePlaceholder({ icon: Icon, label, className, iconClassName }
       aria-label={label}
       aria-hidden={label ? undefined : true}
       className={cn(
-        "flex h-full w-full items-center justify-center overflow-hidden bg-muted/40 ring-1 ring-inset ring-border/60",
+        "flex h-full w-full items-center justify-center overflow-hidden bg-primary/[0.05] ring-1 ring-inset ring-primary/15",
         className,
       )}
     >
       <Icon
         aria-hidden="true"
         strokeWidth={1.5}
-        className={cn("size-8 text-muted-foreground/50 transition-transform duration-500", iconClassName)}
+        className={cn("size-8 text-primary/45 transition-transform duration-500", iconClassName)}
       />
     </div>
   );

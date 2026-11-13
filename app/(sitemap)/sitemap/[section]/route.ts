@@ -9,8 +9,8 @@ import {
   getTagSitemapEntries,
 } from "@/lib/blog";
 import { categoryHref, pageHref, postHref, tagHref } from "@/lib/routes";
-import { SITE_URL } from "@/lib/site";
-import { urlSetXml, type SitemapXmlUrl } from "@/lib/sitemap-xml";
+import { SITE_URL } from "@/lib/site/site";
+import { urlSetXml, type SitemapXmlUrl } from "@/lib/seo/sitemap-xml";
 
 export const revalidate = 3600;
 

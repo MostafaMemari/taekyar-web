@@ -20,8 +20,8 @@ registerHooks({
 });
 
 const { normalizeSlug, resolveSlug, uniqueSlugCandidate } = await import("./lib/slug.ts");
-const { resolveUniqueSlug } = await import("./server/services/slug.service.ts");
-const { prisma } = await import("./server/config/prisma.ts");
+const { resolveUniqueSlug } = await import("./lib/slug-server.ts");
+const { prisma } = await import("./lib/prisma.ts");
 
 let failures = 0;
 function check(name: string, actual: unknown, expected: unknown) {
@@ -77,7 +77,7 @@ async function cleanup() {
     where: { OR: [{ slug: { contains: MARK } }, { slug: { startsWith: "تست-تست" } }, { slug: "پیش‌نویس-آزمون" }] },
   });
   await prisma.category.deleteMany({
-    where: { OR: [{ path: { contains: MARK } }, { slug: { in: ["آزمون-اسلاگ", "آزمون-اسلاگ-2", "تکنیک‌های-آزمون"] } }] },
+    where: { OR: [{ path: { contains: MARK } }, { slug: { in: ["آزمون-اسلاگ", "آزمون-اسلاگ-2"] } }] },
   });
   await prisma.tag.deleteMany({ where: { OR: [{ slug: { contains: MARK } }, { slug: "آب-رسانی-آزمون" }] } });
 }
@@ -121,11 +121,7 @@ try {
   check("13 auto dup category", await resolveUniqueSlug("category", "آزمون-اسلاگ", true, null), "آزمون-اسلاگ-2");
   check("16 manual dup category", await resolveUniqueSlug("category", "آزمون-اسلاگ", false, null), null);
   check("17 category keep", await resolveUniqueSlug("category", "آزمون-اسلاگ", false, catA.id), "آزمون-اسلاگ");
-  await prisma.category.create({
-    data: { slug: "تکنیک‌های-آزمون", name: "تکنیک‌های آزمون", path: `${MARK}/تکنیک‌های-آزمون` },
-    select: { id: true },
-  });
-  check("18 category taken", await resolveUniqueSlug("category", "تکنیک‌های-آزمون", false, catA.id), null);
+  check("18 category taken", await resolveUniqueSlug("category", "تکنیک‌ها", false, catA.id), null);
 
   const tagA = await prisma.tag.create({
     data: { slug: "آب-رسانی-آزمون", name: "آب رسانی آزمون" },

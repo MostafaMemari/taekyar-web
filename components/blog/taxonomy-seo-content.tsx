@@ -4,9 +4,8 @@ import type { LucideIcon } from "lucide-react";
 import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { parsePostHtml } from "@/lib/post-content";
-import { r2PublicUrl } from "@/lib/r2-url";
-import { sanitizePostHtml } from "@/server/services/sanitizer";
+import { parsePostHtml, sanitizePostHtml } from "@/lib/blog/post-content";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 
 interface TaxonomySeoContentProps {
   title: string;
@@ -46,7 +45,7 @@ export function TaxonomySeoContent({ title, content, imageUrl, imageAlt, placeho
         <h2
           id="taxonomy-seo-heading"
           className={cn(
-            "text-balance text-lg font-black tracking-tight sm:text-xl",
+            "text-balance font-heading text-xl leading-[1.5] sm:text-2xl sm:leading-[1.45]",
             hasMedia && "mt-5 text-center sm:mt-6"
           )}
         >

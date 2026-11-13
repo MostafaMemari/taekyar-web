@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 import { PATHNAME_HEADER } from "@/lib/routes";
-import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/session";
+import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/auth/session";
 
 export function proxy(request: NextRequest) {
   const session = verifySessionToken(request.cookies.get(SESSION_COOKIE_NAME)?.value);

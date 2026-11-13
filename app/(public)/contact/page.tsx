@@ -16,34 +16,30 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <>
-      <Section containerClassName="pb-3 pt-6 sm:pb-4 sm:pt-8 lg:pt-10">
-        <Reveal>
-          <ContactHeader />
+    <Section spacing="none" containerClassName="pb-14 pt-8 sm:pb-20 sm:pt-10 lg:pt-12">
+      <Reveal>
+        <ContactHeader />
+      </Reveal>
+
+      <Reveal delay={80} className="mt-10 sm:mt-12">
+        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 lg:gap-5">
+          {CONTACT_CHANNELS.map((channel) => (
+            <li key={channel.id}>
+              <ChannelCard {...channel} />
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+
+      <div className="mt-8 grid items-start gap-4 sm:mt-10 lg:grid-cols-5 lg:gap-5">
+        <Reveal delay={120} className="lg:col-span-3">
+          <ContactForm />
         </Reveal>
-      </Section>
 
-      <Section containerClassName="pb-14 pt-6 sm:pb-16 sm:pt-8 lg:pt-10">
-        <Reveal delay={80}>
-          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 lg:gap-5">
-            {CONTACT_CHANNELS.map((channel) => (
-              <li key={channel.id}>
-                <ChannelCard {...channel} />
-              </li>
-            ))}
-          </ul>
+        <Reveal delay={160} className="lg:col-span-2">
+          <SupportInfo />
         </Reveal>
-
-        <div className="mt-8 grid items-start gap-4 sm:mt-10 lg:grid-cols-5 lg:gap-5">
-          <Reveal delay={120} className="lg:col-span-3">
-            <ContactForm />
-          </Reveal>
-
-          <Reveal delay={160} className="lg:col-span-2">
-            <SupportInfo />
-          </Reveal>
-        </div>
-      </Section>
-    </>
+      </div>
+    </Section>
   );
 }

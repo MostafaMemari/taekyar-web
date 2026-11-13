@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME } from "@/lib/site/site";
 
 interface LogoProps {
   onNavigate?: () => void;

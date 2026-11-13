@@ -18,8 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MENUS_LABELS } from "@/data/dashboard/ui";
-import { ApiClientError } from "@/lib/api/client";
-import { menuItemsApi } from "@/lib/api/endpoints";
+import { createMenuItem, deleteMenuItem, moveMenuItem, updateMenuItem } from "@/lib/admin-actions";
 import type {
   MenuItemFieldErrors,
   MenuItemInput,
@@ -27,8 +26,8 @@ import type {
   MenuItemRowDto,
   MenuItemTypeDto,
   MenuLocationDto,
-  MenuLinkTargets,
-} from "@/types/api";
+} from "@/lib/admin/types";
+import type { MenuLinkTargets } from "@/lib/admin/menu-targets";
 import { toast } from "@/hooks/use-toast";
 
 const TYPE_ORDER: MenuItemTypeDto[] = ["PAGE", "POST", "CATEGORY", "TAG", "CUSTOM"];
@@ -77,22 +76,16 @@ export function MenuManager({ location, items, targets }: MenuManagerProps) {
 
   function move(id: number, direction: "up" | "down") {
     startTransition(async () => {
-      try {
-        await menuItemsApi.move(id, direction);
-      } catch {
-        toast({ tone: "error", title: MENUS_LABELS.moveUpError });
-      }
+      const result = await moveMenuItem(id, direction);
+      if (!result.ok) toast({ tone: "error", title: MENUS_LABELS.moveUpError });
     });
   }
 
   function remove(id: number) {
     startTransition(async () => {
-      try {
-        await menuItemsApi.remove(id);
-        toast({ tone: "success", title: MENUS_LABELS.deleted });
-      } catch {
-        toast({ tone: "error", title: MENUS_LABELS.deleteError });
-      }
+      const result = await deleteMenuItem(id);
+      if (result.ok) toast({ tone: "success", title: MENUS_LABELS.deleted });
+      else toast({ tone: "error", title: MENUS_LABELS.deleteError });
     });
   }
 
@@ -188,10 +181,10 @@ export function MenuManager({ location, items, targets }: MenuManagerProps) {
     <Card>
       <CardHeader className="flex-row items-center justify-between space-y-0 pb-3">
         <div>
-          <CardTitle className="text-[14px] font-black">{MENUS_LABELS.locations[location]}</CardTitle>
+          <CardTitle className="text-sm font-bold">{MENUS_LABELS.locations[location]}</CardTitle>
           <p className="mt-1 text-xs leading-5 text-muted-foreground">{MENUS_LABELS.maxDepthHint}</p>
         </div>
-        <Button className="h-9 gap-2 rounded-xl px-4 text-[12px] font-bold" onClick={() => openCreate(null)}>
+        <Button className="h-10 gap-2 rounded-lg px-4 text-[12px] font-bold" onClick={() => openCreate(null)}>
           <Plus className="size-4" aria-hidden="true" />
           {MENUS_LABELS.addItem}
         </Button>
@@ -282,24 +275,16 @@ function MenuItemDialog({ open, onOpenChange, location, targets, editing, parent
 
     setFieldErrors({});
     startTransition(async () => {
-      try {
-        if (editing) {
-          await menuItemsApi.update(editing.id, input);
-        } else {
-          await menuItemsApi.create(input);
-        }
-        toast({ tone: "success", title: MENUS_LABELS.saved });
-        onOpenChange(false);
-      } catch (error) {
-        if (error instanceof ApiClientError) {
-          setFieldErrors((error.fieldErrors ?? {}) as MenuItemFieldErrors);
-          if (error.message && error.message !== error.code) {
-            toast({ tone: "error", title: MENUS_LABELS.saveError, description: error.message });
-          }
-        } else {
-          toast({ tone: "error", title: MENUS_LABELS.saveError });
-        }
+      const result = editing
+        ? await updateMenuItem(editing.id, input)
+        : await createMenuItem(input);
+      if (result.status === "error") {
+        setFieldErrors(result.fieldErrors ?? {});
+        if (result.message) toast({ tone: "error", title: MENUS_LABELS.saveError, description: result.message });
+        return;
       }
+      toast({ tone: "success", title: MENUS_LABELS.saved });
+      onOpenChange(false);
     });
   }
 
@@ -322,7 +307,7 @@ function MenuItemDialog({ open, onOpenChange, location, targets, editing, parent
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="theme-admin max-w-md">
         <DialogHeader>
           <DialogTitle>{editing ? MENUS_LABELS.editItem : MENUS_LABELS.addItem}</DialogTitle>
         </DialogHeader>
@@ -359,7 +344,7 @@ function MenuItemDialog({ open, onOpenChange, location, targets, editing, parent
               <SelectTrigger id={`${idPrefix}-type`} className="h-10 w-full rounded-xl">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="theme-admin">
                 {TYPE_ORDER.map((type) => (
                   <SelectItem key={type} value={type}>
                     {MENUS_LABELS.types[type]}
@@ -405,7 +390,7 @@ function MenuItemDialog({ open, onOpenChange, location, targets, editing, parent
                 <SelectTrigger id={`${idPrefix}-target`} className="h-10 w-full rounded-xl">
                   <SelectValue placeholder={MENUS_LABELS.targetPlaceholder} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="theme-admin">
                   {optionsFor(draft.type).map((option) => (
                     <SelectItem key={option.id} value={String(option.id)}>
                       {"— ".repeat(option.depth ?? 0)}

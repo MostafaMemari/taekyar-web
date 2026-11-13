@@ -8,7 +8,7 @@ import {
   COMMENTS_LABELS,
   type PostComment,
 } from "@/data/blog/comments";
-import { BeltDivider } from "@/components/shared/belt-divider";
+import { Eyebrow } from "@/components/shared/section-header";
 import { Button } from "@/components/ui/button";
 import { toFaDigits } from "@/lib/utils";
 
@@ -32,10 +32,8 @@ export function CommentsSection({ comments, postSlug }: CommentsSectionProps) {
       <div className="border-b border-border/60 pb-4 sm:pb-5">
         <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
           <div>
-            <p className="text-[11px] font-bold tracking-wide text-primary sm:text-xs">
-              {COMMENTS_LABELS.eyebrow}
-            </p>
-            <h2 id="comments-title" className="mt-1.5 text-[1.25rem] font-black leading-tight sm:text-2xl">
+            <Eyebrow>{COMMENTS_LABELS.eyebrow}</Eyebrow>
+            <h2 id="comments-title" className="mt-3 font-heading text-[1.25rem] leading-snug sm:text-2xl">
               {COMMENTS_LABELS.title}
               {totalComments > 0 ? (
                 <span className="ms-2 align-middle text-sm font-bold text-muted-foreground sm:text-[15px]">
@@ -43,7 +41,6 @@ export function CommentsSection({ comments, postSlug }: CommentsSectionProps) {
                 </span>
               ) : null}
             </h2>
-            <BeltDivider variant="pill" className="mt-3 h-1 w-12 sm:w-16" />
           </div>
 
           <CommentDialog

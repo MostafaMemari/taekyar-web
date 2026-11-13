@@ -7,12 +7,12 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { BLOG_PAGINATION } from "@/data/blog/index-page";
 import { TAG_PAGE_LABELS } from "@/data/blog/tag-page";
 import { archiveJsonLd, breadcrumbJsonLd } from "@/lib/blog/structured-data";
-import { getPaginatedPostsByTag, getTagBySlug } from "@/lib/blog";
-import { buildPageMetadata } from "@/lib/seo";
-import { resolveSeo } from "@/lib/seo-resolve";
-import { htmlToPlainText } from "@/lib/post-content";
+import { getPaginatedPostsByTag, getTagBySlug, getTags } from "@/lib/blog";
+import { buildPageMetadata } from "@/lib/seo/seo";
+import { resolveSeo } from "@/lib/seo/seo-resolve";
+import { htmlToPlainText } from "@/lib/blog/post-content";
 import { tagHref } from "@/lib/routes";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME } from "@/lib/site/site";
 import { toFaDigits } from "@/lib/utils";
 
 export const revalidate = 60;
@@ -101,6 +101,13 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
     { name: "وبلاگ", path: "/blog" },
     { name: tag.name, path: basePath },
   ];
+  const tags = await getTags();
+  const chips = tags
+    .filter((t) => t._count.posts > 0)
+    .map((t) => ({
+      name: t.name,
+      path: tagHref(t.slug),
+    }));
   const plainDescription = tag.description ? htmlToPlainText(tag.description) : null;
 
   return (
@@ -117,20 +124,21 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
         })}
       />
       <TaxonomyArchive
-        eyebrow={TAG_PAGE_LABELS.eyebrow}
         title={tag.name}
         description={tag.description}
         imageUrl={tag.image}
         imageAlt={tag.imageAlt}
         placeholderIcon={Tag}
         posts={visiblePosts}
-        totalCount={totalCount}
         breadcrumbs={breadcrumbs}
         pagination={{
           currentPage,
           totalPages,
           hrefFor: (targetPage) => pageHref(basePath, targetPage),
         }}
+        chips={chips}
+        chipActivePath={basePath}
+        allChip={{ name: TAG_PAGE_LABELS.allPostsChip, path: "/blog" }}
       />
     </>
   );

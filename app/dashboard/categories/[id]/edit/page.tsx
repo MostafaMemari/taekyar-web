@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 
 import { TaxonomyForm } from "@/components/dashboard/taxonomy/taxonomy-form";
+import { DashboardPageHeader } from "@/components/dashboard/shared/dashboard-page-header";
 import { TAXONOMY_LABELS } from "@/data/dashboard/ui";
-import type { TaxonomyInput } from "@/types/api";
+import type { TaxonomyInput } from "@/lib/admin/types";
 import { buildCategoryTree, flattenCategoryTree } from "@/lib/blog/categories";
-import { prisma } from "@/server/config/prisma";
-import { r2PublicUrl } from "@/lib/r2-url";
+import { prisma } from "@/lib/prisma";
+import { r2PublicUrl } from "@/lib/media/r2-url";
 
 interface EditCategoryPageProps {
   params: Promise<{ id: string }>;
@@ -54,12 +55,12 @@ export default async function EditCategoryPage({ params }: EditCategoryPageProps
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-black text-foreground sm:text-2xl">{TAXONOMY_LABELS.kinds.category.editTitle}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{TAXONOMY_LABELS.kinds.category.editDescription}</p>
-      </div>
+      <DashboardPageHeader
+        title={TAXONOMY_LABELS.kinds.category.editTitle}
+        description={TAXONOMY_LABELS.kinds.category.editDescription}
+      />
 
-      <div className="rounded-2xl bg-card p-5 shadow-sm shadow-black/[0.04] ring-1 ring-border/50 sm:p-6">
+      <div className="rounded-xl border border-border bg-card p-4 sm:p-6">
         <TaxonomyForm
           kind="category"
           mode="edit"

@@ -46,7 +46,7 @@ export function ConfirmDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent showCloseButton={false} className="max-w-sm">
+      <DialogContent showCloseButton={false} className="theme-admin max-w-sm">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>

@@ -1,4 +1,4 @@
-import type { SeoOverrides } from "@/lib/seo";
+import type { SeoOverrides } from "@/lib/seo/seo";
 
 export interface PostCategoryRef {
   id: number;

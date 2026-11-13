@@ -4,15 +4,13 @@ import { useCallback, useState, type FormEvent } from "react";
 
 import { COMMENT_TOAST_MESSAGES } from "@/data/blog/comments";
 import { toast } from "@/hooks/use-toast";
-import { ApiClientError } from "@/lib/api/client";
-import { commentsApi } from "@/lib/api/endpoints";
+import { submitComment, type SubmitCommentResult } from "@/lib/comments/comment-actions";
 import {
   EMPTY_COMMENT_DRAFT,
   validateCommentDraft,
   type CommentDraft,
   type CommentDraftErrors,
-} from "@/lib/comment-submission";
-import type { CommentRejectReason } from "@/types/api";
+} from "@/lib/comments/comment-submission";
 import { useCommentCaptcha } from "./use-comment-captcha";
 
 interface UseCommentSubmissionOptions {
@@ -35,20 +33,20 @@ export function useCommentSubmission({ postSlug, parentId, onSuccess }: UseComme
   }, []);
 
   const reject = useCallback(
-    (reason: CommentRejectReason) => {
-      if (reason === "rate_limited") {
+    (result: SubmitCommentResult) => {
+      if (result.reason === "rate_limited") {
         toast({
           tone: "error",
           title: COMMENT_TOAST_MESSAGES.rateLimitedTitle,
           description: COMMENT_TOAST_MESSAGES.rateLimitedDescription,
         });
-      } else if (reason === "captcha_wrong") {
+      } else if (result.reason === "captcha_wrong") {
         toast({
           tone: "error",
           title: COMMENT_TOAST_MESSAGES.captchaWrongTitle,
           description: COMMENT_TOAST_MESSAGES.captchaWrongDescription,
         });
-      } else if (reason === "captcha_expired") {
+      } else if (result.reason === "captcha_expired") {
         toast({
           tone: "error",
           title: COMMENT_TOAST_MESSAGES.captchaExpiredTitle,
@@ -80,14 +78,15 @@ export function useCommentSubmission({ postSlug, parentId, onSuccess }: UseComme
       setIsSubmitting(true);
 
       try {
-        await commentsApi.submit({
-          slug: postSlug,
-          name: draft.name,
-          message: draft.message,
+        const result = await submitComment(postSlug, draft, {
           parentId,
           captchaAnswer: answer,
           honeypot,
         });
+        if (!result.ok) {
+          reject(result);
+          return;
+        }
         setDraft(EMPTY_COMMENT_DRAFT);
         setHoneypot("");
         await refresh();
@@ -97,16 +96,12 @@ export function useCommentSubmission({ postSlug, parentId, onSuccess }: UseComme
           description: COMMENT_TOAST_MESSAGES.successDescription,
         });
         onSuccess?.();
-      } catch (error) {
-        if (error instanceof ApiClientError) {
-          reject(error.code as CommentRejectReason);
-        } else {
-          toast({
-            tone: "error",
-            title: COMMENT_TOAST_MESSAGES.errorTitle,
-            description: COMMENT_TOAST_MESSAGES.errorDescription,
-          });
-        }
+      } catch {
+        toast({
+          tone: "error",
+          title: COMMENT_TOAST_MESSAGES.errorTitle,
+          description: COMMENT_TOAST_MESSAGES.errorDescription,
+        });
       } finally {
         setIsSubmitting(false);
       }

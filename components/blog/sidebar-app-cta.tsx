@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { BeltDivider } from "@/components/shared/belt-divider";
 import { POST_LABELS } from "@/data/blog/post-config";
 import { Button } from "@/components/ui/button";
-import { getSiteSettings } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site/site-settings";
 
 export async function SidebarAppCta() {
   const settings = await getSiteSettings();

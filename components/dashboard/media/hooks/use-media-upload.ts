@@ -3,18 +3,13 @@
 import { useTransition } from "react";
 import { toast } from "@/hooks/use-toast";
 import { MEDIA_LABELS, UPLOAD_ERROR_LABELS } from "@/data/dashboard/ui";
-import { ApiClientError } from "@/lib/api/client";
-import { mediaApi } from "@/lib/api/endpoints";
-import { MEDIA_MAX_BYTES } from "@/lib/media";
+import { uploadImageAction } from "@/lib/admin-actions";
+import { MEDIA_MAX_BYTES } from "@/lib/media/media";
 import { toPersianDigits } from "@/lib/utils";
 
 type UploadError = "UNSUPPORTED_TYPE" | "FILE_TOO_LARGE" | "UPLOAD_FAILED";
 
-interface UploadResult {
-  ok: boolean;
-  key?: string;
-  error?: UploadError;
-}
+type UploadResult = Awaited<ReturnType<typeof uploadImageAction>>;
 
 function uploadErrorMessage(error?: UploadError): string {
   if (error === "UNSUPPORTED_TYPE") return UPLOAD_ERROR_LABELS.unsupportedType;
@@ -38,21 +33,8 @@ export function useMediaUpload({ onUploaded }: UseMediaUploadOptions = {}) {
     startTransition(async () => {
       let results: UploadResult[];
       try {
-        const uploaded = await Promise.all(
-          valid.map(async (file): Promise<UploadResult> => {
-            try {
-              const result = await mediaApi.upload(file);
-              return { ok: result.ok, key: result.key };
-            } catch (error) {
-              if (error instanceof ApiClientError) {
-                return { ok: false, error: error.code as UploadError } as UploadResult;
-              }
-              return { ok: false, error: "UPLOAD_FAILED" } as UploadResult;
-            }
-          }),
-        );
         results = [
-          ...uploaded,
+          ...(await Promise.all(valid.map((file) => uploadImageAction(file)))),
           ...oversized.map((): UploadResult => ({ ok: false, error: "FILE_TOO_LARGE" })),
         ];
       } catch {

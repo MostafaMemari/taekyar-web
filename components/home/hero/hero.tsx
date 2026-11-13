@@ -1,60 +1,124 @@
-import { Download } from "lucide-react";
+import { toFaDigits } from "@/lib/utils";
+import {
+  HERO_BADGE,
+  HERO_BULLETS,
+  HERO_CONTENT,
+  HERO_PRIMARY_CTA,
+  HERO_SECONDARY_CTA,
+} from "@/data/home/hero";
+import { HeroMascot } from "@/components/home/hero/hero-mascot";
 
-import { Reveal } from "@/components/shared/reveal";
-import { sectionVariants } from "@/components/shared/section";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { PhoneMockup } from "./phone-mockup";
-import { HERO_COPY } from "@/data/home/hero";
+interface HeroProps {
+  appDownloadUrl?: string | null;
+  postsCount: number;
+  categoriesCount: number;
+}
 
-export function Hero({ appDownloadUrl }: { appDownloadUrl?: string | null }) {
-  const downloadHref = appDownloadUrl ?? "#download";
+export function Hero({ appDownloadUrl, postsCount, categoriesCount }: HeroProps) {
+  const downloadHref = appDownloadUrl ?? HERO_PRIMARY_CTA.href;
+  const stats: Array<{ value: string; label: string }> = [
+    { value: toFaDigits(postsCount), label: "مقاله" },
+    { value: toFaDigits(categoriesCount), label: "دسته‌بندی‌ها" },
+    { value: "۶", label: "کمربندها" },
+    { value: "+۵۰۰", label: "ورزشکار" },
+    { value: "+۲۰", label: "مربی" },
+  ];
+
   return (
-    <section className={cn(sectionVariants({ tone: "contrast" }), "overflow-hidden")}>
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0" />
+    <section className="relative isolate overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-full bg-[linear-gradient(to_left,rgba(224,168,0,0.09),transparent_55%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_left,rgba(15,23,42,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.045)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_75%)]"
+      />
 
-      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 px-4 pb-10 pt-8 sm:gap-12 sm:px-6 sm:pb-11 sm:pt-12 lg:grid-cols-[1fr_0.9fr] lg:gap-10 lg:px-8 lg:pb-12 lg:pt-14">
-        <Reveal>
-          <div className="flex flex-col items-center text-center lg:items-start lg:text-start">
-            <span className="inline-flex items-center gap-2 text-[13px] font-semibold text-muted-foreground">
-              <span className="h-px w-6 bg-primary/40" />
-              {HERO_COPY.eyebrow}
-            </span>
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-4 pb-10 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-6 lg:px-8 lg:pt-20">
+        <div className="order-2 flex flex-col items-center text-center lg:order-1 lg:items-start lg:text-start">
+          <h1 className="text-balance text-[2.5rem] font-heading leading-[1.18] text-[#1b2330] sm:text-5xl sm:leading-[1.14] lg:text-[3.25rem] lg:leading-[1.12]">
+            <span className="block">{HERO_CONTENT.title.line1}</span>
+            <span className="block">{HERO_CONTENT.title.line2}</span>
+            <span className="block text-[#d99e00]">{HERO_CONTENT.title.line3}</span>
+          </h1>
 
-            <h2 className="mt-4 max-w-xl text-[2rem] font-black leading-[1.3] tracking-[-0.01em] sm:text-[2.75rem] sm:leading-[1.25] lg:mt-5 lg:text-[3.25rem] lg:leading-[1.22]">
-              <span className="block">{HERO_COPY.titleLine1}</span>
-              <span className="block text-primary">{HERO_COPY.titleLine2}</span>
-            </h2>
+          <p className="mt-6 max-w-xl text-pretty text-[15px] leading-8 text-black/55 sm:text-base sm:leading-9">
+            <strong className="font-extrabold text-[#c79500]">
+              {HERO_CONTENT.descriptionLead}
+            </strong>{" "}
+            {HERO_CONTENT.description}
+          </p>
 
-            <p className="mt-4 max-w-md text-[15px] leading-8 text-muted-foreground lg:mt-5 lg:max-w-lg">
-              {HERO_COPY.description}
-            </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+            <a
+              href={downloadHref}
+              {...(appDownloadUrl ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              className="inline-flex h-[52px] items-center gap-2.5 rounded-2xl bg-gradient-to-bl from-[#E0A800] via-[#C99416] to-[#9A6D00] px-7 text-[15px] font-extrabold text-[#2A1F00] shadow-[0_10px_24px_-10px_rgba(154,109,0,0.55)] transition-transform duration-200 hover:-translate-y-0.5"
+            >
+              <HERO_PRIMARY_CTA.Icon className="!size-[18px]" />
+              {HERO_PRIMARY_CTA.label}
+            </a>
+            <a
+              href={HERO_SECONDARY_CTA.href}
+              className="inline-flex h-[52px] items-center gap-2.5 rounded-2xl bg-[#1b2330] px-6 text-[15px] font-bold text-white transition-colors duration-200 hover:bg-[#26304a]"
+            >
+              <HERO_SECONDARY_CTA.Icon className="!size-[18px]" />
+              {HERO_SECONDARY_CTA.label}
+            </a>
+          </div>
 
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5 lg:mt-9 lg:justify-start">
-              <Button asChild size="lg" className="h-11 gap-2 rounded-lg px-5 text-[15px] font-bold shadow-sm shadow-primary/25">
-                <a
-                  href={downloadHref}
-                  {...(appDownloadUrl ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  <Download className="!size-[17px]" />
-                  دانلود اپلیکیشن
-                </a>
-              </Button>
-              <Button
-                asChild
-                variant="ghost"
-                size="lg"
-                className="h-11 px-4 text-[15px] font-semibold text-muted-foreground hover:text-foreground"
+          <ul className="mt-9 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+            {HERO_BULLETS.map(({ Icon, label }) => (
+              <li
+                key={label}
+                className="inline-flex items-center gap-2 text-[13px] font-medium text-black/60"
               >
-                <a href="#features">مشاهده امکانات</a>
-              </Button>
+                <Icon aria-hidden="true" className="!size-4 shrink-0 text-[#d99e00]" />
+                {label}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="order-1 lg:order-2">
+          <div className="relative mx-auto w-fit">
+            <div
+              aria-hidden="true"
+              className="absolute left-1/2 top-1/2 size-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(224,168,0,0.18),transparent_62%)]"
+            />
+            <HeroMascot />
+            <div
+              aria-hidden="true"
+              className="mx-auto mt-3 h-5 w-3/5 rounded-[50%] bg-black/10 blur-lg motion-reduce:animate-none animate-[hero-shadow_5s_ease-in-out_infinite]"
+            />
+
+            <div className="absolute -top-6 end-0 z-20 rounded-2xl border border-black/[0.06] bg-white px-5 py-3 text-center shadow-[0_18px_40px_-18px_rgba(15,23,42,0.25)]">
+              <p className="text-2xl font-black leading-none text-[#d99e00]">
+                {HERO_BADGE.value}
+              </p>
+              <p className="mt-1.5 text-[11px] font-bold leading-5 text-black/60">
+                {HERO_BADGE.label}
+              </p>
             </div>
           </div>
-        </Reveal>
+        </div>
+      </div>
 
-        <Reveal delay={140}>
-          <PhoneMockup />
-        </Reveal>
+      <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {stats.map((stat) => (
+            <li
+              key={stat.label}
+              className="rounded-[13px] border border-black/[0.09] bg-white px-4 py-4 text-center shadow-[0_10px_24px_-18px_rgba(15,23,42,0.25)]"
+            >
+              <span className="block text-[11px] font-medium text-black/50">{stat.label}</span>
+              <span className="mt-1 block text-xl font-black tabular-nums text-[#1b2330]">
+                {stat.value}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

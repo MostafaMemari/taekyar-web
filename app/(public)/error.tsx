@@ -19,7 +19,7 @@ export default function PublicError({
   }, [error]);
 
   return (
-    <Section containerClassName="pb-10 sm:pb-14">
+    <Section>
       <ErrorContent onRetry={reset} />
     </Section>
   );

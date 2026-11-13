@@ -2,11 +2,9 @@
 
 import { useCallback, useState } from "react";
 
-import { API_PREFIX } from "@/lib/api/endpoints";
-
 export type CaptchaStatus = "loading" | "refreshing" | "ready" | "unavailable";
 
-const IMAGE_ENDPOINT = `${API_PREFIX}/captcha/image`;
+const IMAGE_ENDPOINT = "/api/captcha/image";
 
 export function useCommentCaptcha() {
   const [nonce, setNonce] = useState(0);
