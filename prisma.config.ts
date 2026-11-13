@@ -1,17 +1,6 @@
-// import { defineConfig, env } from "prisma/config";
-
-// export default defineConfig({
-//   schema: "prisma/schema.prisma",
-//   migrations: {
-//     path: "prisma/migrations",
-//     seed: "node --env-file=.env prisma/seed.ts",
-//   },
-//   datasource: {
-//     url: env("DATABASE_URL"),
-//   },
-// });
-
 import { defineConfig, env } from "prisma/config";
+
+const databaseUrl = process.env.DATABASE_URL;
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -22,6 +11,6 @@ export default defineConfig({
   },
 
   datasource: {
-    url: env("DATABASE_URL"),
+    url: databaseUrl ? databaseUrl.replace("-pooler.", ".") : env("DATABASE_URL"),
   },
 });
